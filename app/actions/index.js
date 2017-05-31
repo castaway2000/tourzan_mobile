@@ -1,7 +1,10 @@
-import * as RecipeActions from './recipes'
-import * as NavigationActions from './navigation'
 
-export const ActionCreators = Object.assign({},
-  RecipeActions,
-  NavigationActions,
-);
+export const LOGIN = 'LOGIN';
+
+export const addTodo = (title) => {
+  return {
+    type: LOGIN,
+    user_email
+  };
+};
+
