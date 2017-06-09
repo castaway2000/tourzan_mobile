@@ -20,7 +20,9 @@ import { StackNavigator } from 'react-navigation';
 
 import LoginGuideScreen from './containers/LoginGuideScreen';
 import LoginTouristScreen from './containers/LoginTouristScreen';
-import ApplyButton from './components/ApplyButton'
+import RegisterTourist from './containers/RegisterTouristScreen';
+import RegisterGuide from './containers/RegisterGuideScreen';
+import ApplyButton from './components/ApplyButton';
 
 // const store = createStore(tourzan);
 
@@ -76,7 +78,8 @@ const styles = StyleSheet.create({
   },
   txt_welcome: {
     marginTop : -20,
-    fontSize: 30,
+    fontSize: 25,
+    fontWeight : 'bold',
     textAlign: 'center',
     color : '#ffffff',
   },
@@ -88,7 +91,7 @@ const styles = StyleSheet.create({
   },
   txt_bottom:{
     marginTop: 7,
-    fontSize: 20,
+    fontSize: 17,
     textAlign: 'center',
     color : '#eeeeee',
   },
@@ -128,6 +131,8 @@ const App = StackNavigator({
   Welcome: { screen: WelcomeScreen },
   LoginGuide : {screen: LoginGuideScreen},
   LoginTourist : {screen: LoginTouristScreen},
+  RegisterTourist : {screen: RegisterTourist},
+  RegisterGuide : {screen: RegisterGuide},
 },{ 
     headerMode: 'screen' 
   },

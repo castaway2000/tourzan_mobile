@@ -14,7 +14,6 @@ class NavigationBar extends React.Component{
         const {
             title,
             onPress,
-            style,
         } = this.props
         return(
              <View style={styles.container}>
@@ -30,16 +29,14 @@ class NavigationBar extends React.Component{
 
 const styles = StyleSheet.create({
     container:{
-        marginTop:10,
         width:width,
-        height: 50,
+        height: 44,
         alignItems:'center',
         flex:1,
         flexDirection:'row',
-        
     },
     backView:{
-       height:50,
+       height:44,
        width: 50,
     },
     backButton:{
@@ -49,11 +46,11 @@ const styles = StyleSheet.create({
     centerText:{
         color:'#fff',
         textAlign:'center',
-        fontSize:20,
+        fontSize:17,
         width:width-100,
     },
     rightView:{
-        height:50,
+        height:44,
         width:50
     }
 });
