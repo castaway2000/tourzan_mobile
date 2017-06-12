@@ -17,11 +17,19 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
+import { TabNavigator } from 'react-navigation';
 
 import LoginGuideScreen from './containers/LoginGuideScreen';
 import LoginTouristScreen from './containers/LoginTouristScreen';
 import RegisterTourist from './containers/RegisterTouristScreen';
 import RegisterGuide from './containers/RegisterGuideScreen';
+import ForgotPassword from './containers/ForgotPasswordScreen';
+
+import MapsScreen from './containers/MapsScreen';
+import DashboardScreen from './containers/DashboardScreen';
+import ChatScreen from './containers/ChatScreen';
+import MarketplaceScreen from './containers/MarketplaceScreen';
+
 import ApplyButton from './components/ApplyButton';
 
 // const store = createStore(tourzan);
@@ -127,16 +135,34 @@ const styles = StyleSheet.create({
   },
 });
 
+const MainTapNavigator = TabNavigator({
+  Maps: { screen: MapsScreen, },
+  Dashboard: { screen: DashboardScreen, },
+  Chat: { screen: ChatScreen, },
+  Marketplace: { screen: MarketplaceScreen, },
+}, {
+  tabBarPosition:'bottom',
+  tabBarOptions: {
+    activeTintColor: '#0f0',
+    inactiveTintColor:'#999',
+    labelStyle:{fontSize:9,marginTop:0},
+    showIcon:'true',
+    style: {backgroundColor: 'white', marginBottom: -10},
+    indicatorStyle:{opacity:0},
+  },
+});
+
 const App = StackNavigator({
   Welcome: { screen: WelcomeScreen },
   LoginGuide : {screen: LoginGuideScreen},
   LoginTourist : {screen: LoginTouristScreen},
   RegisterTourist : {screen: RegisterTourist},
   RegisterGuide : {screen: RegisterGuide},
+  ForgotPassword : {screen : ForgotPassword},
+  Home: {screen:MainTapNavigator},
 },{ 
     headerMode: 'screen' 
   },
 );
-
 
 AppRegistry.registerComponent('Tourzan', () => App);

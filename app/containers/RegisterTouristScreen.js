@@ -54,7 +54,7 @@ class RegisterTouristScreen extends React.Component {
       return (
         <View style={styles.container}>  
             <Image resizeMode='cover' source={require("../assets/images/login_bg.png")} style={styles.top_container}>
-                  <NavigationBar title={''} onPress={() => {this.props.navigation.dispatch(backAction)}}/>
+                  <NavigationBar title={''} bgColor={'transparent'} onPress={() => {this.props.navigation.dispatch(backAction)}}/>
                   <View style={styles.view_title}>
                         <Text style={styles.txt_bottom}>Create an account to Tourist</Text>
                          <Text style={styles.txt_welcome}>REGISTER</Text>

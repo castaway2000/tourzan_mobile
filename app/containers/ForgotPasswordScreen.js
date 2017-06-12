@@ -28,15 +28,15 @@ const backAction = NavigationActions.back({
     // key: 'WelcomeScreen'
 })
 
-class LoginGuideScreen extends React.Component {
+class ForgotPasswordScreen extends React.Component {
   static navigationOptions = {
-      title: 'Tour Guide Login ',
+      title: 'Forgot Password',
       header : null,
   };
 
  constructor(props) {
     super(props);
-    this.state = { checked: false };
+  
   }
 
   onLogin(){
@@ -47,33 +47,19 @@ class LoginGuideScreen extends React.Component {
       const { navigate } = this.props.navigation;
       return (
         <View style={styles.container}>  
-            <Image resizeMode='cover' source={require("../assets/images/login_bg.png")} style={styles.top_container}>
-                  <NavigationBar title={'Tour Guide Login'} bgColor={'transparent'} onPress={() => {this.props.navigation.dispatch(backAction)}}/>
+            <View  style={styles.top_container}>
+                  <NavigationBar title={'Forgot Password'} bgColor={'#31dd73'} onPress={() => {this.props.navigation.dispatch(backAction)}}/>
                   <View style={styles.view_logo}>
                         <Image resizeMode='contain' style={styles.icon_logo}  source={require("../assets/images/Tourzan_Logo.png")}/>
-                        <Text style={styles.txt_welcome}>TOURZAN</Text>
-                        <Text style={styles.txt_bottom}>Wine Tours La Dolce Vita</Text>
+                        <Text style={styles.txt_welcome}>Recover Password</Text>
+                        <Text style={styles.txt_bottom}>Enter your email to receive intructions on how to reset your password</Text>
                   </View>
-            </Image>
+            </View>
             <View style={styles.bottom_container}>
                   <TextInput placeholder="Email" style={styles.inputText} underlineColorAndroid={'gray'}/>
-                  <TextInput placeholder="Password" secureTextEntry={true} style={styles.inputText} underlineColorAndroid={'gray'}/>
-                  <View style={styles.view_remember}>
-                     <View style={styles.view_checkbox}>
-                          <Checkbox
-                                checked={true}
-                                style={{backgroundColor: '#f2f2f2', color:'#31dd73', borderRadius: 2}}
-                                size={15}
-                          />
-                         <Text style={styles.txt_checkbox}>Remember me</Text>
-                     </View>
-                     <TouchableOpacity onPress={() => navigate('ForgotPassword')}>
-                         <Text style={styles.txt_forgot}>Forgot Password?</Text>
-                     </TouchableOpacity>
-                  </View>
-                  <ApplyButton name={'Login'} style={styles.button_login}/>
-                  <TouchableOpacity  onPress={() => navigate('RegisterGuide')} title="SING UP">
-                      <Text style={styles.button_signup} >SIGN UP</Text>
+                  <ApplyButton name={'Recover'} style={styles.button_recover}/>
+                  <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}} title="Cancel">
+                      <Text style={styles.button_cancel} >Cancel</Text>
                   </TouchableOpacity>
             </View>
         </View>
@@ -91,9 +77,8 @@ const styles = StyleSheet.create({
   top_container: {
       width: width,
       height : height*40/100,
-      flex:1,
       flexDirection:'column',
-      justifyContent:'space-between'
+      justifyContent:'flex-start'
   },
   view_logo:{
       width: width,
@@ -101,9 +86,11 @@ const styles = StyleSheet.create({
       alignItems:'center',
       flex:3,
       flexDirection:'column',
-      justifyContent:'flex-start'
+      justifyContent:'flex-start',
+      backgroundColor: '#fff',
   },
   icon_logo:{
+      marginTop:10,
       height:70,
       width:70
   },
@@ -111,12 +98,13 @@ const styles = StyleSheet.create({
       fontSize: 17,
       fontWeight : 'bold',
       textAlign: 'center',
-      color : '#ffffff',
+      color : '#000',
   },
   txt_bottom:{
-      fontSize: 17,
+      width: width-60,
+      fontSize: 15,
       textAlign: 'center',
-      color : '#eeeeee'
+      color : '#999999'
   },
   bottom_container:{
       width: width,
@@ -125,34 +113,17 @@ const styles = StyleSheet.create({
   },
   inputText: {
       width: width-60, 
-      marginTop: 20,
+      marginTop: 50,
       height: 40,
       borderColor: 'gray'
   },
-  txt_checkbox:{
-      marginLeft:10,
-      fontSize:12,    
+
+  button_recover:{
+      marginTop: 35,
   },
-  txt_forgot:{
-      fontSize:12,    
-  },
-  view_remember: {
-      width: width-60,
-      marginTop: 20,
-      justifyContent:'space-between',
-      flexDirection: 'row'
-  },
-  view_checkbox:{
-      width:100,
-      justifyContent:'flex-start',
-      flexDirection: 'row',
-      alignItems:'center'
-  },
-  button_login:{
-      marginTop: 25,
-  },
-  button_signup:{
-      marginTop:30,
+  button_cancel:{
+      marginTop:40,
+      marginBottom: 30,
       color: '#000',
       textAlign:'center',
       fontSize:18,
@@ -162,5 +133,5 @@ const styles = StyleSheet.create({
   }
 });
 
-export default LoginGuideScreen;
+export default ForgotPasswordScreen;
 

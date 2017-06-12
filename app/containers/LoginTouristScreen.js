@@ -50,7 +50,7 @@ class LoginTouristScreen extends React.Component {
       return (
         <View style={styles.container}>  
             <Image resizeMode='cover' source={require("../assets/images/login_bg.png")} style={styles.top_container}>
-                  <NavigationBar title={'Tourist Login'} onPress={() => {this.props.navigation.dispatch(backAction)}}/>
+                  <NavigationBar title={'Tourist Login'} bgColor={'transparent'} onPress={() => {this.props.navigation.dispatch(backAction)}}/>
                   <View style={styles.view_logo}>
                         <Image resizeMode='contain' style={styles.icon_logo}  source={require("../assets/images/Tourzan_Logo.png")}/>
                         <Text style={styles.txt_welcome}>TOURZAN</Text>
@@ -69,11 +69,11 @@ class LoginTouristScreen extends React.Component {
                           />
                          <Text style={styles.txt_checkbox}>Remember me</Text>
                      </View>
-                     <TouchableOpacity >
+                     <TouchableOpacity onPress={() => navigate('ForgotPassword')}>
                          <Text style={styles.txt_forgot}>Forgot Password?</Text>
                      </TouchableOpacity>
                   </View>
-                  <ApplyButton name={'Login'} style={styles.button_login}/>
+                  <ApplyButton onPress={() => navigate('Home')} name={'Login'} style={styles.button_login}/>
                   <TouchableOpacity  onPress={() => navigate('RegisterTourist')} title="SING UP">
                       <Text style={styles.button_signup} >SIGN UP</Text>
                   </TouchableOpacity>

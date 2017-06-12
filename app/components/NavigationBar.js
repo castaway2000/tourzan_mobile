@@ -12,11 +12,12 @@ var { width, height } = Dimensions.get('window');
 class NavigationBar extends React.Component{
     render(){
         const {
+            bgColor,
             title,
             onPress,
         } = this.props
         return(
-             <View style={styles.container}>
+             <View style={[styles.container,{backgroundColor:bgColor}]}>
                     <TouchableOpacity onPress={onPress}>
                         <Image  resizeMode='center' style={styles.backButton} source={require("../assets/images/back.png")} />
                     </TouchableOpacity>
