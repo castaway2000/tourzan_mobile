@@ -71,7 +71,7 @@ class LoginGuideScreen extends React.Component {
                          <Text style={styles.txt_forgot}>Forgot Password?</Text>
                      </TouchableOpacity>
                   </View>
-                  <ApplyButton name={'Login'} style={styles.button_login}/>
+                  <ApplyButton name={'Login'} onPress={() => navigate('Home')} style={styles.button_login}/>
                   <TouchableOpacity  onPress={() => navigate('RegisterGuide')} title="SING UP">
                       <Text style={styles.button_signup} >SIGN UP</Text>
                   </TouchableOpacity>
@@ -86,22 +86,19 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems: 'center',
       flexDirection: 'column',
-      justifyContent: 'space-between'
   },
   top_container: {
       width: width,
       height : height*40/100,
-      flex:1,
       flexDirection:'column',
       justifyContent:'space-between'
   },
   view_logo:{
       width: width,
-      height : height*40/100 - 64,
+      height : height*40/100 - 44,
       alignItems:'center',
-      flex:3,
       flexDirection:'column',
-      justifyContent:'flex-start'
+      justifyContent:'center',
   },
   icon_logo:{
       height:70,

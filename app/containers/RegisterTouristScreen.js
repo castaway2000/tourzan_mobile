@@ -71,7 +71,7 @@ class RegisterTouristScreen extends React.Component {
                     <TextInput placeholder="Phone Number" style={styles.inputText} underlineColorAndroid={'gray'}/>
                     <TextInput defaultValue="Intests" editable={false} onFocus={this.onIntestExtention}  style={styles.interest_text} underlineColorAndroid={'gray'} />
                 
-                    <ApplyButton name={'Sign Up'} style={styles.button_login}/>
+                    <ApplyButton name={'Sign Up'} onPress={() => navigate('Home')} style={styles.button_login}/>
                     <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}} title="SING IN">
                        <Text style={styles.button_signin} >SIGN IN</Text>
                     </TouchableOpacity>
@@ -90,15 +90,12 @@ const styles = StyleSheet.create({
   },
   top_container: {
       width: width,
-      height : height*30/100,
-    //   flex:1,
-    //   flexDirection:'column',
-    //   justifyContent:'space-between'
+      height : height*40/100,
+      flexDirection:'column',
   },
   view_title:{
       width: width,
-      height : height*30/100 - 64,
-      flex:3,
+      height : height*40/100 - 44,
       alignItems:'flex-start',
       flexDirection:'column',
       justifyContent:'flex-end',

@@ -82,15 +82,13 @@ const styles = StyleSheet.create({
   },
   view_logo:{
       width: width,
-      height : height*40/100 - 64,
+      height : height*40/100 - 44,
       alignItems:'center',
-      flex:3,
       flexDirection:'column',
-      justifyContent:'flex-start',
+      justifyContent:'center',
       backgroundColor: '#fff',
   },
   icon_logo:{
-      marginTop:10,
       height:70,
       width:70
   },

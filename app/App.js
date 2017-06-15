@@ -143,7 +143,7 @@ const MainTapNavigator = TabNavigator({
 }, {
   tabBarPosition:'bottom',
   tabBarOptions: {
-    activeTintColor: '#0f0',
+    activeTintColor: '#31dd73',
     inactiveTintColor:'#999',
     labelStyle:{fontSize:9,marginTop:0},
     showIcon:'true',

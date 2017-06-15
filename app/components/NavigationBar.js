@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
         width:width,
         height: 44,
         alignItems:'center',
-        flex:1,
         flexDirection:'row',
     },
     backView:{
