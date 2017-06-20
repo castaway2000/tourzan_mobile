@@ -60,7 +60,7 @@ class MapsScreen extends React.Component {
                     </TouchableOpacity>
                     <Text style={styles.centerText}>TOURZAN</Text>
                     <TouchableOpacity>
-                        <Image resizeMode='cover' source={require("../assets/images/person1.png")} style={styles.map_container} style={styles.rightView} />
+                        <Image resizeMode='cover' source={require("../assets/images/person1.png")}  style={styles.rightView} />
                     </TouchableOpacity>
             </View>
             <View style={styles.map_container}>
@@ -68,6 +68,25 @@ class MapsScreen extends React.Component {
                      region={this.state.region}
                      onRegionChange={this.onRegionChange}
                 />
+                <View style={styles.locationInfo_view}>
+                    <View style={styles.location_address_view}>
+                        <Image resizeMode='cover' source={require("../assets/images/location_maps.png")} style={styles.icon_image}/>
+                        <Text style={styles.row_text}>052 Maggio Road Apt. o16</Text>
+                    </View>
+                    <View style={styles.devide_line}/>
+                    <View style={styles.location_time_view}>
+                        <View style={styles.location_time_left_child}>
+                            <Image resizeMode='cover' source={require("../assets/images/time_icon.png")} style={styles.icon_image}/>
+                            <Text  style={styles.row_text}>09:18 pm</Text>
+                        </View>
+                        <TouchableOpacity>
+                            <Image resizeMode='cover' source={require("../assets/images/edit_time.png")} style={styles.edit_time}/>
+                         </TouchableOpacity>
+                    </View>
+                </View>
+                 <TouchableOpacity style={styles.booking_view}>
+                    <Image resizeMode='cover' source={require("../assets/images/booking_green_btn.png")} style={styles.booking_green_btn} />
+                </TouchableOpacity>
             </View>
         </View>
       );
@@ -107,15 +126,81 @@ const styles = StyleSheet.create({
     },
     rightView:{
         marginRight:20,
-        height:44,
-        width:44
+        height:35,
+        width:35
     },
     map_container:{
-         height:height-44,
+         height:height-120,
+         width:width,
+         alignItems:'center'
     },
     map_view:{
-        height:height-44,
-        // width: width,
+        height:height-120,
+        width: width,
+    },
+    locationInfo_view: {
+        position: 'absolute',
+        width: width-60,
+        height: 100,
+        top: 25,
+        marginLeft:30,
+        backgroundColor: 'white',
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#ddd',
+        flexDirection:'column',
+        justifyContent:'flex-start',
+    },
+    location_address_view:{
+        flex:0.55,
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'flex-start',
+        height: 30,
+        width:width-60,
+    },
+    devide_line:{
+        backgroundColor:'#ccc',
+        height: 1,
+        width: width-60,
+    },
+    location_time_view:{
+        flex:0.45,
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'space-between',
+        height: 30,
+        width:width-60,
+    },
+    location_time_left_child:{
+        flexDirection:'row',
+        alignItems:'center',
+        height: 30,
+        width:width-90,
+    },
+    booking_view:{
+        position: 'absolute',
+        width: 100,
+        height: 100,
+        bottom: 20,
+    },
+    booking_green_btn: {
+        backgroundColor: 'transparent',
+        width: 100,
+        height: 100,
+    },
+    icon_image:{
+        marginLeft:10,
+        height:15,
+        width:15,
+    },
+    row_text:{
+        marginLeft:15,
+    },
+    edit_time:{
+        height:15,
+        width:15,
+        marginRight:20,
     },
 });
 
