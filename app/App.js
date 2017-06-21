@@ -30,6 +30,12 @@ import DashboardScreen from './containers/DashboardScreen';
 import ChatScreen from './containers/ChatScreen';
 import MarketplaceScreen from './containers/MarketplaceScreen';
 
+import TripsScreen from './containers/DashboardTabs/TripsScreen';
+import GuidesScreen from './containers/DashboardTabs/GuidesScreen';
+import TransactionsScreen from './containers/DashboardTabs/TransactionsScreen';
+
+import TripItemDetailScreen from './containers/ItemDetailScreens/TripItemDetailScreen';
+
 import ApplyButton from './components/ApplyButton';
 
 // const store = createStore(tourzan);
@@ -110,17 +116,6 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     marginBottom:30,
   },
-  // button_tourist:{
-  //   color:'#fff',
-  //   paddingTop:10,
-  //   textAlign:'center',
-  //   fontSize: 18,
-  //   height:50,
-  //   width:width-60,
-  //   backgroundColor:'#31dd73',
-  //   borderRadius:5,
-  //   borderColor: '#555555'
-  // },
   button_guide:{
     paddingTop:10,
     color:'#000',
@@ -135,6 +130,30 @@ const styles = StyleSheet.create({
   },
 });
 
+// const TripsStackNavigator = StackNavigator({
+//     Trips: { screen: TripsScreen, },
+//     TripItemDetail : {screen: TripItemDetailScreen},
+// },{ 
+//     headerMode: 'screen', 
+//     initialRouteName: 'Trips',
+//   },
+// );
+
+export default DashboardTapNavigator = TabNavigator({
+  Trips: { screen: TripsScreen, },
+  Guides: { screen: GuidesScreen, },
+  Transactions: { screen: TransactionsScreen, },
+}, {
+  tabBarPosition:'top',
+  tabBarOptions: {
+    activeTintColor: '#fff',
+    inactiveTintColor:'#555',
+    labelStyle:{fontSize:9},
+    showIcon:'true',
+    style: {backgroundColor: '#31dd73'},
+  },
+});
+
 const MainTapNavigator = TabNavigator({
   Maps: { screen: MapsScreen, },
   Dashboard: { screen: DashboardScreen, },
@@ -142,6 +161,7 @@ const MainTapNavigator = TabNavigator({
   Marketplace: { screen: MarketplaceScreen, },
 }, {
   tabBarPosition:'bottom',
+  lazy: true,
   tabBarOptions: {
     activeTintColor: '#31dd73',
     inactiveTintColor:'#999',
