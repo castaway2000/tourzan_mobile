@@ -90,20 +90,15 @@ class TripsScreen extends React.Component {
                 onPress={()=> this.pressRow(rowData)}
                 underlayColor = '#ddd'>
                     <View style ={styles.row}>
-                        <Image resizeMode='contain' source={require("../../assets/images/trip_avatar.png")}  style={styles.avatar_img}/>
+                        <Image resizeMode='cover' source={require("../../assets/images/trip_avatar.png")}  style={styles.avatar_img}/>
                         <View style={styles.info_view}>
                             <View style={styles.location_view}>
                                 <Image resizeMode='contain' source={require("../../assets/images/trip_item_location_icon.png")}  style={styles.location_icon}/>
                                 <Text style={styles.name_text}>Elmerburgh</Text>
-                            </View>
-                            
+                            </View>  
                             <Text style={styles.description_text}>Conventry City Guide Including Conventry Hotels</Text>
                             <View style={styles.rate_view} pointerEvents="none">
-                                <Rating 
-                                    ratingCount={5}
-                                    imageSize={15}
-                                    onFinishRating={this.ratingCompleted}
-                                />
+                                <Rating ratingCount={5} imageSize={8} onFinishRating={this.ratingCompleted} />
                                 <Text style={styles.rating_text}>(12)</Text>
                             </View>
                         </View>
@@ -162,7 +157,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   info_view: {
-    width:200,
+    width:width*50/100,
     marginLeft:10,
     flexDirection:'column',
     justifyContent: 'center',
@@ -193,7 +188,7 @@ const styles = StyleSheet.create({
       marginTop:5,
       height: 20,
       flexDirection:'row',
-    //   alignItems:'center',
+      alignItems:'center',
   },
   ratingbar:{
       height:10,
@@ -201,7 +196,7 @@ const styles = StyleSheet.create({
   },
   rating_text:{
       marginLeft:5,
-      fontSize: 12,
+      fontSize: 8,
       color: '#999',
   },
   arrow_view:{

@@ -11,10 +11,16 @@
     "react-native": "0.44.0",
     "react-native-checkbox": "^1.1.0",
     "react-native-custom-checkbox": "^1.5.1",
+    "react-native-elements": "^0.13.0",
+    "react-native-gifted-chat-temporary": "^1.0.9",
+    "react-native-icon-badge": "^1.1.1",
     "react-native-icon-checkbox": "^1.2.0",
     "react-native-maps": "^0.15.2",
     "react-native-modal-dropdown": "^0.4.3",
+    "react-native-search-bar": "^3.0.0",
+    "react-native-searchbar": "^1.10.0",
     "react-native-star-rating": "^1.0.7",
+    "react-native-vector-icons": "^4.2.0",
     "redux": "^3.6.0"
   },
   "devDependencies": {
