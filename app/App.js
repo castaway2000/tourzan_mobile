@@ -35,6 +35,7 @@ import GuidesScreen from './containers/DashboardTabs/GuidesScreen';
 import TransactionsScreen from './containers/DashboardTabs/TransactionsScreen';
 
 import TripItemDetailScreen from './containers/ItemDetailScreens/TripItemDetailScreen';
+import ChatRoomScreen from './containers/ChatRoomScreen'
 
 import ApplyButton from './components/ApplyButton';
 
@@ -154,10 +155,20 @@ export default DashboardTapNavigator = TabNavigator({
   },
 });
 
+const ChatStackNavigator = StackNavigator({
+    Chats: { screen: ChatScreen, },
+    ChatRoom : {screen: ChatRoomScreen},
+},{ 
+    headerMode: 'screen', 
+    initialRouteName: 'Chats',
+  },
+);
+
+
 const MainTapNavigator = TabNavigator({
   Maps: { screen: MapsScreen, },
   Dashboard: { screen: DashboardScreen, },
-  Chat: { screen: ChatScreen, },
+  Chat: { screen: ChatStackNavigator, },
   Marketplace: { screen: MarketplaceScreen, },
 }, {
   tabBarPosition:'bottom',

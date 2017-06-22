@@ -13,35 +13,150 @@ import {
   View,
   Alert,
   TouchableOpacity,
+  TouchableHighlight,
+  ListView,
 } from 'react-native';
 
+import Rating from 'react-native-ratings';
 import { NavigationActions } from 'react-navigation'
+import IconBadge from 'react-native-icon-badge';
+
 import NavigationBar from '../components/NavigationBar'
 
+var SearchBar = require('react-native-search-bar');
 var { width, height } = Dimensions.get('window');
 
+const SearchListHeader = (props) => (
+    <View style={styles.search_header_container}>
+        <View style={styles.search_hedear_row_view}>
+            <Image resizeMode='cover' source={require("../assets/images/search_white_icon.png")}  style={styles.search_header_search_icon}/>
+            <TextInput
+                style={styles.search_header_text}
+                underlineColorAndroid="transparent"
+                placeholder="Search here..."
+                placeholderTextColor="white"
+                onChangeText={(text) => console.log('searching for ', text)}
+            />
+        </View>
+    </View>
+);
+
 class ChatScreen extends React.Component {
-   static navigationOptions = {
+    static navigationOptions = {
         header : null,
         tabBarLabel: 'Chat',
         tabBarIcon: ({ tintColor }) => (
              <Image source={require('../assets/images/Chat_Bottom_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
         ),
-  };
+    };
 
- constructor(props) {
-    super(props);
-   
-  }
+    _handleResults(results) {
+        this.setState({ results });
+    }
 
-  render() {
-      const { navigate } = this.props.navigation;
-      return (
-        <View style={styles.container}>  
-          
-        </View>
-      );
-   }
+    constructor(props) {
+        super(props);
+        var ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 != r2
+        });
+        this.state = {
+            // for listview
+            ds:[{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"}],
+            dataSource:ds,
+
+            // for ratingview
+            starCount: 3.5,
+        }
+    }
+
+    // function for ratingview
+    ratingCompleted(rating) {
+        console.log("Rating is: " + rating)
+    }
+
+    // functions for listview
+    componentDidMount(){
+            this.setState({
+                dataSource:this.state.dataSource.cloneWithRows(this.state.ds),
+            })
+     }
+
+     pressRow(rowData){
+            const { navigate } = this.props.navigation;
+            var newDs = [];
+            newDs = this.state.ds.slice();
+            this.setState({
+                dataSource: this.state.dataSource.cloneWithRows(newDs)
+            })
+            navigate('ChatRoom')
+    }
+
+     renderRow(rowData){
+            return (
+
+            <TouchableHighlight style={styles.row_view}
+                onPress={()=> this.pressRow(rowData)}
+                underlayColor = '#ddd'>
+                    <View style ={styles.row}>
+                        <View style={styles.avatar_view}>
+                            <Image resizeMode='cover' source={require("../assets/images/chat_avatar.png")}  style={styles.avatar_img}/>
+                        </View>
+                        <View style={styles.info_view}>
+                            <Text style={styles.name_text}>Luella Palmer</Text>
+                            <Text style={styles.description_text}>Agreed!</Text>
+                        </View>
+                        <View style={styles.row_right_view}>
+                            <Text style={styles.right_text}>08:23 AM</Text>
+                            <View style={{marginTop:5}}>
+                                <IconBadge
+                                  MainElement={
+                                    <View style={{backgroundColor:'#fff',
+                                      width:0,
+                                      height:0,
+                                      margin:0
+                                    }}/>
+                                  }
+                                  BadgeElement={
+                                    <Text style={{color:'#fff'}}>{3}</Text>
+                                  }
+                                  IconBadgeStyle={
+                                    { position:'relative',
+                                      width:15,
+                                      height:15,
+                                      backgroundColor: '#31dd73'}
+                                  }
+                                  Hidden={this.state.BadgeCount==0}
+                                  />
+                            </View>
+                        </View>
+                    </View>
+            </TouchableHighlight>
+
+         )
+     }
+
+     render() {
+        
+        return (
+            <View style={styles.container}>  
+                  <View style={styles.top_container}>
+                        <View style={styles.backButton}>
+                        </View>
+                        <Text style={styles.centerText}>MESSAGES</Text>
+                        <View style={styles.rightView}>
+                        </View>
+                 </View>
+                 <View style={styles.list_view_container}>
+                        <ListView
+                            dataSource={this.state.dataSource}
+                            renderRow={this.renderRow.bind(this)}
+                            renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator}/>}
+                            renderHeader={() => <SearchListHeader />}
+                        />
+                 </View>
+            </View> 
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -49,13 +164,151 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems: 'center',
       flexDirection: 'column',
-      justifyContent: 'flex-start'
   },
   icon: {
     width: 20,
     height: 20,
   },
+   top_container:{
+      height:44,
+      backgroundColor: '#31dd73',
+      width:width,
+      alignItems:'center',
+      flexDirection:'row',
+      justifyContent:'space-between',
+  },
+    backButton:{
+        marginLeft:20,
+        height:20,
+        width:20,
+    },
+    centerText:{
+        color:'#fff',
+        textAlign:'center',
+        fontSize:17,
+        width:width-160,
+        fontWeight:'bold',
+    },
+    rightView:{
+        marginRight:20,
+        height:35,
+        width:35
+    },
+  list_view_container : {
+         marginTop:1,
+         height:height-120,
+         width:width,
+    },
+  separator: {
+        flex: 1,
+        height: StyleSheet.hairlineWidth,
+        backgroundColor: '#ddd',
+  },
+  text_color:{
+    color:'#000',
+  },
+  search_header_container: {
+    padding: 10,
+    // flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#31dd73',
+
+  },
+  search_hedear_row_view:{
+     flexDirection: 'row',
+     alignItems: 'center',
+     backgroundColor:'#20bb5c',
+     width:width-80,
+     paddingHorizontal:10,
+     paddingTop:0,
+     paddingBottom:0,
+     borderRadius:7,
+  },
+  search_header_search_icon:{
+      height:15,
+      width:15,
+  },
+  search_header_text: {
+    marginLeft:10,
+    paddingTop:0,
+    paddingBottom:0,
+    height: 30,
+    width: width-100,
+    color:'white',
+    fontSize: 12,
+},
+  row_view:{
+    paddingHorizontal:20,
+    paddingVertical:20,
+    backgroundColor: 'white',
+    borderRadius: 5,
+  },
+  row:{
+      alignItems:'center',
+      flexDirection:'row',
+      justifyContent:'space-between',
+  },
+  avatar_view:{
+      flexDirection:'column',
+      alignItems:'center',
+  },
+  avatar_img:{
+    padding:5,
+    width:40,
+    height:40,
+    borderRadius: 20,
+    borderWidth: 1,
+  },
+  info_view: {
+    width:width*50/100,
+    marginLeft:10,
+    flexDirection:'column',
+    justifyContent: 'center',
+  },
+  location_view:{
+      marginTop:5,
+      height:15,
+      flexDirection:'row',
+      alignItems:'center',
+  },
+  location_icon:{
+      width:10,
+      height:10,
+  },
+  name_text:{
+    fontSize:15,
+    color:'#000',
+    textAlign:'left',
+    fontWeight:'bold',
+  },
+  location_text:{
+    marginLeft:5,
+    fontSize:12,
+    color:'#999',
+    textAlign:'left',
+    fontWeight:'bold',
+  },
+  description_text:{
+    marginTop:5,
+    fontSize:12,
+    color:'#999',
+    textAlign:'left',
+  },
+  row_right_view:{
+      width:60,
+      flexDirection:'column',
+      alignItems:'center',
+  },
+  right_text:{
+      fontSize:10,
+  },
+  badge_icon:{
+    height:10,
+    width:10,
+  },
 });
 
+
 export default ChatScreen;
+
 
