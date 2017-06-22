@@ -17,11 +17,12 @@
     "react-native-icon-checkbox": "^1.2.0",
     "react-native-maps": "^0.15.2",
     "react-native-modal-dropdown": "^0.4.3",
-    "react-navigation": "^1.0.0-beta.11",
+    "react-native-ratings": "^1.0.3",
     "react-native-search-bar": "^3.0.0",
     "react-native-searchbar": "^1.10.0",
     "react-native-star-rating": "^1.0.7",
     "react-native-vector-icons": "^4.2.0",
+    "react-navigation": "^1.0.0-beta.11",
     "redux": "^3.6.0"
   },
   "devDependencies": {
