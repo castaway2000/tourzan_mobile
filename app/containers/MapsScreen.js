@@ -59,7 +59,7 @@ class MapsScreen extends React.Component {
                         <Image resizeMode='cover' source={require("../assets/images/hambuger.png")} style={styles.backButton} />
                     </TouchableOpacity>
                     <Text style={styles.centerText}>TOURZAN</Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => {navigate('Profile')}}>
                         <Image resizeMode='cover' source={require("../assets/images/person1.png")}  style={styles.rightView} />
                     </TouchableOpacity>
             </View>
@@ -84,7 +84,7 @@ class MapsScreen extends React.Component {
                          </TouchableOpacity>
                     </View>
                 </View>
-                 <TouchableOpacity style={styles.booking_view}>
+                 <TouchableOpacity style={styles.booking_view} onPress={() => {navigate('BookingSearching')}}>
                     <Image resizeMode='cover' source={require("../assets/images/booking_green_btn.png")} style={styles.booking_green_btn} />
                 </TouchableOpacity>
             </View>

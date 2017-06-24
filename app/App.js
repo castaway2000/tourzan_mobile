@@ -35,7 +35,10 @@ import GuidesScreen from './containers/DashboardTabs/GuidesScreen';
 import TransactionsScreen from './containers/DashboardTabs/TransactionsScreen';
 
 import TripItemDetailScreen from './containers/ItemDetailScreens/TripItemDetailScreen';
-import ChatRoomScreen from './containers/ChatRoomScreen'
+import ChatRoomScreen from './containers/ChatRoomScreen';
+import ProfileScreen from './containers/ProfileScreen';
+import BookingSearchingScreen from './containers/BookingScreens/BookingSearchingScreen';
+import BookingGuideSettingScreen from './containers/BookingScreens/BookingGuideSettingScreen';
 
 import ApplyButton from './components/ApplyButton';
 
@@ -164,9 +167,18 @@ const ChatStackNavigator = StackNavigator({
   },
 );
 
+const MapChatStackNavigator = StackNavigator({
+    Maps: { screen: MapsScreen, },
+    Profile : {screen: ProfileScreen},
+    ProfileCharRoom : {screen: ChatRoomScreen},
+},{ 
+    headerMode: 'screen', 
+    initialRouteName: 'Maps',
+  },
+);
 
 const MainTapNavigator = TabNavigator({
-  Maps: { screen: MapsScreen, },
+  MapsNav: { screen: MapChatStackNavigator, },
   Dashboard: { screen: DashboardScreen, },
   Chat: { screen: ChatStackNavigator, },
   Marketplace: { screen: MarketplaceScreen, },
@@ -191,6 +203,9 @@ const App = StackNavigator({
   RegisterGuide : {screen: RegisterGuide},
   ForgotPassword : {screen : ForgotPassword},
   Home: {screen:MainTapNavigator},
+  BookingSearching: {screen:BookingSearchingScreen},
+  BookingGuideSetting: {screen:BookingGuideSettingScreen},
+  ProfileCharRoomFromBooking : {screen: ChatRoomScreen},
 },{ 
     headerMode: 'screen' 
   },

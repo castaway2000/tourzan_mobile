@@ -37,14 +37,14 @@ class LoginGuideScreen extends React.Component {
  constructor(props) {
     super(props);
     this.state = { checked: false };
+    this.navigate = this.props.navigation;
   }
 
   onLogin(){
-        
+        this.navigate.navigate('Home');
   }
 
   render() {
-      const { navigate } = this.props.navigation;
       return (
         <View style={styles.container}>  
             <Image resizeMode='cover' source={require("../assets/images/login_bg.png")} style={styles.top_container}>
@@ -71,7 +71,7 @@ class LoginGuideScreen extends React.Component {
                          <Text style={styles.txt_forgot}>Forgot Password?</Text>
                      </TouchableOpacity>
                   </View>
-                  <ApplyButton name={'Login'} onPress={() => navigate('Home')} style={styles.button_login}/>
+                  <ApplyButton name={'Login'} onPress={() => this.onLogin()} style={styles.button_login}/>
                   <TouchableOpacity  onPress={() => navigate('RegisterGuide')} title="SING UP">
                       <Text style={styles.button_signup} >SIGN UP</Text>
                   </TouchableOpacity>

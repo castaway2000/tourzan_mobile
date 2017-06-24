@@ -37,15 +37,15 @@ class LoginTouristScreen extends React.Component {
  constructor(props) {
     super(props);
     this.state = { checked: false };
+    this.navigate = this.props.navigation;
   }
 
   onLogin(){
-        
+        this.navigate.navigate('Home');
   }
 
 
   render() {
-      const { navigate } = this.props.navigation;
       return (
         <View style={styles.container}>  
             <Image resizeMode='cover' source={require("../assets/images/login_bg.png")} style={styles.top_container}>
@@ -72,7 +72,7 @@ class LoginTouristScreen extends React.Component {
                          <Text style={styles.txt_forgot}>Forgot Password?</Text>
                      </TouchableOpacity>
                   </View>
-                  <ApplyButton onPress={() => navigate('Home')} name={'Login'} style={styles.button_login}/>
+                  <ApplyButton onPress={() => this.onLogin()} name={'Login'} style={styles.button_login}/>
                   <TouchableOpacity  onPress={() => navigate('RegisterTourist')} title="SING UP">
                       <Text style={styles.button_signup} >SIGN UP</Text>
                   </TouchableOpacity>

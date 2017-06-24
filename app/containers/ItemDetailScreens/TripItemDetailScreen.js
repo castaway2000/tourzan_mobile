@@ -37,10 +37,6 @@ class TripItemDetailScreen extends React.Component {
     this.state = {  };
   }
 
-  onLogin(){
-        
-  }
-
 
   render() {
       const { navigate } = this.props.navigation;
