@@ -73,7 +73,7 @@ class LoginTouristScreen extends React.Component {
                      </TouchableOpacity>
                   </View>
                   <ApplyButton onPress={() => this.onLogin()} name={'Login'} style={styles.button_login}/>
-                  <TouchableOpacity  onPress={() => navigate('RegisterTourist')} title="SING UP">
+                  <TouchableOpacity  onPress={() => this.navigate.navigate('RegisterTourist')} title="SING UP">
                       <Text style={styles.button_signup} >SIGN UP</Text>
                   </TouchableOpacity>
             </View>

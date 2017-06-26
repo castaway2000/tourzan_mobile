@@ -67,12 +67,12 @@ class LoginGuideScreen extends React.Component {
                           />
                          <Text style={styles.txt_checkbox}>Remember me</Text>
                      </View>
-                     <TouchableOpacity onPress={() => navigate('ForgotPassword')}>
+                     <TouchableOpacity onPress={() => this.navigate.navigate('ForgotPassword')}>
                          <Text style={styles.txt_forgot}>Forgot Password?</Text>
                      </TouchableOpacity>
                   </View>
                   <ApplyButton name={'Login'} onPress={() => this.onLogin()} style={styles.button_login}/>
-                  <TouchableOpacity  onPress={() => navigate('RegisterGuide')} title="SING UP">
+                  <TouchableOpacity  onPress={() => this.navigate.navigate('RegisterGuide')} title="SING UP">
                       <Text style={styles.button_signup} >SIGN UP</Text>
                   </TouchableOpacity>
             </View>
