@@ -35,10 +35,15 @@ class BookingGuideSettingScreen extends React.Component {
  constructor(props) {
     super(props);
     this.state = {  };
+    this.navigate = this.props.navigation;
   }
 
   onConfirm(){
 
+  }
+
+  onPaymentSetting(){
+      this.navigate.navigate('PaymentMethod');
   }
 
   render() {
@@ -73,7 +78,7 @@ class BookingGuideSettingScreen extends React.Component {
                             <View style={styles.setting_text_view}>
                                 <Text style={styles.setting_text}>Payment Method</Text>
                             </View>
-                            <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}} style={styles.row_setting_btn_view}>
+                            <TouchableOpacity  onPress={() => this.onPaymentSetting()} style={styles.row_setting_btn_view}>
                                  <View style={styles.row_setting_btn_left_view}>
                                     <Image resizeMode='contain' source={require("../../assets/images/cash_icon.png")}  style={styles.row_setting_btn_icon}/>
                                     <Text style={styles.row_setting_btn_text}>Set Credit Card</Text>

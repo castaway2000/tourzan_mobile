@@ -37,6 +37,7 @@ import TransactionsScreen from './containers/DashboardTabs/TransactionsScreen';
 import TripItemDetailScreen from './containers/ItemDetailScreens/TripItemDetailScreen';
 import ChatRoomScreen from './containers/ChatRoomScreen';
 import ProfileScreen from './containers/ProfileScreen';
+import PaymentMethodScreen from './containers/PaymentMethodScreen';
 import BookingSearchingScreen from './containers/BookingScreens/BookingSearchingScreen';
 import BookingGuideSettingScreen from './containers/BookingScreens/BookingGuideSettingScreen';
 
@@ -206,6 +207,7 @@ const App = StackNavigator({
   BookingSearching: {screen:BookingSearchingScreen},
   BookingGuideSetting: {screen:BookingGuideSettingScreen},
   ProfileCharRoomFromBooking : {screen: ChatRoomScreen},
+  PaymentMethod : {screen: PaymentMethodScreen},
 },{ 
     headerMode: 'screen' 
   },

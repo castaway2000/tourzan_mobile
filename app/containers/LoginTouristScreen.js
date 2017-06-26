@@ -68,7 +68,7 @@ class LoginTouristScreen extends React.Component {
                           />
                          <Text style={styles.txt_checkbox}>Remember me</Text>
                      </View>
-                     <TouchableOpacity onPress={() => navigate('ForgotPassword')}>
+                     <TouchableOpacity onPress={() => this.navigate.navigate('ForgotPassword')}>
                          <Text style={styles.txt_forgot}>Forgot Password?</Text>
                      </TouchableOpacity>
                   </View>
