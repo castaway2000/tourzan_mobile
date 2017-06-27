@@ -46,6 +46,10 @@ class BookingGuideSettingScreen extends React.Component {
       this.navigate.navigate('PaymentMethod');
   }
 
+  onTimeLimitSetting(){
+      this.navigate.navigate('CurrentTimeLimit');
+  }
+
   render() {
       const { navigate } = this.props.navigation;
       return (
@@ -90,7 +94,7 @@ class BookingGuideSettingScreen extends React.Component {
                             <View style={styles.setting_text_view}>
                                 <Text style={styles.setting_text}>Payment Term</Text>
                             </View>
-                            <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}} style={styles.row_setting_btn_view}>
+                            <TouchableOpacity  onPress={() => this.onTimeLimitSetting()} style={styles.row_setting_btn_view}>
                                  <View style={styles.row_setting_btn_left_view}>
                                     <Image resizeMode='contain' source={require("../../assets/images/time_icon_black.png")}  style={styles.row_setting_btn_icon}/>
                                     <Text style={styles.row_setting_btn_text}>Hourly</Text>
@@ -102,7 +106,7 @@ class BookingGuideSettingScreen extends React.Component {
                             <View style={styles.setting_text_view}>
                                 <Text style={styles.setting_text}>Time Limit</Text>
                             </View>
-                            <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}} style={styles.row_setting_btn_view}>
+                            <TouchableOpacity  onPress={() => this.onTimeLimitSetting()} style={styles.row_setting_btn_view}>
                                  <View style={styles.row_setting_btn_left_view}>
                                     <Text style={styles.row_setting_btn_time_text}>Set Time Limit</Text>
                                  </View>

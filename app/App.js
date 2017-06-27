@@ -38,12 +38,12 @@ import TripItemDetailScreen from './containers/ItemDetailScreens/TripItemDetailS
 import ChatRoomScreen from './containers/ChatRoomScreen';
 import ProfileScreen from './containers/ProfileScreen';
 import PaymentMethodScreen from './containers/PaymentMethodScreen';
+import SetTimeLimitScreen from './containers/SetTimeLimitScreen';
+import CurrentTimeLimitScreen from './containers/CurrentTimeLimitScreen';
 import BookingSearchingScreen from './containers/BookingScreens/BookingSearchingScreen';
 import BookingGuideSettingScreen from './containers/BookingScreens/BookingGuideSettingScreen';
 
 import ApplyButton from './components/ApplyButton';
-
-// const store = createStore(tourzan);
 
 var { width, height } = Dimensions.get('window');
 const onButtonPress = () => { Alert.alert('Button has been pressed!'); }; 
@@ -208,6 +208,8 @@ const App = StackNavigator({
   BookingGuideSetting: {screen:BookingGuideSettingScreen},
   ProfileCharRoomFromBooking : {screen: ChatRoomScreen},
   PaymentMethod : {screen: PaymentMethodScreen},
+  TimeLimit: {screen: SetTimeLimitScreen},
+  CurrentTimeLimit:{screen: CurrentTimeLimitScreen},
 },{ 
     headerMode: 'screen' 
   },

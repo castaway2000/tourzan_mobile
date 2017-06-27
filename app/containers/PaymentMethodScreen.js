@@ -23,14 +23,13 @@ import NavigationBar from '../components/NavigationBar'
 
 var { width, height } = Dimensions.get('window');
 
-const onButtonPress = () => { Alert.alert('Button has been pressed!'); }; 
 const backAction = NavigationActions.back({
     // key: 'WelcomeScreen'
 })
 
 class PaymentMethodScreen extends React.Component {
   static navigationOptions = {
-      title: 'Login Tourist',
+      title: 'Payment Method',
       header : null,
   };
 
@@ -39,10 +38,6 @@ class PaymentMethodScreen extends React.Component {
     this.state = { selectedPaymentItem: '', visaSelcted : false, mastercardSelected:false, expressSelected:false};
     this.navigate = this.props.navigation;
   }
-
-//   componentDidMount(){
-//       this.state.visaSelcted = false;
-//   }
 
   onContinue(){
 
