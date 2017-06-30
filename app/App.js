@@ -29,6 +29,7 @@ import MapsScreen from './containers/MapsScreen';
 import DashboardScreen from './containers/DashboardScreen';
 import ChatScreen from './containers/ChatScreen';
 import MarketplaceScreen from './containers/MarketplaceScreen';
+import MoreScreen from './containers/MoreScreen';
 
 import TripsScreen from './containers/DashboardTabs/TripsScreen';
 import GuidesScreen from './containers/DashboardTabs/GuidesScreen';
@@ -42,6 +43,8 @@ import SetTimeLimitScreen from './containers/SetTimeLimitScreen';
 import CurrentTimeLimitScreen from './containers/CurrentTimeLimitScreen';
 import BookingSearchingScreen from './containers/BookingScreens/BookingSearchingScreen';
 import BookingGuideSettingScreen from './containers/BookingScreens/BookingGuideSettingScreen';
+
+import SettingsScreen from './containers/SettingsScreen';
 
 import ApplyButton from './components/ApplyButton';
 
@@ -178,18 +181,29 @@ const MapChatStackNavigator = StackNavigator({
   },
 );
 
+const MoreStackNavigator = StackNavigator({
+    More : {screen: MoreScreen},
+    Settings : {screen : SettingsScreen},
+},{ 
+    headerMode: 'screen', 
+    initialRouteName: 'More',
+  },
+);
+
+
 const MainTapNavigator = TabNavigator({
   MapsNav: { screen: MapChatStackNavigator, },
   Dashboard: { screen: DashboardScreen, },
   Chat: { screen: ChatStackNavigator, },
   Marketplace: { screen: MarketplaceScreen, },
+  MoreNav:{screen: MoreStackNavigator,},
 }, {
   tabBarPosition:'bottom',
   lazy: true,
   tabBarOptions: {
     activeTintColor: '#31dd73',
     inactiveTintColor:'#999',
-    labelStyle:{fontSize:9,marginTop:0},
+    labelStyle:{fontSize:9,marginTop:0, width:width/5-5,},
     showIcon:'true',
     style: {backgroundColor: 'white', marginBottom: -10},
     indicatorStyle:{opacity:0},

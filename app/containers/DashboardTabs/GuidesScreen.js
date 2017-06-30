@@ -31,7 +31,7 @@ class GuideScreen extends React.Component {
         header : null,
         tabBarLabel: 'Prev Guides',
         tabBarIcon: ({ tintColor }) => (
-             <Image source={require('../../assets/images/guides_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
+             <Image resizeMode='contain' source={require('../../assets/images/guides_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
         ),
     };
 

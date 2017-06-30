@@ -34,7 +34,7 @@ class BookingGuideSettingScreen extends React.Component {
 
  constructor(props) {
     super(props);
-    this.state = {  };
+    this.state = { isExtendTerm : false, isHourlyOrManual : false, isCheckHoulryOrManual:false }; // default hourly : isHourlyOrManual = false.  houlry checked - isCheckHourlyOrManual = false.
     this.navigate = this.props.navigation;
   }
 
@@ -47,7 +47,39 @@ class BookingGuideSettingScreen extends React.Component {
   }
 
   onTimeLimitSetting(){
-      this.navigate.navigate('CurrentTimeLimit');
+      this.navigate.navigate('TimeLimit');
+  }
+
+  onExtendTerm(){
+     this.setState(previousState => {
+        return { isExtendTerm: true,};
+      });
+  }
+
+  onUnExtendTerm(){
+       this.setState(previousState => {
+        return { isExtendTerm: false,};
+      });
+  }
+
+  onDone(){
+    this.setState(previousState => {
+          return { isHourlyOrManual : previousState.isCheckHoulryOrManual ? true : false}
+    });
+
+    this.onUnExtendTerm();
+  }
+
+  onCheckHourly(){
+       this.setState(previousState => {
+        return { isCheckHoulryOrManual: false,};
+      });
+  }
+
+  onCheckManual(){
+        this.setState(previousState => {
+        return { isCheckHoulryOrManual: true,};
+      });
   }
 
   render() {
@@ -91,16 +123,91 @@ class BookingGuideSettingScreen extends React.Component {
                             </TouchableOpacity>
                         </View>
                          <View style={styles.row_setting_view}>
-                            <View style={styles.setting_text_view}>
+                            <View style={styles.setting_text_view_term}>
                                 <Text style={styles.setting_text}>Payment Term</Text>
+                                { this.state.isExtendTerm ? (
+                                     <TouchableOpacity onPress={() => this.onDone()}>
+                                        <Text style={styles.done_text}>DONE</Text>
+                                    </TouchableOpacity>
+                                ) : (
+                                    <TouchableOpacity pointerEvents='none'>
+                                        <Text style={styles.done_text}></Text>
+                                    </TouchableOpacity>
+                                )}
                             </View>
-                            <TouchableOpacity  onPress={() => this.onTimeLimitSetting()} style={styles.row_setting_btn_view}>
-                                 <View style={styles.row_setting_btn_left_view}>
-                                    <Image resizeMode='contain' source={require("../../assets/images/time_icon_black.png")}  style={styles.row_setting_btn_icon}/>
-                                    <Text style={styles.row_setting_btn_text}>Hourly</Text>
-                                 </View>
-                                 <Image resizeMode='contain' source={require("../../assets/images/edit_icon.png")}  style={styles.row_setting_btn_right_icon}/>
-                            </TouchableOpacity>
+                            {this.state.isExtendTerm ? (
+                                !this.state.isHourlyOrManual ? (
+                                    <View style={styles.setting_term_extend_view}>
+                                        <TouchableOpacity style={styles.hourly_setting_view} onPress={() => this.onCheckHourly()}>
+                                            <View style={styles.row_setting_btn_left_view}>
+                                                <Image resizeMode='contain' source={require("../../assets/images/time_icon_black.png")}  style={styles.row_setting_btn_icon}/>
+                                                <Text style={styles.row_setting_btn_text}>Hourly</Text>
+                                            </View>
+                                            { this.state.isCheckHoulryOrManual ? (
+                                                <Image resizeMode='contain' source={require("../../assets/images/unchecked_gray_badge.png")}  style={styles.row_setting_btn_right_icon}/>
+                                            ) : (
+                                                <Image resizeMode='contain' source={require("../../assets/images/checked_green_badge.png")}  style={styles.row_setting_btn_right_icon}/>
+                                            )}
+                                            
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.manual_setting_view} onPress={() => this.onCheckManual()}>
+                                            <View style={styles.row_setting_btn_left_view}>
+                                                <Image resizeMode='contain' source={require("../../assets/images/forms.png")}  style={styles.row_setting_btn_icon}/>
+                                                <Text style={styles.row_setting_btn_text}>Manual Time</Text>
+                                            </View>
+                                            { this.state.isCheckHoulryOrManual ? (
+                                                <Image resizeMode='contain' source={require("../../assets/images/checked_green_badge.png")}  style={styles.row_setting_btn_right_icon}/>
+                                            ) : (
+                                                <Image resizeMode='contain' source={require("../../assets/images/unchecked_gray_badge.png")}  style={styles.row_setting_btn_right_icon}/>
+                                            )}
+                                        </TouchableOpacity>
+                                    </View>
+                                ) : (
+                                    <View style={styles.setting_term_extend_view}>
+                                        <TouchableOpacity style={styles.manual_setting_view} onPress={() => this.onCheckManual()}>
+                                            <View style={styles.row_setting_btn_left_view}>
+                                                <Image resizeMode='contain' source={require("../../assets/images/forms.png")}  style={styles.row_setting_btn_icon}/>
+                                                <Text style={styles.row_setting_btn_text}>Manual Time</Text>
+                                            </View>
+                                             { this.state.isCheckHoulryOrManual ? (
+                                                <Image resizeMode='contain' source={require("../../assets/images/checked_green_badge.png")}  style={styles.row_setting_btn_right_icon}/>
+                                            ) : (
+                                                <Image resizeMode='contain' source={require("../../assets/images/unchecked_gray_badge.png")}  style={styles.row_setting_btn_right_icon}/>
+                                            )}
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.hourly_setting_view} onPress={() => this.onCheckHourly()}>
+                                            <View style={styles.row_setting_btn_left_view}>
+                                                <Image resizeMode='contain' source={require("../../assets/images/time_icon_black.png")}  style={styles.row_setting_btn_icon}/>
+                                                <Text style={styles.row_setting_btn_text}>Hourly</Text>
+                                            </View>
+                                             { this.state.isCheckHoulryOrManual ? (
+                                                <Image resizeMode='contain' source={require("../../assets/images/unchecked_gray_badge.png")}  style={styles.row_setting_btn_right_icon}/>
+                                            ) : (
+                                                <Image resizeMode='contain' source={require("../../assets/images/checked_green_badge.png")}  style={styles.row_setting_btn_right_icon}/>
+                                            )}
+                                        </TouchableOpacity>
+                                    </View>
+                                )                
+                            ) : ( 
+                                !this.state.isHourlyOrManual ? (  
+                                    <TouchableOpacity  onPress={() => this.onExtendTerm()} style={styles.row_setting_btn_view}>
+                                        <View style={styles.row_setting_btn_left_view}>
+                                            <Image resizeMode='contain' source={require("../../assets/images/time_icon_black.png")}  style={styles.row_setting_btn_icon}/>
+                                            <Text style={styles.row_setting_btn_text}>Hourly</Text>
+                                        </View>
+                                        <Image resizeMode='contain' source={require("../../assets/images/edit_icon.png")}  style={styles.row_setting_btn_right_icon}/>
+                                    </TouchableOpacity>
+                                ):(
+                                    <TouchableOpacity  onPress={() => this.onExtendTerm()} style={styles.row_setting_btn_view}>
+                                        <View style={styles.row_setting_btn_left_view}>
+                                            <Image resizeMode='contain' source={require("../../assets/images/forms.png")}  style={styles.row_setting_btn_icon}/>
+                                            <Text style={styles.row_setting_btn_text}>Manual Time</Text>
+                                        </View>
+                                        <Image resizeMode='contain' source={require("../../assets/images/edit_icon.png")}  style={styles.row_setting_btn_right_icon}/>
+                                    </TouchableOpacity>
+                                )
+                            )}
+                           
                         </View>
                          <View style={styles.row_setting_view}>
                             <View style={styles.setting_text_view}>
@@ -272,8 +379,48 @@ const styles = StyleSheet.create({
   },
   row_setting_btn_right_icon:{
       height:20,
-      width:15,
+      width:20,
       marginRight:30,
+  },
+  setting_term_extend_view:{
+      flexDirection:'column',
+      alignItems:'flex-start',
+  },
+  hourly_setting_view:{
+      width:width,
+      flexDirection:'row',
+      alignItems:'center',
+      paddingVertical:15,
+      borderBottomWidth:1,
+      borderColor:'#ddd',
+      justifyContent:'space-between',
+      backgroundColor:'white',
+  },
+  manual_setting_view:{
+      width:width,
+      flexDirection:'row',
+      alignItems:'center',
+      paddingVertical:15,
+      borderBottomWidth:1,
+      borderColor:'#ddd',
+      justifyContent:'space-between',
+      backgroundColor:'white',
+  },
+  done_text:{
+      fontSize:15,
+      color:'#31dd73',
+      marginRight:20,
+  },
+  setting_text_view_term:{
+      flexDirection:'row',
+      alignItems:'center',
+      justifyContent:'space-between',
+      paddingVertical:7,
+      paddingLeft:20,
+      width:width,
+      backgroundColor:'#f9fbfc',
+      borderBottomWidth:1,
+      borderColor:'#ddd',
   },
   
   //--- bottom container ---//
@@ -285,4 +432,3 @@ const styles = StyleSheet.create({
 });
 
 export default BookingGuideSettingScreen;
-

@@ -45,7 +45,7 @@ class MarketplaceScreen extends React.Component {
         header : null,
         tabBarLabel: 'Marketplace',
         tabBarIcon: ({ tintColor }) => (
-             <Image source={require('../assets/images/Marketplace_Bottom_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
+             <Image resizeMode='contain' source={require('../assets/images/Marketplace_Bottom_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
         ),
     };
 

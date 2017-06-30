@@ -46,7 +46,7 @@ class ChatScreen extends React.Component {
         header : null,
         tabBarLabel: 'Chat',
         tabBarIcon: ({ tintColor }) => (
-             <Image source={require('../assets/images/Chat_Bottom_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
+             <Image resizeMode='contain' source={require('../assets/images/Chat_Bottom_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
         ),
     };
 

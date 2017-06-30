@@ -31,7 +31,7 @@ class TripsScreen extends React.Component {
         header : null,
         tabBarLabel: 'List of trips',
         tabBarIcon: ({ tintColor }) => (
-             <Image source={require('../../assets/images/trips_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
+             <Image resizeMode='contain' source={require('../../assets/images/trips_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
         ),
     };
 

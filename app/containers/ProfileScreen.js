@@ -38,7 +38,7 @@ class ProfileScreen extends React.Component {
       header : null,
         tabBarLabel: 'Maps',
         tabBarIcon: ({ tintColor }) => (
-             <Image source={require('../assets/images/Maps_Bottom_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
+             <Image resizeMode='contain' source={require('../assets/images/Maps_Bottom_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
         ),
   };
 
