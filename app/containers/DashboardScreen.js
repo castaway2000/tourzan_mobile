@@ -21,37 +21,36 @@ import { StackNavigator } from 'react-navigation';
 
 import NavigationBar from '../components/NavigationBar'
 
-// import TripsScreen from './DashboardTabs/TripsScreen';
-// import GuidesScreen from './DashboardTabs/GuidesScreen';
-// import TransactionsScreen from './DashboardTabs/TransactionsScreen';
-
-// import TripItemDetailScreen from './ItemDetailScreens/TripItemDetailScreen';
+import TripsScreen from './DashboardTabs/TripsScreen';
+import GuidesScreen from './DashboardTabs/GuidesScreen';
+import TransactionsScreen from './DashboardTabs/TransactionsScreen';
+import TripItemDetailScreen from './ItemDetailScreens/TripItemDetailScreen';
 
 var { width, height } = Dimensions.get('window');
 
-// const DashboardTapNavigator = TabNavigator({
-//   Trips: { screen: TripsScreen, },
-//   Guides: { screen: GuidesScreen, },
-//   Transactions: { screen: TransactionsScreen, },
-// }, {
-//   tabBarPosition:'top',
-//   tabBarOptions: {
-//     activeTintColor: '#fff',
-//     inactiveTintColor:'#555',
-//     labelStyle:{fontSize:9},
-//     showIcon:'true',
-//     style: {backgroundColor: '#31dd73'},
-//   },
-// });
+const DashboardTapNavigator = TabNavigator({
+  TripsNav: { screen: TripsScreen, },
+  Guides: { screen: GuidesScreen, },
+  Transactions: { screen: TransactionsScreen, },
+}, {
+  tabBarPosition:'top',
+  tabBarOptions: {
+    activeTintColor: '#fff',
+    inactiveTintColor:'#555',
+    labelStyle:{fontSize:9},
+    showIcon:'true',
+    style: {backgroundColor: '#31dd73'},
+  },
+});
 
-// const DashBoardStackNavigator = StackNavigator({
-//     Dashboard: { screen: DashboardTapNavigator },
-//     TripItemDetail : {screen: TripItemDetailScreen},
-// },{ 
-//     headerMode: 'screen', 
-//     initialRouteName: 'Dashboard',
-//   },
-// );
+const DashboardStackNavigator = StackNavigator({
+  Dashboard:{screen: DashboardTapNavigator},
+  TripItemDetail:{screen: TripItemDetailScreen},
+},{
+   headerMode: 'screen', 
+   mode: 'modal',
+   initialRouteName: 'Dashboard',
+})
 
 class DashboardScreen extends React.Component {
     static navigationOptions = {
@@ -79,7 +78,7 @@ class DashboardScreen extends React.Component {
                         </TouchableOpacity>
                  </View>
                  <View style={styles.tabbar_view_container}>
-                        <DashboardTapNavigator />
+                        <DashboardStackNavigator />
                  </View>
             </View> 
         );

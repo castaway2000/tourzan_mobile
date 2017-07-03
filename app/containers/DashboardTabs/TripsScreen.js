@@ -24,8 +24,6 @@ import NavigationBar from '../../components/NavigationBar'
 
 var { width, height } = Dimensions.get('window');
 
-
-
 class TripsScreen extends React.Component {
     static navigationOptions = {
         header : null,
@@ -33,8 +31,8 @@ class TripsScreen extends React.Component {
         tabBarIcon: ({ tintColor }) => (
              <Image resizeMode='contain' source={require('../../assets/images/trips_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
         ),
-    };
 
+    };
     constructor(props) {
         super(props);
         var ds = new ListView.DataSource({
@@ -48,6 +46,7 @@ class TripsScreen extends React.Component {
             // for ratingview
             starCount: 3.5,
         }
+        this.navigate = this.props.navigation;
     }
 
     // function for ratingview
@@ -63,14 +62,15 @@ class TripsScreen extends React.Component {
      }
 
      pressRow(rowData){
-            const { navigate } = this.props.navigation;
             var newDs = [];
             newDs = this.state.ds.slice();
             // newDs[0].Selection = newDs[0] == "AwayTeam" ? "HomeTeam" : "AwayTeam";
             this.setState({
                 dataSource: this.state.dataSource.cloneWithRows(newDs)
             })
-            // navigate('TripItemDetail')
+
+            this.state.isShowNavigation = false;
+            this.navigate.navigate('TripItemDetail');
     }
 
      renderRow(rowData){

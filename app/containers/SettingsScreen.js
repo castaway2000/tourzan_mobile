@@ -44,8 +44,9 @@ class SettingsScreen extends React.Component {
       return (
         <View style={styles.container}>  
              <View  style={styles.navigationbar}>
-                    <View style={styles.backButton}> 
-                    </View>
+                    <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}}>
+                        <Image resizeMode='cover' source={require("../assets/images/back.png")} style={styles.backButton} />
+                    </TouchableOpacity>
                     <Text style={styles.centerText}>Settings</Text>
                     <View style={styles.rightView}>
                     </View>
@@ -57,7 +58,7 @@ class SettingsScreen extends React.Component {
                     <Text style={styles.profile_email_text}>adamparker@gmail.com</Text>                
                 </View>
                 <View style={styles.main_info_view}>
-                    <TouchableOpacity style={styles.row_view}>
+                    <TouchableOpacity style={styles.row_view} onPress={() => {this.navigate.navigate('ChangePassword')}}>
                         <Text  style={styles.row_lb}>Update Password</Text>
                         <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon}/>
                     </TouchableOpacity>
@@ -71,7 +72,7 @@ class SettingsScreen extends React.Component {
                         <Image resizeMode='contain' source={require("../assets/images/trip_item_location_icon.png")} style={styles.row_small_icon}/>
                         <Text  style={styles.row_icon_lb}>8763 Schultz Wall Suite 840</Text>
                     </View>
-                     <TouchableOpacity style={styles.row_view}>
+                     <TouchableOpacity style={styles.row_credit_view}>
                          <View style={styles.row_icon_small_view}>
                             <Image resizeMode='contain' source={require("../assets/images/wallet_icon.png")} style={styles.row_small_icon}/>
                             <Text  style={styles.row_icon_lb}>Credit Card</Text>
@@ -174,6 +175,16 @@ const styles = StyleSheet.create({
         justifyContent:'space-between',
         borderBottomWidth:1,
         borderColor:'#c2c3c9',
+        backgroundColor:'white',
+    },
+    row_credit_view:{
+        height:40,
+        paddingVertical:13,
+        paddingHorizontal:30,
+        width:width,
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'space-between',
         backgroundColor:'white',
     },
     row_lb:{

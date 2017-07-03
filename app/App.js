@@ -45,6 +45,7 @@ import BookingSearchingScreen from './containers/BookingScreens/BookingSearching
 import BookingGuideSettingScreen from './containers/BookingScreens/BookingGuideSettingScreen';
 
 import SettingsScreen from './containers/SettingsScreen';
+import ChangePasswordScreen from './containers/ChangePasswordScreen';
 
 import ApplyButton from './components/ApplyButton';
 
@@ -147,20 +148,6 @@ const styles = StyleSheet.create({
 //   },
 // );
 
-export default DashboardTapNavigator = TabNavigator({
-  Trips: { screen: TripsScreen, },
-  Guides: { screen: GuidesScreen, },
-  Transactions: { screen: TransactionsScreen, },
-}, {
-  tabBarPosition:'top',
-  tabBarOptions: {
-    activeTintColor: '#fff',
-    inactiveTintColor:'#555',
-    labelStyle:{fontSize:9},
-    showIcon:'true',
-    style: {backgroundColor: '#31dd73'},
-  },
-});
 
 const ChatStackNavigator = StackNavigator({
     Chats: { screen: ChatScreen, },
@@ -184,6 +171,7 @@ const MapChatStackNavigator = StackNavigator({
 const MoreStackNavigator = StackNavigator({
     More : {screen: MoreScreen},
     Settings : {screen : SettingsScreen},
+    ChangePassword : {screen : ChangePasswordScreen},
 },{ 
     headerMode: 'screen', 
     initialRouteName: 'More',
