@@ -36,12 +36,16 @@ class LoginTouristScreen extends React.Component {
 
  constructor(props) {
     super(props);
-    this.state = { checked: false };
+    this.state = { checked: false,};
     this.navigate = this.props.navigation;
   }
 
   onLogin(){
         this.navigate.navigate('Home');
+  }
+
+  onSignup(){
+      this.navigate.navigate('RegisterTourist');
   }
 
 
@@ -73,8 +77,10 @@ class LoginTouristScreen extends React.Component {
                      </TouchableOpacity>
                   </View>
                   <ApplyButton onPress={() => this.onLogin()} name={'Login'} style={styles.button_login}/>
-                  <TouchableOpacity  onPress={() => this.navigate.navigate('RegisterTourist')} title="SING UP">
-                      <Text style={styles.button_signup} >SIGN UP</Text>
+                  <TouchableOpacity  
+                  onPress={() => this.onSignup()}
+                  title="SING UP">
+                      <Text style={styles.button_signup}> SIGN UP </Text>
                   </TouchableOpacity>
             </View>
         </View>
@@ -160,5 +166,5 @@ const styles = StyleSheet.create({
   }
 });
 
-export default LoginTouristScreen;
+export default LoginTouristScreen
 

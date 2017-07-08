@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-// import { createStore } from 'redux';
-// import { Provider } from 'react-redux';
-// import tourzan from './reducers';
+
 import {
   AppRegistry,
   Button,
@@ -16,6 +14,7 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
+
 import { StackNavigator } from 'react-navigation';
 import { TabNavigator } from 'react-navigation';
 
@@ -24,6 +23,7 @@ import LoginTouristScreen from './containers/LoginTouristScreen';
 import RegisterTourist from './containers/RegisterTouristScreen';
 import RegisterGuide from './containers/RegisterGuideScreen';
 import ForgotPassword from './containers/ForgotPasswordScreen';
+import WelcomeScreen from './containers/WelcomeScreen';
 
 import MapsScreen from './containers/MapsScreen';
 import DashboardScreen from './containers/DashboardScreen';
@@ -47,97 +47,7 @@ import BookingGuideSettingScreen from './containers/BookingScreens/BookingGuideS
 import SettingsScreen from './containers/SettingsScreen';
 import ChangePasswordScreen from './containers/ChangePasswordScreen';
 
-import ApplyButton from './components/ApplyButton';
-
 var { width, height } = Dimensions.get('window');
-const onButtonPress = () => { Alert.alert('Button has been pressed!'); }; 
-
-class WelcomeScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Welcome',
-    header : null,
-  };
-  render() {
-    const { navigate } = this.props.navigation;
-    return (
-      
-      <View style={styles.container}>  
-          <Image resizeMode='cover' source={require("../app/assets/images/welcome_bg.png")} style={styles.bg_img}>
-                <View style={styles.top_container}>
-                    <Image resizeMode='center' source={require("../app/assets/images/Tourzan_Logo.png")}/>
-                    <Text style={styles.txt_welcome}>WELCOME!</Text>
-                    <View style={styles.line}></View>
-                    <Text style={styles.txt_bottom}>Wine Tours La Dolce Vita</Text>
-                </View>
-                <View style={styles.bottom_container}>
-                    <ApplyButton  onPress={() => navigate('LoginTourist')} name="Login Tourist"/>
-                    <TouchableOpacity onPress={() => navigate('LoginGuide')} title="Login Guide">
-                        <Text style={styles.button_guide}>Tour Guide</Text>
-                    </TouchableOpacity>
-                </View>
-          </Image>
-      </View>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-  },
-  bg_img: {
-    width: width,
-    height : height,
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-
-  top_container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  txt_welcome: {
-    marginTop : -20,
-    fontSize: 25,
-    fontWeight : 'bold',
-    textAlign: 'center',
-    color : '#ffffff',
-  },
-  line: {
-    marginTop:7,
-    height: 1,
-    width: '50%',
-    backgroundColor: '#ffffff',
-  },
-  txt_bottom:{
-    marginTop: 7,
-    fontSize: 17,
-    textAlign: 'center',
-    color : '#eeeeee',
-  },
-
-  bottom_container:{
-    width: width,
-    alignItems:'center',
-    justifyContent:'center',
-    marginBottom:30,
-  },
-  button_guide:{
-    paddingTop:10,
-    color:'#000',
-    textAlign:'center',
-    fontSize: 18,
-    marginTop : 20,
-    height:50,
-    width:width-60,
-    backgroundColor:'#ffffff',
-    borderRadius:5,
-    borderColor: '#555555'
-  },
-});
 
 // const TripsStackNavigator = StackNavigator({
 //     Trips: { screen: TripsScreen, },
@@ -147,7 +57,6 @@ const styles = StyleSheet.create({
 //     initialRouteName: 'Trips',
 //   },
 // );
-
 
 const ChatStackNavigator = StackNavigator({
     Chats: { screen: ChatScreen, },
@@ -217,4 +126,4 @@ const App = StackNavigator({
   },
 );
 
-AppRegistry.registerComponent('Tourzan', () => App);
+export default App

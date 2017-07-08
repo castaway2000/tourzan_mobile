@@ -5,6 +5,6 @@
  */
 
 import { AppRegistry } from 'react-native';
-import App from './app/App';
+import Wrapper from './app/Wrapper';
 
-// AppRegistry.registerComponent('Tourzan', () => App);
+AppRegistry.registerComponent('Tourzan', () => Wrapper);

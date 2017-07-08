@@ -48,6 +48,8 @@ class GuideScreen extends React.Component {
             // for ratingview
             starCount: 3.5,
         }
+
+        this.navigate = this.props.navigation;
     }
 
     // function for ratingview
@@ -69,6 +71,8 @@ class GuideScreen extends React.Component {
             this.setState({
                 dataSource: this.state.dataSource.cloneWithRows(newDs)
             })
+
+            this.navigate.navigate('GuideItemDetail');
     }
 
      renderRow(rowData){

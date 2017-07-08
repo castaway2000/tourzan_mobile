@@ -15,6 +15,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux'
+
 import { TabNavigator } from 'react-navigation';
 import { NavigationActions } from 'react-navigation'
 import { StackNavigator } from 'react-navigation';
@@ -25,8 +28,23 @@ import TripsScreen from './DashboardTabs/TripsScreen';
 import GuidesScreen from './DashboardTabs/GuidesScreen';
 import TransactionsScreen from './DashboardTabs/TransactionsScreen';
 import TripItemDetailScreen from './ItemDetailScreens/TripItemDetailScreen';
+import GuideItemDetailScreen from './ItemDetailScreens/GuideItemDetailScreen';
+import TransactionItemDetailScreen from './ItemDetailScreens/TransactionItemDetailScreen';
+
+import * as Actions from '../actions/dashboard'
 
 var { width, height } = Dimensions.get('window');
+
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators(Actions, dispatch)
+}
+
+const  mapStateToProps = (state) => {
+    return {
+        isHideDashboardNavigationbar: state.isHideDashboardNavigationbar
+    }
+ }
+
 
 const DashboardTapNavigator = TabNavigator({
   TripsNav: { screen: TripsScreen, },
@@ -46,6 +64,8 @@ const DashboardTapNavigator = TabNavigator({
 const DashboardStackNavigator = StackNavigator({
   Dashboard:{screen: DashboardTapNavigator},
   TripItemDetail:{screen: TripItemDetailScreen},
+  GuideItemDetail:{screen: GuideItemDetailScreen},
+  TransactionItemDetail: {screen: TransactionItemDetailScreen},
 },{
    headerMode: 'screen', 
    mode: 'modal',
@@ -62,25 +82,32 @@ class DashboardScreen extends React.Component {
      };
     constructor(props) {
         super(props);
-    
     }
 
     render() {
         const { navigate } = this.props.navigation;
         return (
-            <View style={styles.container}>  
-                  <View style={styles.top_container}>
-                        <View style={styles.backButton}>
-                        </View>
-                        <Text style={styles.centerText}>DASHBOARD</Text>
-                        <TouchableOpacity>
-                            <Image resizeMode='cover' source={require("../assets/images/person1.png")}  style={styles.rightView} />
-                        </TouchableOpacity>
-                 </View>
-                 <View style={styles.tabbar_view_container}>
-                        <DashboardStackNavigator />
-                 </View>
-            </View> 
+            this.props.isHideDashboardNavigationbar ? (
+                <View style={styles.container}>  
+                    <View style={styles.top_container}>
+                            <View style={styles.backButton}>
+                            </View>
+                            <Text style={styles.centerText}>DASHBOARD</Text>
+                            <TouchableOpacity>
+                                <Image resizeMode='cover' source={require("../assets/images/person1.png")}  style={styles.rightView} />
+                            </TouchableOpacity>
+                    </View>
+                    <View style={styles.tabbar_view_container}>
+                            <DashboardStackNavigator />
+                    </View>
+                </View> 
+            ) :(
+                <View style={styles.container}>  
+                    <View style={styles.tabbar_view_container_full}>
+                            <DashboardStackNavigator />
+                    </View>
+                </View> 
+            )
         );
     }
 }
@@ -126,9 +153,15 @@ const styles = StyleSheet.create({
          height:height-120,
          width:width,
     },
+    tabbar_view_container_full : {
+         marginTop:1,
+         height:height-76,
+         width:width,
+    },
 
 });
 
 
-export default DashboardScreen;
+// export default DashboardScreen;
+export default connect(mapStateToProps,mapDispatchToProps)(DashboardScreen);
 

@@ -46,6 +46,8 @@ class TransactionsScreen extends React.Component {
             // for ratingview
             starCount: 3.5,
         }
+
+        this.navigate = this.props.navigation;
     }
 
    // function for ratingview
@@ -67,6 +69,8 @@ class TransactionsScreen extends React.Component {
             this.setState({
                 dataSource: this.state.dataSource.cloneWithRows(newDs)
             })
+
+            this.navigate.navigate('TransactionItemDetail');
     }
 
      renderRow(rowData){
@@ -115,7 +119,7 @@ class TransactionsScreen extends React.Component {
 
 const styles = StyleSheet.create({
  container: {
-      flex: 1,
+      backgroundColor:'white',
       alignItems: 'center',
       flexDirection: 'column',
   },
@@ -131,6 +135,7 @@ const styles = StyleSheet.create({
      paddingRight:10,
      paddingBottom:20,
      paddingLeft:10,
+     backgroundColor:'white',
   },
   separator: {
         flex: 1,

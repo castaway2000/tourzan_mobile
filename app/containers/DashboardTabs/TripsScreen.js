@@ -17,12 +17,26 @@ import {
   ListView,
 } from 'react-native';
 
+import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux'
+
 import Rating from 'react-native-ratings';
 import { NavigationActions } from 'react-navigation'
 
 import NavigationBar from '../../components/NavigationBar'
+import * as Actions from '../../actions/dashboard'
 
 var { width, height } = Dimensions.get('window');
+
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators(Actions, dispatch)
+}
+
+const  mapStateToProps = (state) => {
+    return {
+        isHideDashboardNavigationbar: state.isHideDashboardNavigationbar
+    }
+ }
 
 class TripsScreen extends React.Component {
     static navigationOptions = {
@@ -49,6 +63,8 @@ class TripsScreen extends React.Component {
         this.navigate = this.props.navigation;
     }
 
+
+
     // function for ratingview
     ratingCompleted(rating) {
         console.log("Rating is: " + rating)
@@ -68,8 +84,8 @@ class TripsScreen extends React.Component {
             this.setState({
                 dataSource: this.state.dataSource.cloneWithRows(newDs)
             })
-
-            this.state.isShowNavigation = false;
+           
+            // this.props.hideOrShowDashboardNavigationbar();
             this.navigate.navigate('TripItemDetail');
     }
 
@@ -94,7 +110,7 @@ class TripsScreen extends React.Component {
                         <View style={styles.info_view}>
                             <View style={styles.location_view}>
                                 <Image resizeMode='contain' source={require("../../assets/images/trip_item_location_icon.png")}  style={styles.location_icon}/>
-                                <Text style={styles.name_text}>Elmerburgh</Text>
+                                <Text style={styles.name_text}>Elmerburgh  </Text>
                             </View>  
                             <Text style={styles.description_text}>Conventry City Guide Including Conventry Hotels</Text>
                             <View style={styles.rate_view} pointerEvents="none">
@@ -210,5 +226,5 @@ const styles = StyleSheet.create({
 });
 
 
-export default TripsScreen;
-
+// export default TripsScreen
+export default connect(mapStateToProps,mapDispatchToProps)(TripsScreen);
