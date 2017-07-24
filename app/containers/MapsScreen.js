@@ -21,6 +21,8 @@ import MapView from 'react-native-maps';
 import Switch from '../components/Switch';
 import NavigationBar from '../components/NavigationBar';
 
+import flagImg from '../assets/images/flag-blue_small.png';
+
 // var Switch = require('react-native-material-switch');
 
 var { width, height } = Dimensions.get('window');
@@ -40,20 +42,30 @@ class MapsScreen extends React.Component {
 
  constructor(props) {
     super(props);
-    this.state = { region: {
+    this.state = {
+        region:{
             latitude: 37.78825,
             longitude: -122.4324,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
-            },
-
+        },
             isSettingTime:false,
          };
   }
 
+  getInitialState() {
+    return {
+      region: {
+        latitude: 37.78825,
+        longitude: -122.4324,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      },
+    };
+  }
 
   onRegionChange(region) {
-      this.setState({ region });
+      () => this.onRegionChange.bind(this);
   }
 
   onSettingTime(){
@@ -83,9 +95,14 @@ class MapsScreen extends React.Component {
             </View>
             <View style={styles.map_container}>
                 <MapView style={styles.map_view}
-                     region={this.state.region}
-                     onRegionChange={this.onRegionChange}
-                />
+                    region={this.state.region}
+                    onRegionChange={this.onRegionChange}>
+                    <MapView.Marker
+                        coordinate={this.state.region}
+                        centerOffset={{ x: -18, y: -60 }}
+                        anchor={{ x: 0.69, y: 1 }}
+                        image={flagImg}/>
+                 </MapView>
                 <View style={styles.locationInfo_view}>
                     <View style={styles.location_address_view}>
                         <Image resizeMode='contain' source={require("../assets/images/location_maps.png")} style={styles.icon_image}/>
@@ -207,6 +224,7 @@ const styles = StyleSheet.create({
          backgroundColor:'transparent',
     },
     map_view:{
+        // position:'absolute',
         height:height-120,
         width: width,
     },
@@ -378,4 +396,3 @@ const styles = StyleSheet.create({
 });
 
 export default MapsScreen;
-
