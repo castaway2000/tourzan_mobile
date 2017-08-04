@@ -45,7 +45,6 @@ const  mapStateToProps = (state) => {
     }
  }
 
-
 const DashboardTapNavigator = TabNavigator({
   TripsNav: { screen: TripsScreen, },
   Guides: { screen: GuidesScreen, },
@@ -59,27 +58,32 @@ const DashboardTapNavigator = TabNavigator({
     showIcon:'true',
     style: {backgroundColor: '#31dd73'},
   },
+  
 });
 
-const DashboardStackNavigator = StackNavigator({
+ const DashboardStackNavigator = StackNavigator({
   Dashboard:{screen: DashboardTapNavigator},
   TripItemDetail:{screen: TripItemDetailScreen},
   GuideItemDetail:{screen: GuideItemDetailScreen},
   TransactionItemDetail: {screen: TransactionItemDetailScreen},
-},{
-   headerMode: 'screen', 
+},{ 
+    headerMode: 'screen',
    mode: 'modal',
    initialRouteName: 'Dashboard',
+   initalRouteParams: {
+       sample : 'test',
+   }
 })
 
 class DashboardScreen extends React.Component {
     static navigationOptions = {
-        header : null,
+        header:null,
         tabBarLabel: 'Dashboard',
         tabBarIcon: ({ tintColor }) => (
              <Image resizeMode='contain' source={require('../assets/images/Dashboard_Bottom_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
         ),
      };
+
     constructor(props) {
         super(props);
     }
@@ -87,28 +91,12 @@ class DashboardScreen extends React.Component {
     render() {
         const { navigate } = this.props.navigation;
         return (
-            this.props.isHideDashboardNavigationbar ? (
-                <View style={styles.container}>  
-                    <View style={styles.top_container}>
-                            <View style={styles.backButton}>
-                            </View>
-                            <Text style={styles.centerText}>DASHBOARD</Text>
-                            <TouchableOpacity>
-                                <Image resizeMode='cover' source={require("../assets/images/person1.png")}  style={styles.rightView} />
-                            </TouchableOpacity>
-                    </View>
-                    <View style={styles.tabbar_view_container}>
-                            <DashboardStackNavigator />
-                    </View>
-                </View> 
-            ) :(
-                <View style={styles.container}>  
-                    <View style={styles.tabbar_view_container_full}>
-                            <DashboardStackNavigator />
-                    </View>
-                </View> 
-            )
-        );
+              <View style={styles.container}>
+                <View style={styles.tabbar_view_container_full}>
+                    <DashboardStackNavigator />
+                </View>
+              </View> 
+          )
     }
 }
 
@@ -154,7 +142,6 @@ const styles = StyleSheet.create({
          width:width,
     },
     tabbar_view_container_full : {
-         marginTop:1,
          height:height-76,
          width:width,
     },
@@ -164,4 +151,6 @@ const styles = StyleSheet.create({
 
 // export default DashboardScreen;
 export default connect(mapStateToProps,mapDispatchToProps)(DashboardScreen);
+
+
 

@@ -40,7 +40,19 @@ const  mapStateToProps = (state) => {
 
 class TripsScreen extends React.Component {
     static navigationOptions = {
-        header : null,
+        header: ( 
+            <View style={{backgroundColor:'white', height:45, width:width, alignItems:'center', flexDirection:'column', justifyContent:'flex-start'}}>
+                <View style={{backgroundColor:'#31dd73', height:44, width:width, alignItems:'center',flexDirection:'row',justifyContent:'space-between',}}>
+                    <View style={{ marginLeft:20, height:20, width:20,}}>
+                    </View>
+                    <Text style={{ color:'#fff', textAlign:'center',fontSize:17,width:width-160,fontWeight:'bold',}}>DASHBOARD</Text>
+                    <TouchableOpacity>
+                        <Image resizeMode='cover' source={require("../../assets/images/person1.png")}  style={{ marginRight:20, height:35, width:35}} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        ),
+ 
         tabBarLabel: 'List of trips',
         tabBarIcon: ({ tintColor }) => (
              <Image resizeMode='contain' source={require('../../assets/images/trips_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
@@ -63,8 +75,6 @@ class TripsScreen extends React.Component {
         this.navigate = this.props.navigation;
     }
 
-
-
     // function for ratingview
     ratingCompleted(rating) {
         console.log("Rating is: " + rating)
@@ -72,6 +82,8 @@ class TripsScreen extends React.Component {
 
     // functions for listview
     componentDidMount(){
+
+        console.log('navigation:', this.props.navigtion)
             this.setState({
                 dataSource:this.state.dataSource.cloneWithRows(this.state.ds),
             })
@@ -85,8 +97,13 @@ class TripsScreen extends React.Component {
                 dataSource: this.state.dataSource.cloneWithRows(newDs)
             })
            
+           
             // this.props.hideOrShowDashboardNavigationbar();
+            console.log('debug',this.props);
+            console.log('debug',this.navigate);
+
             this.navigate.navigate('TripItemDetail');
+            // this.props.rootNavigation.navigation.navigate('TripItemDetail');
     }
 
      renderRow(rowData){
@@ -128,12 +145,13 @@ class TripsScreen extends React.Component {
      }
 
      render() {
-        
         return (
-            <ListView
-                dataSource={this.state.dataSource}
-                renderRow={this.renderRow.bind(this)}
-            />
+             <View style={styles.container}> 
+                <ListView 
+                    dataSource={this.state.dataSource}
+                    renderRow={this.renderRow.bind(this)}
+                />
+             </View> 
         );
     }
 }
@@ -143,6 +161,7 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems: 'center',
       flexDirection: 'column',
+      backgroundColor:'white',
   },
   icon: {
     width: 20,

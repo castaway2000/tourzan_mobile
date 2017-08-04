@@ -26,7 +26,19 @@ var { width, height } = Dimensions.get('window');
 
 class TransactionsScreen extends React.Component {
     static navigationOptions = {
-        header : null,
+         header: ( 
+            <View style={{backgroundColor:'white', height:45, width:width, alignItems:'center', flexDirection:'column', justifyContent:'flex-start'}}>
+                <View style={{backgroundColor:'#31dd73', height:44, width:width, alignItems:'center',flexDirection:'row',justifyContent:'space-between',}}>
+                    <View style={{ marginLeft:20, height:20, width:20,}}>
+                    </View>
+                    <Text style={{ color:'#fff', textAlign:'center',fontSize:17,width:width-160,fontWeight:'bold',}}>DASHBOARD</Text>
+                    <TouchableOpacity>
+                        <Image resizeMode='cover' source={require("../../assets/images/person1.png")}  style={{ marginRight:20, height:35, width:35}} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        ),
+ 
         tabBarLabel: 'Transaction',
         tabBarIcon: ({ tintColor }) => (
              <Image resizeMode='contain' source={require('../../assets/images/transactions_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />

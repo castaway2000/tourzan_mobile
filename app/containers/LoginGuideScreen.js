@@ -41,7 +41,13 @@ class LoginGuideScreen extends React.Component {
   }
 
   onLogin(){
-        this.navigate.navigate('Home');
+    const resetAction = NavigationActions.reset({
+        index: 0,
+        actions: [
+            NavigationActions.navigate({ routeName: 'Home'})
+        ]
+    })
+    this.navigate.dispatch(resetAction)
   }
 
   render() {
