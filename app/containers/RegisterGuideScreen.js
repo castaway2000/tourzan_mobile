@@ -45,8 +45,14 @@ class RegisterGuideScreen extends React.Component {
       isIntestExtend = !isIntestExtend;
   }
 
-  onLogin(){
-        
+  onSignup(){
+    const resetAction = NavigationActions.reset({
+        index: 0,
+        actions: [
+            NavigationActions.navigate({ routeName: 'Home'})
+        ]
+    })
+    this.props.navigation.dispatch(resetAction)
   }
 
   render() {
@@ -71,7 +77,7 @@ class RegisterGuideScreen extends React.Component {
                     <TextInput placeholder="Phone Number" style={styles.inputText} underlineColorAndroid={'gray'}/>
                     <TextInput defaultValue="Intests" editable={false} onFocus={this.onIntestExtention}  style={styles.interest_text} underlineColorAndroid={'gray'} />
                 
-                    <ApplyButton name={'Sign Up'} onPress={() => navigate('Home')} style={styles.button_login}/>
+                    <ApplyButton name={'Sign Up'} onPress={() => this.onSignup()} style={styles.button_login}/>
                     <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}} title="SING IN">
                        <Text style={styles.button_signin} >SIGN IN</Text>
                     </TouchableOpacity>

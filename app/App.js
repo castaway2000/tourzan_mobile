@@ -36,6 +36,8 @@ import GuidesScreen from './containers/DashboardTabs/GuidesScreen';
 import TransactionsScreen from './containers/DashboardTabs/TransactionsScreen';
 
 import TripItemDetailScreen from './containers/ItemDetailScreens/TripItemDetailScreen';
+import GuideItemDetailScreen from './containers/ItemDetailScreens/GuideItemDetailScreen';
+import TransactionItemDetailScreen from './containers/ItemDetailScreens/TransactionItemDetailScreen';
 import ChatRoomScreen from './containers/ChatRoomScreen';
 import ProfileScreen from './containers/ProfileScreen';
 import PaymentMethodScreen from './containers/PaymentMethodScreen';
@@ -58,6 +60,36 @@ var { width, height } = Dimensions.get('window');
 //   },
 // );
 
+// const DashboardTapNavigator = TabNavigator({
+//   TripsNav: { screen: TripsScreen, },
+//   Guides: { screen: GuidesScreen, },
+//   Transactions: { screen: TransactionsScreen, },
+// }, {
+//   tabBarPosition:'top',
+//   tabBarOptions: {
+//     activeTintColor: '#fff',
+//     inactiveTintColor:'#555',
+//     labelStyle:{fontSize:9},
+//     showIcon:'true',
+//     style: {backgroundColor: '#31dd73'},
+//   },
+  
+// });
+
+// const DashboardStackNavigator = StackNavigator({
+//   Dashboard:{screen: DashboardTapNavigator},
+//   TripItemDetail:{screen: TripItemDetailScreen},
+//   GuideItemDetail:{screen: GuideItemDetailScreen},
+//   TransactionItemDetail: {screen: TransactionItemDetailScreen},
+// },{ 
+//    headerMode: 'screen',
+//    mode: 'modal',
+//    initialRouteName: 'Dashboard',
+//    initalRouteParams: {
+//        sample : 'test',
+//    }
+// })
+
 const ChatStackNavigator = StackNavigator({
     Chats: { screen: ChatScreen, },
     ChatRoom : {screen: ChatRoomScreen},
@@ -72,7 +104,9 @@ const MapChatStackNavigator = StackNavigator({
     Profile : {screen: ProfileScreen},
     ProfileCharRoom : {screen: ChatRoomScreen},
 },{ 
-    headerMode: 'screen', 
+    navigationOptions:{
+      header: null
+    },
     initialRouteName: 'Maps',
   },
 );
@@ -87,7 +121,6 @@ const MoreStackNavigator = StackNavigator({
   },
 );
 
-
 const MainTapNavigator = TabNavigator({
   MapsNav: { screen: MapChatStackNavigator, },
   Dashboard: { screen: DashboardScreen, },
@@ -95,6 +128,9 @@ const MainTapNavigator = TabNavigator({
   Marketplace: { screen: MarketplaceScreen, },
   MoreNav:{screen: MoreStackNavigator,},
 }, {
+  navigationOptions:{
+    header:null,
+  },
   tabBarPosition:'bottom',
   lazy: true,
   tabBarOptions: {
