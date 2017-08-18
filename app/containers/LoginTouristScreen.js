@@ -41,6 +41,7 @@ class LoginTouristScreen extends React.Component {
   }
 
   onLogin(){
+    console.log("clicked on Loginbutton");
     const resetAction = NavigationActions.reset({
         index: 0,
         actions: [

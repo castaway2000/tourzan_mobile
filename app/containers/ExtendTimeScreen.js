@@ -48,10 +48,11 @@ class ExtendTimeScreen extends React.Component {
     // KeyEvent.onKeyUpListener((keyCode) => {
     //   console.log(`Key code pressed: ${keyCode}`);
     // });
-  }
+  } 
 
   onDone(){
-
+     console.log("clicked on DoneButton!");
+    //  this.navigate.dispatch(backAction);
   }
 
   render() {

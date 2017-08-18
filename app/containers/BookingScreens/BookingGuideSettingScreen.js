@@ -26,6 +26,14 @@ const backAction = NavigationActions.back({
     
 })
 
+const resetRootAction = NavigationActions.reset({
+        index: 0,
+        actions: [
+            NavigationActions.navigate({ routeName: 'Home' }),
+        ],
+        key: null
+ });
+
 class BookingGuideSettingScreen extends React.Component {
   static navigationOptions = {
       title: 'Booking Guide Setting',
@@ -39,7 +47,9 @@ class BookingGuideSettingScreen extends React.Component {
   }
 
   onConfirm(){
-
+    console.log("clicking on Confirm Button!");
+    // this.props.navigation.dispatch(resetRootAction);
+    this.navigate.navigate('Offer');
   }
 
   onPaymentSetting(){
@@ -87,7 +97,7 @@ class BookingGuideSettingScreen extends React.Component {
       return (
         <View style={styles.container}>  
              <View  style={styles.navigationbar}>
-                    <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}}>
+                    <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(resetRootAction)}}>
                         <Image resizeMode='cover' source={require("../../assets/images/back.png")} style={styles.nav_back_btn} />
                     </TouchableOpacity>
                     <Text style={styles.nav_center_text}></Text>

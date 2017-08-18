@@ -40,7 +40,7 @@ class PaymentMethodScreen extends React.Component {
   }
 
   onContinue(){
-
+      this.navigate.dispatch(backAction);
   }
 
   onVisaClick(){

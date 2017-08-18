@@ -51,7 +51,8 @@ class SetTimeLimitScreen extends React.Component {
   }
 
   onDone(){
-
+    console.log("clicked on DoneButton!");
+     this.navigate.dispatch(backAction);
   }
 
   render() {

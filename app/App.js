@@ -45,6 +45,7 @@ import SetTimeLimitScreen from './containers/SetTimeLimitScreen';
 import CurrentTimeLimitScreen from './containers/CurrentTimeLimitScreen';
 import BookingSearchingScreen from './containers/BookingScreens/BookingSearchingScreen';
 import BookingGuideSettingScreen from './containers/BookingScreens/BookingGuideSettingScreen';
+import OfferScreen from './containers/OfferScreen';
 
 import SettingsScreen from './containers/SettingsScreen';
 import ChangePasswordScreen from './containers/ChangePasswordScreen';
@@ -157,6 +158,7 @@ const App = StackNavigator({
   PaymentMethod : {screen: PaymentMethodScreen},
   TimeLimit: {screen: SetTimeLimitScreen},
   CurrentTimeLimit:{screen: CurrentTimeLimitScreen},
+  Offer:{screen: OfferScreen},
 },{ 
     headerMode: 'screen' 
   },
