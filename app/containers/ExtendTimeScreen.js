@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
         paddingVertical:5,
         alignItems:'center',
         borderBottomWidth:1,
-        borderColor:'ddd',
+        borderColor:'#ddd',
     },
     current_time_text:{
         textAlign:'center',

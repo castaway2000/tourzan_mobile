@@ -15,8 +15,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {connect} from 'react-redux';
-import { bindActionCreators } from 'redux'
+// import {connect} from 'react-redux';
+// import { bindActionCreators } from 'redux'
 
 import { TabNavigator } from 'react-navigation';
 import { NavigationActions } from 'react-navigation'
@@ -31,19 +31,7 @@ import TripItemDetailScreen from './ItemDetailScreens/TripItemDetailScreen';
 import GuideItemDetailScreen from './ItemDetailScreens/GuideItemDetailScreen';
 import TransactionItemDetailScreen from './ItemDetailScreens/TransactionItemDetailScreen';
 
-import * as Actions from '../actions/dashboard'
-
 var { width, height } = Dimensions.get('window');
-
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators(Actions, dispatch)
-}
-
-const  mapStateToProps = (state) => {
-    return {
-        isHideDashboardNavigationbar: state.isHideDashboardNavigationbar
-    }
- }
 
 const DashboardTapNavigator = TabNavigator({
   TripsNav: { screen: TripsScreen, },
@@ -149,8 +137,8 @@ const styles = StyleSheet.create({
 });
 
 
-// export default DashboardScreen;
-export default connect(mapStateToProps,mapDispatchToProps)(DashboardScreen);
+export default DashboardScreen;
+// export default connect(mapStateToProps,mapDispatchToProps)(DashboardScreen);
 
 
 

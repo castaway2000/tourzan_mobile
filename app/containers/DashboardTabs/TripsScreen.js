@@ -17,26 +17,25 @@ import {
   ListView,
 } from 'react-native';
 
-import {connect} from 'react-redux';
-import { bindActionCreators } from 'redux'
+// import {connect} from 'react-redux';
+// import { bindActionCreators } from 'redux'
 
 import Rating from 'react-native-ratings';
 import { NavigationActions } from 'react-navigation'
 
 import NavigationBar from '../../components/NavigationBar'
-import * as Actions from '../../actions/dashboard'
 
 var { width, height } = Dimensions.get('window');
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators(Actions, dispatch)
-}
+// const mapDispatchToProps = (dispatch) => {
+//     return bindActionCreators(Actions, dispatch)
+// }
 
-const  mapStateToProps = (state) => {
-    return {
-        isHideDashboardNavigationbar: state.isHideDashboardNavigationbar
-    }
- }
+// const  mapStateToProps = (state) => {
+//     return {
+//         isHideDashboardNavigationbar: state.isHideDashboardNavigationbar
+//     }
+//  }
 
 class TripsScreen extends React.Component {
     static navigationOptions = {
@@ -245,5 +244,5 @@ const styles = StyleSheet.create({
 });
 
 
-// export default TripsScreen
-export default connect(mapStateToProps,mapDispatchToProps)(TripsScreen);
+export default TripsScreen
+// export default connect(mapStateToProps,mapDispatchToProps)(TripsScreen);

@@ -15,11 +15,25 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux'
+
 import { NavigationActions } from 'react-navigation'
 import Rating from 'react-native-ratings';
 
 import NavigationBar from '../../components/NavigationBar'
 import ApplyButton from '../../components/ApplyButton'
+import * as Actions from '../../actions/map'
+
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators(Actions, dispatch)
+}
+
+const  mapStateToProps = (state) => {
+    return {
+        isbooked: state.isbooked,
+    }
+ }
 
 var { width, height } = Dimensions.get('window');
 const backAction = NavigationActions.back({
@@ -47,8 +61,8 @@ class BookingGuideSettingScreen extends React.Component {
   }
 
   onConfirm(){
-    console.log("clicking on Confirm Button!");
-    // this.props.navigation.dispatch(resetRootAction);
+    this.props.getBookedState();
+    console.log('bookingguidesetting_debug',this.props.isbooked);
     this.navigate.navigate('Offer');
   }
 
@@ -94,6 +108,7 @@ class BookingGuideSettingScreen extends React.Component {
 
   render() {
       const { navigate } = this.props.navigation;
+      console.log('bookingguidesetting_debug',this.props.isbooked);
       return (
         <View style={styles.container}>  
              <View  style={styles.navigationbar}>
@@ -441,4 +456,5 @@ const styles = StyleSheet.create({
 
 });
 
-export default BookingGuideSettingScreen;
+// export default BookingGuideSettingScreen;
+export default connect(mapStateToProps,mapDispatchToProps)(BookingGuideSettingScreen);

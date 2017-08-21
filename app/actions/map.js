@@ -1,9 +1,8 @@
 import * as types from './types'
-
 // This is an action creator, it simply specifies the action.
 // this is what we call to send an action.
-export  function hideOrShowDashboardNavigationbar()  {
+export  function getBookedState()  {
   return {
-    type: types.HIDE_DASHBOARD_NAVIGATIONBAR
+    type: types.IS_BOOKED
   }
 }

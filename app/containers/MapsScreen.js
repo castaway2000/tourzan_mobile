@@ -15,11 +15,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux'
+
 import { NavigationActions } from 'react-navigation'
 import MapView from 'react-native-maps';
 
 import Switch from '../components/Switch';
 import NavigationBar from '../components/NavigationBar';
+import * as Actions from '../actions/map'
 
 import flagImg from '../assets/images/flag-blue_small.png';
 
@@ -30,6 +34,16 @@ var { width, height } = Dimensions.get('window');
 const backAction = NavigationActions.back({
 
 })
+
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators(Actions, dispatch)
+}
+
+const  mapStateToProps = (state) => {
+    return {
+        isbooked: state.isbooked,
+    }
+ }
 
 class MapsScreen extends React.Component {
   static navigationOptions = {
@@ -82,6 +96,7 @@ class MapsScreen extends React.Component {
 
   render() {
       const { navigate } = this.props.navigation;
+      console.log('map_debug', this.props.isbooked);
       return (
         <View style={styles.container}>  
              <View style={styles.top_container}>
@@ -172,9 +187,17 @@ class MapsScreen extends React.Component {
                         </TouchableOpacity>
                     )}
                 </View>
-                 <TouchableOpacity style={styles.booking_view} onPress={() => {navigate('BookingSearching')}}>
-                    <Image resizeMode='cover' source={require("../assets/images/booking_green_btn.png")} style={styles.booking_green_btn} />
-                </TouchableOpacity>
+                 {
+                     !this.props.isbooked ? (
+                     <TouchableOpacity style={styles.booking_view} onPress={() => {navigate('BookingSearching')}}>
+                        <Image resizeMode='cover' source={require("../assets/images/booking_green_btn.png")} style={styles.booking_green_btn} />
+                    </TouchableOpacity>
+                 ) : (
+                      <TouchableOpacity style={styles.booking_view} onPress={() => {navigate('ExtendTime')}}>
+                        <Image resizeMode='cover' source={require("../assets/images/checked_green_badge.png")} style={styles.booking_green_btn} />
+                    </TouchableOpacity>
+                 )}
+                
             </View>
         </View>
       );
@@ -395,4 +418,5 @@ const styles = StyleSheet.create({
           
 });
 
-export default MapsScreen;
+// export default MapsScreen;
+export default connect(mapStateToProps,mapDispatchToProps)(MapsScreen);
