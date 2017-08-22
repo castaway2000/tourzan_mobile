@@ -39,8 +39,8 @@ class WelcomeScreen extends React.Component {
                     </View>
                     <View style={styles.bottom_container}>
                         <ApplyButton  
-                        onPress={() => navigate('LoginTourist')} 
-                        name="Login Tourist"/>
+                          onPress={() => navigate('LoginTourist')} 
+                          name="Login Tourist"/>
                         <TouchableOpacity onPress={() => navigate('LoginGuide')} title="Login Guide">
                             <Text style={styles.button_guide}>Tour Guide</Text>
                         </TouchableOpacity>
@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     fontWeight : 'bold',
     textAlign: 'center',
     color : '#ffffff',
+    backgroundColor : 'transparent',
   },
   line: {
     marginTop:7,
@@ -88,6 +89,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     textAlign: 'center',
     color : '#eeeeee',
+    backgroundColor : 'transparent',
   },
 
   bottom_container:{

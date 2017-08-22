@@ -95,7 +95,7 @@ class CurrentTimeLimitScreen extends React.Component {
 
     if (this.state.selected == 1 ) { 
         this.props.getBookedState();
-        this.navigate.dispatch(resetRootAction);
+        this.props.navigation.navigate('CompleteTour');
     }
   }
 

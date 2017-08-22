@@ -47,6 +47,7 @@ import BookingSearchingScreen from './containers/BookingScreens/BookingSearching
 import BookingGuideSettingScreen from './containers/BookingScreens/BookingGuideSettingScreen';
 import OfferScreen from './containers/OfferScreen';
 import ExtendTimeScreen from './containers/ExtendTimeScreen';
+import CompleteTourScreen from './containers/CompleteTourScreen';
 
 import SettingsScreen from './containers/SettingsScreen';
 import ChangePasswordScreen from './containers/ChangePasswordScreen';
@@ -161,6 +162,8 @@ const App = StackNavigator({
   TimeLimit: {screen: SetTimeLimitScreen},
   CurrentTimeLimit:{screen: CurrentTimeLimitScreen},
   Offer:{screen: OfferScreen},
+  CompleteTour:{screen: CompleteTourScreen},
+  Profile:{screen: ProfileScreen},
 },{ 
     headerMode: 'screen' 
   },
