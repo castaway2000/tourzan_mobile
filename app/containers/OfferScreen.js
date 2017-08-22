@@ -26,6 +26,14 @@ var { width, height } = Dimensions.get('window');
 const backAction = NavigationActions.back({
 })
 
+const resetRootAction = NavigationActions.reset({
+        index: 0,
+        actions: [
+            NavigationActions.navigate({ routeName: 'Home' }),
+        ],
+        key: null
+ });
+
 class OfferScreen extends React.Component {
   static navigationOptions = {
       title: 'Offer',
@@ -43,15 +51,17 @@ class OfferScreen extends React.Component {
 
   onAccept(){
      console.log("clicked on Accept Button!");
-    //  this.navigate.dispatch(backAction);
+      this.navigate.dispatch(resetRootAction);
   }
 
   onCancel(){
       console.log("clicked on Cancel Button!");
+      this.navigate.dispatch(resetRootAction);
   }
 
   onChat(){
       console.log("clicked on Chat Button!");
+      this.navigate.navigation('Chat');
   }
 
   render() {

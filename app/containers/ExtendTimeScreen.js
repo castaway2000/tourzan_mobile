@@ -62,7 +62,7 @@ class ExtendTimeScreen extends React.Component {
                     <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}}>
                         <Image resizeMode='cover' source={require("../assets/images/back.png")} style={styles.backButton} />
                     </TouchableOpacity>
-                    <Text style={styles.centerText}>Time Limit</Text>
+                    <Text style={styles.centerText}>Extend Time</Text>
                     <View style={styles.rightView}>
                     </View>
             </View>
@@ -84,8 +84,7 @@ class ExtendTimeScreen extends React.Component {
                     </View>
                 </View>
                 <View style={styles.main_bottom_view}>
-                    <ApplyButton onPress={() => this.onDone()} name={'Done'} style={styles.done_btn}/>
-                    <Text style={styles.note_text}>By clicking "Done". Guide will receive your time limit offer</Text>
+                    <ApplyButton onPress={() => this.onDone()} name={'Extend Time'} style={styles.done_btn}/>
                 </View>
             </View>
         </View>

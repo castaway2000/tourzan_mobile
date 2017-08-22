@@ -193,7 +193,7 @@ class MapsScreen extends React.Component {
                         <Image resizeMode='cover' source={require("../assets/images/booking_green_btn.png")} style={styles.booking_green_btn} />
                     </TouchableOpacity>
                  ) : (
-                      <TouchableOpacity style={styles.booking_view} onPress={() => {navigate('ExtendTime')}}>
+                      <TouchableOpacity style={styles.booking_view} onPress={() => {navigate('CurrentTimeLimit')}}>
                         <Image resizeMode='cover' source={require("../assets/images/checked_green_badge.png")} style={styles.booking_green_btn} />
                     </TouchableOpacity>
                  )}
