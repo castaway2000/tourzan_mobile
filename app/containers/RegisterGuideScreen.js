@@ -68,20 +68,36 @@ class RegisterGuideScreen extends React.Component {
             </Image>
             <ScrollView style={styles.scrollview_container}>
                 <View style={styles.bottom_container}>
-                    <TextInput placeholder="Username" style={styles.inputText} underlineColorAndroid={'gray'}/>
-                    <TextInput placeholder="Email" style={styles.inputText} underlineColorAndroid={'gray'}/>
-                    <TextInput placeholder="Password" secureTextEntry={true} style={styles.inputText} underlineColorAndroid={'gray'}/>
-                    <TextInput placeholder="Confirm Password" secureTextEntry={true} style={styles.inputText} underlineColorAndroid={'gray'}/>
-                    <TextInput placeholder="Address" style={styles.inputText} underlineColorAndroid={'gray'}/>
-                    <TextInput placeholder="Company Name" style={styles.inputText} underlineColorAndroid={'gray'}/>
-                    <TextInput placeholder="Phone Number" style={styles.inputText} underlineColorAndroid={'gray'}/>
-                    <TextInput defaultValue="Intests" editable={false} onFocus={this.onIntestExtention}  style={styles.interest_text} underlineColorAndroid={'gray'} />
+                    <View style={{borderBottomWidth:1, borderColor:'grey'}}>
+                        <TextInput placeholder="Username" style={styles.inputText} underlineColorAndroid='rgba(0,0,0,0)'/>
+                    </View>
+                    <View style={{borderBottomWidth:1, borderColor:'grey'}}>
+                        <TextInput placeholder="Email" style={styles.inputText} underlineColorAndroid='rgba(0,0,0,0)'/>
+                    </View>
+                    <View style={{borderBottomWidth:1, borderColor:'grey'}}>
+                    <TextInput placeholder="Password" secureTextEntry={true} style={styles.inputText} underlineColorAndroid='rgba(0,0,0,0)'/>
+                    </View>
+                    <View style={{borderBottomWidth:1, borderColor:'grey'}}>
+                    <TextInput placeholder="Confirm Password" secureTextEntry={true} style={styles.inputText} underlineColorAndroid='rgba(0,0,0,0)'/>
+                    </View>
+                    <View style={{borderBottomWidth:1, borderColor:'grey'}}>
+                        <TextInput placeholder="Address" style={styles.inputText} underlineColorAndroid='rgba(0,0,0,0)'/>
+                    </View>
+                    <View style={{borderBottomWidth:1, borderColor:'grey'}}>
+                        <TextInput placeholder="Company Name" style={styles.inputText} underlineColorAndroid='rgba(0,0,0,0)'/>
+                    </View>
+                    <View style={{borderBottomWidth:1, borderColor:'grey'}}>
+                        <TextInput placeholder="Phone Number" style={styles.inputText} underlineColorAndroid='rgba(0,0,0,0)'/>
+                    </View>
+                    <View style={{borderBottomWidth:1, borderColor:'grey'}}>
+                        <TextInput defaultValue="Intests" editable={false} onFocus={this.onIntestExtention}  style={styles.interest_text} underlineColorAndroid='rgba(0,0,0,0)' />
+                    </View>
                 
                     <ApplyButton name={'Sign Up'} onPress={() => this.onSignup()} style={styles.button_login}/>
                     <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}} title="SING IN">
-                       <Text style={styles.button_signin} >SIGN IN</Text>
+                        <Text style={styles.button_signin} >SIGN IN</Text>
                     </TouchableOpacity>
-                </View>
+                    </View>
             </ScrollView>
         </View>
       );

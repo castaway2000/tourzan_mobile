@@ -68,8 +68,12 @@ class LoginTouristScreen extends React.Component {
                   </View>
             </Image>
             <View style={styles.bottom_container}>
-                  <TextInput placeholder="Email" style={styles.inputText} underlineColorAndroid={'gray'}/>
-                  <TextInput placeholder="Password" secureTextEntry={true} style={styles.inputText} underlineColorAndroid={'gray'}/>
+                  <View style={{borderBottomWidth:1, borderColor:'grey'}}>
+                     <TextInput placeholder="Email" style={styles.inputText} underlineColorAndroid='rgba(0,0,0,0)'/>
+                  </View>
+                  <View style={{borderBottomWidth:1, borderColor:'grey'}}>
+                    <TextInput placeholder="Password" secureTextEntry={true} style={styles.inputText} underlineColorAndroid='rgba(0,0,0,0)'/>
+                  </View>
                   <View style={styles.view_remember}>
                      <View style={styles.view_checkbox}>
                           <Checkbox
