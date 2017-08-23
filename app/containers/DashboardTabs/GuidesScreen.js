@@ -29,8 +29,8 @@ var { width, height } = Dimensions.get('window');
 class GuideScreen extends React.Component {
     static navigationOptions = {
          header: ( 
-            <View style={{backgroundColor:'white', height:45, width:width, alignItems:'center', flexDirection:'column', justifyContent:'flex-start'}}>
-                <View style={{backgroundColor:'#31dd73', height:44, width:width, alignItems:'center',flexDirection:'row',justifyContent:'space-between',}}>
+            <View style={{backgroundColor:'white', height:65, width:width, alignItems:'center', flexDirection:'column', justifyContent:'flex-start'}}>
+                <View style={{backgroundColor:'#31dd73', height:64,paddingTop:20, width:width, alignItems:'center',flexDirection:'row',justifyContent:'space-between',}}>
                     <View style={{ marginLeft:20, height:20, width:20,}}>
                     </View>
                     <Text style={{ color:'#fff', textAlign:'center',fontSize:17,width:width-160,fontWeight:'bold',}}>DASHBOARD</Text>
@@ -166,6 +166,7 @@ const styles = StyleSheet.create({
     height:40,
     borderRadius: 20,
     borderWidth: 1,
+    borderColor:'transparent',
   },
   rate_view:{
       marginTop:5,

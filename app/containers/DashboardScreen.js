@@ -56,9 +56,9 @@ const DashboardTapNavigator = TabNavigator({
   TransactionItemDetail: {screen: TransactionItemDetailScreen},
 },{ 
     headerMode: 'screen',
-   mode: 'modal',
-   initialRouteName: 'Dashboard',
-   initalRouteParams: {
+    mode: 'modal',
+    initialRouteName: 'Dashboard',
+    initalRouteParams: {
        sample : 'test',
    }
 })
@@ -100,12 +100,13 @@ const styles = StyleSheet.create({
     //   justifyContent: 'flex-start'
   },
   top_container:{
-      height:44,
-      backgroundColor: '#31dd73',
-      width:width,
-      alignItems:'center',
-      flexDirection:'row',
-      justifyContent:'space-between',
+    paddingTop:20,
+    height:64,
+    backgroundColor: '#31dd73',
+    width:width,
+    alignItems:'center',
+    flexDirection:'row',
+    justifyContent:'space-between',
   },
     backButton:{
         marginLeft:20,
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
          width:width,
     },
     tabbar_view_container_full : {
-         height:height-76,
+         height:height-30,
          width:width,
     },
 

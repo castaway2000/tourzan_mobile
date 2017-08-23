@@ -135,7 +135,8 @@ const styles = StyleSheet.create({
 
   // --- navigation bar --- //
     navigationbar:{
-      height:44,
+      paddingTop:20,
+      height:64,
       backgroundColor: '#31dd73',
       width:width,
       alignItems:'center',
@@ -222,6 +223,7 @@ const styles = StyleSheet.create({
         height:40,
         borderRadius: 20,
         borderWidth: 1,
+        borderColor:'transparent',
     },
     rate_view:{
         marginTop:5,

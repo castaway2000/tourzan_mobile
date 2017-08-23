@@ -127,11 +127,13 @@ const styles = StyleSheet.create({
       fontWeight : 'bold',
       textAlign: 'center',
       color : '#ffffff',
+      backgroundColor:'transparent',
   },
   txt_bottom:{
       fontSize: 17,
       textAlign: 'center',
-      color : '#eeeeee'
+      color : '#eeeeee',
+      backgroundColor:'transparent',
   },
   bottom_container:{
       width: width,
