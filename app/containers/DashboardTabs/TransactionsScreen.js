@@ -86,7 +86,8 @@ class TransactionsScreen extends React.Component {
     }
 
      renderRow(rowData){
-            return (
+         
+        return (
             <TouchableHighlight style={styles.row_view}
                 onPress={()=> this.pressRow(rowData)}
                 underlayColor = '#ddd'>
@@ -118,7 +119,6 @@ class TransactionsScreen extends React.Component {
      }
 
      render() {
-        
         return (
             <ListView
                 dataSource={this.state.dataSource}

@@ -139,9 +139,9 @@ const MainTapNavigator = TabNavigator({
   tabBarOptions: {
     activeTintColor: '#31dd73',
     inactiveTintColor:'#999',
-    labelStyle:{fontSize:9,marginTop:0, width:width/5-5,},
+    labelStyle:{fontSize:9,marginLeft:5/2,marginBottom:5, width:width/5-5,},
     showIcon:'true',
-    style: {backgroundColor: 'white', marginBottom: -10},
+    style: {backgroundColor: 'white', },
     indicatorStyle:{opacity:0},
   },
 });
