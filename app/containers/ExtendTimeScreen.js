@@ -48,10 +48,11 @@ class ExtendTimeScreen extends React.Component {
     // KeyEvent.onKeyUpListener((keyCode) => {
     //   console.log(`Key code pressed: ${keyCode}`);
     // });
-  }
+  } 
 
   onDone(){
-
+     console.log("clicked on DoneButton!");
+    //  this.navigate.dispatch(backAction);
   }
 
   render() {
@@ -61,7 +62,7 @@ class ExtendTimeScreen extends React.Component {
                     <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}}>
                         <Image resizeMode='cover' source={require("../assets/images/back.png")} style={styles.backButton} />
                     </TouchableOpacity>
-                    <Text style={styles.centerText}>Time Limit</Text>
+                    <Text style={styles.centerText}>Extend Time</Text>
                     <View style={styles.rightView}>
                     </View>
             </View>
@@ -71,20 +72,19 @@ class ExtendTimeScreen extends React.Component {
             <View style={styles.main_view}>
                 <View style={styles.main_top_view}>
                     <View style={styles.hour_view}>
-                        <TextInput underlineColorAndroid='transparent' keyboardType='numeric' style={styles.hour_text}>03</TextInput>
+                        <TextInput underlineColorAndroid='transparent' keyboardType='numeric' style={styles.hour_text} value={'03'}></TextInput>
                         <Text style={styles.hour_lb}>Hours</Text>
                     </View>
                     <View style={styles.double_dut_view}>   
                         <Text style={styles.double_dut_symbol}>:</Text>
                     </View>
                     <View style={styles.minute_view}>
-                        <TextInput underlineColorAndroid='transparent' keyboardType='numeric' style={styles.hour_text}>40</TextInput>
+                        <TextInput underlineColorAndroid='transparent' keyboardType='numeric' style={styles.hour_text} value={'40'}></TextInput>
                         <Text style={styles.hour_lb}>Minutes</Text>
                     </View>
                 </View>
                 <View style={styles.main_bottom_view}>
-                    <ApplyButton onPress={() => this.onDone()} name={'Done'} style={styles.done_btn}/>
-                    <Text style={styles.note_text}>By clicking "Done". Guide will receive your time limit offer</Text>
+                    <ApplyButton onPress={() => this.onDone()} name={'Extend Time'} style={styles.done_btn}/>
                 </View>
             </View>
         </View>
@@ -101,7 +101,8 @@ const styles = StyleSheet.create({
 
   // --- navigation bar --- //
    navigationbar:{
-      height:44,
+      paddingTop:20,
+      height:64,
       backgroundColor: '#31dd73',
       width:width,
       alignItems:'center',
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
         paddingVertical:5,
         alignItems:'center',
         borderBottomWidth:1,
-        borderColor:'ddd',
+        borderColor:'#ddd',
     },
     current_time_text:{
         textAlign:'center',

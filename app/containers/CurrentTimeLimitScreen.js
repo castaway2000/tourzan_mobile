@@ -15,27 +15,60 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import ActionSheet from 'react-native-actionsheet'
+import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux'
 import { NavigationActions } from 'react-navigation'
 import KeyEvent from 'react-native-keyevent';
 import PercentageCircle from 'react-native-percentage-circle';
-
 import ApplyButton from '../components/ApplyButton'
 var Toast = require('react-native-toast');
+import * as Actions from '../actions/map'
+
+
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators(Actions, dispatch)
+}
+
+const  mapStateToProps = (state) => {
+    return {
+        isbooked: state.isbooked,
+    }
+ }
 
 var { width, height } = Dimensions.get('window');
 
 const backAction = NavigationActions.back({
 })
 
+const resetRootAction = NavigationActions.reset({
+        index: 0,
+        actions: [
+            NavigationActions.navigate({ routeName: 'Home' }),
+        ],
+        key: null
+ });
+
+const CANCEL_INDEX = 0
+const DESTRUCTIVE_INDEX = 4
+const options = [ 'Cancel', 'End Tour' ]
+
+
 class CurrentTimeLimitScreen extends React.Component {
   static navigationOptions = {
-      title: 'Current Time Limit',
+      title: 'Time Limit',
       header : null,
   };
 
  constructor(props) {
     super(props);
     this.navigate = this.props.navigation;
+
+    this.state = {
+      selected: ''
+    };
+    this.handlePress = this.handlePress.bind(this);
+    this.showActionSheet = this.showActionSheet.bind(this);
   }
 
   componentDidMount() {
@@ -51,12 +84,27 @@ class CurrentTimeLimitScreen extends React.Component {
     // });
   }
 
-  onCompleteTourBtnClick(){
+  showActionSheet() {
+    this.ActionSheet.show()
+  }
+ 
+  handlePress(i) {
+    this.setState({
+      selected: i
+    })
 
+    if (this.state.selected == 1 ) { 
+        this.props.getBookedState();
+        this.props.navigation.navigate('CompleteTour');
+    }
+  }
+
+  onCompleteTourBtnClick(){
+      this.showActionSheet();
   }
 
   onExtendTimeBtnClick(){
-
+     this.props.navigation.navigate('ExtendTime');
   }
 
   render() {
@@ -81,12 +129,20 @@ class CurrentTimeLimitScreen extends React.Component {
                      </PercentageCircle>
                 </View>
                 <View style={styles.main_bottom_view}>
-                     <TouchableOpacity style={styles.extend_time_view} onPress={() => this.onExtendTimeBtnClick() } title='Extend Time'>
+                     <TouchableOpacity style={styles.extend_time_view} onPress={() => this.onExtendTimeBtnClick()} title='Extend Time'>
                             <Text style={styles.extend_time_btn} >Extend Time</Text>
                     </TouchableOpacity>
                     <ApplyButton onPress={() => this.onCompleteTourBtnClick()} name={'Complete Tour'} style={styles.done_btn}/>
                 </View>
             </View>
+            <ActionSheet
+                ref={o => this.ActionSheet = o}
+                // title={title}
+                options={options}
+                cancelButtonIndex={CANCEL_INDEX}
+                destructiveButtonIndex={DESTRUCTIVE_INDEX}
+                onPress={this.handlePress}
+                />
         </View>
       );
    }
@@ -101,7 +157,8 @@ const styles = StyleSheet.create({
 
   // --- navigation bar --- //
    navigationbar:{
-      height:44,
+      paddingTop:20,
+      height:64,
       backgroundColor: '#31dd73',
       width:width,
       alignItems:'center',
@@ -209,5 +266,5 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CurrentTimeLimitScreen;
-
+// export default CurrentTimeLimitScreen;
+export default connect(mapStateToProps,mapDispatchToProps)(CurrentTimeLimitScreen);

@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         height:50,
         width:width-60,
+        overflow:'hidden',
         backgroundColor:'#31dd73',
         borderRadius:5,
         borderColor: '#555555'

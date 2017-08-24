@@ -45,6 +45,9 @@ import SetTimeLimitScreen from './containers/SetTimeLimitScreen';
 import CurrentTimeLimitScreen from './containers/CurrentTimeLimitScreen';
 import BookingSearchingScreen from './containers/BookingScreens/BookingSearchingScreen';
 import BookingGuideSettingScreen from './containers/BookingScreens/BookingGuideSettingScreen';
+import OfferScreen from './containers/OfferScreen';
+import ExtendTimeScreen from './containers/ExtendTimeScreen';
+import CompleteTourScreen from './containers/CompleteTourScreen';
 
 import SettingsScreen from './containers/SettingsScreen';
 import ChangePasswordScreen from './containers/ChangePasswordScreen';
@@ -136,9 +139,9 @@ const MainTapNavigator = TabNavigator({
   tabBarOptions: {
     activeTintColor: '#31dd73',
     inactiveTintColor:'#999',
-    labelStyle:{fontSize:9,marginTop:0, width:width/5-5,},
+    labelStyle:{fontSize:9,marginLeft:5/2,marginBottom:5, width:width/5-5,},
     showIcon:'true',
-    style: {backgroundColor: 'white', marginBottom: -10},
+    style: {backgroundColor: 'white', },
     indicatorStyle:{opacity:0},
   },
 });
@@ -153,10 +156,14 @@ const App = StackNavigator({
   Home: {screen:MainTapNavigator},
   BookingSearching: {screen:BookingSearchingScreen},
   BookingGuideSetting: {screen:BookingGuideSettingScreen},
+  ExtendTime : {screen: ExtendTimeScreen},
   ProfileCharRoomFromBooking : {screen: ChatRoomScreen},
   PaymentMethod : {screen: PaymentMethodScreen},
   TimeLimit: {screen: SetTimeLimitScreen},
   CurrentTimeLimit:{screen: CurrentTimeLimitScreen},
+  Offer:{screen: OfferScreen},
+  CompleteTour:{screen: CompleteTourScreen},
+  Profile:{screen: ProfileScreen},
 },{ 
     headerMode: 'screen' 
   },

@@ -17,32 +17,31 @@ import {
   ListView,
 } from 'react-native';
 
-import {connect} from 'react-redux';
-import { bindActionCreators } from 'redux'
+// import {connect} from 'react-redux';
+// import { bindActionCreators } from 'redux'
 
 import Rating from 'react-native-ratings';
 import { NavigationActions } from 'react-navigation'
 
 import NavigationBar from '../../components/NavigationBar'
-import * as Actions from '../../actions/dashboard'
 
 var { width, height } = Dimensions.get('window');
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators(Actions, dispatch)
-}
+// const mapDispatchToProps = (dispatch) => {
+//     return bindActionCreators(Actions, dispatch)
+// }
 
-const  mapStateToProps = (state) => {
-    return {
-        isHideDashboardNavigationbar: state.isHideDashboardNavigationbar
-    }
- }
+// const  mapStateToProps = (state) => {
+//     return {
+//         isHideDashboardNavigationbar: state.isHideDashboardNavigationbar
+//     }
+//  }
 
 class TripsScreen extends React.Component {
     static navigationOptions = {
         header: ( 
-            <View style={{backgroundColor:'white', height:45, width:width, alignItems:'center', flexDirection:'column', justifyContent:'flex-start'}}>
-                <View style={{backgroundColor:'#31dd73', height:44, width:width, alignItems:'center',flexDirection:'row',justifyContent:'space-between',}}>
+            <View style={{backgroundColor:'white', height:65, width:width, alignItems:'center', flexDirection:'column', justifyContent:'flex-start'}}>
+                <View style={{backgroundColor:'#31dd73', height:64,paddingTop:20, width:width, alignItems:'center',flexDirection:'row',justifyContent:'space-between',}}>
                     <View style={{ marginLeft:20, height:20, width:20,}}>
                     </View>
                     <Text style={{ color:'#fff', textAlign:'center',fontSize:17,width:width-160,fontWeight:'bold',}}>DASHBOARD</Text>
@@ -190,6 +189,7 @@ const styles = StyleSheet.create({
     height:80,
     borderRadius: 5,
     borderWidth: 1,
+    borderColor:'transparent',
   },
   info_view: {
     width:width*50/100,
@@ -245,5 +245,5 @@ const styles = StyleSheet.create({
 });
 
 
-// export default TripsScreen
-export default connect(mapStateToProps,mapDispatchToProps)(TripsScreen);
+export default TripsScreen
+// export default connect(mapStateToProps,mapDispatchToProps)(TripsScreen);

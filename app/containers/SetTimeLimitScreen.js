@@ -51,7 +51,8 @@ class SetTimeLimitScreen extends React.Component {
   }
 
   onDone(){
-
+    console.log("clicked on DoneButton!");
+     this.navigate.dispatch(backAction);
   }
 
   render() {
@@ -68,14 +69,14 @@ class SetTimeLimitScreen extends React.Component {
             <View style={styles.main_view}>
                 <View style={styles.main_top_view}>
                     <View style={styles.hour_view}>
-                        <TextInput underlineColorAndroid='transparent' keyboardType='numeric' style={styles.hour_text}>03</TextInput>
+                        <TextInput underlineColorAndroid='transparent' keyboardType='numeric' style={styles.hour_text} value={'03'}></TextInput>
                         <Text style={styles.hour_lb}>Hours</Text>
                     </View>
                     <View style={styles.double_dut_view}>   
                         <Text style={styles.double_dut_symbol}>:</Text>
                     </View>
                     <View style={styles.minute_view}>
-                        <TextInput underlineColorAndroid='transparent' keyboardType='numeric' style={styles.hour_text}>40</TextInput>
+                        <TextInput underlineColorAndroid='transparent' keyboardType='numeric' style={styles.hour_text} value={'40'}></TextInput>
                         <Text style={styles.hour_lb}>Minutes</Text>
                     </View>
                 </View>
@@ -98,7 +99,8 @@ const styles = StyleSheet.create({
 
   // --- navigation bar --- //
    navigationbar:{
-      height:44,
+      paddingTop:20,
+      height:64,
       backgroundColor: '#31dd73',
       width:width,
       alignItems:'center',

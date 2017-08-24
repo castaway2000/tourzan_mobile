@@ -32,15 +32,15 @@ class WelcomeScreen extends React.Component {
           <View style={styles.container}>  
               <Image resizeMode='cover' source={require("../assets/images/welcome_bg.png")} style={styles.bg_img}>
                     <View style={styles.top_container}>
-                        <Image resizeMode='center' source={require("../assets/images/Tourzan_Logo.png")}/>
+                        <Image resizeMode='cover' source={require("../assets/images/grey_logo.png")} style={styles.logo}/>
                         <Text style={styles.txt_welcome}>WELCOME!</Text>
                         <View style={styles.line}></View>
                         <Text style={styles.txt_bottom}>Wine Tours La Dolce Vita </Text>
                     </View>
                     <View style={styles.bottom_container}>
                         <ApplyButton  
-                        onPress={() => navigate('LoginTourist')} 
-                        name="Login Tourist"/>
+                          onPress={() => navigate('LoginTourist')} 
+                          name="Login Tourist"/>
                         <TouchableOpacity onPress={() => navigate('LoginGuide')} title="Login Guide">
                             <Text style={styles.button_guide}>Tour Guide</Text>
                         </TouchableOpacity>
@@ -67,15 +67,20 @@ const styles = StyleSheet.create({
   },
 
   top_container: {
+    marginTop:40,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent:'flex-start',
+  },
+  logo:{
+    width:60,
+    height:60,
   },
   txt_welcome: {
-    marginTop : -20,
     fontSize: 25,
     fontWeight : 'bold',
     textAlign: 'center',
     color : '#ffffff',
+    backgroundColor : 'transparent',
   },
   line: {
     marginTop:7,
@@ -88,6 +93,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     textAlign: 'center',
     color : '#eeeeee',
+    backgroundColor : 'transparent',
   },
 
   bottom_container:{
@@ -106,7 +112,8 @@ const styles = StyleSheet.create({
     width:width-60,
     backgroundColor:'#ffffff',
     borderRadius:5,
-    borderColor: '#555555'
+    borderColor: '#555555',
+    overflow:'hidden',
   },
 });
 
