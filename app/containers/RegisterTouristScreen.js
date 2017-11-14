@@ -14,16 +14,20 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { NavigationActions } from 'react-navigation'
 import Checkbox  from 'react-native-custom-checkbox'
 
 import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
 
-
-
 var { width, height } = Dimensions.get('window');
+let nextInput1;
+let nextInput2;
+let nextInput3;
+let nextInput4;
+let nextInput5;
+let nextInput6;
 
 const onButtonPress = () => { Alert.alert('Button has been pressed!'); }; 
 const backAction = NavigationActions.back({
@@ -38,6 +42,16 @@ class RegisterTouristScreen extends React.Component {
 
  constructor(props) {
     super(props);
+    this.state = {
+        name: '',
+        email: '',
+        password: '',
+        confirmpassword: '',
+        address: '',
+        company:'',
+        phone:'',
+        intests: '',
+    };
     isIntestExtend : {false};
   }
 
@@ -55,6 +69,88 @@ class RegisterTouristScreen extends React.Component {
     this.props.navigation.dispatch(resetAction)
   }
 
+  setUserName(text){
+      this.setState({ name: text })
+  }
+  
+  setUserEmail(text){
+      this.setState({ email: text })
+  }
+
+  setUserPassword(text){
+      this.setState({ password: text })
+  }
+
+  setUserConfirmPassword(text){
+      this.setState({ confirmpassword: text })
+  }
+
+  setUserAddress(text){
+      this.setState({ address: text })
+  }
+
+  setUserCompany(text){
+      this.setState({ company: text })
+  }
+
+  setUserPhone(text){
+      this.setState({ phone: text })
+  }
+
+  setUserIntests(text){
+      this.setState({ intests: text })
+  }
+
+  getNextInput1(data) {
+      nextInput1 = data;
+  }
+
+  getNextInput2(data) {
+      nextInput2 = data;
+  }
+
+  getNextInput3(data) {
+      nextInput3 = data;
+  }
+
+  getNextInput4(data) {
+      nextInput4 = data;
+  }
+
+  getNextInput5(data) {
+      nextInput5 = data;
+  }
+
+  getNextInput6(data) {
+      nextInput6 = data;
+  }
+
+  changeFocus1() {
+      if (nextInput1 !== undefined) {
+		nextInput1.focus();
+	  }
+  }
+  
+  changeFocus2(){
+      nextInput2.focus();
+  }
+
+  changeFocus3(){
+      nextInput3.focus();
+  }
+
+  changeFocus4(){
+      nextInput4.focus();
+  }
+
+  changeFocus5(){
+      nextInput5.focus();
+  }
+
+  changeFocus6(){
+      nextInput6.focus();
+  }
+
   render() {
       const { navigate } = this.props.navigation;
       return (
@@ -66,31 +162,101 @@ class RegisterTouristScreen extends React.Component {
                          <Text style={styles.txt_welcome}>REGISTER</Text>
                   </View>
             </Image>
-            <ScrollView style={styles.scrollview_container}>
+            <KeyboardAwareScrollView style = {styles.out_container}>
                 <View style={styles.bottom_container}>
-                    <View style={{borderBottomWidth:1, borderColor:'grey'}}>
-                        <TextInput placeholder="Username" style={styles.inputText} underlineColorAndroid='rgba(0,0,0,0)'/>
+                    <View>
+                        <TextInput 
+                            placeholder="Username" 
+                            style={styles.inputText}
+                            underlineColorAndroid = 'transparent'
+                            value = {this.state.name}
+                            onChangeText = {(text) => this.setUserName(text)}
+                            onSubmitEditing={this.changeFocus1.bind(this)}
+                        />
+                        <View style={styles.line}></View>
                     </View>
-                    <View style={{borderBottomWidth:1, borderColor:'grey'}}>
-                        <TextInput placeholder="Email" style={styles.inputText} underlineColorAndroid='rgba(0,0,0,0)'/>
+                    <View>
+                        <TextInput
+                            ref={this.getNextInput1.bind(this)}
+                            placeholder="Email" 
+                            style={styles.inputText}
+                            underlineColorAndroid = 'transparent'
+                            value = {this.state.email}
+                            onChangeText = {(text) => this.setUserEmail(text)}
+                            onSubmitEditing={this.changeFocus2.bind(this)}
+                        />
+                        <View style={styles.line}></View>
                     </View>
-                    <View style={{borderBottomWidth:1, borderColor:'grey'}}>
-                    <TextInput placeholder="Password" secureTextEntry={true} style={styles.inputText} underlineColorAndroid='rgba(0,0,0,0)'/>
+                    <View>
+                        <TextInput
+                            ref={this.getNextInput2.bind(this)}
+                            placeholder="Password" 
+                            style={styles.inputText}
+                            underlineColorAndroid = 'transparent'
+                            value = {this.state.password}
+                            onChangeText = {(text) => this.setUserPassword(text)}
+                            onSubmitEditing={this.changeFocus3.bind(this)}
+                        />
+                        <View style={styles.line}></View>
                     </View>
-                    <View style={{borderBottomWidth:1, borderColor:'grey'}}>
-                    <TextInput placeholder="Confirm Password" secureTextEntry={true} style={styles.inputText} underlineColorAndroid='rgba(0,0,0,0)'/>
+                    <View>
+                        <TextInput
+                            ref={this.getNextInput3.bind(this)}
+                            placeholder="Confirm Password" 
+                            style={styles.inputText}
+                            underlineColorAndroid = 'transparent'
+                            value = {this.state.confirmpassword}
+                            onChangeText = {(text) => this.setUserConfirmPassword(text)}
+                            onSubmitEditing={this.changeFocus4.bind(this)}
+                        />
+                        <View style={styles.line}></View>
                     </View>
-                    <View style={{borderBottomWidth:1, borderColor:'grey'}}>
-                        <TextInput placeholder="Address" style={styles.inputText} underlineColorAndroid='rgba(0,0,0,0)'/>
+                    <View>
+                        <TextInput
+                            ref={this.getNextInput4.bind(this)}
+                            placeholder="Address" 
+                            style={styles.inputText}
+                            underlineColorAndroid = 'transparent'
+                            value = {this.state.address}
+                            onChangeText = {(text) => this.setUserAddress(text)}
+                            onSubmitEditing={this.changeFocus5.bind(this)}
+                        />
+                        <View style={styles.line}></View>
                     </View>
-                    <View style={{borderBottomWidth:1, borderColor:'grey'}}>
-                        <TextInput placeholder="Company Name" style={styles.inputText} underlineColorAndroid='rgba(0,0,0,0)'/>
+                    <View>
+                        <TextInput
+                            ref={this.getNextInput5.bind(this)}
+                            placeholder="Company Name" 
+                            style={styles.inputText}
+                            underlineColorAndroid = 'transparent'
+                            value = {this.state.company}
+                            onChangeText = {(text) => this.setUserCompany(text)}
+                            onSubmitEditing={this.changeFocus6.bind(this)}
+                        />
+                        <View style={styles.line}></View>
                     </View>
-                    <View style={{borderBottomWidth:1, borderColor:'grey'}}>
-                        <TextInput placeholder="Phone Number" style={styles.inputText} underlineColorAndroid='rgba(0,0,0,0)'/>
+                    <View>
+                        <TextInput
+                            ref={this.getNextInput6.bind(this)}
+                            placeholder="Phone Number" 
+                            style={styles.inputText}
+                            underlineColorAndroid = 'transparent'
+                            value = {this.state.phone}
+                            onChangeText = {(text) => this.setUserPhone(text)}
+                        />
+                        <View style={styles.line}></View>
                     </View>
-                    <View style={{borderBottomWidth:1, borderColor:'grey'}}>
-                        <TextInput defaultValue="Intests" editable={false} onFocus={this.onIntestExtention}  style={styles.interest_text} underlineColorAndroid='rgba(0,0,0,0)' />
+                    <View>
+                        <TextInput
+                            placeholder="Intests" 
+                            style={styles.inputText}
+                            editable={false}
+                            underlineColorAndroid = 'transparent'
+                            value = {this.state.intests}
+                            onFocus={this.onIntestExtention}  style={styles.interest_text}
+                            onChangeText = {(text) => this.setUserIntests(text)}
+                        />
+                        <View style={styles.line}></View>
                     </View>
                 
                     <ApplyButton name={'Sign Up'} onPress={() => this.onSignup()} style={styles.button_login}/>
@@ -98,7 +264,7 @@ class RegisterTouristScreen extends React.Component {
                        <Text style={styles.button_signin} >SIGN IN</Text>
                     </TouchableOpacity>
                 </View>
-            </ScrollView>
+            </KeyboardAwareScrollView>
         </View>
       );
    }
@@ -117,12 +283,12 @@ const styles = StyleSheet.create({
   },
   view_title:{
       width: width,
-      height : height*40/100 - 44,
+      height : height*0.4 - 70,
       alignItems:'flex-start',
       flexDirection:'column',
       justifyContent:'flex-end',
-      marginLeft:40,
-      marginBottom:30,
+      marginLeft:30,
+    //   marginBottom:30,
   },
   txt_welcome: {   
       marginTop:5,
@@ -130,11 +296,13 @@ const styles = StyleSheet.create({
       fontWeight : 'bold',
       textAlign: 'center',
       color : '#ffffff',
+      backgroundColor: 'transparent'
   },
   txt_bottom:{
       fontSize: 17,
       textAlign: 'center',
-      color : '#eeeeee'
+      color : '#eeeeee',
+      backgroundColor: 'transparent'
   },
   scrollview_container: {
      flex:1,
@@ -187,7 +355,12 @@ const styles = StyleSheet.create({
       textDecorationLine: "underline",
       textDecorationStyle: "solid",
       textDecorationColor: "#000"
-  }
+  },
+  line: {
+      height: 1,
+      width: width-60,
+      backgroundColor: 'gray',
+  },
 });
 
 export default RegisterTouristScreen;

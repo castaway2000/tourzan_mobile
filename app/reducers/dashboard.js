@@ -1,4 +1,4 @@
-import * as types from '../actions/types'
+import {HIDE_DASHBOARD_NAVIGATIONBAR} from '../actions/dashboard'
 
 // This is the default state of the app i.e. when the app starts for the first time
 const initialState = {
@@ -10,9 +10,9 @@ const initialState = {
   // A switch is used since if more actions are added in the future, it will be easy
   // to be able to handle this in the reducer since we just add another 'case'.
   switch (action.type) {
-    case types.HIDE_DASHBOARD_NAVIGATIONBAR:
+    case HIDE_DASHBOARD_NAVIGATIONBAR:
         return {
-            // ...state,
+            ...state,
             isHideDashboardNavigationbar: !state.isHideDashboardNavigationbar
         }
     default: return state

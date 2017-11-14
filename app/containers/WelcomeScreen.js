@@ -13,6 +13,7 @@ import {
   View,
   Alert,
   TouchableOpacity,
+  Platform
 } from 'react-native';
 
 import ApplyButton from '../components/ApplyButton';
@@ -32,7 +33,7 @@ class WelcomeScreen extends React.Component {
           <View style={styles.container}>  
               <Image resizeMode='cover' source={require("../assets/images/welcome_bg.png")} style={styles.bg_img}>
                     <View style={styles.top_container}>
-                        <Image resizeMode='cover' source={require("../assets/images/grey_logo.png")} style={styles.logo}/>
+                        <Image resizeMode='center' source={require("../assets/images/Tourzan_Logo.png")} style = {styles.logoImg}/>
                         <Text style={styles.txt_welcome}>WELCOME!</Text>
                         <View style={styles.line}></View>
                         <Text style={styles.txt_bottom}>Wine Tours La Dolce Vita </Text>
@@ -58,6 +59,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
   },
+  logoImg: {
+    width: 70,
+    height: 70,
+    marginTop: (Platform.OS === 'ios') ?  35 : 20,
+    resizeMode: 'contain'
+  },
   bg_img: {
     width: width,
     height : height,
@@ -67,35 +74,30 @@ const styles = StyleSheet.create({
   },
 
   top_container: {
-    marginTop:40,
     alignItems: 'center',
-    justifyContent:'flex-start',
-  },
-  logo:{
-    width:60,
-    height:60,
+    justifyContent: 'center',
   },
   txt_welcome: {
+    marginTop : 10,
     fontSize: 25,
     fontWeight : 'bold',
     textAlign: 'center',
     color : '#ffffff',
-    backgroundColor : 'transparent',
+    backgroundColor: 'transparent'
   },
   line: {
     marginTop:7,
     height: 1,
     width: '50%',
-    backgroundColor: '#ffffff',
+    backgroundColor: 'white',
   },
   txt_bottom:{
     marginTop: 7,
     fontSize: 17,
     textAlign: 'center',
     color : '#eeeeee',
-    backgroundColor : 'transparent',
+    backgroundColor: 'transparent',
   },
-
   bottom_container:{
     width: width,
     alignItems:'center',
@@ -103,17 +105,16 @@ const styles = StyleSheet.create({
     marginBottom:30,
   },
   button_guide:{
-    paddingTop:10,
-    color:'#000',
+    paddingTop:13,
+    color:'black',
     textAlign:'center',
     fontSize: 18,
     marginTop : 20,
     height:50,
     width:width-60,
-    backgroundColor:'#ffffff',
+    backgroundColor:'white',
     borderRadius:5,
-    borderColor: '#555555',
-    overflow:'hidden',
+    borderColor: '#555555'
   },
 });
 

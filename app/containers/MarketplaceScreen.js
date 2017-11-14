@@ -25,6 +25,21 @@ import NavigationBar from '../components/NavigationBar'
 var SearchBar = require('react-native-search-bar');
 var { width, height } = Dimensions.get('window');
 
+const SearchListHeader = (props) => (
+    <View style={styles.search_header_container}>
+        <View style={styles.search_hedear_row_view}>
+            <Image resizeMode='cover' source={require("../assets/images/search_white_icon.png")}  style={styles.search_header_search_icon}/>
+            <TextInput
+                style={styles.search_header_text}
+                underlineColorAndroid="transparent"
+                placeholder="Search here..."
+                placeholderTextColor="white"
+                onChangeText={(text) => console.log('searching for ', text)}
+            />
+        </View>
+    </View>
+);
+
 class MarketplaceScreen extends React.Component {
     static navigationOptions = {
         header : null,
@@ -45,9 +60,7 @@ class MarketplaceScreen extends React.Component {
         });
         this.state = {
             // for listview
-            ds:[{name: "Luella Palmer", location:"Conventry City Guide Including Conventry Hotel"},{name: "Samuel Wells", location:"Conventry City Guide Including Conventry Hotel"},{name: "Eric Ramsey", location:"Conventry City Guide Including Conventry Hotel"}
-                 ,{name: "Vera Hudson", location:"Conventry City Guide Including Conventry Hotel"},{name: "Jordan Holmes", location:"Conventry City Guide Including Conventry Hotel"},{name: "Carolyn Howard", location:"Conventry City Guide Including Conventry Hotel"}
-                 ,{name: "Verar Hudson", location:"Conventry City Guide Including Conventry Hotel"},{name: "Jordfan Holmes", location:"Conventry City Guide Including Conventry Hotel"},{name: "Catrolyn Howard", location:"Conventry City Guide Including Conventry Hotel"}],
+            ds:[{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"}],
             dataSource:ds,
 
             // for ratingview
@@ -66,29 +79,6 @@ class MarketplaceScreen extends React.Component {
                 dataSource:this.state.dataSource.cloneWithRows(this.state.ds),
             })
      }
-
-     setSearchText(event){
-        let searchText = event.nativeEvent.text;
-        console.log("debug", searchText);
-        this.setState({searchText});
-
-        let filteredData = this.filterNotes(searchText, this.state.ds);
-        this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(filteredData),
-        });
-     }
-
-     filterNotes(searchText, notes) {
-        let text = searchText.toLowerCase();
-      
-        let filteredData = notes.filter(
-            (note) =>{
-                return note.name.toLowerCase().indexOf(text)!= -1;
-            }
-        );
-
-        return filteredData;
-      }
 
      pressRow(rowData){
             const { navigate } = this.props.navigation;
@@ -114,8 +104,8 @@ class MarketplaceScreen extends React.Component {
                             </View>
                         </View>
                         <View style={styles.info_view}>
-                            <Text style={styles.name_text}>{rowData.name}</Text>
-                            <Text style={styles.description_text}>{rowData.location}</Text>
+                            <Text style={styles.name_text}>Glen Hale</Text>
+                            <Text style={styles.description_text}>Conventry City Guide Including Conventry Hotels</Text>
                         </View>
                          <View style={styles.right_view}>                      
                              <Text style={styles.right_text}>1km</Text>
@@ -139,22 +129,10 @@ class MarketplaceScreen extends React.Component {
                         </TouchableOpacity>
                  </View>
                  <View style={styles.list_view_container}>
-                        <View style={styles.search_header_container}>
-                            <View style={styles.search_hedear_row_view}>
-                                <Image resizeMode='cover' source={require("../assets/images/search_white_icon.png")}  style={styles.search_header_search_icon}/>
-                                <TextInput
-                                    style={styles.search_header_text}
-                                    underlineColorAndroid="transparent"
-                                    placeholder="Search here..."
-                                    placeholderTextColor="white"
-                                    value={this.state.searchText}
-                                    onChange={this.setSearchText.bind(this)}
-                                />
-                            </View>
-                        </View>
                         <ListView
                             dataSource={this.state.dataSource}
                             renderRow={this.renderRow.bind(this)}
+                            renderHeader={() => <SearchListHeader />}
                         />
                  </View>
             </View> 
@@ -173,8 +151,7 @@ const styles = StyleSheet.create({
     height: 20,
   },
    top_container:{
-      paddingTop:20,
-      height:64,
+      height:44,
       backgroundColor: '#31dd73',
       width:width,
       alignItems:'center',
@@ -200,7 +177,7 @@ const styles = StyleSheet.create({
     },
   list_view_container : {
          marginTop:1,
-         height:height-100,
+         height:height-120,
          width:width,
     },
   text_color:{
@@ -261,7 +238,6 @@ const styles = StyleSheet.create({
     height:40,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor:'transparent',
   },
   rate_view:{
       marginTop:5,
