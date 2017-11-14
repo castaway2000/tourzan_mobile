@@ -15,6 +15,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { NavigationActions } from 'react-navigation'
 import Checkbox  from 'react-native-custom-checkbox'
 
@@ -28,6 +29,8 @@ const backAction = NavigationActions.back({
     // key: 'WelcomeScreen'
 })
 
+let nextInput;
+
 class LoginGuideScreen extends React.Component {
   static navigationOptions = {
       title: 'Tour Guide Login ',
@@ -36,7 +39,11 @@ class LoginGuideScreen extends React.Component {
 
  constructor(props) {
     super(props);
-    this.state = { checked: false };
+    this.state = { 
+        checked: false,
+        email: '',
+        password: '' 
+    };
     this.navigate = this.props.navigation;
   }
 
@@ -50,9 +57,28 @@ class LoginGuideScreen extends React.Component {
     this.navigate.dispatch(resetAction)
   }
 
+  setUserEmail(text){
+      this.setState({ email: text })
+  }
+  
+  setPassword(text){
+      this.setState({ password: text })
+  }
+  
+  getNextInput(data) {
+      nextInput = data;
+  }
+
+  changeFocus() {
+      if (nextInput !== undefined) {
+		nextInput.focus();
+	  }
+  }
+
+
   render() {
       return (
-        <View style={styles.container}>  
+        <View style = {styles.container} >
             <Image resizeMode='cover' source={require("../assets/images/login_bg.png")} style={styles.top_container}>
                   <NavigationBar title={'Tour Guide Login'} bgColor={'transparent'} onPress={() => {this.props.navigation.dispatch(backAction)}}/>
                   <View style={styles.view_logo}>
@@ -61,31 +87,53 @@ class LoginGuideScreen extends React.Component {
                         <Text style={styles.txt_bottom}>Wine Tours La Dolce Vita</Text>
                   </View>
             </Image>
-            <View style={styles.bottom_container}>
-                  <View style={{borderBottomWidth:1, borderColor:'grey'}}>
-                     <TextInput placeholder="Email" style={styles.inputText} underlineColorAndroid='rgba(0,0,0,0)'/>
-                  </View>
-                  <View style={{borderBottomWidth:1, borderColor:'grey'}}>
-                    <TextInput placeholder="Password" secureTextEntry={true} style={styles.inputText} underlineColorAndroid='rgba(0,0,0,0)'/>
-                  </View>
-                  <View style={styles.view_remember}>
-                     <View style={styles.view_checkbox}>
-                          <Checkbox
-                                checked={true}
-                                style={{backgroundColor: '#f2f2f2', color:'#31dd73', borderRadius: 2}}
-                                size={15}
-                          />
-                         <Text style={styles.txt_checkbox}>Remember me</Text>
-                     </View>
-                     <TouchableOpacity onPress={() => this.navigate.navigate('ForgotPassword')}>
-                         <Text style={styles.txt_forgot}>Forgot Password?</Text>
-                     </TouchableOpacity>
-                  </View>
-                  <ApplyButton name={'Login'} onPress={() => this.onLogin()} style={styles.button_login}/>
-                  <TouchableOpacity  onPress={() => this.navigate.navigate('RegisterGuide')} title="SING UP">
-                      <Text style={styles.button_signup} >SIGN UP</Text>
-                  </TouchableOpacity>
-            </View>
+            <KeyboardAwareScrollView >
+                <View style={styles.bottom_container}>
+                    <View style={styles.bottom_container}>
+                        <View>
+                            <TextInput 
+                                placeholder="Email" 
+                                style={styles.inputText}
+                                underlineColorAndroid = 'transparent'
+                                value = {this.state.email}
+                                onChangeText = {(text) => this.setUserEmail(text)}
+                                onSubmitEditing={this.changeFocus.bind(this)}
+                            />
+                            <View style={styles.line}></View>
+                        </View>
+                        <View>
+                            <TextInput 
+                                ref={this.getNextInput.bind(this)}
+                                placeholder="Password" 
+                                secureTextEntry={true}
+                                style={styles.inputText}
+                                underlineColorAndroid = 'transparent'
+                                value = {this.state.password}
+                                onChangeText = {(text) => this.setPassword(text)}
+                                onSubmitEditing={this._onLogin}
+                            />
+                            <View style={styles.line}></View>
+                        </View>
+                        <View style={styles.view_remember}>
+                            <View style={styles.view_checkbox}>
+                                <Checkbox
+                                        checked={true}
+                                        style={{backgroundColor: '#f2f2f2', color:'#31dd73', borderRadius: 2}}
+                                        size={15}
+                                />
+                                <Text style={styles.txt_checkbox}>Remember me</Text>
+                            </View>
+                            <TouchableOpacity onPress={() => this.navigate.navigate('ForgotPassword')}>
+                                <Text style={styles.txt_forgot}>Forgot Password?</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <ApplyButton name={'Login'} onPress={() => this.onLogin()} style={styles.button_login}/>
+                        <TouchableOpacity  onPress={() => this.navigate.navigate('RegisterGuide')} title="SING UP">
+                            <Text style={styles.button_signup} >SIGN UP</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </KeyboardAwareScrollView>
         </View>
       );
    }
@@ -94,7 +142,6 @@ class LoginGuideScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
       flex: 1,
-      alignItems: 'center',
       flexDirection: 'column',
   },
   top_container: {
@@ -115,18 +162,18 @@ const styles = StyleSheet.create({
       width:70
   },
   txt_welcome: {
-      fontSize: 17,
-      fontWeight : 'bold',
-      textAlign: 'center',
-      color : '#ffffff',
-      backgroundColor:'transparent',
-  },
+        fontSize: 17,
+        fontWeight : 'bold',
+        textAlign: 'center',
+        color : 'white',
+        backgroundColor: 'transparent'
+    },
   txt_bottom:{
-      fontSize: 17,
-      textAlign: 'center',
-      color : '#eeeeee',
-       backgroundColor:'transparent',
-  },
+        fontSize: 17,
+        textAlign: 'center',
+        color : '#eeeeee',
+        backgroundColor: 'transparent'
+    },
   bottom_container:{
       width: width,
       height:height-height*40/100,
@@ -136,6 +183,7 @@ const styles = StyleSheet.create({
       width: width-60, 
       marginTop: 20,
       height: 40,
+      borderColor: 'gray'
   },
   txt_checkbox:{
       marginLeft:10,
@@ -167,7 +215,12 @@ const styles = StyleSheet.create({
       textDecorationLine: "underline",
       textDecorationStyle: "solid",
       textDecorationColor: "#000"
-  }
+  },
+  line: {
+        height: 1,
+        width: width-60,
+        backgroundColor: 'gray',
+    },
 });
 
 export default LoginGuideScreen;

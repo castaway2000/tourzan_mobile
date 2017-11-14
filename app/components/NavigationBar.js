@@ -6,6 +6,7 @@ import {
     StyleSheet,
     Dimensions,
     Image,
+    Platform
 } from 'react-native';
 
 var { width, height } = Dimensions.get('window');
@@ -16,10 +17,11 @@ class NavigationBar extends React.Component{
             title,
             onPress,
         } = this.props
+
         return(
              <View style={[styles.container,{backgroundColor:bgColor}]}>
                     <TouchableOpacity onPress={onPress}>
-                        <Image  resizeMode='cover' style={styles.backButton} source={require("../assets/images/back.png")} />
+                        <Image  resizeMode='center' style={styles.backButton} source={require("../assets/images/back.png")} />
                     </TouchableOpacity>
                     <Text style={styles.centerText}>{title}</Text>
                     <Image style={styles.rightView} />
@@ -31,19 +33,19 @@ class NavigationBar extends React.Component{
 const styles = StyleSheet.create({
     container:{
         width:width,
-        paddingTop:20,
-        height: 64,
+        height: 44,
         alignItems:'center',
         flexDirection:'row',
+        marginTop: (Platform.OS === 'ios') ?  15 : 0,
     },
     backView:{
        height:44,
        width: 50,
     },
     backButton:{
-        marginLeft:20,
         height:15,
-        width:10,
+        width:50,
+        resizeMode: 'contain'
     },
     centerText:{
         color:'#fff',

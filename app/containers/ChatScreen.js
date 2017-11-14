@@ -26,6 +26,21 @@ import NavigationBar from '../components/NavigationBar'
 var SearchBar = require('react-native-search-bar');
 var { width, height } = Dimensions.get('window');
 
+const SearchListHeader = (props) => (
+    <View style={styles.search_header_container}>
+        <View style={styles.search_hedear_row_view}>
+            <Image resizeMode='cover' source={require("../assets/images/search_white_icon.png")}  style={styles.search_header_search_icon}/>
+            <TextInput
+                style={styles.search_header_text}
+                underlineColorAndroid="transparent"
+                placeholder="Search here..."
+                placeholderTextColor="white"
+                onChangeText={(text) => console.log('searching for ', text)}
+            />
+        </View>
+    </View>
+);
+
 class ChatScreen extends React.Component {
     static navigationOptions = {
         header : null,
@@ -46,9 +61,7 @@ class ChatScreen extends React.Component {
         });
         this.state = {
             // for listview
-            ds:[{name: "Luella Palmer", last_message:"Agreed!"},{name: "Samuel Wells", last_message:"Hmmm..., really?"},{name: "Eric Ramsey", last_message:"yeah, but..."}
-                    ,{name: "Vera Hudson", last_message:"Just wanted to tell you!"},{name: "Jordan Holmes", last_message:"Damn! That's awesome man!"},{name: "Carolyn Howard", last_message:"Oh, allright."}
-                    ,,{name: "Verar Hudson", last_message:"Just wanted to tell you!"},{name: "Jordfan Holmes", last_message:"Damn! That's awesome man!"},{name: "Catrolyn Howard", last_message:"Oh, allright."}],
+            ds:[{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"}],
             dataSource:ds,
 
             // for ratingview
@@ -67,29 +80,6 @@ class ChatScreen extends React.Component {
                 dataSource:this.state.dataSource.cloneWithRows(this.state.ds),
             })
      }
-
-     setSearchText(event){
-        let searchText = event.nativeEvent.text;
-        console.log("debug", searchText);
-        this.setState({searchText});
-
-        let filteredData = this.filterNotes(searchText, this.state.ds);
-        this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(filteredData),
-        });
-     }
-
-     filterNotes(searchText, notes) {
-        let text = searchText.toLowerCase();
-      
-        let filteredData = notes.filter(
-            (note) =>{
-                return note.name.toLowerCase().indexOf(text)!= -1;
-            }
-        );
-
-        return filteredData;
-      }
 
      pressRow(rowData){
             const { navigate } = this.props.navigation;
@@ -112,8 +102,8 @@ class ChatScreen extends React.Component {
                             <Image resizeMode='cover' source={require("../assets/images/chat_avatar.png")}  style={styles.avatar_img}/>
                         </View>
                         <View style={styles.info_view}>
-                            <Text style={styles.name_text}>{rowData.name}</Text>
-                            <Text style={styles.description_text}>{rowData.last_message}</Text>
+                            <Text style={styles.name_text}>Luella Palmer</Text>
+                            <Text style={styles.description_text}>Agreed!</Text>
                         </View>
                         <View style={styles.row_right_view}>
                             <Text style={styles.right_text}>08:23 AM</Text>
@@ -131,8 +121,8 @@ class ChatScreen extends React.Component {
                                   }
                                   IconBadgeStyle={
                                     { position:'relative',
-                                      width:20,
-                                      height:20,
+                                      width:15,
+                                      height:15,
                                       backgroundColor: '#31dd73'}
                                   }
                                   Hidden={this.state.BadgeCount==0}
@@ -141,6 +131,7 @@ class ChatScreen extends React.Component {
                         </View>
                     </View>
             </TouchableHighlight>
+
          )
      }
 
@@ -156,24 +147,11 @@ class ChatScreen extends React.Component {
                         </View>
                  </View>
                  <View style={styles.list_view_container}>
-                        <View style={styles.search_header_container}>
-                            <View style={styles.search_hedear_row_view}>
-                                <Image resizeMode='cover' source={require("../assets/images/search_white_icon.png")}  style={styles.search_header_search_icon}/>
-                                <TextInput
-                                    style={styles.search_header_text}
-                                    underlineColorAndroid="transparent"
-                                    placeholder="Search here..."
-                                    placeholderTextColor="white"
-                                    value={this.state.searchText}
-                                    onChange={this.setSearchText.bind(this)}
-                                />
-                            </View>
-                        </View>
                         <ListView
                             dataSource={this.state.dataSource}
                             renderRow={this.renderRow.bind(this)}
                             renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator}/>}
-                            //renderHeader={() => <SearchListHeader />}
+                            renderHeader={() => <SearchListHeader />}
                         />
                  </View>
             </View> 
@@ -192,8 +170,7 @@ const styles = StyleSheet.create({
     height: 20,
   },
    top_container:{
-     paddingTop:20,
-     height:64,
+      height:44,
       backgroundColor: '#31dd73',
       width:width,
       alignItems:'center',
@@ -219,7 +196,7 @@ const styles = StyleSheet.create({
     },
   list_view_container : {
          marginTop:1,
-         height:height-100,
+         height:height-120,
          width:width,
     },
   separator: {
@@ -281,7 +258,6 @@ const styles = StyleSheet.create({
     height:40,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor:'transparent',
   },
   info_view: {
     width:width*50/100,

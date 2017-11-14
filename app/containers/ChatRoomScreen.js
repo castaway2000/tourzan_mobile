@@ -103,13 +103,12 @@ const styles = StyleSheet.create({
     height: 20,
   },
   top_container: {
-    paddingTop:20,
-    height:64,
-    backgroundColor: '#31dd73',
-    width:width,
-    alignItems:'center',
-    flexDirection:'row',
-    justifyContent:'space-between',
+      height:44,
+      backgroundColor: '#31dd73',
+      width:width,
+      alignItems:'center',
+      flexDirection:'row',
+      justifyContent:'space-between',
   },
    backButton:{
         marginLeft:20,
@@ -129,7 +128,7 @@ const styles = StyleSheet.create({
         width:35
     },
     bottom_container:{
-        height: height-44-50,
+        height: height-64-50,
         width: width,
     },
 });

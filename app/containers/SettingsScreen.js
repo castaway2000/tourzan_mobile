@@ -55,7 +55,7 @@ class SettingsScreen extends React.Component {
                 <View style={styles.main_top_view}>
                     <Image resizeMode='cover' source={require('../assets/images/person1.png')} style={styles.user_photo_img} />
                     <Text style={styles.profile_name_text}>Adam Parker</Text>
-                    <Text style={styles.profile_email_text} >adamparker@gmail.com</Text>                
+                    <Text style={styles.profile_email_text}>adamparker@gmail.com</Text>                
                 </View>
                 <View style={styles.main_info_view}>
                     <TouchableOpacity style={styles.row_view} onPress={() => {this.navigate.navigate('ChangePassword')}}>
@@ -66,7 +66,7 @@ class SettingsScreen extends React.Component {
                     </View>
                      <View style={styles.row_icon_view}>
                         <Image resizeMode='contain' source={require("../assets/images/Icon_email.png")} style={styles.row_small_icon}/>
-                        <TextInput underlineColorAndroid='transparent' style={styles.row_icon_lb} value={'adamparker@gmail.com'}></TextInput>
+                        <TextInput underlineColorAndroid='transparent' style={styles.row_icon_lb}>adamparker@gmail.com</TextInput>
                     </View>
                     <View style={styles.row_icon_view}>
                         <Image resizeMode='contain' source={require("../assets/images/trip_item_location_icon.png")} style={styles.row_small_icon}/>
@@ -99,8 +99,7 @@ const styles = StyleSheet.create({
 
      // --- navigation bar --- //
    navigationbar:{
-      paddingTop:20,
-      height:64,
+      height:44,
       backgroundColor: '#31dd73',
       width:width,
       alignItems:'center',
@@ -149,7 +148,6 @@ const styles = StyleSheet.create({
         height:80,
         borderRadius: 40,
         borderWidth: 1,
-        borderColor:'transparent',
     },
     profile_name_text:{
         fontSize:17,

@@ -201,7 +201,7 @@ class GuideItemDetailScreen extends React.Component {
                 </View>
             </ScrollView>
             <Image resizeMode='cover' source={require("../../assets/images/person1.png")} style={styles.avatar_icon}/> 
-            <Image resizeMode='cover' source={require("../../assets/images/book.png")} style={styles.booking_icon}/> 
+            <Image resizeMode='cover' source={require("../../assets/images/booking_green_btn.png")} style={styles.booking_icon}/> 
         </View>
       );
    }
@@ -223,8 +223,7 @@ const styles = StyleSheet.create({
       borderColor:'#31dd73'
   },
   navigationbar:{
-    paddingTop:20,
-    height:64,
+      height:44,
       backgroundColor: 'transparent',
       width:width,
       alignItems:'center',
@@ -402,7 +401,6 @@ const styles = StyleSheet.create({
     height:40,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor:'transparent',
   },
   rate_view:{
       marginTop:5,

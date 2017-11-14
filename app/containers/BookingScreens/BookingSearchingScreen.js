@@ -40,8 +40,7 @@ class BookingSearchingScreen extends React.Component {
     this.navigate = this.props.navigation;
   }
 
-  componentWillMount() {
-    console.log("bookingSearchingScreen = componentDidMount Calling");
+  componentDidMount() {
     timer.clearTimeout(this);
     timer.setTimeout(this, '', () => this.navigate.navigate('BookingGuideSetting'), 5000);
   }
