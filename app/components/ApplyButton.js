@@ -5,7 +5,6 @@ import {
     StyleSheet,
     Dimensions,
 } from 'react-native';
-import { Colors } from '../constants'
 
 var { width, height } = Dimensions.get('window');
 class ApplyButton extends React.Component{
@@ -24,13 +23,14 @@ class ApplyButton extends React.Component{
 
 const styles = StyleSheet.create({
     button:{
-        color:'white',
+        color:'#fff',
         paddingTop:13,
         textAlign:'center',
         fontSize: 18,
         height:50,
         width:width-60,
-        backgroundColor: Colors.main,
+        overflow:'hidden',
+        backgroundColor:'#31dd73',
         borderRadius:5,
         borderColor: '#555555'
     },

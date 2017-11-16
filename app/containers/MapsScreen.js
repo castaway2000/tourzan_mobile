@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import {
   Button,
   ScrollView,
@@ -12,14 +13,19 @@ import {
   View,
   Alert,
   TouchableOpacity,
-  Platform,
+  Platform
 } from 'react-native';
 
-import { NavigationActions } from 'react-navigation'
+import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux'
 import { Colors } from '../constants'
+import { NavigationActions } from 'react-navigation'
 import MapView from 'react-native-maps';
+
 import Switch from '../components/Switch';
 import NavigationBar from '../components/NavigationBar';
+import * as Actions from '../actions/map'
+
 import flagImg from '../assets/images/flag-blue_small.png';
 
 // var Switch = require('react-native-material-switch');
@@ -29,6 +35,16 @@ var { width, height } = Dimensions.get('window');
 const backAction = NavigationActions.back({
 
 })
+
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators(Actions, dispatch)
+}
+
+const  mapStateToProps = (state) => {
+    return {
+        isbooked: state.isbooked,
+    }
+ }
 
 class MapsScreen extends React.Component {
   static navigationOptions = {
@@ -81,17 +97,18 @@ class MapsScreen extends React.Component {
 
   render() {
       const { navigate } = this.props.navigation;
+      console.log('map_debug', this.props.isbooked);
       return (
-        <View style={styles.container}>
+        <View style={styles.container}> 
             <View style = {styles.statusbar}/>
-            <View style={styles.top_container}>
-                <TouchableOpacity>
-                    <Image resizeMode='cover' source={require("../assets/images/hambuger.png")} style={styles.backButton} />
-                </TouchableOpacity>
-                <Text style={styles.centerText}>TOURZAN</Text>
-                <TouchableOpacity onPress={() => {navigate('Profile')}}>
-                    <Image resizeMode='cover' source={require("../assets/images/person1.png")}  style={styles.rightView} />
-                </TouchableOpacity>
+             <View style={styles.top_container}>
+                    <TouchableOpacity>
+                        <Image resizeMode='cover' source={require("../assets/images/hambuger.png")} style={styles.backButton} />
+                    </TouchableOpacity>
+                    <Text style={styles.centerText}>TOURZAN</Text>
+                    <TouchableOpacity onPress={() => {navigate('Profile')}}>
+                        <Image resizeMode='cover' source={require("../assets/images/person1.png")}  style={styles.rightView} />
+                    </TouchableOpacity>
             </View>
             <View style={styles.map_container}>
                 <MapView style={styles.map_view}
@@ -102,7 +119,7 @@ class MapsScreen extends React.Component {
                         centerOffset={{ x: -18, y: -60 }}
                         anchor={{ x: 0.69, y: 1 }}
                         image={flagImg}/>
-                    </MapView>
+                 </MapView>
                 <View style={styles.locationInfo_view}>
                     <View style={styles.location_address_view}>
                         <Image resizeMode='contain' source={require("../assets/images/location_maps.png")} style={styles.icon_image}/>
@@ -128,7 +145,7 @@ class MapsScreen extends React.Component {
                                             <TouchableOpacity onPress={() => {navigate('')}}>
                                                 <Image resizeMode='contain' source={require("../assets/images/caret-arrow-up.png")}  style={styles.up_down_arrow_view} />
                                             </TouchableOpacity>
-                                            <TextInput underlineColorAndroid='transparent' keyboardType='numeric' style={styles.hour_text}>03</TextInput>
+                                            <TextInput underlineColorAndroid='transparent' keyboardType='numeric' style={styles.hour_text} value={'03'}></TextInput>
                                             <TouchableOpacity onPress={() => {navigate('')}}>
                                                 <Image resizeMode='contain' source={require("../assets/images/caret-arrow-down.png")}  style={styles.up_down_arrow_view} />
                                             </TouchableOpacity>
@@ -140,7 +157,7 @@ class MapsScreen extends React.Component {
                                             <TouchableOpacity onPress={() => {navigate('')}}>
                                                 <Image resizeMode='contain' source={require("../assets/images/caret-arrow-up.png")}  style={styles.up_down_arrow_view} />
                                             </TouchableOpacity>
-                                            <TextInput underlineColorAndroid='transparent' keyboardType='numeric' style={styles.hour_text}>40</TextInput>
+                                            <TextInput underlineColorAndroid='transparent' keyboardType='numeric' style={styles.hour_text} value={'40'}></TextInput>
                                             <TouchableOpacity onPress={() => {navigate('')}}>
                                                 <Image resizeMode='contain' source={require("../assets/images/caret-arrow-down.png")}  style={styles.up_down_arrow_view} />
                                             </TouchableOpacity>
@@ -172,11 +189,19 @@ class MapsScreen extends React.Component {
                         </TouchableOpacity>
                     )}
                 </View>
-                    <TouchableOpacity style={styles.booking_view} onPress={() => {navigate('BookingSearching')}}>
-                    <Image resizeMode='cover' source={require("../assets/images/booking_green_btn.png")} style={styles.booking_green_btn} />
-                </TouchableOpacity>
+                 {
+                     !this.props.isbooked ? (
+                     <TouchableOpacity style={styles.booking_view} onPress={() => {navigate('BookingSearching')}}>
+                        <Image resizeMode='cover' source={require("../assets/images/book.png")} style={styles.booking_green_btn} />
+                    </TouchableOpacity>
+                 ) : (
+                      <TouchableOpacity style={styles.booking_view} onPress={() => {navigate('CurrentTimeLimit')}}>
+                        <Image resizeMode='cover' source={require("../assets/images/book_time.png")} style={styles.booking_green_btn} />
+                    </TouchableOpacity>
+                 )}
+                
             </View>
-         </View>
+        </View>
       );
    }
 }
@@ -213,7 +238,6 @@ const styles = StyleSheet.create({
         marginLeft:20,
         height:20,
         width:20,
-        opacity: 0
     },
     centerText:{
         color:'#000',
@@ -228,15 +252,15 @@ const styles = StyleSheet.create({
         width:35
     },
     map_container:{
-        //  height:height-120,
-        flex: 1,
+        //  height:height-100,
+         flex: 1,
          width:width,
          alignItems:'center',
          backgroundColor:'transparent',
     },
     map_view:{
         // position:'absolute',
-        // height:height-120,
+        // height:height-100,
         flex: 1,
         width: width,
     },
@@ -407,4 +431,5 @@ const styles = StyleSheet.create({
           
 });
 
-export default MapsScreen;
+// export default MapsScreen;
+export default connect(mapStateToProps,mapDispatchToProps)(MapsScreen);

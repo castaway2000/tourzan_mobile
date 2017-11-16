@@ -15,11 +15,12 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   ListView,
+  Platform,
 } from 'react-native';
 
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux'
-
+import { Colors } from '../../constants'
 import Rating from 'react-native-ratings';
 import { NavigationActions } from 'react-navigation'
 
@@ -42,7 +43,7 @@ class TripsScreen extends React.Component {
     static navigationOptions = {
         header: ( 
             <View style={{backgroundColor:'white', height:45, width:width, alignItems:'center', flexDirection:'column', justifyContent:'flex-start'}}>
-                <View style={{backgroundColor:'#31dd73', height:44, width:width, alignItems:'center',flexDirection:'row',justifyContent:'space-between',}}>
+                <View style={{backgroundColor:'#31dd73', height:44, width:width, alignItems:'center', flexDirection:'row', justifyContent:'space-between',}}>
                     <View style={{ marginLeft:20, height:20, width:20,}}>
                     </View>
                     <Text style={{ color:'#fff', textAlign:'center',fontSize:17,width:width-160,fontWeight:'bold',}}>DASHBOARD</Text>
@@ -107,18 +108,7 @@ class TripsScreen extends React.Component {
     }
 
      renderRow(rowData){
-            return (
-            // <TouchableHighlight
-            //     onPress={()=> this.pressRow(rowData)}
-            //     underlayColor = '#ddd'>
-            //         <View style ={styles.row}>
-            //             <Text style={{fontSize:18}}>{rowData.AwayTeam} @ {rowData.HomeTeam} </Text>
-            //             <View style={{flex:1}}>
-            //                 <Text style={styles.selectionText}>{rowData[rowData.Selection]}</Text>
-            //             </View>
-            //         </View>
-            // </TouchableHighlight>
-
+        return (
             <TouchableHighlight style={styles.row_view}
                 onPress={()=> this.pressRow(rowData)}
                 underlayColor = '#ddd'>
@@ -140,7 +130,6 @@ class TripsScreen extends React.Component {
                         </TouchableOpacity>
                     </View>
             </TouchableHighlight>
-
          )
      }
 

@@ -224,7 +224,8 @@ const styles = StyleSheet.create({
       height:180,
   },
   navigationbar:{
-      height:44,
+      paddingTop:20,
+      height:64,
       backgroundColor: 'transparent',
       width:width,
       alignItems:'center',
@@ -392,6 +393,7 @@ const styles = StyleSheet.create({
     height:40,
     borderRadius: 20,
     borderWidth: 1,
+    borderColor:'transparent',
   },
   rate_view:{
       marginTop:5,

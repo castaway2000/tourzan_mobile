@@ -25,6 +25,14 @@ const backAction = NavigationActions.back({
     
 })
 
+const resetRootAction = NavigationActions.reset({
+    index: 0,
+    actions: [
+        NavigationActions.navigate({ routeName: 'Welcome' }),
+    ],
+    key: null
+});
+
 class MoreScreen extends React.Component {
   static navigationOptions = {
         header : null,
@@ -38,6 +46,10 @@ class MoreScreen extends React.Component {
     super(props);
     this.state = {};
     this.navigate = this.props.navigation;
+  }
+
+  onLogout(){
+      this.props.navigation.dispatch(resetRootAction);
   }
 
   render() {
@@ -73,7 +85,7 @@ class MoreScreen extends React.Component {
                     </TouchableOpacity>
                      <View style={styles.blank_logout_view}>
                     </View>
-                    <TouchableOpacity style={styles.row_view}>
+                    <TouchableOpacity style={styles.row_view} onPress={() => this.onLogout()}>
                         <Text  style={styles.row_logout_lb}>LOGOUT</Text>
                         <Image resizeMode='contain' source={require("../assets/images/Logout_icon.png")} style={styles.row_icon}/>
                     </TouchableOpacity>
@@ -96,7 +108,8 @@ const styles = StyleSheet.create({
 
      // --- navigation bar --- //
    navigationbar:{
-      height:44,
+      paddingTop:20,
+      height:64,
       backgroundColor: '#31dd73',
       width:width,
       alignItems:'center',

@@ -40,7 +40,7 @@ class PaymentMethodScreen extends React.Component {
   }
 
   onContinue(){
-
+      this.navigate.dispatch(backAction);
   }
 
   onVisaClick(){
@@ -188,7 +188,8 @@ const styles = StyleSheet.create({
 
   // --- navigation bar --- //
    navigationbar:{
-      height:44,
+      paddingTop:20,
+      height:64,
       backgroundColor: '#31dd73',
       width:width,
       alignItems:'center',

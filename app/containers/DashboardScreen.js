@@ -15,8 +15,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {connect} from 'react-redux';
-import { bindActionCreators } from 'redux'
+// import {connect} from 'react-redux';
+// import { bindActionCreators } from 'redux'
 
 import { TabNavigator } from 'react-navigation';
 import { NavigationActions } from 'react-navigation'
@@ -31,54 +31,36 @@ import TripItemDetailScreen from './ItemDetailScreens/TripItemDetailScreen';
 import GuideItemDetailScreen from './ItemDetailScreens/GuideItemDetailScreen';
 import TransactionItemDetailScreen from './ItemDetailScreens/TransactionItemDetailScreen';
 
-import * as Actions from '../actions/dashboard'
-
 var { width, height } = Dimensions.get('window');
-
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators(Actions, dispatch)
-}
-
-const  mapStateToProps = (state) => {
-    return {
-        isHideDashboardNavigationbar: state.isHideDashboardNavigationbar
-    }
- }
 
 const DashboardTapNavigator = TabNavigator({
     TripsNav: { screen: TripsScreen, },
     Guides: { screen: GuidesScreen, },
     Transactions: { screen: TransactionsScreen, },
- }, 
- {
-  navigationOptions:{
-    header:null,
-  },
-  tabBarPosition:'top',
-  lazy: true,
-  tabBarOptions: {
-    activeTintColor: '#fff',
-    inactiveTintColor:'#555',
-    labelStyle:{fontSize:9},
-    showIcon:'true',
-    style: {backgroundColor: '#31dd73'},
-    indicatorStyle:{opacity:1},
-  },
+  }, {
+    tabBarPosition:'top',
+    tabBarOptions: {
+        activeTintColor: '#fff',
+        inactiveTintColor:'#555',
+        labelStyle:{fontSize:9},
+        showIcon:'true',
+        style: {backgroundColor: '#31dd73'},
+    },
   
 });
 
  const DashboardStackNavigator = StackNavigator({
-  Dashboard:{screen: DashboardTapNavigator},
-  TripItemDetail:{screen: TripItemDetailScreen},
-  GuideItemDetail:{screen: GuideItemDetailScreen},
-  TransactionItemDetail: {screen: TransactionItemDetailScreen},
-},{ 
-    headerMode: 'screen',
-   mode: 'modal',
-   initialRouteName: 'Dashboard',
-   initalRouteParams: {
-       sample : 'test',
-   }
+    Dashboard:{screen: DashboardTapNavigator},
+    TripItemDetail:{screen: TripItemDetailScreen},
+    GuideItemDetail:{screen: GuideItemDetailScreen},
+    TransactionItemDetail: {screen: TransactionItemDetailScreen},
+  },{ 
+      headerMode: 'screen',
+      mode: 'modal',
+      initialRouteName: 'Dashboard',
+      initalRouteParams: {
+        sample : 'test',
+    }
 })
 
 class DashboardScreen extends React.Component {
@@ -97,19 +79,19 @@ class DashboardScreen extends React.Component {
     render() {
         const { navigate } = this.props.navigation;
         return (
-              <View style={styles.container}>
+            <View style={styles.container}>
                 <View style={styles.tabbar_view_container_full}>
                     <DashboardStackNavigator />
                 </View>
-              </View> 
+            </View> 
           )
     }
 }
 
 const styles = StyleSheet.create({
   icon: {
-    width: 20,
-    height: 20,
+      width: 20,
+      height: 20,
   },
   container: {
       flex: 1,
@@ -118,7 +100,8 @@ const styles = StyleSheet.create({
     //   justifyContent: 'flex-start'
   },
   top_container:{
-      height:44,
+      paddingTop:20,
+      height:64,
       backgroundColor: '#31dd73',
       width:width,
       alignItems:'center',
@@ -148,15 +131,15 @@ const styles = StyleSheet.create({
          width:width,
     },
     tabbar_view_container_full : {
-         height:height-76,
+         height:height-30,
          width:width,
     },
 
 });
 
 
-// export default DashboardScreen;
-export default connect(mapStateToProps,mapDispatchToProps)(DashboardScreen);
+export default DashboardScreen;
+// export default connect(mapStateToProps,mapDispatchToProps)(DashboardScreen);
 
 
 
