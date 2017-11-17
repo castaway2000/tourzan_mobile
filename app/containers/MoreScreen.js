@@ -13,11 +13,12 @@ import {
   View,
   Alert,
   TouchableOpacity,
+  Platform
 } from 'react-native';
 
 import { NavigationActions } from 'react-navigation'
 import Checkbox  from 'react-native-custom-checkbox'
-
+import { Colors } from '../constants'
 import NavigationBar from '../components/NavigationBar'
 
 var { width, height } = Dimensions.get('window');
@@ -38,7 +39,7 @@ class MoreScreen extends React.Component {
         header : null,
         tabBarLabel: 'More',
         tabBarIcon: ({ tintColor }) => (
-                <Image resizeMode='contain' source={require('../assets/images/More_Bottom_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
+                <Image resizeMode='contain' source={require('../assets/images/hambuger.png')} style={[styles.icon, {tintColor: tintColor}]} />
         ),
   };
 
@@ -54,7 +55,8 @@ class MoreScreen extends React.Component {
 
   render() {
       return (
-        <View style={styles.container}>  
+        <View style={styles.container}> 
+            <View style = {styles.statusbar}/>
              <View  style={styles.navigationbar}>
                     <View style={styles.backButton}> 
                     </View>
@@ -105,16 +107,24 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'column',
     },
+    statusbar:{
+        width: width,
+        height: (Platform.OS == 'ios')? 20 : StatusBar.currentHeight,
+        backgroundColor: Colors.main,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+    },
 
      // --- navigation bar --- //
    navigationbar:{
-      paddingTop:20,
-      height:64,
-      backgroundColor: '#31dd73',
-      width:width,
-      alignItems:'center',
-      flexDirection:'row',
-      justifyContent:'space-between',
+       height:44,
+       marginTop: (Platform.OS == 'ios')? 20:0,
+       backgroundColor: Colors.main,
+       width:width,
+       alignItems:'center',
+       flexDirection:'row',
+       justifyContent:'space-between',
    },
    backButton:{
         marginLeft:20,

@@ -102,9 +102,8 @@ class MapsScreen extends React.Component {
         <View style={styles.container}> 
             <View style = {styles.statusbar}/>
              <View style={styles.top_container}>
-                    <TouchableOpacity>
-                        <Image resizeMode='cover' source={require("../assets/images/hambuger.png")} style={styles.backButton} />
-                    </TouchableOpacity>
+                    <View style={styles.backButton}>
+                    </View>
                     <Text style={styles.centerText}>TOURZAN</Text>
                     <TouchableOpacity onPress={() => {navigate('Profile')}}>
                         <Image resizeMode='cover' source={require("../assets/images/person1.png")}  style={styles.rightView} />
@@ -215,7 +214,6 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems: 'center',
       flexDirection: 'column',
-    //   justifyContent: 'flex-start'
   },
   statusbar:{
       width: width,
@@ -240,7 +238,7 @@ const styles = StyleSheet.create({
         width:20,
     },
     centerText:{
-        color:'#000',
+        color:'white',
         textAlign:'center',
         fontSize:17,
         width:width-160,

@@ -30,38 +30,36 @@ import TransactionsScreen from './DashboardTabs/TransactionsScreen';
 import TripItemDetailScreen from './ItemDetailScreens/TripItemDetailScreen';
 import GuideItemDetailScreen from './ItemDetailScreens/GuideItemDetailScreen';
 import TransactionItemDetailScreen from './ItemDetailScreens/TransactionItemDetailScreen';
+import DashboardTapNavigator from './DashboardTabs/DashboardTapNavigator'
 
 var { width, height } = Dimensions.get('window');
 
-const DashboardTapNavigator = TabNavigator({
-    TripsNav: { screen: TripsScreen, },
-    Guides: { screen: GuidesScreen, },
-    Transactions: { screen: TransactionsScreen, },
-  }, {
-    tabBarPosition:'top',
-    tabBarOptions: {
-        activeTintColor: '#fff',
-        inactiveTintColor:'#555',
-        labelStyle:{fontSize:9},
-        showIcon:'true',
-        style: {backgroundColor: '#31dd73'},
-    },
-  
-});
+// const DashboardTapNavigator = TabNavigator({
+//     TripsNav: { screen: TripsScreen, },
+//     Guides: { screen: GuidesScreen, },
+//     Transactions: { screen: TransactionsScreen, },
+//   }, {
+//     tabBarPosition:'top',
+//     tabBarOptions: {
+//         activeTintColor: '#fff',
+//         inactiveTintColor:'#555',
+//         labelStyle:{fontSize:9},
+//         showIcon:'true',
+//         style: {backgroundColor: '#31dd73'},
+//     },
+// });
 
  const DashboardStackNavigator = StackNavigator({
-    Dashboard:{screen: DashboardTapNavigator},
-    TripItemDetail:{screen: TripItemDetailScreen},
-    GuideItemDetail:{screen: GuideItemDetailScreen},
-    TransactionItemDetail: {screen: TransactionItemDetailScreen},
-  },{ 
+      DashboardTapNavigator:{screen: DashboardTapNavigator},
+      TripItemDetail:{screen: TripItemDetailScreen},
+      GuideItemDetail:{screen: GuideItemDetailScreen},
+      TransactionItemDetail: {screen: TransactionItemDetailScreen},
+    },{ 
       headerMode: 'screen',
       mode: 'modal',
-      initialRouteName: 'Dashboard',
-      initalRouteParams: {
-        sample : 'test',
-    }
-})
+      initialRouteName: 'DashboardTapNavigator',
+  }
+)
 
 class DashboardScreen extends React.Component {
     static navigationOptions = {
@@ -99,40 +97,9 @@ const styles = StyleSheet.create({
       flexDirection: 'column',
     //   justifyContent: 'flex-start'
   },
-  top_container:{
-      paddingTop:20,
-      height:64,
-      backgroundColor: '#31dd73',
-      width:width,
-      alignItems:'center',
-      flexDirection:'row',
-      justifyContent:'space-between',
-  },
-    backButton:{
-        marginLeft:20,
-        height:20,
-        width:20,
-    },
-    centerText:{
-        color:'#fff',
-        textAlign:'center',
-        fontSize:17,
-        width:width-160,
-        fontWeight:'bold',
-    },
-    rightView:{
-        marginRight:20,
-        height:35,
-        width:35
-    },
-    tabbar_view_container : {
-         marginTop:1,
-         height:height-120,
-         width:width,
-    },
     tabbar_view_container_full : {
-         height:height-30,
          width:width,
+         flex: 1
     },
 
 });

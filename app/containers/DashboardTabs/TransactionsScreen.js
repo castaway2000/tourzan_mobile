@@ -27,23 +27,7 @@ var { width, height } = Dimensions.get('window');
 
 class TransactionsScreen extends React.Component {
     static navigationOptions = {
-         header: ( 
-            <View style={{backgroundColor:'white', height:65, width:width, alignItems:'center', flexDirection:'column', justifyContent:'flex-start'}}>
-                <View style={{backgroundColor:'#31dd73', height:64, paddingTop:20,width:width, alignItems:'center',flexDirection:'row',justifyContent:'space-between',}}>
-                    <View style={{ marginLeft:20, height:20, width:20,}}>
-                    </View>
-                    <Text style={{ color:'#fff', textAlign:'center',fontSize:17,width:width-160,fontWeight:'bold',}}>DASHBOARD</Text>
-                    <TouchableOpacity>
-                        <Image resizeMode='cover' source={require("../../assets/images/person1.png")}  style={{ marginRight:20, height:35, width:35}} />
-                    </TouchableOpacity>
-                </View>
-            </View>
-        ),
- 
-        tabBarLabel: 'Transaction',
-        tabBarIcon: ({ tintColor }) => (
-             <Image resizeMode='contain' source={require('../../assets/images/transactions_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
-        ),
+         header: null
     };
 
     constructor(props) {
@@ -69,10 +53,15 @@ class TransactionsScreen extends React.Component {
     }
 
     // functions for listview
-    componentDidMount(){
-            this.setState({
-                dataSource:this.state.dataSource.cloneWithRows(this.state.ds),
-            })
+    // componentDidMount(){
+    //         this.setState({
+    //             dataSource:this.state.dataSource.cloneWithRows(this.state.ds),
+    //         })
+    //  }
+     componentWillMount() {
+         this.setState({
+            dataSource:this.state.dataSource.cloneWithRows(this.state.ds),
+        })
      }
 
      pressRow(rowData){
@@ -125,6 +114,7 @@ class TransactionsScreen extends React.Component {
                 dataSource={this.state.dataSource}
                 renderRow={this.renderRow.bind(this)}
                 renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+                showsVerticalScrollIndicator = {false}
             />
         );
     }
@@ -144,11 +134,12 @@ const styles = StyleSheet.create({
     color:'#000',
   },
   row_view:{
-     paddingTop:20,
-     paddingRight:10,
-     paddingBottom:20,
-     paddingLeft:10,
-     backgroundColor:'white',
+      marginTop: 10,
+      paddingTop:20,
+    //  paddingRight:10,
+      paddingBottom:20,
+    //  paddingLeft:10,
+      backgroundColor:'white',
   },
   separator: {
         flex: 1,
@@ -200,6 +191,7 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
   },
   row_right_view:{
+      marginRight: 5,
       width:width*30/100,
       flexDirection:'column',
       alignItems:'flex-end',
