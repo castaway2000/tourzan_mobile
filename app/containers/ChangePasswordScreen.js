@@ -24,7 +24,7 @@ import NavigationBar from '../components/NavigationBar'
 var { width, height } = Dimensions.get('window');
 const backAction = NavigationActions.back({
     
-})
+});
 
 class ChangePasswordScreen extends React.Component {
   static navigationOptions = {

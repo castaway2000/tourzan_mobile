@@ -28,7 +28,7 @@ var { width, height } = Dimensions.get('window');
 const onButtonPress = () => { Alert.alert('Button has been pressed!'); }; 
 const backAction = NavigationActions.back({
     // key: 'WelcomeScreen'
-})
+});
 
 let nextInput1;
 let nextInput2;
@@ -68,7 +68,7 @@ class RegisterGuideScreen extends React.Component {
         actions: [
             NavigationActions.navigate({ routeName: 'Home'})
         ]
-    })
+    });
     this.props.navigation.dispatch(resetAction)
   }
 

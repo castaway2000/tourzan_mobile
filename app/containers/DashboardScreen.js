@@ -59,7 +59,7 @@ var { width, height } = Dimensions.get('window');
       mode: 'modal',
       initialRouteName: 'DashboardTapNavigator',
   }
-)
+);
 
 class DashboardScreen extends React.Component {
     static navigationOptions = {

@@ -24,7 +24,7 @@ var Toast = require('react-native-toast');
 var { width, height } = Dimensions.get('window');
 
 const backAction = NavigationActions.back({
-})
+});
 
 class SetTimeLimitScreen extends React.Component {
   static navigationOptions = {

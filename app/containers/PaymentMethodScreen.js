@@ -25,7 +25,7 @@ var { width, height } = Dimensions.get('window');
 
 const backAction = NavigationActions.back({
     // key: 'WelcomeScreen'
-})
+});
 
 class PaymentMethodScreen extends React.Component {
   static navigationOptions = {

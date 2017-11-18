@@ -34,17 +34,17 @@ var { width, height } = Dimensions.get('window');
 
 const backAction = NavigationActions.back({
 
-})
+});
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators(Actions, dispatch)
-}
+};
 
 const  mapStateToProps = (state) => {
     return {
         isbooked: state.isbooked,
     }
- }
+ };
 
 class MapsScreen extends React.Component {
   static navigationOptions = {

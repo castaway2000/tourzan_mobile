@@ -42,7 +42,7 @@ class GuideScreen extends React.Component {
 
             // for ratingview
             starCount: 3.5,
-        }
+        };
 
         this.navigate = this.props.navigation;
     }
@@ -65,7 +65,7 @@ class GuideScreen extends React.Component {
         newDs = this.state.ds.slice();
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(newDs)
-        })
+        });
 
         this.navigate.navigate('GuideItemDetail');
     }

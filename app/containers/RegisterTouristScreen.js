@@ -32,7 +32,7 @@ let nextInput6;
 const onButtonPress = () => { Alert.alert('Button has been pressed!'); }; 
 const backAction = NavigationActions.back({
     // key: 'WelcomeScreen'
-})
+});
 
 class RegisterTouristScreen extends React.Component {
   static navigationOptions = {
@@ -65,7 +65,7 @@ class RegisterTouristScreen extends React.Component {
         actions: [
             NavigationActions.navigate({ routeName: 'Home'})
         ]
-    })
+    });
     this.props.navigation.dispatch(resetAction)
   }
 

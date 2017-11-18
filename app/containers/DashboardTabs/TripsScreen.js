@@ -56,7 +56,7 @@ class TripsScreen extends React.Component {
 
             // for ratingview
             starCount: 3.5,
-        }
+        };
         this.navigate = this.props.navigation;
     }
 
@@ -68,7 +68,7 @@ class TripsScreen extends React.Component {
     // functions for listview
     componentWillMount(){
 
-        console.log('navigation:', this.props.navigtion)
+        console.log('navigation:', this.props.navigtion);
         this.setState({
             dataSource:this.state.dataSource.cloneWithRows(this.state.ds),
         })
@@ -80,7 +80,7 @@ class TripsScreen extends React.Component {
             // newDs[0].Selection = newDs[0] == "AwayTeam" ? "HomeTeam" : "AwayTeam";
             this.setState({
                 dataSource: this.state.dataSource.cloneWithRows(newDs)
-            })
+            });
            
            
             // this.props.hideOrShowDashboardNavigationbar();

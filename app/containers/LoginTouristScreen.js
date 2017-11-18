@@ -27,7 +27,7 @@ var { width, height } = Dimensions.get('window');
 const onButtonPress = () => { Alert.alert('Button has been pressed!'); }; 
 const backAction = NavigationActions.back({
     // key: 'WelcomeScreen'
-})
+});
 
 let nextInput;
 
@@ -53,7 +53,7 @@ class LoginTouristScreen extends React.Component {
         actions: [
             NavigationActions.navigate({ routeName: 'Home'})
         ]
-    })
+    });
     this.navigate.dispatch(resetAction)
   }
 

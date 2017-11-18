@@ -8,7 +8,7 @@ export default function configureStore() {
   let store = createStore(
     map,
     applyMiddleware(thunk)
-  )
+  );
 
   return store
 }

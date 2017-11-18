@@ -24,7 +24,7 @@ class DashboardTapNavigator extends React.Component {
     static navigationOptions = {
         title: '',
         header: null
-    }
+    };
 
     constructor(props) {
         super(props);

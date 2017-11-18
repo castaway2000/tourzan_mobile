@@ -26,7 +26,7 @@ const timer = require('react-native-timer');
 const onButtonPress = () => { Alert.alert('Button has been pressed!'); }; 
 const backAction = NavigationActions.back({
     
-})
+});
 
 class BookingSearchingScreen extends React.Component {
   static navigationOptions = {

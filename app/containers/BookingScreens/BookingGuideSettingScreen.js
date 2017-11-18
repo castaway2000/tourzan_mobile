@@ -27,18 +27,18 @@ import * as Actions from '../../actions/map'
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators(Actions, dispatch)
-}
+};
 
 const  mapStateToProps = (state) => {
     return {
         isbooked: state.isbooked,
     }
- }
+ };
 
 var { width, height } = Dimensions.get('window');
 const backAction = NavigationActions.back({
     
-})
+});
 
 const resetRootAction = NavigationActions.reset({
         index: 0,
