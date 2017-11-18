@@ -149,7 +149,7 @@ class BookingGuideSettingScreen extends React.Component {
                         </View>
                          <View style={styles.row_setting_view}>
                             <View style={styles.setting_text_view_term}>
-                                <Text style={styles.setting_text}>Payment Term</Text>
+                                <Text style={styles.setting_text}>Time Setting</Text>
                                 { this.state.isExtendTerm ? (
                                      <TouchableOpacity onPress={() => this.onDone()}>
                                         <Text style={styles.done_text}>DONE</Text>
@@ -166,7 +166,7 @@ class BookingGuideSettingScreen extends React.Component {
                                         <TouchableOpacity style={styles.hourly_setting_view} onPress={() => this.onCheckHourly()}>
                                             <View style={styles.row_setting_btn_left_view}>
                                                 <Image resizeMode='contain' source={require("../../assets/images/time_icon_black.png")}  style={styles.row_setting_btn_icon}/>
-                                                <Text style={styles.row_setting_btn_text}>Hourly</Text>
+                                                <Text style={styles.row_setting_btn_text}>Automatic</Text>
                                             </View>
                                             { this.state.isCheckHoulryOrManual ? (
                                                 <Image resizeMode='contain' source={require("../../assets/images/unchecked_gray_badge.png")}  style={styles.row_setting_btn_right_icon}/>
@@ -178,7 +178,7 @@ class BookingGuideSettingScreen extends React.Component {
                                         <TouchableOpacity style={styles.manual_setting_view} onPress={() => this.onCheckManual()}>
                                             <View style={styles.row_setting_btn_left_view}>
                                                 <Image resizeMode='contain' source={require("../../assets/images/forms.png")}  style={styles.row_setting_btn_icon}/>
-                                                <Text style={styles.row_setting_btn_text}>Manual Time</Text>
+                                                <Text style={styles.row_setting_btn_text}>Manual</Text>
                                             </View>
                                             { this.state.isCheckHoulryOrManual ? (
                                                 <Image resizeMode='contain' source={require("../../assets/images/checked_green_badge.png")}  style={styles.row_setting_btn_right_icon}/>
@@ -192,7 +192,7 @@ class BookingGuideSettingScreen extends React.Component {
                                         <TouchableOpacity style={styles.manual_setting_view} onPress={() => this.onCheckManual()}>
                                             <View style={styles.row_setting_btn_left_view}>
                                                 <Image resizeMode='contain' source={require("../../assets/images/forms.png")}  style={styles.row_setting_btn_icon}/>
-                                                <Text style={styles.row_setting_btn_text}>Manual Time</Text>
+                                                <Text style={styles.row_setting_btn_text}>Manual</Text>
                                             </View>
                                              { this.state.isCheckHoulryOrManual ? (
                                                 <Image resizeMode='contain' source={require("../../assets/images/checked_green_badge.png")}  style={styles.row_setting_btn_right_icon}/>
@@ -203,7 +203,7 @@ class BookingGuideSettingScreen extends React.Component {
                                         <TouchableOpacity style={styles.hourly_setting_view} onPress={() => this.onCheckHourly()}>
                                             <View style={styles.row_setting_btn_left_view}>
                                                 <Image resizeMode='contain' source={require("../../assets/images/time_icon_black.png")}  style={styles.row_setting_btn_icon}/>
-                                                <Text style={styles.row_setting_btn_text}>Hourly</Text>
+                                                <Text style={styles.row_setting_btn_text}>Automatic</Text>
                                             </View>
                                              { this.state.isCheckHoulryOrManual ? (
                                                 <Image resizeMode='contain' source={require("../../assets/images/unchecked_gray_badge.png")}  style={styles.row_setting_btn_right_icon}/>
@@ -218,7 +218,7 @@ class BookingGuideSettingScreen extends React.Component {
                                     <TouchableOpacity  onPress={() => this.onExtendTerm()} style={styles.row_setting_btn_view}>
                                         <View style={styles.row_setting_btn_left_view}>
                                             <Image resizeMode='contain' source={require("../../assets/images/time_icon_black.png")}  style={styles.row_setting_btn_icon}/>
-                                            <Text style={styles.row_setting_btn_text}>Hourly</Text>
+                                            <Text style={styles.row_setting_btn_text}>Automatic</Text>
                                         </View>
                                         <Image resizeMode='contain' source={require("../../assets/images/edit_icon.png")}  style={styles.row_setting_btn_right_icon}/>
                                     </TouchableOpacity>
@@ -226,7 +226,7 @@ class BookingGuideSettingScreen extends React.Component {
                                     <TouchableOpacity  onPress={() => this.onExtendTerm()} style={styles.row_setting_btn_view}>
                                         <View style={styles.row_setting_btn_left_view}>
                                             <Image resizeMode='contain' source={require("../../assets/images/forms.png")}  style={styles.row_setting_btn_icon}/>
-                                            <Text style={styles.row_setting_btn_text}>Manual Time</Text>
+                                            <Text style={styles.row_setting_btn_text}>Manual</Text>
                                         </View>
                                         <Image resizeMode='contain' source={require("../../assets/images/edit_icon.png")}  style={styles.row_setting_btn_right_icon}/>
                                     </TouchableOpacity>
