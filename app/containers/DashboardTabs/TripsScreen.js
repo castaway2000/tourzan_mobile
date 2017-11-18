@@ -15,11 +15,12 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   ListView,
+  Platform,
 } from 'react-native';
 
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux'
-
+import { Colors } from '../../constants'
 import Rating from 'react-native-ratings';
 import { NavigationActions } from 'react-navigation'
 
@@ -28,35 +29,19 @@ import * as Actions from '../../actions/dashboard'
 
 var { width, height } = Dimensions.get('window');
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators(Actions, dispatch)
-}
+// const mapDispatchToProps = (dispatch) => {
+//     return bindActionCreators(Actions, dispatch)
+// }
 
-const  mapStateToProps = (state) => {
-    return {
-        isHideDashboardNavigationbar: state.isHideDashboardNavigationbar
-    }
- }
+// const  mapStateToProps = (state) => {
+//     return {
+//         isHideDashboardNavigationbar: state.isHideDashboardNavigationbar
+//     }
+//  }
 
 class TripsScreen extends React.Component {
     static navigationOptions = {
-        header: ( 
-            <View style={{backgroundColor:'white', height:45, width:width, alignItems:'center', flexDirection:'column', justifyContent:'flex-start'}}>
-                <View style={{backgroundColor:'#31dd73', height:44, width:width, alignItems:'center',flexDirection:'row',justifyContent:'space-between',}}>
-                    <View style={{ marginLeft:20, height:20, width:20,}}>
-                    </View>
-                    <Text style={{ color:'#fff', textAlign:'center',fontSize:17,width:width-160,fontWeight:'bold',}}>DASHBOARD</Text>
-                    <TouchableOpacity>
-                        <Image resizeMode='cover' source={require("../../assets/images/person1.png")}  style={{ marginRight:20, height:35, width:35}} />
-                    </TouchableOpacity>
-                </View>
-            </View>
-        ),
- 
-        tabBarLabel: 'List of trips',
-        tabBarIcon: ({ tintColor }) => (
-             <Image resizeMode='contain' source={require('../../assets/images/trips_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
-        ),
+        header: null
 
     };
     constructor(props) {
@@ -81,12 +66,12 @@ class TripsScreen extends React.Component {
     }
 
     // functions for listview
-    componentDidMount(){
+    componentWillMount(){
 
         console.log('navigation:', this.props.navigtion)
-            this.setState({
-                dataSource:this.state.dataSource.cloneWithRows(this.state.ds),
-            })
+        this.setState({
+            dataSource:this.state.dataSource.cloneWithRows(this.state.ds),
+        })
      }
 
      pressRow(rowData){
@@ -107,18 +92,7 @@ class TripsScreen extends React.Component {
     }
 
      renderRow(rowData){
-            return (
-            // <TouchableHighlight
-            //     onPress={()=> this.pressRow(rowData)}
-            //     underlayColor = '#ddd'>
-            //         <View style ={styles.row}>
-            //             <Text style={{fontSize:18}}>{rowData.AwayTeam} @ {rowData.HomeTeam} </Text>
-            //             <View style={{flex:1}}>
-            //                 <Text style={styles.selectionText}>{rowData[rowData.Selection]}</Text>
-            //             </View>
-            //         </View>
-            // </TouchableHighlight>
-
+        return (
             <TouchableHighlight style={styles.row_view}
                 onPress={()=> this.pressRow(rowData)}
                 underlayColor = '#ddd'>
@@ -140,18 +114,16 @@ class TripsScreen extends React.Component {
                         </TouchableOpacity>
                     </View>
             </TouchableHighlight>
-
          )
      }
 
      render() {
         return (
-             <View style={styles.container}> 
-                <ListView 
-                    dataSource={this.state.dataSource}
-                    renderRow={this.renderRow.bind(this)}
-                />
-             </View> 
+            <ListView 
+                dataSource={this.state.dataSource}
+                renderRow={this.renderRow.bind(this)}
+                showsVerticalScrollIndicator = {false}
+            />
         );
     }
 }
@@ -172,8 +144,8 @@ const styles = StyleSheet.create({
   },
   row_view:{
     marginTop:10,
-    marginLeft:10,
-    marginRight:10,
+    // marginLeft:10,
+    // marginRight:10,
     padding:10,
     backgroundColor: 'white',
     borderRadius: 5,
@@ -181,6 +153,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
   },
   row:{
+      flex: 1,
       alignItems:'center',
       flexDirection:'row',
       justifyContent:'space-between',
@@ -245,5 +218,5 @@ const styles = StyleSheet.create({
 });
 
 
-// export default TripsScreen
-export default connect(mapStateToProps,mapDispatchToProps)(TripsScreen);
+export default TripsScreen
+// export default connect(mapStateToProps,mapDispatchToProps)(TripsScreen);

@@ -13,11 +13,12 @@ import {
   View,
   Alert,
   TouchableOpacity,
+  Platform
 } from 'react-native';
 
 import { NavigationActions } from 'react-navigation'
 import Checkbox  from 'react-native-custom-checkbox'
-
+import { Colors } from '../constants'
 import NavigationBar from '../components/NavigationBar'
 
 var { width, height } = Dimensions.get('window');
@@ -25,12 +26,20 @@ const backAction = NavigationActions.back({
     
 })
 
+const resetRootAction = NavigationActions.reset({
+    index: 0,
+    actions: [
+        NavigationActions.navigate({ routeName: 'Welcome' }),
+    ],
+    key: null
+});
+
 class MoreScreen extends React.Component {
   static navigationOptions = {
         header : null,
         tabBarLabel: 'More',
         tabBarIcon: ({ tintColor }) => (
-                <Image resizeMode='contain' source={require('../assets/images/More_Bottom_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
+                <Image resizeMode='contain' source={require('../assets/images/hambuger.png')} style={[styles.icon, {tintColor: tintColor}]} />
         ),
   };
 
@@ -40,9 +49,14 @@ class MoreScreen extends React.Component {
     this.navigate = this.props.navigation;
   }
 
+  onLogout(){
+      this.props.navigation.dispatch(resetRootAction);
+  }
+
   render() {
       return (
-        <View style={styles.container}>  
+        <View style={styles.container}> 
+            <View style = {styles.statusbar}/>
              <View  style={styles.navigationbar}>
                     <View style={styles.backButton}> 
                     </View>
@@ -73,7 +87,7 @@ class MoreScreen extends React.Component {
                     </TouchableOpacity>
                      <View style={styles.blank_logout_view}>
                     </View>
-                    <TouchableOpacity style={styles.row_view}>
+                    <TouchableOpacity style={styles.row_view} onPress={() => this.onLogout()}>
                         <Text  style={styles.row_logout_lb}>LOGOUT</Text>
                         <Image resizeMode='contain' source={require("../assets/images/Logout_icon.png")} style={styles.row_icon}/>
                     </TouchableOpacity>
@@ -93,15 +107,24 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'column',
     },
+    statusbar:{
+        width: width,
+        height: (Platform.OS == 'ios')? 20 : StatusBar.currentHeight,
+        backgroundColor: Colors.main,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+    },
 
      // --- navigation bar --- //
    navigationbar:{
-      height:44,
-      backgroundColor: '#31dd73',
-      width:width,
-      alignItems:'center',
-      flexDirection:'row',
-      justifyContent:'space-between',
+       height:44,
+       marginTop: (Platform.OS == 'ios')? 20:0,
+       backgroundColor: Colors.main,
+       width:width,
+       alignItems:'center',
+       flexDirection:'row',
+       justifyContent:'space-between',
    },
    backButton:{
         marginLeft:20,

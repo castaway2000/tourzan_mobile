@@ -217,10 +217,10 @@ const styles = StyleSheet.create({
       textDecorationColor: "#000"
   },
   line: {
-        height: 1,
-        width: width-60,
-        backgroundColor: 'gray',
-    },
+      height: 1,
+      width: width-60,
+      backgroundColor: 'gray',
+  },
 });
 
 export default LoginGuideScreen;

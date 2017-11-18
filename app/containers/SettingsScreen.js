@@ -13,11 +13,12 @@ import {
   View,
   Alert,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 
 import { NavigationActions } from 'react-navigation'
 import Checkbox  from 'react-native-custom-checkbox'
-
+import { Colors } from '../constants'
 import NavigationBar from '../components/NavigationBar'
 
 var { width, height } = Dimensions.get('window');
@@ -30,7 +31,7 @@ class SettingsScreen extends React.Component {
         header : null,
         tabBarLabel: 'More',
         tabBarIcon: ({ tintColor }) => (
-                <Image resizeMode='contain' source={require('../assets/images/More_Bottom_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
+                <Image resizeMode='contain' source={require('../assets/images/hambuger.png')} style={[styles.icon, {tintColor: tintColor}]} />
         ),
   };
 
@@ -43,19 +44,20 @@ class SettingsScreen extends React.Component {
   render() {
       return (
         <View style={styles.container}>  
-             <View  style={styles.navigationbar}>
-                    <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}}>
-                        <Image resizeMode='cover' source={require("../assets/images/back.png")} style={styles.backButton} />
-                    </TouchableOpacity>
-                    <Text style={styles.centerText}>Settings</Text>
-                    <View style={styles.rightView}>
-                    </View>
+            <View style = {styles.statusbar}/>
+            <View  style={styles.navigationbar}>
+                <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}}>
+                    <Image resizeMode='cover' source={require("../assets/images/back.png")} style={styles.backButton} />
+                </TouchableOpacity>
+                <Text style={styles.centerText}>Settings</Text>
+                <View style={styles.rightView}>
+                </View>
             </View>
             <View style={styles.main_view}>
                 <View style={styles.main_top_view}>
                     <Image resizeMode='cover' source={require('../assets/images/person1.png')} style={styles.user_photo_img} />
                     <Text style={styles.profile_name_text}>Adam Parker</Text>
-                    <Text style={styles.profile_email_text}>adamparker@gmail.com</Text>                
+                    <Text style={styles.profile_email_text} >adamparker@gmail.com</Text>                
                 </View>
                 <View style={styles.main_info_view}>
                     <TouchableOpacity style={styles.row_view} onPress={() => {this.navigate.navigate('ChangePassword')}}>
@@ -66,7 +68,7 @@ class SettingsScreen extends React.Component {
                     </View>
                      <View style={styles.row_icon_view}>
                         <Image resizeMode='contain' source={require("../assets/images/Icon_email.png")} style={styles.row_small_icon}/>
-                        <TextInput underlineColorAndroid='transparent' style={styles.row_icon_lb}>adamparker@gmail.com</TextInput>
+                        <TextInput underlineColorAndroid='transparent' style={styles.row_icon_lb} value={'adamparker@gmail.com'}></TextInput>
                     </View>
                     <View style={styles.row_icon_view}>
                         <Image resizeMode='contain' source={require("../assets/images/trip_item_location_icon.png")} style={styles.row_small_icon}/>
@@ -97,10 +99,20 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
     },
 
+    statusbar:{
+        width: width,
+        height: (Platform.OS == 'ios')? 20 : StatusBar.currentHeight,
+        backgroundColor: Colors.main,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+    },
+
      // --- navigation bar --- //
    navigationbar:{
       height:44,
-      backgroundColor: '#31dd73',
+      marginTop: (Platform.OS == 'ios')? 20:0,
+      backgroundColor: Colors.main,
       width:width,
       alignItems:'center',
       flexDirection:'row',
@@ -148,6 +160,7 @@ const styles = StyleSheet.create({
         height:80,
         borderRadius: 40,
         borderWidth: 1,
+        borderColor:'transparent',
     },
     profile_name_text:{
         fontSize:17,

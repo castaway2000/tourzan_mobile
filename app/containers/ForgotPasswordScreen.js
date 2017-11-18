@@ -13,11 +13,12 @@ import {
   View,
   Alert,
   TouchableOpacity,
+  Platform
 } from 'react-native';
 
 import { NavigationActions } from 'react-navigation'
 import Checkbox  from 'react-native-custom-checkbox'
-
+import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
 
@@ -36,17 +37,20 @@ class ForgotPasswordScreen extends React.Component {
 
  constructor(props) {
     super(props);
-  
+    this.state = { 
+        email: '',
+    };
   }
 
-  onLogin(){
-        
+  setUserEmail(text){
+      this.setState({ email: text })
   }
 
   render() {
       const { navigate } = this.props.navigation;
       return (
         <View style={styles.container}>  
+            <View style = {styles.statusbar}/>
             <View  style={styles.top_container}>
                   <NavigationBar title={'Forgot Password'} bgColor={'#31dd73'} onPress={() => {this.props.navigation.dispatch(backAction)}}/>
                   <View style={styles.view_logo}>
@@ -56,7 +60,16 @@ class ForgotPasswordScreen extends React.Component {
                   </View>
             </View>
             <View style={styles.bottom_container}>
-                  <TextInput placeholder="Email" style={styles.inputText} underlineColorAndroid={'gray'}/>
+                  <View>
+                      <TextInput 
+                          placeholder="Email" 
+                          style={styles.inputText}
+                          underlineColorAndroid = 'transparent'
+                          value = {this.state.email}
+                          onChangeText = {(text) => this.setUserEmail(text)}
+                      />
+                      <View style={styles.line}></View>
+                  </View>
                   <ApplyButton name={'Recover'} style={styles.button_recover}/>
                   <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}} title="Cancel">
                       <Text style={styles.button_cancel} >Cancel</Text>
@@ -73,6 +86,14 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       flexDirection: 'column',
       justifyContent: 'space-between'
+  },
+  statusbar:{
+      width: width,
+      height: (Platform.OS == 'ios')? 20 : StatusBar.currentHeight,
+      backgroundColor: Colors.main,
+      position: 'absolute',
+      top: 0,
+      left: 0,
   },
   top_container: {
       width: width,
@@ -115,7 +136,11 @@ const styles = StyleSheet.create({
       height: 40,
       borderColor: 'gray'
   },
-
+  line: {
+      height: 1,
+      width: width-60,
+      backgroundColor: 'gray',
+  },
   button_recover:{
       marginTop: 35,
   },
@@ -128,7 +153,7 @@ const styles = StyleSheet.create({
       textDecorationLine: "underline",
       textDecorationStyle: "solid",
       textDecorationColor: "#000"
-  }
+  },
 });
 
 export default ForgotPasswordScreen;

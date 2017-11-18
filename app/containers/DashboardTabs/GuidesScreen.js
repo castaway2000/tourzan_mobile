@@ -15,36 +15,19 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   ListView,
+  Platform
 } from 'react-native';
 
 import Rating from 'react-native-ratings';
 import { NavigationActions } from 'react-navigation'
-
+import { Colors } from '../../constants'
 import NavigationBar from '../../components/NavigationBar'
 
 var { width, height } = Dimensions.get('window');
 
-
-
 class GuideScreen extends React.Component {
     static navigationOptions = {
-         header: ( 
-            <View style={{backgroundColor:'white', height:45, width:width, alignItems:'center', flexDirection:'column', justifyContent:'flex-start'}}>
-                <View style={{backgroundColor:'#31dd73', height:44, width:width, alignItems:'center',flexDirection:'row',justifyContent:'space-between',}}>
-                    <View style={{ marginLeft:20, height:20, width:20,}}>
-                    </View>
-                    <Text style={{ color:'#fff', textAlign:'center',fontSize:17,width:width-160,fontWeight:'bold',}}>DASHBOARD</Text>
-                    <TouchableOpacity>
-                        <Image resizeMode='cover' source={require("../../assets/images/person1.png")}  style={{ marginRight:20, height:35, width:35}} />
-                    </TouchableOpacity>
-                </View>
-            </View>
-        ),
- 
-        tabBarLabel: 'Prev Guides',
-        tabBarIcon: ({ tintColor }) => (
-             <Image resizeMode='contain' source={require('../../assets/images/guides_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
-        ),
+         header: null
     };
 
     constructor(props) {
@@ -71,25 +54,24 @@ class GuideScreen extends React.Component {
 
     // functions for listview
     componentDidMount(){
-            this.setState({
-                dataSource:this.state.dataSource.cloneWithRows(this.state.ds),
-            })
+        this.setState({
+            dataSource:this.state.dataSource.cloneWithRows(this.state.ds),
+        })
      }
 
      pressRow(rowData){
-            const { navigate } = this.props.navigation;
-            var newDs = [];
-            newDs = this.state.ds.slice();
-            this.setState({
-                dataSource: this.state.dataSource.cloneWithRows(newDs)
-            })
+        const { navigate } = this.props.navigation;
+        var newDs = [];
+        newDs = this.state.ds.slice();
+        this.setState({
+            dataSource: this.state.dataSource.cloneWithRows(newDs)
+        })
 
-            this.navigate.navigate('GuideItemDetail');
+        this.navigate.navigate('GuideItemDetail');
     }
 
      renderRow(rowData){
-            return (
-
+        return (
             <TouchableHighlight style={styles.row_view}
                 onPress={()=> this.pressRow(rowData)}
                 underlayColor = '#ddd'>
@@ -114,16 +96,15 @@ class GuideScreen extends React.Component {
                         </TouchableOpacity>
                     </View>
             </TouchableHighlight>
-
-         )
+        )
      }
 
      render() {
-        
         return (
             <ListView
                 dataSource={this.state.dataSource}
                 renderRow={this.renderRow.bind(this)}
+                showsVerticalScrollIndicator = {false}
             />
         );
     }
@@ -166,6 +147,7 @@ const styles = StyleSheet.create({
     height:40,
     borderRadius: 20,
     borderWidth: 1,
+    borderColor:'transparent',
   },
   rate_view:{
       marginTop:5,

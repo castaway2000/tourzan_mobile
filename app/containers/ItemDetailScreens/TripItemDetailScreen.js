@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
         fontSize:15,
         color:'white',
         marginLeft:5,
+        backgroundColor:'transparent',
   },
 
   // --- bottom container --- //
@@ -184,6 +185,7 @@ const styles = StyleSheet.create({
         height:50,
         borderRadius: 25,
         borderWidth: 1,
+        borderColor:'transparent',
   },
   info_view: {
         width:width*50/100,

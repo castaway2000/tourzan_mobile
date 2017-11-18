@@ -15,16 +15,38 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux'
+
 import { NavigationActions } from 'react-navigation'
 import Rating from 'react-native-ratings';
 
 import NavigationBar from '../../components/NavigationBar'
 import ApplyButton from '../../components/ApplyButton'
+import * as Actions from '../../actions/map'
+
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators(Actions, dispatch)
+}
+
+const  mapStateToProps = (state) => {
+    return {
+        isbooked: state.isbooked,
+    }
+ }
 
 var { width, height } = Dimensions.get('window');
 const backAction = NavigationActions.back({
     
 })
+
+const resetRootAction = NavigationActions.reset({
+        index: 0,
+        actions: [
+            NavigationActions.navigate({ routeName: 'Home' }),
+        ],
+        key: null
+ });
 
 class BookingGuideSettingScreen extends React.Component {
   static navigationOptions = {
@@ -39,7 +61,9 @@ class BookingGuideSettingScreen extends React.Component {
   }
 
   onConfirm(){
-
+    this.props.getBookedState();
+    console.log('bookingguidesetting_debug',this.props.isbooked);
+    this.navigate.navigate('Offer');
   }
 
   onPaymentSetting(){
@@ -84,10 +108,11 @@ class BookingGuideSettingScreen extends React.Component {
 
   render() {
       const { navigate } = this.props.navigation;
+      console.log('bookingguidesetting_debug',this.props.isbooked);
       return (
         <View style={styles.container}>  
              <View  style={styles.navigationbar}>
-                    <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}}>
+                    <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(resetRootAction)}}>
                         <Image resizeMode='cover' source={require("../../assets/images/back.png")} style={styles.nav_back_btn} />
                     </TouchableOpacity>
                     <Text style={styles.nav_center_text}></Text>
@@ -241,7 +266,8 @@ const styles = StyleSheet.create({
 
   // ---- top naviatgion bar ----//
   navigationbar:{
-        height:44,
+        paddingTop:20,
+        height:64,
         backgroundColor: '#31dd73',
         width:width,
         alignItems:'center',
@@ -431,4 +457,5 @@ const styles = StyleSheet.create({
 
 });
 
-export default BookingGuideSettingScreen;
+// export default BookingGuideSettingScreen;
+export default connect(mapStateToProps,mapDispatchToProps)(BookingGuideSettingScreen);
