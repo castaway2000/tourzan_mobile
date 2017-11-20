@@ -16,7 +16,7 @@ class NavigationBar extends React.Component{
             bgColor,
             title,
             onPress,
-        } = this.props
+        } = this.props;
 
         return(
              <View style={[styles.container,{backgroundColor:bgColor}]}>

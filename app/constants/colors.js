@@ -3,4 +3,4 @@ export const Colors = {
     tintColor: '#555',
     textBottomColor: '#eee',
     color999: '#999',
-}
+};

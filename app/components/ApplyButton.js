@@ -13,7 +13,7 @@ class ApplyButton extends React.Component{
         const {
             onPress,
             style,
-        } = this.props
+        } = this.props;
         return(
           <TouchableOpacity style={style} onPress={ onPress} title={this.props.name}>
                 <Text style={styles.button} >{this.props.name}</Text>

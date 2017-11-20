@@ -30,18 +30,18 @@ import * as Actions from '../actions/map'
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators(Actions, dispatch)
-}
+};
 
 const  mapStateToProps = (state) => {
     return {
         isbooked: state.isbooked,
     }
- }
+ };
 
 var { width, height } = Dimensions.get('window');
 
 const backAction = NavigationActions.back({
-})
+});
 
 const resetRootAction = NavigationActions.reset({
         index: 0,
@@ -51,9 +51,9 @@ const resetRootAction = NavigationActions.reset({
         key: null
  });
 
-const CANCEL_INDEX = 0
-const DESTRUCTIVE_INDEX = 4
-const options = [ 'Cancel', 'End Tour' ]
+const CANCEL_INDEX = 0;
+const DESTRUCTIVE_INDEX = 4;
+const options = [ 'Cancel', 'End Tour' ];
 
 
 class CurrentTimeLimitScreen extends React.Component {
@@ -93,7 +93,7 @@ class CurrentTimeLimitScreen extends React.Component {
   handlePress(i) {
     this.setState({
       selected: i
-    })
+    });
 
     if (this.state.selected == 1 ) { 
         this.props.getBookedState();

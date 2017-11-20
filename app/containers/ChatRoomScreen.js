@@ -24,7 +24,7 @@ var { width, height } = Dimensions.get('window');
 
 const backAction = NavigationActions.back({
     
-})
+});
 
 class ChatRoomScreen extends React.Component {
     static navigationOptions = {

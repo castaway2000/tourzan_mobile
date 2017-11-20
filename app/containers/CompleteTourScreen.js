@@ -30,7 +30,7 @@ var Toast = require('react-native-toast');
 var { width, height } = Dimensions.get('window');
 
 const backAction = NavigationActions.back({
-})
+});
 
 const resetRootAction = NavigationActions.reset({
         index: 0,

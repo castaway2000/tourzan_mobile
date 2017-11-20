@@ -98,7 +98,7 @@ class ChatScreen extends React.Component {
             newDs = this.state.ds.slice();
             this.setState({
                 dataSource: this.state.dataSource.cloneWithRows(newDs)
-            })
+            });
             navigate('ChatRoom')
     }
 

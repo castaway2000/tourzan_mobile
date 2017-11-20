@@ -24,7 +24,7 @@ import NavigationBar from '../components/NavigationBar'
 var { width, height } = Dimensions.get('window');
 const backAction = NavigationActions.back({
     
-})
+});
 
 const resetRootAction = NavigationActions.reset({
     index: 0,

@@ -30,7 +30,7 @@ var { width, height } = Dimensions.get('window');
 const onButtonPress = () => { Alert.alert('Button has been pressed!'); }; 
 const backAction = NavigationActions.back({
     // key: 'WelcomeScreen'
-})
+});
 
 class ProfileScreen extends React.Component {
   static navigationOptions = {
@@ -98,11 +98,11 @@ class ProfileScreen extends React.Component {
             </TouchableOpacity>
         </View>
     );
-  }
+  };
 
   _handleTextReady = () => {
     // ...
-  }
+  };
 
   // interesting button functions
    _interestingBtnHandlePress() {

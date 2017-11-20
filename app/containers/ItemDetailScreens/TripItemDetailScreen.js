@@ -26,7 +26,7 @@ var { width, height } = Dimensions.get('window');
 
 const backAction = NavigationActions.back({
     
-})
+});
 
 class TripItemDetailScreen extends React.Component {
       static navigationOptions = {
@@ -48,7 +48,7 @@ class TripItemDetailScreen extends React.Component {
                   </TouchableOpacity>
               </View>
           );
-      }
+      };
 
       _renderRevealedFooter = (handlePress) => {
           return (
@@ -58,11 +58,11 @@ class TripItemDetailScreen extends React.Component {
                   </TouchableOpacity>
                   </View>
               );
-      }
+      };
 
       _handleTextReady = () => {
       // ...
-      }
+      };
 
 
       render() {

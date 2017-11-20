@@ -27,18 +27,18 @@ import * as Actions from '../../actions/map'
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators(Actions, dispatch)
-}
+};
 
 const  mapStateToProps = (state) => {
     return {
         isbooked: state.isbooked,
     }
- }
+ };
 
 var { width, height } = Dimensions.get('window');
 const backAction = NavigationActions.back({
     
-})
+});
 
 const resetRootAction = NavigationActions.reset({
         index: 0,
@@ -149,7 +149,8 @@ class BookingGuideSettingScreen extends React.Component {
                         </View>
                          <View style={styles.row_setting_view}>
                             <View style={styles.setting_text_view_term}>
-                                <Text style={styles.setting_text}>Timelimit Settings</Text>
+
+                                <Text style={styles.setting_text}>Time Limit Settings</Text>
                                 { this.state.isExtendTerm ? (
                                      <TouchableOpacity onPress={() => this.onDone()}>
                                         <Text style={styles.done_text}>DONE</Text>
@@ -178,7 +179,7 @@ class BookingGuideSettingScreen extends React.Component {
                                         <TouchableOpacity style={styles.manual_setting_view} onPress={() => this.onCheckManual()}>
                                             <View style={styles.row_setting_btn_left_view}>
                                                 <Image resizeMode='contain' source={require("../../assets/images/forms.png")}  style={styles.row_setting_btn_icon}/>
-                                                <Text style={styles.row_setting_btn_text}>Manual Time</Text>
+                                                <Text style={styles.row_setting_btn_text}>Manual</Text>
                                             </View>
                                             { this.state.isCheckHoulryOrManual ? (
                                                 <Image resizeMode='contain' source={require("../../assets/images/checked_green_badge.png")}  style={styles.row_setting_btn_right_icon}/>
@@ -192,7 +193,7 @@ class BookingGuideSettingScreen extends React.Component {
                                         <TouchableOpacity style={styles.manual_setting_view} onPress={() => this.onCheckManual()}>
                                             <View style={styles.row_setting_btn_left_view}>
                                                 <Image resizeMode='contain' source={require("../../assets/images/forms.png")}  style={styles.row_setting_btn_icon}/>
-                                                <Text style={styles.row_setting_btn_text}>Manual Time</Text>
+                                                <Text style={styles.row_setting_btn_text}>Manual</Text>
                                             </View>
                                              { this.state.isCheckHoulryOrManual ? (
                                                 <Image resizeMode='contain' source={require("../../assets/images/checked_green_badge.png")}  style={styles.row_setting_btn_right_icon}/>
@@ -226,7 +227,7 @@ class BookingGuideSettingScreen extends React.Component {
                                     <TouchableOpacity  onPress={() => this.onExtendTerm()} style={styles.row_setting_btn_view}>
                                         <View style={styles.row_setting_btn_left_view}>
                                             <Image resizeMode='contain' source={require("../../assets/images/forms.png")}  style={styles.row_setting_btn_icon}/>
-                                            <Text style={styles.row_setting_btn_text}>Manual Time</Text>
+                                            <Text style={styles.row_setting_btn_text}>Manual</Text>
                                         </View>
                                         <Image resizeMode='contain' source={require("../../assets/images/edit_icon.png")}  style={styles.row_setting_btn_right_icon}/>
                                     </TouchableOpacity>

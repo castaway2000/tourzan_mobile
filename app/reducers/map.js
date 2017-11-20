@@ -3,7 +3,7 @@ import * as types from '../actions/types'
 // This is the default state of the app i.e. when the app starts for the first time
 const initialState = {
   // isbooked: false
-}
+};
 
 // This is a reducer which listens to actions and modifies the state
  export default function getBookedState(state = initialState, action){
@@ -14,7 +14,7 @@ const initialState = {
         return {
             // ...state,
             isbooked: !state.isbooked
-        } 
+        };
     default:
       return state
   }
