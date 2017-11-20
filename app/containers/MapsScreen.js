@@ -47,162 +47,184 @@ const  mapStateToProps = (state) => {
  }
 
 class MapsScreen extends React.Component {
-  static navigationOptions = {
+    static navigationOptions = {
         header : null,
         tabBarLabel: 'Maps',
         tabBarIcon: ({ tintColor }) => (
-             <Image resizeMode='contain' source={require('../assets/images/Maps_Bottom_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
+            <Image resizeMode='contain' source={require('../assets/images/Maps_Bottom_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
         ),
-  };
-
- constructor(props) {
-    super(props);
-    this.state = {
-        region:{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-        },
-            isSettingTime:false,
-         };
-  }
-
-  getInitialState() {
-    return {
-      region: {
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      },
     };
-  }
 
-  onRegionChange(region) {
-      () => this.onRegionChange.bind(this);
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            region:{
+                latitude: 37.78825,
+                longitude: -122.4324,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+            },
+            isSettingTime:false,
+            hour: '09',
+            minute: '18',
+            trueSwitchIsOn: true,
+        };
+    }
 
-  onSettingTime(){
-     this.setState(previousState => {
-        return { isSettingTime: true,};
-      });
-  }
+    getInitialState() {
+        return {
+            region: {
+                latitude: 37.78825,
+                longitude: -122.4324,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+            },
+        };
+    }
 
-  onUnSettingTime(){
-     this.setState(previousState => {
-        return { isSettingTime: false,};
-      });
-  }
+    onRegionChange(region) {
+        () => this.onRegionChange.bind(this);
+    }
 
-  render() {
-      const { navigate } = this.props.navigation;
-      console.log('map_debug', this.props.isbooked);
-      return (
-        <View style={styles.container}> 
-            <View style = {styles.statusbar}/>
-             <View style={styles.top_container}>
+    onSettingTime(){
+        this.setState({ isSettingTime: true })
+    }
+
+    onUnSettingTime(){
+        this.setState({ isSettingTime: false })
+    }
+
+    setHour(text){
+        this.setState({ hour: text })
+    }
+
+    setMinute(text){
+        this.setState({ minute: text })
+    }
+
+    render() {
+        const { navigate } = this.props.navigation;
+        console.log('map_debug', this.props.isbooked);
+        return (
+            <View style={styles.container}> 
+                <View style = {styles.statusbar}/>
+                    <View style={styles.top_container}>
                     <View style={styles.backButton}>
                     </View>
                     <Text style={styles.centerText}>TOURZAN</Text>
                     <TouchableOpacity onPress={() => {navigate('Profile')}}>
                         <Image resizeMode='cover' source={require("../assets/images/person1.png")}  style={styles.rightView} />
                     </TouchableOpacity>
-            </View>
-            <View style={styles.map_container}>
-                <MapView style={styles.map_view}
-                    region={this.state.region}
-                    onRegionChange={this.onRegionChange}>
-                    <MapView.Marker
-                        coordinate={this.state.region}
-                        centerOffset={{ x: -18, y: -60 }}
-                        anchor={{ x: 0.69, y: 1 }}
-                        image={flagImg}/>
-                 </MapView>
-                <View style={styles.locationInfo_view}>
-                    <View style={styles.location_address_view}>
-                        <Image resizeMode='contain' source={require("../assets/images/location_maps.png")} style={styles.icon_image}/>
-                        <Text style={styles.row_text}>052 Maggio Road Apt. o16</Text>
-                    </View>
-                    <View style={styles.devide_line}/>
-                    {this.state.isSettingTime ? (
-                        <View style={styles.setting_time_view}>
-                            <View style={styles.setting_time_top_view}> 
-                                <Image resizeMode='contain' source={require("../assets/images/time_icon.png")} style={styles.icon_image}/>
-                                <Text  style={styles.row_text}>09:18 pm</Text>
-                            </View>
-                            <View style={styles.setting_time_main_view}>
-                                <View style={styles.setting_time_lb_view}>
-                                    <Text  style={styles.setting_time_lb}>Set your time schedule</Text>
-                                    <TouchableOpacity onPress={() => this.onUnSettingTime()}>
-                                        <Image resizeMode='contain' source={require("../assets/images/checked_gray.png")} style={styles.setting_time_check_icon}/>
-                                    </TouchableOpacity>
-                                </View>
-                                <View style={styles.setting_time_picker_view}>
-                                    <View style={styles.setting_time_picker_main_view}>
-                                        <View style={styles.hour_view}>
-                                            <TouchableOpacity onPress={() => {navigate('')}}>
-                                                <Image resizeMode='contain' source={require("../assets/images/caret-arrow-up.png")}  style={styles.up_down_arrow_view} />
-                                            </TouchableOpacity>
-                                            <TextInput underlineColorAndroid='transparent' keyboardType='numeric' style={styles.hour_text} value={'03'}></TextInput>
-                                            <TouchableOpacity onPress={() => {navigate('')}}>
-                                                <Image resizeMode='contain' source={require("../assets/images/caret-arrow-down.png")}  style={styles.up_down_arrow_view} />
-                                            </TouchableOpacity>
-                                        </View>
-                                        <View style={styles.double_dut_view}>   
-                                            <Text style={styles.double_dut_symbol}>:</Text>
-                                        </View>
-                                        <View style={styles.minute_view}>
-                                            <TouchableOpacity onPress={() => {navigate('')}}>
-                                                <Image resizeMode='contain' source={require("../assets/images/caret-arrow-up.png")}  style={styles.up_down_arrow_view} />
-                                            </TouchableOpacity>
-                                            <TextInput underlineColorAndroid='transparent' keyboardType='numeric' style={styles.hour_text} value={'40'}></TextInput>
-                                            <TouchableOpacity onPress={() => {navigate('')}}>
-                                                <Image resizeMode='contain' source={require("../assets/images/caret-arrow-down.png")}  style={styles.up_down_arrow_view} />
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>
-                                    <Switch
-                                        value={true}
-                                        onValueChange={(val) => console.log(val)}
-                                        disabled={false}
-                                        activeText={'AM'}
-                                        inActiveText={'PM'}        
-                                        backgroundActive={'#31dd73'}
-                                        backgroundInactive={'#c2c3c9'}
-                                        circleActiveColor={'white'}
-                                        circleInActiveColor={'white'}
-                                    />
-                                </View>
-                            </View>
-                        </View>
-                    ) : (
-                        <TouchableOpacity style={styles.location_time_touchable_view} onPress={() => this.onSettingTime()}>
-                            <View style={styles.location_time_view}>
-                                <View style={styles.location_time_left_child}>
-                                    <Image resizeMode='contain' source={require("../assets/images/time_icon.png")} style={styles.icon_image}/>
-                                    <Text  style={styles.row_text}>09:18 pm</Text>
-                                </View>
-                                <Image resizeMode='contain' source={require("../assets/images/edit_time.png")} style={styles.edit_time}/>
-                            </View>
-                        </TouchableOpacity>
-                    )}
                 </View>
-                 {
-                     !this.props.isbooked ? (
-                     <TouchableOpacity style={styles.booking_view} onPress={() => {navigate('BookingSearching')}}>
-                        <Image resizeMode='cover' source={require("../assets/images/book.png")} style={styles.booking_green_btn} />
-                    </TouchableOpacity>
-                 ) : (
-                      <TouchableOpacity style={styles.booking_view} onPress={() => {navigate('CurrentTimeLimit')}}>
-                        <Image resizeMode='cover' source={require("../assets/images/book_time.png")} style={styles.booking_green_btn} />
-                    </TouchableOpacity>
-                 )}
-                
+                <View style={styles.map_container}>
+                    <MapView style={styles.map_view}
+                        region={this.state.region}
+                        onRegionChange={this.onRegionChange}>
+                        <MapView.Marker
+                            coordinate={this.state.region}
+                            centerOffset={{ x: -18, y: -60 }}
+                            anchor={{ x: 0.69, y: 1 }}
+                            image={flagImg}/>
+                        </MapView>
+                    <View style={styles.locationInfo_view}>
+                        <View style={styles.location_address_view}>
+                            <Image resizeMode='contain' source={require("../assets/images/location_maps.png")} style={styles.icon_image}/>
+                            <Text style={styles.row_text}>052 Maggio Road Apt. o16</Text>
+                        </View>
+                        <View style={styles.devide_line}/>
+                        {this.state.isSettingTime ? (
+                            <View style={styles.setting_time_view}>
+                                <View style={styles.setting_time_top_view}>
+                                    <Image resizeMode='contain' source={require("../assets/images/time_icon.png")} style={styles.icon_image}/>
+                                    <Text  style={styles.row_text}>{this. state.hour} : {this.state.minute} {this.state.trueSwitchIsOn? 'AM': 'PM'}</Text>
+                                </View>
+                                <View style={styles.setting_time_main_view}>
+                                    <View style={styles.setting_time_lb_view}>
+                                        <Text  style={styles.setting_time_lb}>Set your time schedule</Text>
+                                        <TouchableOpacity onPress={() => this.onUnSettingTime()}>
+                                            <Image resizeMode='contain' source={require("../assets/images/checked_gray.png")} style={styles.setting_time_check_icon}/>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={styles.setting_time_picker_view}>
+                                        <View style={styles.setting_time_picker_main_view}>
+                                            <View style={styles.hour_view}>
+                                                <TouchableOpacity onPress={() => {navigate('')}}>
+                                                    <Image resizeMode='contain' source={require("../assets/images/caret-arrow-up.png")}  style={styles.up_down_arrow_view} />
+                                                </TouchableOpacity>
+                                                <TextInput
+                                                    style={styles.hour_text}
+                                                    underlineColorAndroid = 'transparent'
+                                                    value = {this.state.hour}
+                                                    keyboardType = 'numeric'
+                                                    maxLength = {2}
+                                                    onChangeText = {(text) => this.setHour(text)}
+                                                    onSubmitEditing={this._onLogin}
+                                                />
+                                                <TouchableOpacity onPress={() => {navigate('')}}>
+                                                    <Image resizeMode='contain' source={require("../assets/images/caret-arrow-down.png")}  style={styles.up_down_arrow_view} />
+                                                </TouchableOpacity>
+                                            </View>
+                                            <View style={styles.double_dut_view}>   
+                                                <Text style={styles.double_dut_symbol}>:</Text>
+                                            </View>
+                                            <View style={styles.minute_view}>
+                                                <TouchableOpacity onPress={() => {navigate('')}}>
+                                                    <Image resizeMode='contain' source={require("../assets/images/caret-arrow-up.png")}  style={styles.up_down_arrow_view} />
+                                                </TouchableOpacity>
+                                                <TextInput
+                                                    style={styles.hour_text}
+                                                    underlineColorAndroid = 'transparent'
+                                                    value = {this.state.minute}
+                                                    keyboardType = 'numeric'
+                                                    maxLength = {2}
+                                                    onChangeText = {(text) => this.setMinute(text)}
+                                                    onSubmitEditing={this._onLogin}
+                                                />
+                                                <TouchableOpacity onPress={() => {navigate('')}}>
+                                                    <Image resizeMode='contain' source={require("../assets/images/caret-arrow-down.png")}  style={styles.up_down_arrow_view} />
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                        <Switch
+                                            value={true}
+                                            onValueChange={(val) => this.setState({ trueSwitchIsOn: val })}
+                                            disabled={false}
+                                            activeText={'AM'}
+                                            inActiveText={'PM'}        
+                                            backgroundActive={'#31dd73'}
+                                            backgroundInactive={'#c2c3c9'}
+                                            circleActiveColor={'white'}
+                                            circleInActiveColor={'white'}
+                                        />
+                                    </View>
+                                </View>
+                            </View>
+                        ) : (
+                            <TouchableOpacity style={styles.location_time_touchable_view} onPress={() => this.onSettingTime()}>
+                                <View style={styles.location_time_view}>
+                                    <View style={styles.location_time_left_child}>
+                                        <Image resizeMode='contain' source={require("../assets/images/time_icon.png")} style={styles.icon_image}/>
+                                        <Text style={styles.row_text}>{this. state.hour} : {this.state.minute} {this.state.trueSwitchIsOn? 'AM': 'PM'}</Text>
+                                    </View>
+                                    <Image resizeMode='contain' source={require("../assets/images/edit_time.png")} style={styles.edit_time}/>
+                                </View>
+                            </TouchableOpacity>
+                            )}
+                        </View>
+                        {
+                            !this.props.isbooked ? (
+                            <TouchableOpacity style={styles.booking_view} onPress={() => {navigate('BookingSearching')}}>
+                            <Image resizeMode='cover' source={require("../assets/images/book.png")} style={styles.booking_green_btn} />
+                        </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity style={styles.booking_view} onPress={() => {navigate('CurrentTimeLimit')}}>
+                            <Image resizeMode='cover' source={require("../assets/images/book_time.png")} style={styles.booking_green_btn} />
+                        </TouchableOpacity>
+                        )}
+                </View>
             </View>
-        </View>
-      );
-   }
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -250,15 +272,12 @@ const styles = StyleSheet.create({
         width:35
     },
     map_container:{
-        //  height:height-100,
          flex: 1,
          width:width,
          alignItems:'center',
          backgroundColor:'transparent',
     },
     map_view:{
-        // position:'absolute',
-        // height:height-100,
         flex: 1,
         width: width,
     },
@@ -419,10 +438,6 @@ const styles = StyleSheet.create({
         width:40,
         height:40,
     },
-    // setting_time_am_pm_view:{
-    //     alignItems:'center',
-    //     width:30,
-    // },
     switch_view:{
     
     },

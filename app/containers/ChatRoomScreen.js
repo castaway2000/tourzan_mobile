@@ -13,10 +13,12 @@ import {
   View,
   Alert,
   TouchableOpacity,
+  Platform
 } from 'react-native';
 
 import { NavigationActions } from 'react-navigation'
 import { GiftedChat } from 'react-native-gifted-chat';
+import { Colors } from '../constants'
 
 var { width, height } = Dimensions.get('window');
 
@@ -25,18 +27,18 @@ const backAction = NavigationActions.back({
 })
 
 class ChatRoomScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Luella Palmer',
-    header : null,
-    tabBarLabel: 'Chat',
-    tabBarIcon: ({ tintColor }) => (
+    static navigationOptions = {
+        title: 'Luella Palmer',
+        header : null,
+        tabBarLabel: 'Chat',
+        tabBarIcon: ({ tintColor }) => (
             <Image resizeMode='contain' source={require('../assets/images/Chat_Bottom_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
-    ),
-  };
+       ),
+   };
 
     // gifted chat 
     componentWillMount() {
-            this.setState({
+        this.setState({
             messages: [
                 {
                 _id: 1,
@@ -49,7 +51,7 @@ class ChatRoomScreen extends React.Component {
                 },
                 },
             ],
-            });
+        });
      }
 
     onSend(messages = []) {
@@ -58,18 +60,17 @@ class ChatRoomScreen extends React.Component {
             }));
      }
 
-
- constructor(props) {
-    super(props);
-        this.state = {messages: []};
-        // this.onSend = this.onSend.bind(this);
-  }
-
+   constructor(props) {
+       super(props);
+           this.state = {messages: []};
+           // this.onSend = this.onSend.bind(this);
+   }
 
   render() {
       const { navigate } = this.props.navigation;
       return (
-        <View style={styles.container}>  
+        <View style={styles.container}>
+            <View style = {styles.statusbar}/>
             <View style={styles.top_container}>
                 <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}}>
                     <Image resizeMode='cover' source={require("../assets/images/back.png")} style={styles.backButton} />
@@ -84,7 +85,7 @@ class ChatRoomScreen extends React.Component {
                     messages={this.state.messages}
                     onSend={(messages) => this.onSend(messages)}
                     user={{
-                    _id: 1,
+                        _id: 1,
                     }}
                 />
             </View>
@@ -94,24 +95,32 @@ class ChatRoomScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-      alignItems: 'center',
-      flexDirection: 'column',
-  },
-   icon: {
-    width: 20,
-    height: 20,
-  },
-  top_container: {
-    paddingTop:20,
-    height:64,
-    backgroundColor: '#31dd73',
-    width:width,
-    alignItems:'center',
-    flexDirection:'row',
-    justifyContent:'space-between',
-  },
-   backButton:{
+    container: {
+        alignItems: 'center',
+        flexDirection: 'column',
+    },
+    statusbar:{
+        width: width,
+        height: (Platform.OS == 'ios')? 20 : StatusBar.currentHeight,
+        backgroundColor: Colors.main,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+    },
+    icon: {
+        width: 20,
+        height: 20,
+    },
+    top_container: {
+        marginTop: (Platform.OS == 'ios')? 20 : 0,
+        height:44,
+        backgroundColor: Colors.main,
+        width:width,
+        alignItems:'center',
+        flexDirection:'row',
+        justifyContent:'space-between',
+    },
+    backButton:{
         marginLeft:20,
         height:15,
         width:10,
@@ -129,7 +138,7 @@ const styles = StyleSheet.create({
         width:35
     },
     bottom_container:{
-        height: height-44-50,
+        height: (Platform.OS == 'ios')? height - 64 : height - 66,
         width: width,
     },
 });

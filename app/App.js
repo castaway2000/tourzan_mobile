@@ -50,9 +50,11 @@ import ChangePasswordScreen from './containers/ChangePasswordScreen';
 
 var { width, height } = Dimensions.get('window');
 
+console.disableYellowBox = true;
+
 const ChatStackNavigator = StackNavigator({
     Chats: { screen: ChatScreen, },
-    ChatRoom : {screen: ChatRoomScreen},
+    // ChatRoom : {screen: ChatRoomScreen},
 },{ 
     headerMode: 'screen', 
     initialRouteName: 'Chats',
@@ -82,41 +84,42 @@ const MoreStackNavigator = StackNavigator({
 );
 
 const MainTapNavigator = TabNavigator({
-  MapsNav: { screen: MapChatStackNavigator, },
-  Dashboard: { screen: DashboardScreen, },
-  Chat: { screen: ChatStackNavigator, },
-  Marketplace: { screen: MarketplaceScreen, },
-  MoreNav:{screen: MoreStackNavigator,},
+    MapsNav: { screen: MapChatStackNavigator, },
+    Dashboard: { screen: DashboardScreen, },
+    Chat: { screen: ChatStackNavigator, },
+    Marketplace: { screen: MarketplaceScreen, },
+    MoreNav:{screen: MoreStackNavigator,},
 }, {
-  navigationOptions:{
-    header:null,
-  },
-  tabBarPosition:'bottom',
-  lazy: false,
-  tabBarOptions: {
-    activeTintColor: '#31dd73',
-    inactiveTintColor:'#999',
-    labelStyle:{fontSize:9, width:width/5-5,},
-    showIcon:'true',
-    style: {backgroundColor: 'white'},
-    indicatorStyle:{opacity:1},
-  },
+    navigationOptions:{
+      header:null,
+    },
+    tabBarPosition:'bottom',
+    lazy: false,
+    tabBarOptions: {
+      activeTintColor: '#31dd73',
+      inactiveTintColor:'#999',
+      labelStyle:{fontSize:9, width:width/5-5,},
+      showIcon:'true',
+      style: {backgroundColor: 'white'},
+      indicatorStyle:{opacity:1},
+    },
 });
 
 const App = StackNavigator({
-  Welcome: { screen: WelcomeScreen },
-  LoginGuide : {screen: LoginGuideScreen},
-  LoginTourist : {screen: LoginTouristScreen},
-  RegisterTourist : {screen: RegisterTourist},
-  RegisterGuide : {screen: RegisterGuide},
-  ForgotPassword : {screen : ForgotPassword},
-  Home: {screen: MainTapNavigator},
-  BookingSearching: {screen:BookingSearchingScreen},
-  BookingGuideSetting: {screen:BookingGuideSettingScreen},
-  ProfileCharRoomFromBooking : {screen: ChatRoomScreen},
-  PaymentMethod : {screen: PaymentMethodScreen},
-  TimeLimit: {screen: SetTimeLimitScreen},
-  CurrentTimeLimit:{screen: CurrentTimeLimitScreen},
+    Welcome: { screen: WelcomeScreen },
+    LoginGuide : {screen: LoginGuideScreen},
+    LoginTourist : {screen: LoginTouristScreen},
+    RegisterTourist : {screen: RegisterTourist},
+    RegisterGuide : {screen: RegisterGuide},
+    ForgotPassword : {screen : ForgotPassword},
+    Home: {screen: MainTapNavigator},
+    BookingSearching: {screen:BookingSearchingScreen},
+    BookingGuideSetting: {screen:BookingGuideSettingScreen},
+    ProfileCharRoomFromBooking : {screen: ChatRoomScreen},
+    PaymentMethod : {screen: PaymentMethodScreen},
+    TimeLimit: {screen: SetTimeLimitScreen},
+    CurrentTimeLimit:{screen: CurrentTimeLimitScreen},
+    ChatRoom : {screen: ChatRoomScreen},
 },{ 
     headerMode: 'screen' 
   },

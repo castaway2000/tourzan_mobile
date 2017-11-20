@@ -24,6 +24,7 @@ import Button from 'react-native-button';
 
 import ApplyButton from '../../components/ApplyButton'
 import NavigationBar from '../../components/NavigationBar'
+import {Colors} from '../../constants/index';
 
 var { width, height } = Dimensions.get('window');
 
@@ -305,12 +306,6 @@ const styles = StyleSheet.create({
         width:15,
         height:15,
     },
-    location_text:{
-        marginLeft:5,
-        fontSize:12,
-        color:'#999',
-        textAlign:'left',
-    },
     overview_view:{
         marginTop:10,
     },
@@ -357,7 +352,7 @@ const styles = StyleSheet.create({
     },
     interesting_btn:{
        fontSize:12,
-       color:'#555',
+       color: Colors.tintColor,
        fontWeight:'normal',
     },
     listview_view:{
@@ -413,7 +408,7 @@ const styles = StyleSheet.create({
   rating_text:{
       marginLeft:5,
       fontSize: 8,
-      color: '#999',
+      color:  Colors.color999,
   },
   info_view: {
     flex:0.8,
@@ -433,7 +428,7 @@ const styles = StyleSheet.create({
   },
   list_info_time_text:{
       fontSize:12,
-       color: '#999'
+       color: Colors.color999
   },
   list_info_name_text:{
     fontSize:15,
@@ -444,14 +439,14 @@ const styles = StyleSheet.create({
   location_text:{
     marginLeft:5,
     fontSize:12,
-    color:'#999',
+    color: Colors.color999,
     textAlign:'left',
     fontWeight:'bold',
   },
   description_text:{
     marginTop:5,
     fontSize:12,
-    color:'#999',
+    color:Colors.color999,
     textAlign:'left',
   },
 });

@@ -108,8 +108,8 @@ class MarketplaceScreen extends React.Component {
                         <View style={styles.avatar_view}>
                             <Image resizeMode='cover' source={require("../assets/images/guide_avatar.png")}  style={styles.avatar_img}/>
                             <View style={styles.rate_view} pointerEvents="none">
-                                    <Rating ratingCount={5} imageSize={8} onFinishRating={this.ratingCompleted}/>
-                                    <Text style={styles.rating_text}>(12)</Text>
+                                <Rating ratingCount={5} imageSize={8} onFinishRating={this.ratingCompleted}/>
+                                <Text style={styles.rating_text}>(12)</Text>
                             </View>
                         </View>
                         <View style={styles.info_view}>
@@ -164,32 +164,32 @@ class MarketplaceScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-      flex: 1,
-      alignItems: 'center',
-      flexDirection: 'column',
-  },
-  statusbar:{
-      width: width,
-      height: (Platform.OS == 'ios')? 20 : StatusBar.currentHeight,
-      backgroundColor: Colors.main,
-      position: 'absolute',
-      top: 0,
-      left: 0,
-  },
-  icon: {
-      width: 20,
-      height: 20,
-  },
-   top_container:{
-      height: 44,
-      marginTop: (Platform.OS == 'ios')? 20:0,
-      backgroundColor: Colors.main,
-      width:width,
-      alignItems:'center',
-      flexDirection:'row',
-      justifyContent:'space-between',
-  },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'column',
+    },
+    statusbar:{
+        width: width,
+        height: (Platform.OS == 'ios')? 20 : StatusBar.currentHeight,
+        backgroundColor: Colors.main,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+    },
+    icon: {
+        width: 20,
+        height: 20,
+    },
+    top_container:{
+        height: 44,
+        marginTop: (Platform.OS == 'ios')? 20:0,
+        backgroundColor: Colors.main,
+        width:width,
+        alignItems:'center',
+        flexDirection:'row',
+        justifyContent:'space-between',
+    },
     backButton:{
         marginLeft:20,
         height:20,
@@ -208,134 +208,134 @@ const styles = StyleSheet.create({
         height:35,
         width:35
     },
-  list_view_container : {
-      marginTop:1,
-      height:height-100,
-      width:width,
-  },
-  text_color:{
-    color:'#000',
-  },
-  search_header_container: {
-      padding: 10,
-      // flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: '#31dd73',
+    list_view_container : {
+        marginTop:1,
+        height:height-100,
+        width:width,
+    },
+    text_color:{
+        color:'#000',
+    },
+    search_header_container: {
+        padding: 10,
+        // flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#31dd73',
 
-  },
-  search_hedear_row_view:{
-     flexDirection: 'row',
-     alignItems: 'center',
-     backgroundColor:'#20bb5c',
-     width:width-80,
-     paddingHorizontal:10,
-     paddingTop:0,
-     paddingBottom:0,
-     borderRadius:7,
-  },
-  search_header_search_icon:{
-      height:15,
-      width:15,
-  },
-  search_header_text: {
-      marginLeft:10,
-      paddingTop:0,
-      paddingBottom:0,
-      height: 30,
-      width: width-100,
-      color:'white',
-      fontSize: 12,
-},
-  row_view:{
-      marginTop:10,
-      marginLeft:10,
-      marginRight:10,
-      padding:10,
-      backgroundColor: 'white',
-      borderRadius: 5,
-      borderWidth: 1,
-      borderColor: '#ddd',
-  },
-  row:{
-      flex: 1,
-      alignItems:'center',
-      flexDirection:'row',
-      justifyContent:'space-between',
-  },
-  avatar_view:{
-      width:width/5,
-      flexDirection:'column',
-      alignItems:'center',
-  },
-  avatar_img:{
-      width:40,
-      height:40,
-      borderRadius: 20,
-      borderWidth: 1,
-      borderColor:'transparent',
-  },
-  rate_view:{
-      marginTop:5,
-      height: 20,
-      flexDirection:'row',
-      alignItems:'center',
-  },
-  ratingbar:{
-      height:10,
-      width: 50,
-  },
-  rating_text:{
-      marginLeft:5,
-      fontSize: 8,
-      color: '#999',
-  },
-  info_view: {
-      width:width*50/100,
-      marginLeft:10,
-      flexDirection:'column',
-      justifyContent: 'center',
-  },
-  location_view:{
-      marginTop:5,
-      height:15,
-      flexDirection:'row',
-      alignItems:'center',
-  },
-  location_icon:{
-      width:10,
-      height:10,
-  },
-  name_text:{
-      fontSize:15,
-      color:'#000',
-      textAlign:'left',
-      fontWeight:'bold',
-      backgroundColor: 'transparent'
-  },
-  location_text:{
-      marginLeft:5,
-      fontSize:12,
-      color:'#999',
-      textAlign:'left',
-      fontWeight:'bold',
-      backgroundColor: 'transparent'
-  },
-  description_text:{
-      marginTop:5,
-      fontSize:12,
-      color:'#999',
-      textAlign:'left',
-      backgroundColor: 'transparent'
-  },
-  right_view:{
-      alignItems:'center',
-      borderLeftWidth:1,
-      borderColor: "#ddd",
-  },
-  right_text:{
-      margin:10,
-      backgroundColor: 'transparent'
-  },
+    },
+    search_hedear_row_view:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor:'#20bb5c',
+        width:width-80,
+        paddingHorizontal:10,
+        paddingTop:0,
+        paddingBottom:0,
+        borderRadius:7,
+    },
+    search_header_search_icon:{
+        height:15,
+        width:15,
+    },
+    search_header_text: {
+        marginLeft:10,
+        paddingTop:0,
+        paddingBottom:0,
+        height: 30,
+        width: width-100,
+        color:'white',
+        fontSize: 12,
+    },
+    row_view:{
+        marginTop:10,
+        marginLeft:10,
+        marginRight:10,
+        padding:10,
+        backgroundColor: 'white',
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#ddd',
+    },
+    row:{
+        flex: 1,
+        alignItems:'center',
+        flexDirection:'row',
+        justifyContent:'space-between',
+    },
+    avatar_view:{
+        width:width/5,
+        flexDirection:'column',
+        alignItems:'center',
+    },
+    avatar_img:{
+        width:40,
+        height:40,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor:'transparent',
+    },
+    rate_view:{
+        marginTop:5,
+        height: 20,
+        flexDirection:'row',
+        alignItems:'center',
+    },
+    ratingbar:{
+        height:10,
+        width: 50,
+    },
+    rating_text:{
+        marginLeft:5,
+        fontSize: 8,
+        color: Colors.color999,
+    },
+    info_view: {
+        width:width*50/100,
+        marginLeft:10,
+        flexDirection:'column',
+        justifyContent: 'center',
+    },
+    location_view:{
+        marginTop:5,
+        height:15,
+        flexDirection:'row',
+        alignItems:'center',
+    },
+    location_icon:{
+        width:10,
+        height:10,
+    },
+    name_text:{
+        fontSize:15,
+        color:'#000',
+        textAlign:'left',
+        fontWeight:'bold',
+        backgroundColor: 'transparent'
+    },
+    location_text:{
+        marginLeft:5,
+        fontSize:12,
+        color: Colors.color999,
+        textAlign:'left',
+        fontWeight:'bold',
+        backgroundColor: 'transparent'
+    },
+    description_text:{
+        marginTop:5,
+        fontSize:12,
+        color: Colors.color999,
+        textAlign:'left',
+        backgroundColor: 'transparent'
+    },
+    right_view:{
+        alignItems:'center',
+        borderLeftWidth:1,
+        borderColor: "#ddd",
+    },
+    right_text:{
+        margin:10,
+        backgroundColor: 'transparent'
+    },
 });
 
 

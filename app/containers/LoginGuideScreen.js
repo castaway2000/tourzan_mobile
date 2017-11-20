@@ -18,7 +18,7 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { NavigationActions } from 'react-navigation'
 import Checkbox  from 'react-native-custom-checkbox'
-
+import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
 
@@ -140,87 +140,87 @@ class LoginGuideScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-      flex: 1,
-      flexDirection: 'column',
-  },
-  top_container: {
-      width: width,
-      height : height*40/100,
-      flexDirection:'column',
-      justifyContent:'space-between'
-  },
-  view_logo:{
-      width: width,
-      height : height*40/100 - 44,
-      alignItems:'center',
-      flexDirection:'column',
-      justifyContent:'center',
-  },
-  icon_logo:{
-      height:70,
-      width:70
-  },
-  txt_welcome: {
+    container: {
+        flex: 1,
+        flexDirection: 'column',
+    },
+    top_container: {
+        width: width,
+        height : height*40/100,
+        flexDirection:'column',
+        justifyContent:'space-between'
+    },
+    view_logo:{
+        width: width,
+        height : height*40/100 - 44,
+        alignItems:'center',
+        flexDirection:'column',
+        justifyContent:'center',
+    },
+    icon_logo:{
+        height:70,
+        width:70
+    },
+    txt_welcome: {
         fontSize: 17,
         fontWeight : 'bold',
         textAlign: 'center',
         color : 'white',
         backgroundColor: 'transparent'
     },
-  txt_bottom:{
+    txt_bottom:{
         fontSize: 17,
         textAlign: 'center',
-        color : '#eeeeee',
+        color : Colors.textBottomColor,
         backgroundColor: 'transparent'
     },
-  bottom_container:{
-      width: width,
-      height:height-height*40/100,
-      alignItems:'center'
-  },
-  inputText: {
-      width: width-60, 
-      marginTop: 20,
-      height: 40,
-      borderColor: 'gray'
-  },
-  txt_checkbox:{
-      marginLeft:10,
-      fontSize:12,    
-  },
-  txt_forgot:{
-      fontSize:12,    
-  },
-  view_remember: {
-      width: width-60,
-      marginTop: 20,
-      justifyContent:'space-between',
-      flexDirection: 'row'
-  },
-  view_checkbox:{
-      width:100,
-      justifyContent:'flex-start',
-      flexDirection: 'row',
-      alignItems:'center'
-  },
-  button_login:{
-      marginTop: 25,
-  },
-  button_signup:{
-      marginTop:30,
-      color: '#000',
-      textAlign:'center',
-      fontSize:18,
-      textDecorationLine: "underline",
-      textDecorationStyle: "solid",
-      textDecorationColor: "#000"
-  },
-  line: {
-      height: 1,
-      width: width-60,
-      backgroundColor: 'gray',
-  },
+    bottom_container:{
+        width: width,
+        height:height-height*40/100,
+        alignItems:'center'
+    },
+    inputText: {
+        width: width-60, 
+        marginTop: 20,
+        height: 40,
+        borderColor: 'gray'
+    },
+    txt_checkbox:{
+        marginLeft:10,
+        fontSize:12,    
+    },
+    txt_forgot:{
+        fontSize:12,    
+    },
+    view_remember: {
+        width: width-60,
+        marginTop: 20,
+        justifyContent:'space-between',
+        flexDirection: 'row'
+    },
+    view_checkbox:{
+        width:100,
+        justifyContent:'flex-start',
+        flexDirection: 'row',
+        alignItems:'center'
+    },
+    button_login:{
+        marginTop: 25,
+    },
+    button_signup:{
+        marginTop:30,
+        color: '#000',
+        textAlign:'center',
+        fontSize:18,
+        textDecorationLine: "underline",
+        textDecorationStyle: "solid",
+        textDecorationColor: "#000"
+    },
+    line: {
+        height: 1,
+        width: width-60,
+        backgroundColor: 'gray',
+    },
 });
 
 export default LoginGuideScreen;

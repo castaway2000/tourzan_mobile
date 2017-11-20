@@ -24,6 +24,7 @@ import Button from 'react-native-button';
 
 import ApplyButton from '../../components/ApplyButton'
 import NavigationBar from '../../components/NavigationBar'
+import {Colors} from '../../constants/index';
 
 var { width, height } = Dimensions.get('window');
 
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         borderWidth:1,
-        borderColor:'#eee',
+        borderColor: Colors.textBottomColor,
         borderRadius:5,
     },
     location_info_view:{
@@ -276,7 +277,7 @@ const styles = StyleSheet.create({
     rating_text:{
         marginLeft:5,
         fontSize: 8,
-        color: '#999',
+        color: Colors.color999,
     },
     info_view: {
         width:width*50/100,
@@ -303,14 +304,14 @@ const styles = StyleSheet.create({
     location_text:{
         marginLeft:5,
         fontSize:12,
-        color:'#999',
+        color: Colors.color999,
         textAlign:'left',
         fontWeight:'bold',
     },
     description_text:{
         marginTop:5,
         fontSize:12,
-        color:'#999',
+        color: Colors.color999,
         textAlign:'left',
     },
 });

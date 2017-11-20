@@ -67,7 +67,6 @@ class TripsScreen extends React.Component {
 
     // functions for listview
     componentWillMount(){
-
         console.log('navigation:', this.props.navigtion)
         this.setState({
             dataSource:this.state.dataSource.cloneWithRows(this.state.ds),
@@ -75,25 +74,26 @@ class TripsScreen extends React.Component {
      }
 
      pressRow(rowData){
-            var newDs = [];
-            newDs = this.state.ds.slice();
-            // newDs[0].Selection = newDs[0] == "AwayTeam" ? "HomeTeam" : "AwayTeam";
-            this.setState({
-                dataSource: this.state.dataSource.cloneWithRows(newDs)
-            })
-           
-           
-            // this.props.hideOrShowDashboardNavigationbar();
-            console.log('debug',this.props);
-            console.log('debug',this.navigate);
+         var newDs = [];
+         newDs = this.state.ds.slice();
+         // newDs[0].Selection = newDs[0] == "AwayTeam" ? "HomeTeam" : "AwayTeam";
+         this.setState({
+             dataSource: this.state.dataSource.cloneWithRows(newDs)
+         })
+        
+        
+         // this.props.hideOrShowDashboardNavigationbar();
+         console.log('debug',this.props);
+         console.log('debug',this.navigate);
 
-            this.navigate.navigate('TripItemDetail');
-            // this.props.rootNavigation.navigation.navigate('TripItemDetail');
+         this.navigate.navigate('TripItemDetail');
+         // this.props.rootNavigation.navigation.navigate('TripItemDetail');
     }
 
      renderRow(rowData){
-        return (
-            <TouchableHighlight style={styles.row_view}
+         return (
+            <TouchableHighlight 
+                style={styles.row_view}
                 onPress={()=> this.pressRow(rowData)}
                 underlayColor = '#ddd'>
                     <View style ={styles.row}>
@@ -118,39 +118,56 @@ class TripsScreen extends React.Component {
      }
 
      render() {
-        return (
-            <ListView 
-                dataSource={this.state.dataSource}
-                renderRow={this.renderRow.bind(this)}
-                showsVerticalScrollIndicator = {false}
-            />
-        );
+         return (
+             <View style = {styles.container}>
+                 <TouchableOpacity style = {styles.sortBtn}>
+                    <Image source = {require('../../assets/images/ic_tab_settings.png')} style = {styles.sortImg}/>
+                 </TouchableOpacity>
+                 <ListView
+                    style = {styles.mTableView}
+                    dataSource={this.state.dataSource}
+                    renderRow={this.renderRow.bind(this)}
+                    showsVerticalScrollIndicator = {false}
+                />
+             </View>
+         );
     }
 }
 
 const styles = StyleSheet.create({
   container: {
       flex: 1,
+      flexDirection: 'row',
+      backgroundColor:'transparent',
+  },
+  sortBtn: {
+      width: 40,
       alignItems: 'center',
-      flexDirection: 'column',
-      backgroundColor:'white',
+  },
+  mTableView: {
+      width: width - 50,
+  },
+  sortImg: {
+      marginTop: 25,
+      width: 22,
+      height: 22,
+      resizeMode: 'contain'
   },
   icon: {
-    width: 20,
-    height: 20,
+      width: 20,
+      height: 20,
   },
   text_color:{
-    color:'#000',
+      color:'#000',
   },
   row_view:{
-    marginTop:10,
-    // marginLeft:10,
-    // marginRight:10,
-    padding:10,
-    backgroundColor: 'white',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#ddd',
+      marginTop:10,
+      marginRight: 10,
+      padding:10,
+      backgroundColor: 'white',
+      borderRadius: 5,
+      borderWidth: 1,
+      borderColor: '#ddd',
   },
   row:{
       flex: 1,
@@ -159,16 +176,16 @@ const styles = StyleSheet.create({
       justifyContent:'space-between',
   },
   avatar_img:{
-    width:80,
-    height:80,
-    borderRadius: 5,
-    borderWidth: 1,
+      width:80,
+      height:80,
+      borderRadius: 5,
+      borderWidth: 1,
   },
   info_view: {
-    width:width*50/100,
-    marginLeft:10,
-    flexDirection:'column',
-    justifyContent: 'center',
+      width:width*50/100,
+      marginLeft:10,
+      flexDirection:'column',
+      justifyContent: 'center',
   },
   location_view:{
       height:15,
@@ -180,17 +197,17 @@ const styles = StyleSheet.create({
       height:13,
   },
   name_text:{
-     marginLeft:5,
-    fontSize:15,
-    color:'#000',
-    textAlign:'left',
-    fontWeight:'bold',
+      marginLeft:5,
+      fontSize:15,
+      color:'#000',
+      textAlign:'left',
+      fontWeight:'bold',
   },
   description_text:{
-    marginTop:5,
-    fontSize:12,
-    color:'#999',
-    textAlign:'left',
+      marginTop:5,
+      fontSize:12,
+      color: Colors.color999,
+      textAlign:'left',
   },
   rate_view:{
       marginTop:5,
@@ -205,7 +222,7 @@ const styles = StyleSheet.create({
   rating_text:{
       marginLeft:5,
       fontSize: 8,
-      color: '#999',
+      color: Colors.color999,
   },
   arrow_view:{
       width:width*10/100,

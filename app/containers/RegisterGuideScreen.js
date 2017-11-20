@@ -17,7 +17,7 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { NavigationActions } from 'react-navigation'
 import Checkbox  from 'react-native-custom-checkbox'
-
+import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
 
@@ -274,95 +274,94 @@ class RegisterGuideScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-      flex: 1,
-      flexDirection: 'column',
-      justifyContent: 'flex-start'
-  },
-  out_container: {
-      flex: 1
-  },
-  top_container: {
-      width: width,
-      height : height*0.4,
-      flexDirection:'column',
-  },
-  view_title:{
-      width: width,
-      height : height*0.4 - 70,
-      alignItems:'flex-start',
-      flexDirection:'column',
-      justifyContent:'flex-end',
-      marginLeft:30,
-    //   marginBottom:30,
-  },
-  txt_welcome: {   
-      marginTop:5,
-      fontSize: 24,
-      fontWeight : 'bold',
-      textAlign: 'center',
-      color : 'white',
-      backgroundColor: 'transparent'
-  },
-  txt_bottom:{
-      fontSize: 17,
-      textAlign: 'center',
-      color : '#eeeeee',
-      backgroundColor: 'transparent'
-  },
-  scrollview_container: {
-     flex:1,
-     height : 1000,
-  },
-  bottom_container:{
-      width: width,
-      alignItems:'center',
-  },
-  inputText: {
-      width: width-60, 
-      marginTop: 20,
-      height: 40,
-      borderColor: 'gray'
-  },
-  interest_text: {
-      width: width-60, 
-      marginTop: 20,
-      height: 40,
-      borderColor: 'gray',
-  },
-  txt_checkbox:{
-      marginLeft:10,
-      fontSize:12,    
-  },
-  txt_forgot:{
-      fontSize:12,    
-  },
-  view_remember: {
-      width: width-60,
-      marginTop: 20,
-      justifyContent:'space-between',
-      flexDirection: 'row'
-  },
-  view_checkbox:{
-      width:100,
-      justifyContent:'flex-start',
-      flexDirection: 'row',
-      alignItems:'center'
-  },
-  button_login:{
-      marginTop: 25,
-  },
-  button_signin:{
-      marginTop:30,
-      marginBottom:20,
-      color: '#000',
-      textAlign:'center',
-      fontSize:18,
-      textDecorationLine: "underline",
-      textDecorationStyle: "solid",
-      textDecorationColor: "#000"
-  },
-  line: {
+    container: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start'
+    },
+    out_container: {
+        flex: 1
+    },
+    top_container: {
+        width: width,
+        height : height*0.4,
+        flexDirection:'column',
+    },
+    view_title:{
+        width: width,
+        height : height*0.4 - 70,
+        alignItems:'flex-start',
+        flexDirection:'column',
+        justifyContent:'flex-end',
+        marginLeft:30,
+    },
+    txt_welcome: {   
+        marginTop:5,
+        fontSize: 24,
+        fontWeight : 'bold',
+        textAlign: 'center',
+        color : 'white',
+        backgroundColor: 'transparent'
+    },
+    txt_bottom:{
+        fontSize: 17,
+        textAlign: 'center',
+        color : Colors.textBottomColor,
+        backgroundColor: 'transparent'
+    },
+    scrollview_container: {
+        flex:1,
+        height : 1000,
+    },
+    bottom_container:{
+        width: width,
+        alignItems:'center',
+    },
+    inputText: {
+        width: width-60, 
+        marginTop: 20,
+        height: 40,
+        borderColor: 'gray'
+    },
+    interest_text: {
+        width: width-60, 
+        marginTop: 20,
+        height: 40,
+        borderColor: 'gray',
+    },
+    txt_checkbox:{
+        marginLeft:10,
+        fontSize:12,    
+    },
+    txt_forgot:{
+        fontSize:12,    
+    },
+    view_remember: {
+        width: width-60,
+        marginTop: 20,
+        justifyContent:'space-between',
+        flexDirection: 'row'
+    },
+    view_checkbox:{
+        width:100,
+        justifyContent:'flex-start',
+        flexDirection: 'row',
+        alignItems:'center'
+    },
+    button_login:{
+        marginTop: 25,
+    },
+    button_signin:{
+        marginTop:30,
+        marginBottom:20,
+        color: '#000',
+        textAlign:'center',
+        fontSize:18,
+        textDecorationLine: "underline",
+        textDecorationStyle: "solid",
+        textDecorationColor: "#000"
+    },
+    line: {
         height: 1,
         width: width-60,
         backgroundColor: 'gray',

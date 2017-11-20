@@ -17,7 +17,7 @@ import {
 
 import { NavigationActions } from 'react-navigation'
 import KeyEvent from 'react-native-keyevent';
-
+import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 var Toast = require('react-native-toast');
 
@@ -27,67 +27,91 @@ const backAction = NavigationActions.back({
 })
 
 class SetTimeLimitScreen extends React.Component {
-  static navigationOptions = {
-      title: 'Time Limit',
-      header : null,
-  };
+    static navigationOptions = {
+        title: 'Time Limit',
+        header : null,
+    };
 
- constructor(props) {
-    super(props);
-    this.navigate = this.props.navigation;
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            hour: '03',
+            minute: '40',
 
-  componentDidMount() {
-    // if you want to react to keyDown 
-    KeyEvent.onKeyDownListener((keyCode) => {
-      console.log(`Key code pressed: key down`);
-      Toast.show.bind(null, 'key code pressed');
-    });
- 
-    // // if you want to react to keyUp 
-    // KeyEvent.onKeyUpListener((keyCode) => {
-    //   console.log(`Key code pressed: ${keyCode}`);
-    // });
-  }
+        }
+        this.navigate = this.props.navigation;
+    }
 
-  onDone(){
-    console.log("clicked on DoneButton!");
-     this.navigate.dispatch(backAction);
-  }
+    componentDidMount() { 
+        KeyEvent.onKeyDownListener((keyCode) => {
+            console.log(`Key code pressed: key down`);
+            Toast.show.bind(null, 'key code pressed');
+        });
 
-  render() {
-      return (
-        <View style={styles.container}>  
-            <View  style={styles.navigationbar}>
-                    <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}}>
-                        <Image resizeMode='cover' source={require("../assets/images/back.png")} style={styles.backButton} />
-                    </TouchableOpacity>
-                    <Text style={styles.centerText}>Time Limit</Text>
-                    <View style={styles.rightView}>
+    }
+
+    onDone(){
+        console.log("clicked on DoneButton!");
+        this.navigate.dispatch(backAction);
+    }
+
+    setHour(text){
+        this.setState({ hour: text })
+    }
+
+    setMinute(text){
+        this.setState({ minute: text })
+    }
+
+    render() {
+        return (
+            <View style={styles.container}>  
+                <View  style={styles.navigationbar}>
+                        <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}}>
+                            <Image resizeMode='cover' source={require("../assets/images/back.png")} style={styles.backButton} />
+                        </TouchableOpacity>
+                        <Text style={styles.centerText}>Time Limit</Text>
+                        <View style={styles.rightView}>
+                        </View>
+                </View>
+                <View style={styles.main_view}>
+                    <View style={styles.main_top_view}>
+                        <View style={styles.hour_view}>
+                            <TextInput
+                                style={styles.hour_text}
+                                underlineColorAndroid = 'transparent'
+                                value = {this.state.hour}
+                                keyboardType = 'numeric'
+                                maxLength = {2}
+                                onChangeText = {(text) => this.setHour(text)}
+                                onSubmitEditing={this._onLogin}
+                            />
+                            <Text style={styles.hour_lb}>Hours</Text>
+                        </View>
+                        <View style={styles.double_dut_view}>   
+                            <Text style={styles.double_dut_symbol}>:</Text>
+                        </View>
+                        <View style={styles.minute_view}>
+                            <TextInput
+                                style={styles.hour_text}
+                                underlineColorAndroid = 'transparent'
+                                value = {this.state.minute}
+                                keyboardType = 'numeric'
+                                maxLength = {2}
+                                onChangeText = {(text) => this.setMinute(text)}
+                                onSubmitEditing={this._onLogin}
+                            />
+                            <Text style={styles.hour_lb}>Minutes</Text>
+                        </View>
                     </View>
-            </View>
-            <View style={styles.main_view}>
-                <View style={styles.main_top_view}>
-                    <View style={styles.hour_view}>
-                        <TextInput underlineColorAndroid='transparent' keyboardType='numeric' style={styles.hour_text} value={'03'}></TextInput>
-                        <Text style={styles.hour_lb}>Hours</Text>
-                    </View>
-                    <View style={styles.double_dut_view}>   
-                        <Text style={styles.double_dut_symbol}>:</Text>
-                    </View>
-                    <View style={styles.minute_view}>
-                        <TextInput underlineColorAndroid='transparent' keyboardType='numeric' style={styles.hour_text} value={'40'}></TextInput>
-                        <Text style={styles.hour_lb}>Minutes</Text>
+                    <View style={styles.main_bottom_view}>
+                        <ApplyButton onPress={() => this.onDone()} name={'Done'} style={styles.done_btn}/>
+                        <Text style={styles.note_text}>By clicking "Done". Guide will receive your time limit offer</Text>
                     </View>
                 </View>
-                <View style={styles.main_bottom_view}>
-                    <ApplyButton onPress={() => this.onDone()} name={'Done'} style={styles.done_btn}/>
-                    <Text style={styles.note_text}>By clicking "Done". Guide will receive your time limit offer</Text>
-                </View>
             </View>
-        </View>
-      );
-   }
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -178,7 +202,6 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
     },
-
 
     // --- main bottom view -- //
     main_bottom_view:{

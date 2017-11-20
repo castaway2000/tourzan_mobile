@@ -23,6 +23,8 @@ import { NavigationActions } from 'react-navigation'
 import KeyEvent from 'react-native-keyevent';
 import PercentageCircle from 'react-native-percentage-circle';
 import ApplyButton from '../components/ApplyButton'
+import { Colors } from '../constants'
+
 var Toast = require('react-native-toast');
 
 var { width, height } = Dimensions.get('window');
@@ -145,27 +147,27 @@ class CompleteTourScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-      flex: 1,
-      alignItems: 'center',
-      flexDirection: 'column',
-  },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'column',
+    },
 
-  // --- navigation bar --- //
-   navigationbar:{
-      paddingTop:20,
-      height:64,
-      backgroundColor: '#31dd73',
-      width:width,
-      alignItems:'center',
-      flexDirection:'row',
-      justifyContent:'space-between',
-  },
-  backButton:{
+    // --- navigation bar --- //
+    navigationbar:{
+        paddingTop:20,
+        height:64,
+        backgroundColor: '#31dd73',
+        width:width,
+        alignItems:'center',
+        flexDirection:'row',
+        justifyContent:'space-between',
+    },
+    backButton:{
         marginLeft:20,
         height:15,
         width:10,
-    },
+        },
     centerText:{
         color:'white',
         textAlign:'center',
@@ -180,7 +182,7 @@ const styles = StyleSheet.create({
     },
 
 
-   /// ------- main view -------///
+/// ------- main view -------///
     scroll_view:{
         // height : 500,
     },
@@ -247,7 +249,7 @@ const styles = StyleSheet.create({
     location_text:{
         marginLeft:5,
         fontSize:12,
-        color:'#999',
+        color:Colors.color999,
         textAlign:'left',
         fontWeight:'bold',
     },
@@ -268,7 +270,7 @@ const styles = StyleSheet.create({
     rating_title_text:{
         marginTop: 20,
         fontSize: 15,
-        color:'#999',
+        color: Colors.color999,
     },
     rating_view:{
         marginTop:20,
@@ -294,7 +296,7 @@ const styles = StyleSheet.create({
     },
     tour_detail_title_text:{
         fontSize:13,
-        color:'#555'
+        color: Colors.tintColor
     },
     row_setting_btn_view:{
         width:width,

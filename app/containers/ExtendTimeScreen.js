@@ -17,10 +17,10 @@ import {
 
 import { NavigationActions } from 'react-navigation'
 import KeyEvent from 'react-native-keyevent';
-
+import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
-var Toast = require('react-native-toast');
 
+var Toast = require('react-native-toast');
 var { width, height } = Dimensions.get('window');
 
 const backAction = NavigationActions.back({
@@ -93,23 +93,23 @@ class ExtendTimeScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-      flex: 1,
-      alignItems: 'center',
-      flexDirection: 'column',
-  },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'column',
+    },
 
-  // --- navigation bar --- //
-   navigationbar:{
-      paddingTop:20,
-      height:64,
-      backgroundColor: '#31dd73',
-      width:width,
-      alignItems:'center',
-      flexDirection:'row',
-      justifyContent:'space-between',
-  },
-  backButton:{
+    // --- navigation bar --- //
+    navigationbar:{
+        paddingTop:20,
+        height:64,
+        backgroundColor: '#31dd73',
+        width:width,
+        alignItems:'center',
+        flexDirection:'row',
+        justifyContent:'space-between',
+    },
+    backButton:{
         marginLeft:20,
         height:15,
         width:10,
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
         width:width,
         height:height-44,
     },
-    
+
     // --- main top view -- //
     current_time_view:{
         backgroundColor:'white',
@@ -193,7 +193,6 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
     },
-
 
     // --- main bottom view -- //
     main_bottom_view:{

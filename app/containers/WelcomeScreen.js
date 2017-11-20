@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 
 import ApplyButton from '../components/ApplyButton';
+import { Colors } from '../constants'
 
 var { width, height } = Dimensions.get('window');
 const onButtonPress = () => { Alert.alert('Button has been pressed!'); }; 
@@ -53,68 +54,68 @@ class WelcomeScreen extends React.Component {
 
 
 const styles = StyleSheet.create({
-  container: {
+    container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center'
-  },
-  bg_img: {
-    width: width,
-    height : height,
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
+    },
+    bg_img: {
+        width: width,
+        height : height,
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+    },
 
-  top_container: {
-    marginTop:40,
-    alignItems: 'center',
-    justifyContent:'flex-start',
-  },
-  logo:{
-    width:60,
-    height:60,
-  },
-  txt_welcome: {
-    fontSize: 25,
-    fontWeight : 'bold',
-    textAlign: 'center',
-    color : '#ffffff',
-    backgroundColor : 'transparent',
-  },
-  line: {
-    marginTop:7,
-    height: 1,
-    width: '50%',
-    backgroundColor: '#ffffff',
-  },
-  txt_bottom:{
-    marginTop: 7,
-    fontSize: 17,
-    textAlign: 'center',
-    color : '#eeeeee',
-    backgroundColor : 'transparent',
-  },
+    top_container: {
+        marginTop:40,
+        alignItems: 'center',
+        justifyContent:'flex-start',
+    },
+    logo:{
+        width:60,
+        height:60,
+    },
+    txt_welcome: {
+        fontSize: 25,
+        fontWeight : 'bold',
+        textAlign: 'center',
+        color : 'white',
+        backgroundColor : 'transparent',
+    },
+    line: {
+        marginTop:7,
+        height: 1,
+        width: '50%',
+        backgroundColor: 'white',
+    },
+    txt_bottom:{
+        marginTop: 7,
+        fontSize: 17,
+        textAlign: 'center',
+        color : Colors.textBottomColor,
+        backgroundColor : 'transparent',
+    },
 
-  bottom_container:{
-    width: width,
-    alignItems:'center',
-    justifyContent:'center',
-    marginBottom:30,
-  },
-  button_guide:{
-    paddingTop:13,
-    color:'#000',
-    textAlign:'center',
-    fontSize: 18,
-    marginTop : 20,
-    height:50,
-    width:width-60,
-    backgroundColor:'#ffffff',
-    borderRadius:5,
-    borderColor: '#555555',
-    overflow:'hidden',
-  },
+    bottom_container:{
+        width: width,
+        alignItems:'center',
+        justifyContent:'center',
+        marginBottom:30,
+    },
+    button_guide:{
+        paddingTop:13,
+        color:'black',
+        textAlign:'center',
+        fontSize: 18,
+        marginTop : 20,
+        height:50,
+        width:width-60,
+        backgroundColor:'white',
+        borderRadius:5,
+        borderColor: Colors.tintColor,
+        overflow:'hidden',
+    },
 });
 
 export default WelcomeScreen
