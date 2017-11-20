@@ -18,7 +18,7 @@ import {
 import { NavigationActions } from 'react-navigation'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Checkbox  from 'react-native-custom-checkbox'
-
+import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
 
@@ -168,8 +168,8 @@ const styles = StyleSheet.create({
         justifyContent:'center',
     },
     icon_logo:{
-        height:70,
-        width:70
+        height: 70,
+        width: 70
     },
     txt_welcome: {
         fontSize: 17,
@@ -181,12 +181,12 @@ const styles = StyleSheet.create({
     txt_bottom:{
         fontSize: 17,
         textAlign: 'center',
-        color : '#eeeeee',
+        color : Colors.textBottomColor,
         backgroundColor: 'transparent'
     },
     bottom_container:{
         width: width,
-        height:height*0.6,
+        height: height*0.6,
         alignItems:'center'
     },
     inputText: {
@@ -195,8 +195,8 @@ const styles = StyleSheet.create({
         height: 40
     },
     txt_checkbox:{
-        marginLeft:10,
-        fontSize:12,    
+        marginLeft: 10,
+        fontSize: 12,    
     },
     txt_forgot:{
         fontSize:12,    
@@ -204,20 +204,20 @@ const styles = StyleSheet.create({
     view_remember: {
         width: width-60,
         marginTop: 20,
-        justifyContent:'space-between',
+        justifyContent: 'space-between',
         flexDirection: 'row'
     },
     view_checkbox:{
-        width:100,
-        justifyContent:'flex-start',
+        width: 100,
+        justifyContent: 'flex-start',
         flexDirection: 'row',
-        alignItems:'center'
+        alignItems: 'center'
     },
     button_login:{
         marginTop: 25,
     },
     button_signup:{
-        marginTop:30,
+        marginTop: 30,
         color: '#000',
         textAlign:'center',
         fontSize:18,

@@ -177,11 +177,11 @@ const styles = StyleSheet.create({
         marginTop: 5
     },
     personImg: {
-         marginRight:20, 
-         height:35, 
-         width:35,
-         position: 'absolute',
-         right: 25
+        marginRight:20, 
+        height:35, 
+        width:35,
+        position: 'absolute',
+        right: 25
     },
     tab_listView: {
         width: width,

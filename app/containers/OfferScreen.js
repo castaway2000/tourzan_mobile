@@ -18,6 +18,7 @@ import {
 import { NavigationActions } from 'react-navigation'
 import Rating from 'react-native-ratings';
 import ApplyButton from '../components/ApplyButton'
+import { Colors } from '../constants'
 
 var Toast = require('react-native-toast');
 
@@ -238,7 +239,7 @@ const styles = StyleSheet.create({
     rating_text:{
         marginLeft:5,
         fontSize: 8,
-        color: '#999',
+        color: Colors.color999,
     },
     info_view: {
         width:width*50/100,
@@ -265,14 +266,14 @@ const styles = StyleSheet.create({
     location_text:{
         marginLeft:5,
         fontSize:12,
-        color:'#999',
+        color: Colors.color999,
         textAlign:'left',
         fontWeight:'bold',
     },
     description_text:{
         marginTop:5,
         fontSize:12,
-        color:'#999',
+        color: Colors.color999,
         textAlign:'left',
     },
     chat_view:{
@@ -322,14 +323,14 @@ const styles = StyleSheet.create({
         width:width-60,
     },
     button_cancel:{
-      marginTop:30,
-      color: '#000',
-      textAlign:'center',
-      fontSize:18,
-      textDecorationLine: "underline",
-      textDecorationStyle: "solid",
-      textDecorationColor: "#000"
-  },
+        marginTop:30,
+        color: '#000',
+        textAlign:'center',
+        fontSize:18,
+        textDecorationLine: "underline",
+        textDecorationStyle: "solid",
+        textDecorationColor: "#000"
+    },
 });
 
 export default OfferScreen;

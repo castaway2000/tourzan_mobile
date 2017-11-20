@@ -81,79 +81,79 @@ class ForgotPasswordScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-      flex: 1,
-      alignItems: 'center',
-      flexDirection: 'column',
-      justifyContent: 'space-between'
-  },
-  statusbar:{
-      width: width,
-      height: (Platform.OS == 'ios')? 20 : StatusBar.currentHeight,
-      backgroundColor: Colors.main,
-      position: 'absolute',
-      top: 0,
-      left: 0,
-  },
-  top_container: {
-      width: width,
-      height : height*40/100,
-      flexDirection:'column',
-      justifyContent:'flex-start'
-  },
-  view_logo:{
-      width: width,
-      height : height*40/100 - 44,
-      alignItems:'center',
-      flexDirection:'column',
-      justifyContent:'center',
-      backgroundColor: '#fff',
-  },
-  icon_logo:{
-      height:70,
-      width:70
-  },
-  txt_welcome: {
-      fontSize: 17,
-      fontWeight : 'bold',
-      textAlign: 'center',
-      color : '#000',
-  },
-  txt_bottom:{
-      width: width-60,
-      fontSize: 15,
-      textAlign: 'center',
-      color : '#999999'
-  },
-  bottom_container:{
-      width: width,
-      height:height-height*40/100,
-      alignItems:'center'
-  },
-  inputText: {
-      width: width-60, 
-      marginTop: 50,
-      height: 40,
-      borderColor: 'gray'
-  },
-  line: {
-      height: 1,
-      width: width-60,
-      backgroundColor: 'gray',
-  },
-  button_recover:{
-      marginTop: 35,
-  },
-  button_cancel:{
-      marginTop:40,
-      marginBottom: 30,
-      color: '#000',
-      textAlign:'center',
-      fontSize:18,
-      textDecorationLine: "underline",
-      textDecorationStyle: "solid",
-      textDecorationColor: "#000"
-  },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'space-between'
+    },
+    statusbar:{
+        width: width,
+        height: (Platform.OS == 'ios')? 20 : StatusBar.currentHeight,
+        backgroundColor: Colors.main,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+    },
+    top_container: {
+        width: width,
+        height : height*40/100,
+        flexDirection:'column',
+        justifyContent:'flex-start'
+    },
+    view_logo:{
+        width: width,
+        height : height*40/100 - 44,
+        alignItems:'center',
+        flexDirection:'column',
+        justifyContent:'center',
+        backgroundColor: '#fff',
+    },
+    icon_logo:{
+        height:70,
+        width:70
+    },
+    txt_welcome: {
+        fontSize: 17,
+        fontWeight : 'bold',
+        textAlign: 'center',
+        color : '#000',
+    },
+    txt_bottom:{
+        width: width-60,
+        fontSize: 15,
+        textAlign: 'center',
+        color : Colors.color999
+    },
+    bottom_container:{
+        width: width,
+        height:height-height*40/100,
+        alignItems:'center'
+    },
+    inputText: {
+        width: width-60, 
+        marginTop: 50,
+        height: 40,
+        borderColor: 'gray'
+    },
+    line: {
+        height: 1,
+        width: width-60,
+        backgroundColor: 'gray',
+    },
+    button_recover:{
+        marginTop: 35,
+    },
+    button_cancel:{
+        marginTop:40,
+        marginBottom: 30,
+        color: '#000',
+        textAlign:'center',
+        fontSize:18,
+        textDecorationLine: "underline",
+        textDecorationStyle: "solid",
+        textDecorationColor: "#000"
+    },
 });
 
 export default ForgotPasswordScreen;

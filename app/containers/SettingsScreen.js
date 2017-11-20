@@ -243,7 +243,6 @@ const styles = StyleSheet.create({
         height:40,
         backgroundColor:'white',
     }
-
 });
 
 export default SettingsScreen;

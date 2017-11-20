@@ -21,6 +21,7 @@ import {
 import { TabNavigator } from 'react-navigation';
 import { NavigationActions } from 'react-navigation'
 import { StackNavigator } from 'react-navigation';
+import { Colors } from '../constants'
 
 import NavigationBar from '../components/NavigationBar'
 
@@ -68,7 +69,7 @@ class DashboardScreen extends React.Component {
         tabBarIcon: ({ tintColor }) => (
              <Image resizeMode='contain' source={require('../assets/images/Dashboard_Bottom_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
         ),
-     };
+    };
 
     constructor(props) {
         super(props);

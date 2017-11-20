@@ -17,7 +17,7 @@ import {
 
 import { NavigationActions } from 'react-navigation'
 import IconBadge from 'react-native-icon-badge';
-
+import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
 
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     },
     selecting_title_text:{
         fontSize:13,
-        color:'#555'
+        color: Colors.tintColor
     },
     card_list_view:{
         flexDirection:'row',
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
     encrypt_text:{
         marginLeft:5,
         fontSize:12,
-        color:'#999',
+        color: Colors.color999,
         textAlign:'left',
     },
     continue_view:{
@@ -330,7 +330,6 @@ const styles = StyleSheet.create({
         marginTop:30,
         marginBottom:200,
     }
-
 });
 
 export default PaymentMethodScreen;

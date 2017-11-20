@@ -17,7 +17,7 @@ import {
 
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux'
-
+import { Colors } from '../../constants'
 import { NavigationActions } from 'react-navigation'
 import Rating from 'react-native-ratings';
 
@@ -112,26 +112,26 @@ class BookingGuideSettingScreen extends React.Component {
       return (
         <View style={styles.container}>  
              <View  style={styles.navigationbar}>
-                    <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(resetRootAction)}}>
-                        <Image resizeMode='cover' source={require("../../assets/images/back.png")} style={styles.nav_back_btn} />
-                    </TouchableOpacity>
-                    <Text style={styles.nav_center_text}></Text>
-                    <TouchableOpacity onPress={() => {navigate('ProfileCharRoomFromBooking')}}>
-                        <Image resizeMode='cover' source={require("../../assets/images/profile_chat_icon.png")}  style={styles.nav_right_view} />
-                    </TouchableOpacity>
+                <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(resetRootAction)}}>
+                    <Image resizeMode='cover' source={require("../../assets/images/back.png")} style={styles.nav_back_btn} />
+                </TouchableOpacity>
+                <Text style={styles.nav_center_text}></Text>
+                <TouchableOpacity onPress={() => {navigate('ProfileCharRoomFromBooking')}}>
+                    <Image resizeMode='cover' source={require("../../assets/images/profile_chat_icon.png")}  style={styles.nav_right_view} />
+                </TouchableOpacity>
              </View>
-             <ScrollView style={styles.scrollview}>
+             {/*<ScrollView style={styles.scrollview}>*/}
                 <View style={styles.content_view}>
                     <View style={styles.top_container}>
                         <View  style={styles.top_container_bg_view}>
                         </View>
                         <View style={styles.top_info_view} pointerEvents="none">
-                                <Text style={styles.top_name_text}>Bradon Delgado</Text>
-                                <View style={styles.top_location_view}>
-                                    <Image resizeMode='contain' source={require("../../assets/images/location_maps.png")}  style={styles.top_location_icon}/>
-                                    <Text style={styles.top_location_text}>Jewellborough</Text>
-                                </View>
-                                <Rating ratingCount={5} imageSize={12} style={{marginTop:5}} onFinishRating={this.ratingCompleted}/>
+                            <Text style={styles.top_name_text}>Bradon Delgado</Text>
+                            <View style={styles.top_location_view}>
+                                <Image resizeMode='contain' source={require("../../assets/images/location_maps.png")}  style={styles.top_location_icon}/>
+                                <Text style={styles.top_location_text}>Jewellborough</Text>
+                            </View>
+                            <Rating ratingCount={5} imageSize={12} style={{marginTop:5}} onFinishRating={this.ratingCompleted}/>
                         </View>
                     </View>
                     <View style={styles.setting_container}>
@@ -149,7 +149,8 @@ class BookingGuideSettingScreen extends React.Component {
                         </View>
                          <View style={styles.row_setting_view}>
                             <View style={styles.setting_text_view_term}>
-                                <Text style={styles.setting_text}>Time Setting</Text>
+
+                                <Text style={styles.setting_text}>Time Limit Settings</Text>
                                 { this.state.isExtendTerm ? (
                                      <TouchableOpacity onPress={() => this.onDone()}>
                                         <Text style={styles.done_text}>DONE</Text>
@@ -251,8 +252,7 @@ class BookingGuideSettingScreen extends React.Component {
                     </View>
                     <Image resizeMode='cover' source={require("../../assets/images/person1.png")} style={styles.top_avatar_icon}/> 
                 </View>
-             </ScrollView>
-            
+             {/*</ScrollView>*/}
         </View>
       );
    }
@@ -348,7 +348,7 @@ const styles = StyleSheet.create({
   top_location_text:{
         marginLeft:5,
         fontSize:12,
-        color:'#999',
+        color: Colors.color999,
         textAlign:'left',
   },
 
@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
   },
   setting_text:{
       fontSize:13,
-      color:'#555'
+      color: Colors.tintColor
   },
   row_setting_btn_view:{
       width:width,

@@ -52,12 +52,6 @@ class TransactionsScreen extends React.Component {
         console.log("Rating is: " + rating)
     }
 
-    // functions for listview
-    // componentDidMount(){
-    //         this.setState({
-    //             dataSource:this.state.dataSource.cloneWithRows(this.state.ds),
-    //         })
-    //  }
      componentWillMount() {
          this.setState({
             dataSource:this.state.dataSource.cloneWithRows(this.state.ds),
@@ -127,24 +121,22 @@ const styles = StyleSheet.create({
       flexDirection: 'column',
   },
   icon: {
-    width: 20,
-    height: 20,
+      width: 20,
+      height: 20,
   },
   text_color:{
-    color:'#000',
+      color:'#000',
   },
   row_view:{
       marginTop: 10,
       paddingTop:20,
-    //  paddingRight:10,
       paddingBottom:20,
-    //  paddingLeft:10,
       backgroundColor:'white',
   },
   separator: {
-        flex: 1,
-        height: StyleSheet.hairlineWidth,
-        backgroundColor: '#ddd',
+      flex: 1,
+      height: StyleSheet.hairlineWidth,
+      backgroundColor: '#ddd',
   },
   row:{
       alignItems:'center',
@@ -158,13 +150,13 @@ const styles = StyleSheet.create({
   },
   amount_text:{
       fontSize: 15,
-      color: '#999',
+      color: Colors.color999,
   },
   info_view: {
-    width:width*45/100,
-    marginLeft:10,
-    flexDirection:'column',
-    justifyContent: 'center',
+      width:width*45/100,
+      marginLeft:10,
+      flexDirection:'column',
+      justifyContent: 'center',
   },
   info_row_view:{
       marginTop:5,
@@ -177,18 +169,18 @@ const styles = StyleSheet.create({
       height:10,
   },
   location_text:{
-    marginLeft:5,
-    fontSize:12,
-    color:'#000',
-    textAlign:'left',
-    fontWeight:'bold',
+      marginLeft:5,
+      fontSize:12,
+      color:'#000',
+      textAlign:'left',
+      fontWeight:'bold',
   },
   time_text:{
-    marginLeft:5,
-    fontSize:12,
-    color:'#555',
-    textAlign:'left',
-    fontWeight:'bold',
+      marginLeft:5,
+      fontSize:12,
+      color: Colors.tintColor,
+      textAlign:'left',
+      fontWeight:'bold',
   },
   row_right_view:{
       marginRight: 5,

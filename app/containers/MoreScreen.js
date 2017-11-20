@@ -35,36 +35,36 @@ const resetRootAction = NavigationActions.reset({
 });
 
 class MoreScreen extends React.Component {
-  static navigationOptions = {
+    static navigationOptions = {
         header : null,
         tabBarLabel: 'More',
         tabBarIcon: ({ tintColor }) => (
                 <Image resizeMode='contain' source={require('../assets/images/hambuger.png')} style={[styles.icon, {tintColor: tintColor}]} />
         ),
-  };
+    };
 
- constructor(props) {
+    constructor(props) {
     super(props);
     this.state = {};
     this.navigate = this.props.navigation;
-  }
+    }
 
-  onLogout(){
-      this.props.navigation.dispatch(resetRootAction);
-  }
+    onLogout(){
+        this.props.navigation.dispatch(resetRootAction);
+    }
 
-  render() {
-      return (
-        <View style={styles.container}> 
-            <View style = {styles.statusbar}/>
-             <View  style={styles.navigationbar}>
-                    <View style={styles.backButton}> 
+    render() {
+        return (
+            <View style={styles.container}> 
+                <View style = {styles.statusbar}/>
+                <View  style={styles.navigationbar}>
+                    <View style={styles.backButton}>
                     </View>
                     <Text style={styles.centerText}>TOUZAN</Text>
                     <View style={styles.rightView}>
                     </View>
-            </View>
-            <View style={styles.main_view}>
+                </View>
+                <View style={styles.main_view}>
                     <View style={styles.blank_row_view}>
                     </View>
                     <TouchableOpacity style={styles.row_view} onPress={() => this.navigate.navigate('Settings')}>
@@ -77,7 +77,7 @@ class MoreScreen extends React.Component {
                     </TouchableOpacity>
                     <View style={styles.blank_row_view}>
                     </View>
-                     <TouchableOpacity style={styles.row_view}>
+                        <TouchableOpacity style={styles.row_view}>
                         <Text  style={styles.row_lb}>Privacy Policy</Text>
                         <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon}/>
                     </TouchableOpacity>
@@ -85,16 +85,16 @@ class MoreScreen extends React.Component {
                         <Text  style={styles.row_lb}>Terms of Use</Text>
                         <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon}/>
                     </TouchableOpacity>
-                     <View style={styles.blank_logout_view}>
+                        <View style={styles.blank_logout_view}>
                     </View>
                     <TouchableOpacity style={styles.row_view} onPress={() => this.onLogout()}>
                         <Text  style={styles.row_logout_lb}>LOGOUT</Text>
                         <Image resizeMode='contain' source={require("../assets/images/Logout_icon.png")} style={styles.row_icon}/>
                     </TouchableOpacity>
+                </View>
             </View>
-        </View>
-      );
-   }
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -188,7 +188,6 @@ const styles = StyleSheet.create({
         height:15,
         width:15,
     },
-
 });
 
 export default MoreScreen;

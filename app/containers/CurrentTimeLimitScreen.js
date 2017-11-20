@@ -22,6 +22,8 @@ import { NavigationActions } from 'react-navigation'
 import KeyEvent from 'react-native-keyevent';
 import PercentageCircle from 'react-native-percentage-circle';
 import ApplyButton from '../components/ApplyButton'
+import { Colors } from '../constants'
+
 var Toast = require('react-native-toast');
 import * as Actions from '../actions/map'
 
