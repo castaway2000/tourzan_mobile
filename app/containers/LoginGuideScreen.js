@@ -21,6 +21,7 @@ import Checkbox  from 'react-native-custom-checkbox'
 import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
+import {emailLogin} from '../actions/'
 
 var { width, height } = Dimensions.get('window');
 
@@ -39,26 +40,49 @@ class LoginGuideScreen extends React.Component {
 
  constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
         checked: false,
-        email: '',
-        password: '' 
+        username: '',
+        password: '',
     };
     this.navigate = this.props.navigation;
   }
 
   onLogin(){
-    const resetAction = NavigationActions.reset({
-        index: 0,
-        actions: [
-            NavigationActions.navigate({ routeName: 'Home'})
-        ]
-    });
-    this.navigate.dispatch(resetAction)
+    var { dispatch } = this.props;
+    var params = {
+        username: this.state.username,
+        password: this.state.password,
+    }
+    
+    emailLogin(params)
+    .then(data => {
+        this.setState({
+            isLoading: false
+        })
+        console.log('Login email-->', data)
+        if(data.token != undefined){
+            console.log('success')
+            const resetAction = NavigationActions.reset({
+                index: 0,
+                actions: [
+                    NavigationActions.navigate({ routeName: 'Home'})
+                ]
+            });
+            this.navigate.dispatch(resetAction)
+        }
+        else{
+            alert('Unable to log in with provided credentials.')
+        }
+        
+    })
+    .catch(err => {
+        alert(err)
+    })
   }
 
-  setUserEmail(text){
-      this.setState({ email: text })
+  setUsername(text){
+      this.setState({ username: text })
   }
   
   setPassword(text){
@@ -74,6 +98,15 @@ class LoginGuideScreen extends React.Component {
 		nextInput.focus();
 	  }
   }
+
+  showLoading(){
+        if (this.state.isLoading) {
+            return (
+                <ActivityIndicator color={'black'} size={'large'} style = {styles.loadingView}/>
+
+            );
+        }
+    }
 
 
   render() {
@@ -92,11 +125,11 @@ class LoginGuideScreen extends React.Component {
                     <View style={styles.bottom_container}>
                         <View>
                             <TextInput 
-                                placeholder="Email" 
+                                placeholder="Username" 
                                 style={styles.inputText}
                                 underlineColorAndroid = 'transparent'
-                                value = {this.state.email}
-                                onChangeText = {(text) => this.setUserEmail(text)}
+                                value = {this.state.username}
+                                onChangeText = {(text) => this.setUsername(text)}
                                 onSubmitEditing={this.changeFocus.bind(this)}
                             />
                             <View style={styles.line}></View>
@@ -134,6 +167,7 @@ class LoginGuideScreen extends React.Component {
                     </View>
                 </View>
             </KeyboardAwareScrollView>
+            {this.showLoading()}
         </View>
       );
    }
@@ -221,6 +255,12 @@ const styles = StyleSheet.create({
         width: width-60,
         backgroundColor: 'gray',
     },
+    loadingView: {
+        flex: 1,
+        position: 'absolute',
+        top: height/2,
+        left: width/2-20
+    }
 });
 
 export default LoginGuideScreen;

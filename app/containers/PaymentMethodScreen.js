@@ -10,7 +10,7 @@ import {
   Image,
   Text,
   TextInput,
-  View,
+  View, 
   Alert,
   TouchableOpacity,
 } from 'react-native';

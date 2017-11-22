@@ -13,6 +13,7 @@ import {
   View,
   Alert,
   TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { NavigationActions } from 'react-navigation'
@@ -20,6 +21,8 @@ import Checkbox  from 'react-native-custom-checkbox'
 import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
+import {emailSignup} from '../actions/'
+import PLoading from '../components/Loading'
 
 var { width, height } = Dimensions.get('window');
 let nextInput1;
@@ -33,6 +36,12 @@ const onButtonPress = () => { Alert.alert('Button has been pressed!'); };
 const backAction = NavigationActions.back({
     // key: 'WelcomeScreen'
 });
+
+var isInterestExtend = false
+var isAttractions = false
+var isBoarading = false
+var isHiking = false
+var isTraveling = false
 
 class RegisterTouristScreen extends React.Component {
   static navigationOptions = {
@@ -50,23 +59,74 @@ class RegisterTouristScreen extends React.Component {
         address: '',
         company:'',
         phone:'',
-        intests: '',
+        interests: '',
+        isInterestExtend: false,
+        isAttractions: false,
+        isBoarading: false,
+        isHiking: false,
+        isTraveling: false,
+        isLoading: false
     };
-    isIntestExtend : {false};
-  }
-
-  onIntestExtention(){
-      isIntestExtend = !isIntestExtend;
   }
 
   onSignup(){
-    const resetAction = NavigationActions.reset({
-        index: 0,
-        actions: [
-            NavigationActions.navigate({ routeName: 'Home'})
-        ]
-    });
-    this.props.navigation.dispatch(resetAction)
+      if(this.state.name == '' || this.state.name.trim() == ''){
+          alert('Please enter your username')
+      }
+      else if(this.state.email == '' || this.state.email.trim() == ''){
+          alert('Please enter your email address')
+      }
+      else if(this.state.password == '' || this.state.password.trim() == ''){
+          alert('Please enter your password')
+      }
+      else if(this.state.password.length < 8){
+          alert('Password must be at least 8 characters.')
+      }
+      else if(this.state.password != this.state.confirmpassword){
+          alert('Not matched password and confirm password')
+      }
+      else{
+          this.setState({
+              isLoading: true
+          })
+
+          var { dispatch } = this.props;
+          var params = {
+              username: this.state.name,
+              email: this.state.email,
+              password1: this.state.password,
+              password2: this.state.confirmpassword
+          }
+          
+          emailSignup(params)
+          .then(data => {
+              this.setState({
+                  isLoading: false
+              })
+              if(data.token != undefined){
+                  console.log('success')
+                  const resetAction = NavigationActions.reset({
+                    index: 0,
+                    actions: [
+                        NavigationActions.navigate({ routeName: 'Home'})
+                    ]
+                });
+                this.props.navigation.dispatch(resetAction)
+              }
+              else{
+                  alert(data.error)
+
+              }
+              
+          })
+          .catch(err => {
+              alert(err)
+          })
+      }
+      
+
+    
+    
   }
 
   setUserName(text){
@@ -97,8 +157,8 @@ class RegisterTouristScreen extends React.Component {
       this.setState({ phone: text })
   }
 
-  setUserIntests(text){
-      this.setState({ intests: text })
+  setUserInterests(text){
+      this.setState({ interests: text })
   }
 
   getNextInput1(data) {
@@ -151,6 +211,48 @@ class RegisterTouristScreen extends React.Component {
       nextInput6.focus();
   }
 
+  onClickExtendInterests(){
+      isInterestExtend = !isInterestExtend;
+      this.setState({ isInterestExtend: isInterestExtend })
+  }
+
+  onAttractions(){
+      isAttractions = ! isAttractions
+      this.setState({
+          isAttractions: isAttractions,
+      })
+  }
+
+  onBoarding(){
+      isBoarading =! isBoarading
+      this.setState({
+          isBoarading: isBoarading,
+      })
+  }
+
+  onHiking(){
+      isHiking =! isHiking
+      this.setState({
+          isHiking: isHiking,
+      })
+  }
+
+  onTraveling(){
+      isTraveling =! isTraveling
+      this.setState({
+          isTraveling: isTraveling,
+      })
+  }
+
+  showLoading(){
+        if (this.state.isLoading) {
+            return (
+                <ActivityIndicator color={'black'} size={'large'} style = {styles.loadingView}/>
+
+            );
+        }
+    }
+
   render() {
       const { navigate } = this.props.navigation;
       return (
@@ -181,6 +283,8 @@ class RegisterTouristScreen extends React.Component {
                             placeholder="Email" 
                             style={styles.inputText}
                             underlineColorAndroid = 'transparent'
+                            autoCapitalize = 'none'
+                            keyboardType = 'email-address'
                             value = {this.state.email}
                             onChangeText = {(text) => this.setUserEmail(text)}
                             onSubmitEditing={this.changeFocus2.bind(this)}
@@ -190,7 +294,8 @@ class RegisterTouristScreen extends React.Component {
                     <View>
                         <TextInput
                             ref={this.getNextInput2.bind(this)}
-                            placeholder="Password" 
+                            placeholder="Password"
+                            secureTextEntry = {true}
                             style={styles.inputText}
                             underlineColorAndroid = 'transparent'
                             value = {this.state.password}
@@ -204,6 +309,7 @@ class RegisterTouristScreen extends React.Component {
                             ref={this.getNextInput3.bind(this)}
                             placeholder="Confirm Password" 
                             style={styles.inputText}
+                            secureTextEntry = {true}
                             underlineColorAndroid = 'transparent'
                             value = {this.state.confirmpassword}
                             onChangeText = {(text) => this.setUserConfirmPassword(text)}
@@ -240,31 +346,65 @@ class RegisterTouristScreen extends React.Component {
                             ref={this.getNextInput6.bind(this)}
                             placeholder="Phone Number" 
                             style={styles.inputText}
+                            keyboardType = 'numeric'
                             underlineColorAndroid = 'transparent'
                             value = {this.state.phone}
                             onChangeText = {(text) => this.setUserPhone(text)}
                         />
                         <View style={styles.line}></View>
                     </View>
-                    <View>
-                        <TextInput
-                            placeholder="Intests" 
-                            style={styles.inputText}
-                            editable={false}
-                            underlineColorAndroid = 'transparent'
-                            value = {this.state.intests}
-                            onFocus={this.onIntestExtention}  style={styles.interest_text}
-                            onChangeText = {(text) => this.setUserIntests(text)}
-                        />
-                        <View style={styles.line}></View>
+                    <View style = {{flex: 1}}>
+                        <TouchableOpacity style = {styles.intestsView} onPress = {() => this.onClickExtendInterests()}>
+                            <Text style = {styles.label}>Interests</Text>
+                            <Image source = {this.state.isInterestExtend?require('../assets/images/caret-arrow-up.png') : require('../assets/images/caret-arrow-down.png')} style = {styles.arrowIcon}/>
+                        </TouchableOpacity>
+                        {
+                            this.state.isInterestExtend?
+                                <View style = {styles.interest_list_view}>
+                                    <TouchableOpacity onPress = {() => this.onAttractions()} style = {styles.interres_list_button}>
+                                        <Text style = {this.state.isAttractions? styles.interest_item_txt1: styles.interest_item_txt}>Attractions</Text>
+                                        { this.state.isAttractions?
+                                            <Image source = {require('../assets/images/checked_gray.png')} style = {{width: 15, height:15}}/>: null
+                                        }                                        
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress = {() => this.onBoarding()} style = {styles.interres_list_button}>
+                                        <Text style = {this.state.isBoarading? styles.interest_item_txt1: styles.interest_item_txt}>Boarding</Text>
+                                        { this.state.isBoarading?
+                                            <Image source = {require('../assets/images/checked_gray.png')} style = {{width: 15, height:15}}/>: null
+                                        } 
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress = {() => this.onHiking()} style = {styles.interres_list_button}>
+                                        <Text style = {this.state.isHiking? styles.interest_item_txt1: styles.interest_item_txt}>Hiking</Text>
+                                        { this.state.isHiking?
+                                            <Image source = {require('../assets/images/checked_gray.png')} style = {{width: 15, height:15}}/>: null
+                                        } 
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress = {() => this.onTraveling()} style = {styles.interres_list_button}>
+                                        <Text style = {this.state.isTraveling? styles.interest_item_txt1: styles.interest_item_txt}>Traveling</Text>
+                                        { this.state.isTraveling?
+                                            <Image source = {require('../assets/images/checked_gray.png')} style = {{width: 15, height:15}}/>: null
+                                        } 
+                                    </TouchableOpacity>
+                                </View> : null
+                        }
                     </View>
-                
+                    <View style={styles.line}></View>
+                    
                     <ApplyButton name={'Sign Up'} onPress={() => this.onSignup()} style={styles.button_login}/>
-                    <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}} title="SING IN">
-                       <Text style={styles.button_signin} >SIGN IN</Text>
-                    </TouchableOpacity>
+                    <View style = {{flexDirection: 'row', marginTop: 30, marginBottom:20,}}>
+                        <Text style = {styles.label1}>Already have an account</Text>
+                        <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}} title="SING IN">
+                            <Text style={styles.button_signin} >Sign In</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style = {styles.line1}></View>
+                    <View style = {styles.termsView}>
+                        <Text style = {{color: 'gray', fontSize: 13}}>By clicking "<Text style = {{color: Colors.main}}>Sign Up</Text>" I agree</Text>
+                        <Text style = {{fontSize: 13, marginTop: 4}}>Terms of Service</Text>
+                    </View>
                 </View>
             </KeyboardAwareScrollView>
+            {this.showLoading()}
         </View>
       );
    }
@@ -288,7 +428,6 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         justifyContent:'flex-end',
         marginLeft:30,
-    //   marginBottom:30,
     },
     txt_welcome: {   
         marginTop:5,
@@ -316,7 +455,8 @@ const styles = StyleSheet.create({
         width: width-60, 
         marginTop: 20,
         height: 40,
-        borderColor: 'gray'
+        borderColor: 'gray',
+        fontSize: 15,
     },
     interest_text: {
         width: width-60, 
@@ -347,11 +487,10 @@ const styles = StyleSheet.create({
         marginTop: 25,
     },
     button_signin:{
-        marginTop:30,
-        marginBottom:20,
+        marginLeft: 5,
         color: '#000',
         textAlign:'center',
-        fontSize:18,
+        fontSize:17,
         textDecorationLine: "underline",
         textDecorationStyle: "solid",
         textDecorationColor: "#000"
@@ -359,8 +498,69 @@ const styles = StyleSheet.create({
     line: {
         height: 1,
         width: width-60,
-        backgroundColor: 'gray',
+        backgroundColor: Colors.lineColor,
     },
+    line1: {
+        height: 1,
+        width: width,
+        backgroundColor: Colors.lineColor,
+        marginTop: 15,
+ 
+    },
+    arrowIcon: {
+        width: 15,
+        height: 15,
+        resizeMode: 'contain',
+    },
+    label: {
+        color: 'black',
+        fontSize: 15
+    },
+    label1: {
+        color: 'darkgray',
+        fontSize: 17
+    },
+    intestsView: {
+        flexDirection: 'row', 
+        flex: 1, 
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: width-60, 
+        height: 40,
+        marginTop: 20,
+        marginBottom: 10
+    },
+    interest_list_view: {
+        width: width - 60,
+    },
+    interest_item_txt: {
+        height: 37,
+        paddingLeft: 7,
+        color: Colors.interest_color,
+        fontSize: 15,
+    },
+    interest_item_txt1: {
+        height: 37,
+        paddingLeft: 7,
+        color: 'black',
+        fontSize: 15,
+    },
+    interres_list_button: {
+        flexDirection:'row',
+        flex: 1,
+        justifyContent: 'space-between',
+    },
+    termsView: {
+        marginTop: 15,
+        marginBottom: 20,
+        alignItems: 'center'
+    },
+    loadingView: {
+        flex: 1,
+        position: 'absolute',
+        top: height/2,
+        left: width/2-20
+    }
 });
 
 export default RegisterTouristScreen;

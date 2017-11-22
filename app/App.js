@@ -89,7 +89,7 @@ const MainTapNavigator = TabNavigator({
     Chat: { screen: ChatStackNavigator, },
     Marketplace: { screen: MarketplaceScreen, },
     MoreNav:{screen: MoreStackNavigator,},
-}, {
+  }, {
     navigationOptions:{
       header:null,
     },
