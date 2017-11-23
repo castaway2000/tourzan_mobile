@@ -51,6 +51,9 @@ class LoginTouristScreen extends React.Component {
   }
 
   onLogin(){
+    this.setState({
+        isLoading: true
+    })
     var { dispatch } = this.props;
     var params = {
         username: this.state.username,

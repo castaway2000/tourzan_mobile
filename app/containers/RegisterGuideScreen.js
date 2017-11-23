@@ -118,15 +118,11 @@ class RegisterGuideScreen extends React.Component {
                   alert(data.error)
 
               }
-              
           })
           .catch(err => {
               alert(err)
           })
       }
-      
-
-    
     
   }
 
