@@ -136,7 +136,7 @@ class MapsScreen extends React.Component {
                             <View style={styles.setting_time_view}>
                                 <View style={styles.setting_time_top_view}>
                                     <Image resizeMode='contain' source={require("../assets/images/time_icon.png")} style={styles.icon_image}/>
-                                    <Text  style={styles.row_text}>{this. st0ate.hour} : {this.state.minute} {this.state.trueSwitchIsOn? 'AM': 'PM'}</Text>
+                                    <Text  style={styles.row_text}>{this. state.hour} : {this.state.minute} {this.state.trueSwitchIsOn? 'AM': 'PM'}</Text>
                                 </View>
                                 <View style={styles.setting_time_main_view}>
                                     <View style={styles.setting_time_lb_view}>
