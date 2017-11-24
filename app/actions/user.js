@@ -9,7 +9,7 @@ function emailLogin(params){
         fetch(API.SERVER + 'v1/api-token-auth/' , {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+                'Content-Type': 'multipart/form-data'
             },
             body: formData
         })
@@ -36,7 +36,7 @@ function emailSignup(params){
         fetch(API.SERVER + 'v1/signup_user/' , {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'multipart/form-data'
             },
             body: formData
         })

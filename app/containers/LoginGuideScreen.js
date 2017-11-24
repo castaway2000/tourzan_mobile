@@ -13,6 +13,7 @@ import {
   View,
   Alert,
   TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -44,6 +45,7 @@ class LoginGuideScreen extends React.Component {
         checked: false,
         username: '',
         password: '',
+        isLoading: false
     };
     this.navigate = this.props.navigation;
   }

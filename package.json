@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@expo/react-native-read-more-text": "^1.1.0",
+    "moment": "^2.19.2",
     "react": "16.0.0-alpha.6",
     "react-native": "0.44.0",
     "react-native-actionsheet": "^2.2.2",
@@ -23,6 +24,7 @@
     "react-native-loading-spinner-overlay": "^0.5.2",
     "react-native-maps": "^0.15.3",
     "react-native-modal-dropdown": "^0.4.3",
+    "react-native-parallax-scroll-view": "^0.20.1",
     "react-native-percentage-circle": "^1.0.6",
     "react-native-pulse-loader": "^1.0.2",
     "react-native-ratings": "^1.0.3",
