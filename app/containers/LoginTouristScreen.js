@@ -13,7 +13,8 @@ import {
   Alert,
   TouchableOpacity,
   KeyboardAvoidingView,
-  ActivityIndicator
+  ActivityIndicator,
+  ImageBackground
 } from 'react-native';
 
 import { NavigationActions } from 'react-navigation'
@@ -120,14 +121,14 @@ class LoginTouristScreen extends React.Component {
   render() {
       return (
         <View style = {styles.container}>
-            <Image resizeMode='cover' source={require("../assets/images/login_bg.png")} style={styles.top_container}>
+            <ImageBackground resizeMode='cover' source={require("../assets/images/login_bg.png")} style={styles.top_container}>
                   <NavigationBar title={'Tourist Login'} bgColor={'transparent'} onPress={() => {this.props.navigation.dispatch(backAction)}}/>
                   <View style={styles.view_logo}>
                         <Image resizeMode='contain' style={styles.icon_logo}  source={require("../assets/images/Tourzan_Logo.png")}/>
                         <Text style={styles.txt_welcome}>TOURZAN</Text>
                         <Text style={styles.txt_bottom}>Wine Tours La Dolce Vita</Text>
                   </View>
-            </Image>
+            </ImageBackground>
             <KeyboardAwareScrollView >
                 <View style={styles.bottom_container}>
                     <View>

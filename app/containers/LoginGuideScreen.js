@@ -13,7 +13,8 @@ import {
   View,
   Alert,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  ImageBackground
 } from 'react-native';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -43,8 +44,8 @@ class LoginGuideScreen extends React.Component {
     super(props);
     this.state = {
         checked: false,
-        username: '',
-        password: '',
+        username: 'Username105',
+        password: '123123qwe',
         isLoading: false
     };
     this.navigate = this.props.navigation;
@@ -53,7 +54,7 @@ class LoginGuideScreen extends React.Component {
   onLogin(){
     this.setState({
             isLoading: true
-        })  
+        })
     var { dispatch } = this.props;
     var params = {
         username: this.state.username,
@@ -117,14 +118,14 @@ class LoginGuideScreen extends React.Component {
   render() {
       return (
         <View style = {styles.container} >
-            <Image resizeMode='cover' source={require("../assets/images/login_bg.png")} style={styles.top_container}>
+            <ImageBackground resizeMode='cover' source={require("../assets/images/login_bg.png")} style={styles.top_container}>
                   <NavigationBar title={'Tour Guide Login'} bgColor={'transparent'} onPress={() => {this.props.navigation.dispatch(backAction)}}/>
                   <View style={styles.view_logo}>
                         <Image resizeMode='contain' style={styles.icon_logo}  source={require("../assets/images/Tourzan_Logo.png")}/>
                         <Text style={styles.txt_welcome}>TOURZAN</Text>
                         <Text style={styles.txt_bottom}>Wine Tours La Dolce Vita</Text>
                   </View>
-            </Image>
+            </ImageBackground>
             <KeyboardAwareScrollView >
                 <View style={styles.bottom_container}>
                     <View style={styles.bottom_container}>

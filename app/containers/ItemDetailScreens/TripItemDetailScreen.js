@@ -101,7 +101,7 @@ class TripItemDetailScreen extends React.Component {
                               renderForeground={() => (
                                     <View key="parallax-header" >
                                           <View style={styles.top_location_view}>
-                                                <Image resizeMode='contain' source={require("../../assets/images/location_white.icon.png")} style={styles.top_location_icon}/>
+                                                <Image resizeMode='contain' source={require("../../assets/images/location_white_icon.png")} style={styles.top_location_icon}/>
                                                 <Text style={styles.top_location_lb}>{params.tourData.name}</Text>
                                           </View>
                                     </View>

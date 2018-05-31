@@ -1,7 +1,9 @@
 import { API } from '../constants'
 
-function emailLogin(params){
+function emailLogin(params) {
+    
     var formData = new FormData();
+
     formData.append('username', params.username);
     formData.append('password', params.password);
 

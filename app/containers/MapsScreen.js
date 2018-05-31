@@ -87,7 +87,12 @@ class MapsScreen extends React.Component {
     }
 
     onSettingTime(){
-        this.setState({ isSettingTime: true })
+        if (this.state.isSettingTime) {
+            this.setState({ isSettingTime: false })
+        } else {
+            this.setState({ isSettingTime: true })
+        }
+        
     }
 
     onUnSettingTime(){
@@ -122,7 +127,7 @@ class MapsScreen extends React.Component {
                         onRegionChange={this.onRegionChange}>
                         <MapView.Marker
                             coordinate={this.state.region}
-                            centerOffset={{ x: -18, y: -60 }}
+                            centerOffset={{ x: 0, y: 0 }}
                             anchor={{ x: 0.69, y: 1 }}
                             image={flagImg}/>
                         </MapView>
@@ -134,10 +139,12 @@ class MapsScreen extends React.Component {
                         <View style={styles.devide_line}/>
                         {this.state.isSettingTime ? (
                             <View style={styles.setting_time_view}>
+                            <TouchableOpacity onPress={() => this.onSettingTime()}>
                                 <View style={styles.setting_time_top_view}>
                                     <Image resizeMode='contain' source={require("../assets/images/time_icon.png")} style={styles.icon_image}/>
                                     <Text  style={styles.row_text}>{this. state.hour} : {this.state.minute} {this.state.trueSwitchIsOn? 'AM': 'PM'}</Text>
                                 </View>
+                                </TouchableOpacity>
                                 <View style={styles.setting_time_main_view}>
                                     <View style={styles.setting_time_lb_view}>
                                         <Text  style={styles.setting_time_lb}>Set your time schedule</Text>
@@ -358,7 +365,7 @@ const styles = StyleSheet.create({
         backgroundColor:'#f9fbfe',
         flexDirection:'row',
         alignItems:'center',
-        paddingVertical:10,
+        paddingVertical:13,
         width:width-62,
         borderBottomWidth:1,
         borderColor:'#c2c3c9',

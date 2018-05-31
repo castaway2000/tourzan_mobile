@@ -14,6 +14,7 @@ import {
   ListView,
   TouchableOpacity,
   TouchableHighlight,
+  ImageBackground
 } from 'react-native';
 
 import { NavigationActions } from 'react-navigation'
@@ -138,7 +139,7 @@ class ProfileScreen extends React.Component {
         const { navigate } = this.props.navigation;
         return (
             <View style={styles.container}>  
-                <Image resizeMode='cover' source={require("../assets/images/profile_bg.png")} style={styles.top_container}>
+                <ImageBackground resizeMode='cover' source={require("../assets/images/profile_bg.png")} style={styles.top_container}>
                     <View  style={styles.navigationbar}>
                         <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}}>
                             <Image resizeMode='cover' source={require("../assets/images/back.png")} style={styles.backButton} />
@@ -148,7 +149,7 @@ class ProfileScreen extends React.Component {
                             <Image resizeMode='cover' source={require("../assets/images/profile_chat_icon.png")}  style={styles.rightView} />
                         </TouchableOpacity>
                     </View>
-                </Image>
+                </ImageBackground>
                 <ScrollView style={styles.scrollview_container}>
                     <View style={styles.content_container}>
                         <View style={styles.main_container}>

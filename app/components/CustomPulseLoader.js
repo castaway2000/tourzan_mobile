@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Image, TouchableOpacity, Animated, Easing } from 'react-native';
 import CustomPulse from '../components/CustomPulse';
-
+import PropTypes from 'prop-types';
 
 export default class CustomPulseLoader extends React.Component {
 	constructor(props) {
@@ -92,16 +92,16 @@ export default class CustomPulseLoader extends React.Component {
 }
 
 CustomPulseLoader.propTypes = {
-  interval: React.PropTypes.number,
-  size: React.PropTypes.number,
-  pulseMaxSize: React.PropTypes.number,
-  avatar: React.PropTypes.string,
-  avatarBackgroundColor: React.PropTypes.string,
-  pressInValue: React.PropTypes.number,
-  pressDuration: React.PropTypes.number,
-  borderColor: React.PropTypes.string,
-  backgroundColor: React.PropTypes.string,
-  getStyle: React.PropTypes.func,
+  interval: PropTypes.number,
+  size: PropTypes.number,
+  pulseMaxSize: PropTypes.number,
+  avatar: PropTypes.string,
+  avatarBackgroundColor: PropTypes.string,
+  pressInValue: PropTypes.number,
+  pressDuration: PropTypes.number,
+  borderColor: PropTypes.string,
+  backgroundColor: PropTypes.string,
+  getStyle: PropTypes.func,
 };
 
 CustomPulseLoader.defaultProps = {

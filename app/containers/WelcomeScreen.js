@@ -13,13 +13,14 @@ import {
   View,
   Alert,
   TouchableOpacity,
+  ImageBackground
 } from 'react-native';
 
 import ApplyButton from '../components/ApplyButton';
 import { Colors } from '../constants'
 
 var { width, height } = Dimensions.get('window');
-const onButtonPress = () => { Alert.alert('Button has been pressed!'); }; 
+//const onButtonPress = () => { Alert.alert('Button has been pressed!'); }; 
 
 class WelcomeScreen extends React.Component {
     static navigationOptions = {
@@ -30,8 +31,8 @@ class WelcomeScreen extends React.Component {
     render() {
       const { navigate } = this.props.navigation;
       return (
-          <View style={styles.container}>  
-              <Image resizeMode='cover' source={require("../assets/images/welcome_bg.png")} style={styles.bg_img}>
+          <View style={styles.container}>
+              <ImageBackground resizeMode='cover' source={require("../assets/images/welcome_bg.png")} style={styles.bg_img}>
                     <View style={styles.top_container}>
                         <Image resizeMode='cover' source={require("../assets/images/grey_logo.png")} style={styles.logo}/>
                         <Text style={styles.txt_welcome}>WELCOME!</Text>
@@ -46,12 +47,11 @@ class WelcomeScreen extends React.Component {
                             <Text style={styles.button_guide}>Tour Guide</Text>
                         </TouchableOpacity>
                     </View>
-              </Image>
+              </ImageBackground>
           </View>
       );
     }
 }
-
 
 const styles = StyleSheet.create({
     container: {

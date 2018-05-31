@@ -13,7 +13,8 @@ import {
   View,
   Alert,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  ImageBackground
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { NavigationActions } from 'react-navigation'
@@ -254,13 +255,13 @@ class RegisterGuideScreen extends React.Component {
       const { navigate } = this.props.navigation;
       return (
         <View style={styles.container}>  
-            <Image resizeMode='cover' source={require("../assets/images/login_bg.png")} style={styles.top_container}>
+            <ImageBackground resizeMode='cover' source={require("../assets/images/login_bg.png")} style={styles.top_container}>
                   <NavigationBar title={''} bgColor={'transparent'} onPress={() => {this.props.navigation.dispatch(backAction)}}/>
                   <View style={styles.view_title}>
                         <Text style={styles.txt_bottom}>Create an account to Tourist</Text>
                          <Text style={styles.txt_welcome}>REGISTER</Text>
                   </View>
-            </Image>
+            </ImageBackground>
             <KeyboardAwareScrollView style = {styles.out_container}>
                 <View style={styles.bottom_container}>
                     <View>

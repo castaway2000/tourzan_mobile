@@ -92,7 +92,7 @@ class TripsScreen extends React.Component {
                                     <Image resizeMode='contain' source={require("../../assets/images/trip_item_location_icon.png")}  style={styles.location_icon}/>
                                     <Text style={styles.name_text}>{rowData.name}</Text>
                                 </View>  
-                                <Text style={styles.description_text}>{rowData.overview}</Text>
+                                <Text numberOfLines={2} ellipsizeMode="tail" style={styles.description_text}>{rowData.overview}</Text>
                                 <View style={styles.rate_view} pointerEvents="none">
                                     <Rating ratingCount={5} imageSize={8} onFinishRating={this.ratingCompleted} ratingBackgroundColor = 'transparent'/>
                                     <Text style={styles.rating_text}>(12)</Text>

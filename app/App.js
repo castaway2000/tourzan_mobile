@@ -48,10 +48,32 @@ import BookingGuideSettingScreen from './containers/BookingScreens/BookingGuideS
 import SettingsScreen from './containers/SettingsScreen';
 import ChangePasswordScreen from './containers/ChangePasswordScreen';
 
+import FAQScreen from './containers/FAQScreen'
+import PrivacyPolicyScreen from './containers/PrivacyPolicyScreen'
+import TermsofUseScreen from './containers/TermsofUseScreen'
+
 var { width, height } = Dimensions.get('window');
 
 console.disableYellowBox = true;
 
+/**
+ * MAP TAB
+ */
+const MapChatStackNavigator = StackNavigator({
+  Maps: { screen: MapsScreen, },
+  Profile : {screen: ProfileScreen},
+  ProfileCharRoom : {screen: ChatRoomScreen},
+},{ 
+  navigationOptions:{
+    header: null
+  },
+  initialRouteName: 'Maps',
+},
+);
+
+/**
+ * CHAT TAB
+ */
 const ChatStackNavigator = StackNavigator({
     Chats: { screen: ChatScreen, },
     // ChatRoom : {screen: ChatRoomScreen},
@@ -61,18 +83,9 @@ const ChatStackNavigator = StackNavigator({
   },
 );
 
-const MapChatStackNavigator = StackNavigator({
-    Maps: { screen: MapsScreen, },
-    Profile : {screen: ProfileScreen},
-    ProfileCharRoom : {screen: ChatRoomScreen},
-},{ 
-    navigationOptions:{
-      header: null
-    },
-    initialRouteName: 'Maps',
-  },
-);
-
+/**
+ * MORE TAB
+ */
 const MoreStackNavigator = StackNavigator({
     More : {screen: MoreScreen},
     Settings : {screen : SettingsScreen},
@@ -120,6 +133,11 @@ const App = StackNavigator({
     TimeLimit: {screen: SetTimeLimitScreen},
     CurrentTimeLimit:{screen: CurrentTimeLimitScreen},
     ChatRoom : {screen: ChatRoomScreen},
+    FAQScreen : {screen: FAQScreen},
+    PrivacyPolicyScreen : {screen: PrivacyPolicyScreen},
+    TermsofUseScreen : {screen: TermsofUseScreen},
+    
+    
 },{ 
     headerMode: 'screen' 
   },
