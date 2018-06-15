@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     marginTop: -200/2
  },
  bottom_view:{  
-     flex:0.05,
+     flex:0.08,
      flexDirection:'column',
      alignItems:'center',
  },

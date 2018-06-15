@@ -177,16 +177,15 @@ const styles = StyleSheet.create({
         marginTop: 5
     },
     personImg: {
-        marginRight:20, 
         height:35, 
         width:35,
         position: 'absolute',
-        right: 25
+        right: 20
     },
     tab_listView: {
         width: width,
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
     }
 });
 

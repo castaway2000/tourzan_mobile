@@ -8,7 +8,7 @@ import {
 	PanResponder,
 	TouchableWithoutFeedback
 } from 'react-native';
-
+import {ViewPropTypes} from 'react-native'
 export default class Switch extends Component {
 	static propTypes = {
 		onValueChange: PropTypes.func,
@@ -23,7 +23,7 @@ export default class Switch extends Component {
 		circleSize: PropTypes.number,
 		activeTextStyle: Text.propTypes.style,
 		inactiveTextStyle: Text.propTypes.style,
-		containerStyle: View.propTypes.style,
+		containerStyle: ViewPropTypes.style,
 	};
 
 	static defaultProps = {

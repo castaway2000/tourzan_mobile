@@ -73,6 +73,9 @@ class TripsScreen extends React.Component {
      pressRow(rowData){
         //  var { dispatch } = this.props;
         //  dispatch(NavigationActions.navigate({routeName: 'TripItemDetail'}))
+
+        console.log("rowData",rowData)
+        
          this.props.navigation.navigate('TripItemDetail', {tourData: rowData});
     }
 

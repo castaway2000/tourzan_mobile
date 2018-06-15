@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
       color:'#000',
   },
   row_view:{
-      marginTop: 10,
+      marginTop: 0,
       paddingTop:20,
       paddingBottom:20,
       backgroundColor:'white',
@@ -145,8 +145,8 @@ const styles = StyleSheet.create({
   amount_view:{
       padding:10,
       alignItems:'center',
-      borderRightWidth:1,
-      borderColor: "#ddd",
+      borderRightWidth:0.5,
+      borderColor: "white",
   },
   amount_text:{
       fontSize: 15,

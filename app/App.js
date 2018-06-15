@@ -52,6 +52,9 @@ import FAQScreen from './containers/FAQScreen'
 import PrivacyPolicyScreen from './containers/PrivacyPolicyScreen'
 import TermsofUseScreen from './containers/TermsofUseScreen'
 
+import OfferScreen from './containers/OfferScreen'
+
+
 var { width, height } = Dimensions.get('window');
 
 console.disableYellowBox = true;
@@ -108,6 +111,8 @@ const MainTapNavigator = TabNavigator({
     },
     tabBarPosition:'bottom',
     lazy: false,
+    //swipeEnabled:true,
+    //animationEnabled:true,
     tabBarOptions: {
       activeTintColor: '#31dd73',
       inactiveTintColor:'#999',
@@ -136,8 +141,7 @@ const App = StackNavigator({
     FAQScreen : {screen: FAQScreen},
     PrivacyPolicyScreen : {screen: PrivacyPolicyScreen},
     TermsofUseScreen : {screen: TermsofUseScreen},
-    
-    
+    Offer : {screen: OfferScreen},
 },{ 
     headerMode: 'screen' 
   },

@@ -144,7 +144,11 @@ dependencies {
     compile "com.android.support:appcompat-v7:24.0.0"
 
     compile "com.facebook.react:react-native:+"  // From node_modules
-    
+
+    compile "com.google.android.gms:play-services-base:11+"
+    compile 'com.google.android.gms:play-services-location:11+'
+    compile 'com.google.android.gms:play-services-maps:11+'
+
     // compile(project(':react-native-maps')){
     //     exclude group: 'com.google.android.gms', module: 'play-services-base'
     //     exclude group: 'com.google.android.gms', module: 'play-services-maps'
