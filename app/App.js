@@ -37,6 +37,7 @@ import TransactionsScreen from './containers/DashboardTabs/TransactionsScreen';
 import TripItemDetailScreen from './containers/ItemDetailScreens/TripItemDetailScreen';
 import GuideItemDetailScreen from './containers/ItemDetailScreens/GuideItemDetailScreen';
 import TransactionItemDetailScreen from './containers/ItemDetailScreens/TransactionItemDetailScreen';
+
 import ChatRoomScreen from './containers/ChatRoomScreen';
 import ProfileScreen from './containers/ProfileScreen';
 import PaymentMethodScreen from './containers/PaymentMethodScreen';

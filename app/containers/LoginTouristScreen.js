@@ -24,6 +24,7 @@ import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
 import {emailLogin} from '../actions/'
+import { currentuser } from '../global/CurrentUser';
 
 var { width, height } = Dimensions.get('window');
 
@@ -33,6 +34,9 @@ const backAction = NavigationActions.back({
 });
 
 let nextInput;
+
+var Fabric = require('react-native-fabric');
+var { Crashlytics } = Fabric;
 
 class LoginTouristScreen extends React.Component {
   static navigationOptions = {
@@ -44,14 +48,20 @@ class LoginTouristScreen extends React.Component {
     super(props);
     this.state = { 
         checked: false,
-        username: 'tejas.g@3rddigital.com', //Username105 - 123123qwe tejas.g@3rddigital.com Cred@123098
-        password: 'Cred@123098', 
+        username: 'test010', //Username105 - 123123qwe tejas.g@3rddigital.com Cred@123098
+        password: 'Test@123', 
         isLoading: false
     };
     this.navigate = this.props.navigation;
   }
 
   onLogin(){
+    // console.log("lOGIN TAPPED");
+
+    // Crashlytics.logException("TEST Exception");
+
+    // return
+    
     this.setState({
         isLoading: true
     })
@@ -63,12 +73,21 @@ class LoginTouristScreen extends React.Component {
     
     emailLogin(params)
     .then(data => {
+
         this.setState({
             isLoading: false
         })
+
         console.log('Login email-->', data)
-        if(data.token != undefined){
+
+        if(data.token != undefined) {
+            
             console.log('success')
+
+            //save profile data
+            currentuser.token = data.token
+            currentuser.user = data.user
+
             const resetAction = NavigationActions.reset({
                 index: 0,
                 actions: [

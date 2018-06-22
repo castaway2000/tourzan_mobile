@@ -1,6 +1,6 @@
 import { API } from '../constants'
 
-function getGuideList(){
+function getGuideList() {
     return new Promise((resolve, reject) => {
         fetch(API.SERVER + 'v1/guides/' , {
             method: 'GET',
@@ -18,7 +18,6 @@ function getGuideList(){
         });
     })
 }
-
 
 module.exports = {
     getGuideList,

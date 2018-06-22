@@ -29,6 +29,8 @@ import * as Actions from '../actions/map'
 import flagImg from '../assets/images/flag-blue_small.png';
 import moment from 'moment';
 
+import { currentuser } from '../global/CurrentUser';
+
 //import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
 
 // var Switch = require('react-native-material-switch');
@@ -80,6 +82,9 @@ class MapsScreen extends React.Component {
     //#endregion
 
     componentWillMount() {
+
+        console.log('MapsScreen->componentWillMount->',currentuser.token)
+
 /*
         this.toggleTracking()
 

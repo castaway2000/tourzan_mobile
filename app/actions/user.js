@@ -27,7 +27,9 @@ function emailLogin(params) {
 }
 
 function emailSignup(params){
+    
     console.log(params)
+
     var formData = new FormData();
     formData.append('username', params.username)
     formData.append('email', params.email)
@@ -49,6 +51,33 @@ function emailSignup(params){
         })
         .catch(err => {
             console.log('Email Signup API Error->', err);
+        });
+    })
+}
+
+function profile(params){
+    console.log(params)
+    var formData = new FormData();
+    formData.append('username', params.username)
+    formData.append('email', params.email)
+    formData.append('password1', params.password)
+    formData.append('password2', params.confirm)
+
+    return new Promise((resolve, reject) => {
+        fetch(API.SERVER + 'v1/user_profile/' , {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+            body: formData
+        })
+        .then((res) => res.json())
+        .then(data => {
+            console.log('Profile API Success->', data);
+            resolve(data);
+        })
+        .catch(err => {
+            console.log('Profile API Error->', err);
         });
     })
 }

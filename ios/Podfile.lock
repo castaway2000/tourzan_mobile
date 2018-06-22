@@ -1,6 +1,9 @@
 PODS:
   - boost-for-react-native (1.63.0)
+  - Crashlytics (3.10.1):
+    - Fabric (~> 1.7.5)
   - DoubleConversion (1.1.5)
+  - Fabric (1.7.6)
   - Folly (2016.09.26.00):
     - boost-for-react-native
     - DoubleConversion
@@ -86,7 +89,9 @@ PODS:
   - yoga (0.55.4.React)
 
 DEPENDENCIES:
+  - Crashlytics
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
+  - Fabric
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - Google-Maps-iOS-Utils
@@ -113,6 +118,8 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - boost-for-react-native
+    - Crashlytics
+    - Fabric
     - Google-Maps-iOS-Utils
     - GoogleMaps
 
@@ -138,7 +145,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+  Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
   DoubleConversion: e22e0762848812a87afd67ffda3998d9ef29170c
+  Fabric: f8d42c893bb187326a7968b62abe55c36a987a46
   Folly: 211775e49d8da0ca658aebc8eab89d642935755c
   glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
   Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
@@ -150,6 +159,6 @@ SPEC CHECKSUMS:
   RNVectorIcons: c0dbfbf6068fefa240c37b0f71bd03b45dddac44
   yoga: a23273df0088bf7f2bb7e5d7b00044ea57a2a54a
 
-PODFILE CHECKSUM: 6002f92004fef8a5571c17e92a542ffba2f77cb9
+PODFILE CHECKSUM: 79143713d829344a716993faef6c8fe3ffc86f60
 
 COCOAPODS: 1.5.2

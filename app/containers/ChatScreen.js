@@ -23,9 +23,12 @@ import { NavigationActions } from 'react-navigation'
 import IconBadge from 'react-native-icon-badge';
 import { Colors } from '../constants'
 import NavigationBar from '../components/NavigationBar'
+import {getChatList} from '../actions/'
 
 var SearchBar = require('react-native-search-bar');
 var { width, height } = Dimensions.get('window');
+
+import moment from 'moment'
 
 class ChatScreen extends React.Component {
     static navigationOptions = {
@@ -47,15 +50,14 @@ class ChatScreen extends React.Component {
         });
         this.state = {
             // for listview
-            ds:[{name: "Luella Palmer", last_message:"Agreed!"},{name: "Samuel Wells", last_message:"Hmmm..., really?"},{name: "Eric Ramsey", last_message:"yeah, but..."}
-                    ,{name: "Vera Hudson", last_message:"Just wanted to tell you!"},{name: "Jordan Holmes", last_message:"Damn! That's awesome man!"},{name: "Carolyn Howard", last_message:"Oh, allright."}
-                    ,,{name: "Verar Hudson", last_message:"Just wanted to tell you!"},{name: "Jordfan Holmes", last_message:"Damn! That's awesome man!"},{name: "Catrolyn Howard", last_message:"Oh, allright."}],
+            ds:[],
             dataSource:ds,
 
             // for ratingview
             starCount: 3.5,
         }
     }
+    
 
     // function for ratingview
     ratingCompleted(rating) {
@@ -63,11 +65,35 @@ class ChatScreen extends React.Component {
     }
 
     // functions for listview
-    componentDidMount(){
+    componentDidMount() {
+
             this.setState({
                 dataSource:this.state.dataSource.cloneWithRows(this.state.ds),
             })
+
+            this.loadChatList()
+
      }
+
+     loadChatList = () => {
+
+        getChatList()
+        .then(data => {
+            this.setState({
+                isLoading: false
+            })
+            console.log('getChatList data-->', data)
+
+            this.setState({
+                dataSource: this.state.dataSource.cloneWithRows(data)
+              })
+
+        })
+        .catch(err => {
+            alert(err)
+        })
+      }
+     
 
      setSearchText(event){
         let searchText = event.nativeEvent.text;
@@ -92,58 +118,77 @@ class ChatScreen extends React.Component {
         return filteredData;
       }
 
-     pressRow(rowData){
+     pressRow(rowData) {
             const { navigate } = this.props.navigation;
+
+            /*
             var newDs = [];
             newDs = this.state.ds.slice();
             this.setState({
                 dataSource: this.state.dataSource.cloneWithRows(newDs)
-            });
-            navigate('ChatRoom')
+            });*/
+
+            navigate('ChatRoom',{chatData: rowData})
     }
 
-     renderRow(rowData){
-            return (
+    getChatDate = (date) => {
+
+        let chatdate = moment(date)
+
+        var isPast = moment(chatdate);
+
+        if (moment(chatdate).isSame(moment(), 'day')) {
+            return chatdate.format('hh:mm A')
+        } else {
+            return chatdate.format('DD MMM YYYY')
+        }
+    }
+
+    renderRow(rowData) {
+        return (
 
             <TouchableHighlight style={styles.row_view}
-                onPress={()=> this.pressRow(rowData)}
-                underlayColor = '#ddd'>
-                    <View style ={styles.row}>
-                        <View style={styles.avatar_view}>
-                            <Image resizeMode='cover' source={require("../assets/images/chat_avatar.png")}  style={styles.avatar_img}/>
-                        </View>
-                        <View style={styles.info_view}>
-                            <Text style={styles.name_text}>{rowData.name}</Text>
-                            <Text style={styles.description_text}>{rowData.last_message}</Text>
-                        </View>
-                        <View style={styles.row_right_view}>
-                            <Text style={styles.right_text}>08:23 AM</Text>
-                            <View style={{marginTop:5}}>
-                                <IconBadge
-                                  MainElement={
-                                    <View style={{backgroundColor:'#fff',
-                                      width:0,
-                                      height:0,
-                                      margin:0
-                                    }}/>
-                                  }
-                                  BadgeElement={
-                                    <Text style={{color:'#fff'}}>{3}</Text>
-                                  }
-                                  IconBadgeStyle={
-                                    { position:'relative',
-                                      width:20,
-                                      height:20,
-                                      backgroundColor: '#31dd73'}
-                                  }
-                                  Hidden={this.state.BadgeCount==0}
-                                  />
-                            </View>
+                onPress={() => this.pressRow(rowData)}
+                underlayColor='#ddd'>
+                <View style={styles.row}>
+                    <View style={styles.avatar_view}>
+                        <Image resizeMode='cover' source={require("../assets/images/chat_avatar.png")} style={styles.avatar_img} />
+                    </View>
+                    <View style={styles.info_view}>
+                        <Text style={styles.name_text}>{rowData.topic}</Text>
+                        <Text style={styles.description_text}>{rowData.messages[0].message}</Text>
+                    </View>
+                    <View style={styles.row_right_view}>
+                        <Text style={styles.right_text}>{this.getChatDate(rowData.messages[0].created)}</Text>
+                        <View style={{ marginTop: 5 }}>
+                            <IconBadge
+                                MainElement={
+                                    <View style={{
+                                        backgroundColor: '#fff',
+                                        width: 0,
+                                        height: 0,
+                                        margin: 0
+                                    }} />
+                                }
+                                BadgeElement={
+                                    <Text style={{ color: '#fff' }}>{3}</Text>
+                                }
+                                IconBadgeStyle={
+                                    {
+                                        position: 'relative',
+                                        width: 20,
+                                        height: 20,
+                                        backgroundColor: '#31dd73'
+                                    }
+                                }
+                                Hidden={this.state.BadgeCount == 0}
+                            />
                         </View>
                     </View>
+                </View>
             </TouchableHighlight>
-         )
-     }
+        )
+    }
 
      render() {
         
@@ -173,6 +218,7 @@ class ChatScreen extends React.Component {
                     </View>
                     <ListView
                         dataSource={this.state.dataSource}
+                        removeClippedSubviews = {false}
                         renderRow={this.renderRow.bind(this)}
                         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator}/>}
                         //renderHeader={() => <SearchListHeader />}

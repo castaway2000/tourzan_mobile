@@ -24,6 +24,7 @@ import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
 import {emailLogin} from '../actions/'
+import { currentuser } from '../global/CurrentUser';
 
 var { width, height } = Dimensions.get('window');
 
@@ -44,14 +45,14 @@ class LoginGuideScreen extends React.Component {
     super(props);
     this.state = {
         checked: false,
-        username: 'tejas.g@3rddigital.com', //Username105 - 123123qwe  tejas.g@3rddigital.com - Cred@123098
-        password: 'Cred@123098', //
+        username: 'test010', //Username105 - 123123qwe  tejas.g@3rddigital.com - Cred@123098
+        password: 'Test@123', //
         isLoading: false
     };
     this.navigate = this.props.navigation;
   }
 
-  onLogin(){
+  onLogin() {
     this.setState({
             isLoading: true
         })
@@ -76,11 +77,9 @@ class LoginGuideScreen extends React.Component {
                 ]
             });
             this.navigate.dispatch(resetAction)
-        }
-        else{
+        } else {
             alert('Unable to log in with provided credentials.')
         }
-        
     })
     .catch(err => {
         alert(err)
@@ -109,11 +108,9 @@ class LoginGuideScreen extends React.Component {
         if (this.state.isLoading) {
             return (
                 <ActivityIndicator color={'black'} size={'large'} style = {styles.loadingView}/>
-
             );
         }
     }
-
 
   render() {
       return (
