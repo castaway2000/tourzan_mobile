@@ -21,6 +21,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		350AF1BC20DB86C000A6D40B /* libSMXCrashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 350AF1B920DB6DAB00A6D40B /* libSMXCrashlytics.a */; };
+		350C1DAE20E3CE87008E1D53 /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 350C1DAD20E3CE79008E1D53 /* libSplashScreen.a */; };
 		358B8D3D20CE971E004B3C1D /* libRCTBackgroundGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 358B8D1A20CE9709004B3C1D /* libRCTBackgroundGeolocation.a */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
@@ -187,6 +188,13 @@
 			remoteGlobalIDString = 6463C84C1EBA12A60095B8CD;
 			remoteInfo = "SMXCrashlytics-tvOS";
 		};
+		350C1DAC20E3CE79008E1D53 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 350C1D8020E3CE78008E1D53 /* SplashScreen.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D7682761D8E76B80014119E;
+			remoteInfo = SplashScreen;
+		};
 		358B8D1920CE9709004B3C1D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 358B8D1120CE9709004B3C1D /* RCTBackgroundGeolocation.xcodeproj */;
@@ -343,6 +351,7 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		350AF1B320DB6DAB00A6D40B /* SMXCrashlytics.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SMXCrashlytics.xcodeproj; path = "../node_modules/react-native-fabric/ios/SMXCrashlytics.xcodeproj"; sourceTree = "<group>"; };
+		350C1D8020E3CE78008E1D53 /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SplashScreen.xcodeproj; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; };
 		358B8D1120CE9709004B3C1D /* RCTBackgroundGeolocation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBackgroundGeolocation.xcodeproj; path = "../node_modules/react-native-mauron85-background-geolocation/ios/RCTBackgroundGeolocation.xcodeproj"; sourceTree = "<group>"; };
 		5772DC9FB37A500DF63E1921 /* libPods-Tourzan.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tourzan.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
@@ -369,6 +378,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				350C1DAE20E3CE87008E1D53 /* libSplashScreen.a in Frameworks */,
 				350AF1BC20DB86C000A6D40B /* libSMXCrashlytics.a in Frameworks */,
 				358B8D3D20CE971E004B3C1D /* libRCTBackgroundGeolocation.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
@@ -526,6 +536,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		350C1D8120E3CE78008E1D53 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				350C1DAD20E3CE79008E1D53 /* libSplashScreen.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		358B8D1220CE9709004B3C1D /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -555,6 +573,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				350C1D8020E3CE78008E1D53 /* SplashScreen.xcodeproj */,
 				350AF1B320DB6DAB00A6D40B /* SMXCrashlytics.xcodeproj */,
 				358B8D1120CE9709004B3C1D /* RCTBackgroundGeolocation.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
@@ -754,6 +773,10 @@
 					ProductGroup = 350AF1B420DB6DAB00A6D40B /* Products */;
 					ProjectRef = 350AF1B320DB6DAB00A6D40B /* SMXCrashlytics.xcodeproj */;
 				},
+				{
+					ProductGroup = 350C1D8120E3CE78008E1D53 /* Products */;
+					ProjectRef = 350C1D8020E3CE78008E1D53 /* SplashScreen.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -908,6 +931,13 @@
 			fileType = archive.ar;
 			path = libSMXCrashlytics.a;
 			remoteRef = 350AF1BA20DB6DAB00A6D40B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		350C1DAD20E3CE79008E1D53 /* libSplashScreen.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSplashScreen.a;
+			remoteRef = 350C1DAC20E3CE79008E1D53 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		358B8D1A20CE9709004B3C1D /* libRCTBackgroundGeolocation.a */ = {
@@ -1195,7 +1225,10 @@
 				GCC_INPUT_FILETYPE = automatic;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)..\node_modules\neact-native-mapslibios/**",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-mapslibios/**",
+					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 				);
 				INFOPLIST_FILE = Tourzan/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1225,7 +1258,10 @@
 				GCC_INPUT_FILETYPE = automatic;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)..\node_modules\neact-native-mapslibios/**",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-mapslibios/**",
+					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 				);
 				INFOPLIST_FILE = Tourzan/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

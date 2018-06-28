@@ -10,6 +10,7 @@
 #import <React/RCTRootView.h>
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
+#import "SplashScreen.h"  // here
 
 //Add the following lines
 #import <asl.h>
@@ -45,6 +46,7 @@
   
   [self.window makeKeyAndVisible];
   
+   [SplashScreen show];  // here
   
   return YES;
 }

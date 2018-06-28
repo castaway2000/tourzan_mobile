@@ -22,6 +22,9 @@ import { NavigationActions } from 'react-navigation'
 import { Colors } from '../constants'
 import NavigationBar from '../components/NavigationBar'
 
+import { currentuser, isGuide, userid, profilePictureUrl} from '../global/CurrentUser';
+import { Storage } from '../global/Utilities';
+
 var SearchBar = require('react-native-search-bar');
 var { width, height } = Dimensions.get('window');
 
@@ -126,6 +129,7 @@ class MarketplaceScreen extends React.Component {
      }
 
      render() {
+        let {navigate} = this.props.navigation
         
         return (
             <View style={styles.container}>  
@@ -134,8 +138,8 @@ class MarketplaceScreen extends React.Component {
                     <View style={styles.backButton}>
                     </View>
                     <Text style={styles.centerText}>Marketplace</Text>
-                    <TouchableOpacity>
-                        <Image resizeMode='cover' source={require("../assets/images/person1.png")}  style={styles.rightView} />
+                    <TouchableOpacity onPress = { () => {navigate('Profile')}}>
+                        <Image resizeMode='cover' source={{uri:profilePictureUrl()}}  style={styles.rightView} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.list_view_container}>
@@ -156,6 +160,7 @@ class MarketplaceScreen extends React.Component {
                         dataSource={this.state.dataSource}
                         renderRow={this.renderRow.bind(this)}
                         showsVerticalScrollIndicator = {false}
+                        removeClippedSubviews = {false}
                     />
                 </View>
             </View> 
@@ -205,8 +210,9 @@ const styles = StyleSheet.create({
     },
     rightView:{
         marginRight:20,
-        height:35,
-        width:35
+        height:36,
+        width:36,
+        borderRadius:18
     },
     list_view_container : {
         marginTop:1,

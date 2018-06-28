@@ -20,11 +20,15 @@ import { NavigationActions } from 'react-navigation'
 import { GiftedChat } from 'react-native-gifted-chat';
 import { Colors } from '../constants'
 
+import { currentuser, isGuide, userid, profilePictureUrl } from '../global/CurrentUser';
+import { Storage } from '../global/Utilities';
+
 var { width, height } = Dimensions.get('window');
 
 const backAction = NavigationActions.back({
 
 });
+
 
 class ChatRoomScreen extends React.Component {
     static navigationOptions = {
@@ -39,12 +43,12 @@ class ChatRoomScreen extends React.Component {
     // gifted chat 
     componentWillMount() {
 
-        var {params} = this.props.navigation.state
+        var { params } = this.props.navigation.state
 
         for (let index = 0; index < params.chatData.messages.length; index++) {
 
             const element = params.chatData.messages[index];
-            
+
             let data = {
                 _id: element.id,
                 text: element.message,
@@ -70,7 +74,7 @@ class ChatRoomScreen extends React.Component {
                         name: 'React Native',
                         avatar: 'https://news-cdn.softpedia.com/images/news2/microsoft-releases-windows-10-cumulative-updates-kb4284822-kb4284830-kb4284833-1.jpg',
                     },
-                    }),
+                }),
             }));
         }, 5000);
 
@@ -79,16 +83,51 @@ class ChatRoomScreen extends React.Component {
         });
     }
 
+    componentDidMount() {
+
+    }
+
     onSend(messages = []) {
+
+        console.log('sending...');
         this.setState((previousState) => ({
             messages: GiftedChat.append(previousState.messages, messages),
         }));
+
+        //this.socket.send(JSON.stringify({ "chat_uuid": "81b55636-c495-4270-ad91-21a7ec7e7c73", "message": "From vs code!!!!" }))
+
+        this.socket.send(JSON.stringify({
+            'chat_uuid': '81b55636-c495-4270-ad91-21a7ec7e7c73',
+            'message': 'From vs code!!!!'
+        }));
+
+
     }
 
     constructor(props) {
         super(props);
         this.state = { messages: [] };
         // this.onSend = this.onSend.bind(this);
+
+        this.socket = new WebSocket('ws://34.212.65.102/ws/chat/81b55636-c495-4270-ad91-21a7ec7e7c73/');
+
+        this.socket.onopen = () => {
+            console.log('Socket connected...!');
+        };
+
+        this.socket.onmessage = (e) => {
+            console.log('A message was received',e.data);
+        };
+
+        this.socket.onerror = (e) => {
+            // an error occurred
+            console.log('An error occurred', e.message);
+        };
+
+        this.socket.onclose = (e) => {
+            // 
+            console.log('connection closed', e.code, e.reason);
+        };
     }
 
     render() {
@@ -101,7 +140,7 @@ class ChatRoomScreen extends React.Component {
                         <Image resizeMode='cover' source={require("../assets/images/back.png")} style={styles.backButton} />
                     </TouchableOpacity>
                     <Text style={styles.centerText}>Luella Palmer</Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => { navigate('Profile', { userid: this.getOpponmentUserID() }) }}>
                         <Image resizeMode='cover' source={require("../assets/images/chat_avatar.png")} style={styles.rightView} />
                     </TouchableOpacity>
                 </View>
@@ -117,6 +156,23 @@ class ChatRoomScreen extends React.Component {
             </View>
         );
     }
+
+    //#region 
+
+    getOpponmentUserID = () => {
+
+        var { params } = this.props.navigation.state
+
+        var isguide = isGuide()
+
+        if (isguide) {
+            return params.chatData.tourist
+        } else {
+            return params.chatData.guide
+        }
+    }
+
+    //#endregion
 }
 
 const styles = StyleSheet.create({

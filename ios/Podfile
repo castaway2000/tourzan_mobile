@@ -39,6 +39,8 @@ target ’Tourzan’ do
   pod 'Google-Maps-iOS-Utils' # Remove this line if you don't want to support GoogleMaps on iOS
   
   # Add new pods below this line
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   pod 'ReactNativeSearchBar', :path => '../node_modules/react-native-search-bar'

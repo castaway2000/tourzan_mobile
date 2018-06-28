@@ -14,6 +14,8 @@ import {
     Alert,
     TouchableOpacity,
     Platform,
+    WebView,
+    ActivityIndicator
 } from 'react-native';
 
 import { NavigationActions } from 'react-navigation'
@@ -38,22 +40,49 @@ class TermsofUseScreen extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = { visible: true };
         this.navigate = this.props.navigation;
+    }
+
+    hideSpinner() {
+        this.setState({ visible: false });
+    }
+
+    showLoading() {
+        if (this.state.visible) {
+            return (
+                <ActivityIndicator color={'black'} size={'large'} style={styles.loadingView} />
+
+            );
+        }
     }
 
     render() {
         return (
             <View style={styles.container}>
+
                 <View style={styles.statusbar} />
+
                 <View style={styles.navigationbar}>
                     <TouchableOpacity onPress={() => { this.props.navigation.dispatch(backAction) }}>
                         <Image resizeMode='cover' source={require("../assets/images/back.png")} style={styles.backButton} />
                     </TouchableOpacity>
-                    <Text style={styles.centerText}>Privacy Policy</Text>
+                    <Text style={styles.centerText}>Terms of Use</Text>
                     <View style={styles.rightView}>
                     </View>
                 </View>
+
+                <View style={styles.webviewContainer}>
+                    <WebView
+                        onLoad={() => this.hideSpinner()}
+                        source={{
+                            uri:
+                                'https://www.tourzan.com/en/tos/'
+                        }}
+                    />
+                </View>
+                {this.showLoading()}
+
             </View>
         );
     }
@@ -63,10 +92,8 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        alignItems: 'center',
-        flexDirection: 'column',
+        backgroundColor: 'transparent',
     },
-
     statusbar: {
         width: width,
         height: (Platform.OS == 'ios') ? 20 : StatusBar.currentHeight,
@@ -102,8 +129,24 @@ const styles = StyleSheet.create({
         marginRight: 20,
         height: 20,
         width: 20
-    }
-});
+    },
 
+    // --- webview --- //
+    webviewContainer: {
+        flex: 1,
+        backgroundColor: '#000000',
+
+    },
+    loadingView: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'transparent'
+    },
+});
 export default TermsofUseScreen;
 

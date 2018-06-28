@@ -1,30 +1,75 @@
 
-
 let currentuser = {
     "token": null,
     "user": {
-        "street": null,
-        "building_num": null,
-        "email": null,
-        "postcode": null,
-        "country": null,
-        "city": null,
+        "pk": null,
         "username": null,
-        "state": null,
-        "flat_num": null,
-        "phone": null,
+        "email": null,
         "guide_id": null,
-        "user_id": null
+        "guide_profile_image": null,
+        "tourist_profile_image": null,
+        "general_profile": {
+            "phone": null,
+            "phone_is_validated": null,
+            "registration_country": null,
+            "registration_state": null,
+            "registration_city": null,
+            "registration_street": null,
+            "registration_building_nmb": null,
+            "registration_flat_nmb": null,
+            "registration_postcode": null
+        },
+        "interests": [
+            {
+                "id": null,
+                "interest": {
+                    "id": null,
+                    "name": null,
+                    "created": null,
+                    "updated": null
+                },
+                "user": null
+            }
+        ]
     }
 }
 
-const token = () => {
-  console.log('profile token is', currentuser.token);
+const isGuide = () => {
+    if (currentuser.user.guide_id) {
+        return true
+    } else {
+        return false
+    }
 };
 
-const worker = {
-  token,
-  currentuser
+const userid = () => {
+    if (currentuser.user.guide_id) {
+        return currentuser.user.pk
+    } else {
+        return currentuser.user.pk
+    }
 };
 
-module.exports = worker;
+const profilePictureUrl = () => {
+    let url = ''
+    if (currentuser.user.guide_id) {
+        url = currentuser.user.guide_profile_image
+    } else {
+        url = currentuser.user.tourist_profile_image
+    }
+
+    if (url) {
+        return url
+    } else {
+        return require("../assets/images/person1.png")
+    }
+};
+
+const UserData = {
+    currentuser,
+    isGuide,
+    userid,
+    profilePictureUrl
+};
+
+module.exports = UserData;

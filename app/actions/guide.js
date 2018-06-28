@@ -1,11 +1,14 @@
 import { API } from '../constants'
+import { currentuser } from '../global/CurrentUser';
 
 function getGuideList() {
     return new Promise((resolve, reject) => {
         fetch(API.SERVER + 'v1/guides/' , {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'pragma': 'no-cache',
+                'Cache-Control': 'no-cache'
             },
         })
         .then((res) => res.json())

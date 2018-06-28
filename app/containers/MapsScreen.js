@@ -29,7 +29,8 @@ import * as Actions from '../actions/map'
 import flagImg from '../assets/images/flag-blue_small.png';
 import moment from 'moment';
 
-import { currentuser } from '../global/CurrentUser';
+import { currentuser, isGuide, userid, profilePictureUrl} from '../global/CurrentUser';
+import { Storage } from '../global/Utilities';
 
 //import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
 
@@ -83,7 +84,9 @@ class MapsScreen extends React.Component {
 
     componentWillMount() {
 
-        console.log('MapsScreen->componentWillMount->',currentuser.token)
+        // console.log("isGuide",isGuide())
+        // console.log("userid",userid())
+        // console.log("profilePictureUrl", profilePictureUrl())
 
 /*
         this.toggleTracking()
@@ -302,10 +305,12 @@ class MapsScreen extends React.Component {
         return false
     }
     //#endregion
-
+    
+    
     render() {
         const { navigate } = this.props.navigation;
         console.log('map_debug', this.props.isbooked);
+
         return (
             <View style={styles.container}>
                 <View style={styles.statusbar} />
@@ -313,11 +318,13 @@ class MapsScreen extends React.Component {
                     <View style={styles.backButton}>
                     </View>
                     <Text style={styles.centerText}>TOURZAN</Text>
-                    <TouchableOpacity onPress={() => { navigate('Profile') }}>
-                        <Image resizeMode='cover' source={require("../assets/images/person1.png")} style={styles.rightView} />
+                    <TouchableOpacity onPress={() => { navigate('Profile') } }>
+                        <Image resizeMode='cover' source={{uri: profilePictureUrl()}} style={styles.rightView} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.map_container}>
+                
+                {/*
                     <MapView style={styles.map_view}
                         region={this.state.region}
                         onRegionChange={this.onRegionChange}>
@@ -326,7 +333,8 @@ class MapsScreen extends React.Component {
                             centerOffset={{ x: 0, y: 0 }}
                             anchor={{ x: 0.69, y: 1 }}
                             image={flagImg} />
-                    </MapView>
+                    </MapView>*/
+                    }
                     <View style={styles.locationInfo_view}>
                         <View style={styles.location_address_view}>
                             <Image resizeMode='contain' source={require("../assets/images/location_maps.png")} style={styles.icon_image} />
@@ -472,8 +480,9 @@ const styles = StyleSheet.create({
     },
     rightView: {
         marginRight: 20,
-        height: 35,
-        width: 35
+        height: 36,
+        width: 36,
+        borderRadius:18,
     },
     map_container: {
         flex: 1,

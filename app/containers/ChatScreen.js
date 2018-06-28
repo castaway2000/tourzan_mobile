@@ -25,6 +25,9 @@ import { Colors } from '../constants'
 import NavigationBar from '../components/NavigationBar'
 import {getChatList} from '../actions/'
 
+import { currentuser, isGuide, userid, profilePictureUrl} from '../global/CurrentUser';
+import { Storage } from '../global/Utilities';
+
 var SearchBar = require('react-native-search-bar');
 var { width, height } = Dimensions.get('window');
 
@@ -85,7 +88,8 @@ class ChatScreen extends React.Component {
             console.log('getChatList data-->', data)
 
             this.setState({
-                dataSource: this.state.dataSource.cloneWithRows(data)
+                dataSource: this.state.dataSource.cloneWithRows(data),
+                ds:data
               })
 
         })
@@ -111,7 +115,7 @@ class ChatScreen extends React.Component {
       
         let filteredData = notes.filter(
             (note) =>{
-                return note.name.toLowerCase().indexOf(text)!= -1;
+                return note.topic.toLowerCase().indexOf(text)!= -1;
             }
         );
 

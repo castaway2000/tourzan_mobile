@@ -50,7 +50,18 @@ class MoreScreen extends React.Component {
     }
 
     onLogout(){
-        this.props.navigation.dispatch(resetRootAction);
+
+        Alert.alert("Tourzan", 'Are you sure you want to logout?', [{
+            text: 'OK', onPress: () => {
+                this.props.navigation.dispatch(resetRootAction);
+            }
+        },{
+            text: 'Cancel', onPress: () => {
+                
+            }
+        }], { cancelable: false });
+
+        
     }
 
     render() {

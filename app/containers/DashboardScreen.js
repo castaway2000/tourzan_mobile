@@ -32,6 +32,10 @@ import TripItemDetailScreen from './ItemDetailScreens/TripItemDetailScreen';
 import GuideItemDetailScreen from './ItemDetailScreens/GuideItemDetailScreen';
 import TransactionItemDetailScreen from './ItemDetailScreens/TransactionItemDetailScreen';
 import DashboardTapNavigator from './DashboardTabs/DashboardTapNavigator'
+import ProfileScreen from './ProfileScreen';
+
+import { currentuser, isGuide, userid, profilePictureUrl} from '../global/CurrentUser';
+import { Storage } from '../global/Utilities';
 
 var { width, height } = Dimensions.get('window');
 
@@ -55,9 +59,9 @@ var { width, height } = Dimensions.get('window');
       TripItemDetail:{screen: TripItemDetailScreen},
       GuideItemDetail:{screen: GuideItemDetailScreen},
       TransactionItemDetail: {screen: TransactionItemDetailScreen},
+      Profile: {screen: ProfileScreen},
     },{ 
       headerMode: 'screen',
-      mode: 'modal',
       initialRouteName: 'DashboardTapNavigator',
   }
 );
