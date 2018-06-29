@@ -29,7 +29,6 @@ const backAction = NavigationActions.back({
 
 });
 
-
 class ChatRoomScreen extends React.Component {
     static navigationOptions = {
         title: 'Luella Palmer',
@@ -84,35 +83,13 @@ class ChatRoomScreen extends React.Component {
     }
 
     componentDidMount() {
+        this.socket = new WebSocket('ws://34.212.65.102/ws/chat/331c4f3e-466d-4e09-a7e5-e8f710a3ce90/');
+        console.log(this.socket )
 
-    }
-
-    onSend(messages = []) {
-
-        console.log('sending...');
-        this.setState((previousState) => ({
-            messages: GiftedChat.append(previousState.messages, messages),
-        }));
-
-        //this.socket.send(JSON.stringify({ "chat_uuid": "81b55636-c495-4270-ad91-21a7ec7e7c73", "message": "From vs code!!!!" }))
-
-        this.socket.send(JSON.stringify({
-            'chat_uuid': '81b55636-c495-4270-ad91-21a7ec7e7c73',
-            'message': 'From vs code!!!!'
-        }));
-
-
-    }
-
-    constructor(props) {
-        super(props);
-        this.state = { messages: [] };
-        // this.onSend = this.onSend.bind(this);
-
-        this.socket = new WebSocket('ws://34.212.65.102/ws/chat/81b55636-c495-4270-ad91-21a7ec7e7c73/');
 
         this.socket.onopen = () => {
             console.log('Socket connected...!');
+
         };
 
         this.socket.onmessage = (e) => {
@@ -128,6 +105,33 @@ class ChatRoomScreen extends React.Component {
             // 
             console.log('connection closed', e.code, e.reason);
         };
+    }
+
+    onSend(messages = []) {
+
+        console.log('sending...');
+
+        let message1 = {chat_uuid:"331c4f3e-466d-4e09-a7e5-e8f710a3ce90",message:"From Iphone 6"}
+
+        let messagestringfy = JSON.stringify(message1)
+
+        this.socket.send(messagestringfy);
+        
+        //this.socket.send(JSON.stringify({ "chat_uuid": "85370fc6-e253-4f2f-946f-6d5034aef072", "message": "From vs code!!!!" }))
+        let message = {
+            chat_uuid: '331c4f3e-466d-4e09-a7e5-e8f710a3ce90',
+            message: messages
+        }
+
+        this.setState((previousState) => ({
+            messages: GiftedChat.append(previousState.messages, messages),
+        }));
+    }
+
+    constructor(props) {
+        super(props);
+        this.state = { messages: [] };
+        // this.onSend = this.onSend.bind(this);
     }
 
     render() {
