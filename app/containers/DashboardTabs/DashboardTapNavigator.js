@@ -12,10 +12,14 @@ import {
     TouchableOpacity,
     TouchableWithoutFeedback,
 } from 'react-native';
+
 import { Colors } from '../../constants'
 import GuidesScreen from './GuidesScreen'
 import TransactionsScreen from './TransactionsScreen'
 import TripsScreen from './TripsScreen'
+
+import { currentuser, isGuide, userid, profilePictureUrl} from '../../global/CurrentUser';
+import { Storage } from '../../global/Utilities';
 
 var { width, height } = Dimensions.get('window');
 
@@ -75,16 +79,20 @@ class DashboardTapNavigator extends React.Component {
                 < TransactionsScreen navigation = {this.props.navigation}/>
             )
         }
-
     }
 
     render() {
+        
+        const { navigate } = this.props.navigation;
+        
         return (
             <View style={styles.container}>
                 <View style = {styles.statusbar}/>
                 <View style = {styles.headView}>
                     <Text style = {styles.title}>DASHBOARD</Text>
-                    <Image resizeMode='cover' source={require("../../assets/images/person1.png")}  style={styles.personImg} />
+                    <TouchableOpacity style={styles.personImgButton} onPress={() => { navigate('Profile') }}>
+                         <Image resizeMode='cover' source={{uri: profilePictureUrl()}}  style={styles.personImg} />
+                    </TouchableOpacity>
                 </View>
                 <View style = {styles.mainView}>
                     <View style = {styles.tabbarView}>
@@ -177,16 +185,21 @@ const styles = StyleSheet.create({
         marginTop: 5
     },
     personImg: {
-        marginRight:20, 
-        height:35, 
-        width:35,
+        height:36, 
+        width:36,
+        borderRadius: 18,
+    },
+    personImgButton: {
+        height:36, 
+        width:36,
         position: 'absolute',
-        right: 25
+        right: 10,
+        borderRadius: 18,
     },
     tab_listView: {
         width: width,
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
     }
 });
 

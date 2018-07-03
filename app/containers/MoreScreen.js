@@ -50,7 +50,18 @@ class MoreScreen extends React.Component {
     }
 
     onLogout(){
-        this.props.navigation.dispatch(resetRootAction);
+
+        Alert.alert("Tourzan", 'Are you sure you want to logout?', [{
+            text: 'OK', onPress: () => {
+                this.props.navigation.dispatch(resetRootAction);
+            }
+        },{
+            text: 'Cancel', onPress: () => {
+                
+            }
+        }], { cancelable: false });
+
+        
     }
 
     render() {
@@ -71,17 +82,17 @@ class MoreScreen extends React.Component {
                         <Text  style={styles.row_lb}>Settings</Text>
                         <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon}/>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.row_view}>
+                    <TouchableOpacity style={styles.row_view} onPress={() => this.navigate.navigate('FAQScreen')}>
                         <Text  style={styles.row_lb}>FAQ</Text>
                         <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon}/>
                     </TouchableOpacity>
                     <View style={styles.blank_row_view}>
                     </View>
-                        <TouchableOpacity style={styles.row_view}>
+                        <TouchableOpacity style={styles.row_view} onPress={() => this.navigate.navigate('PrivacyPolicyScreen')}>
                         <Text  style={styles.row_lb}>Privacy Policy</Text>
                         <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon}/>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.row_view}>
+                    <TouchableOpacity style={styles.row_view} onPress={() => this.navigate.navigate('TermsofUseScreen')}>
                         <Text  style={styles.row_lb}>Terms of Use</Text>
                         <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon}/>
                     </TouchableOpacity>
@@ -191,4 +202,3 @@ const styles = StyleSheet.create({
 });
 
 export default MoreScreen;
-
