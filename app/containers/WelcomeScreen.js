@@ -19,9 +19,19 @@ import {
 import ApplyButton from '../components/ApplyButton';
 import { Colors } from '../constants'
 import { NavigationActions } from 'react-navigation'
-import { currentuser } from '../global/CurrentUser';
-import { Storage } from '../global/Utilities';
 import SplashScreen from 'react-native-splash-screen'
+
+//Store
+import configureStore from '../configureStore'
+const store = configureStore();
+
+//Actions
+import { connect } from 'react-redux';
+import { updatebooking } from '../actions/bookingActions'
+import { updateuser } from '../actions/userActions'
+
+//Utilities
+import { Storage, isIphoneX  } from '../global/Utilities';
 
 var { width, height } = Dimensions.get('window');
 //const onButtonPress = () => { Alert.alert('Button has been pressed!'); }; 

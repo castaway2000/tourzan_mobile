@@ -24,8 +24,18 @@ import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
 import { emailLogin } from '../actions/'
-import { currentuser } from '../global/CurrentUser';
-import { Storage } from '../global/Utilities';
+
+//Store
+import { connect } from 'react-redux';
+import configureStore from '../configureStore'
+const store = configureStore();
+
+//Actions
+import { updatebooking } from '../actions/bookingActions'
+import { updateuser } from '../actions/userActions'
+
+//Utilities
+import { Storage, isIphoneX  } from '../global/Utilities';
 
 var { width, height } = Dimensions.get('window');
 
@@ -54,11 +64,11 @@ class LoginGuideScreen extends React.Component {
     }
 
     onLogin() {
-        
+
         this.setState({
             isLoading: true
         })
-        
+
         var { dispatch } = this.props;
 
         var params = {
@@ -79,13 +89,15 @@ class LoginGuideScreen extends React.Component {
 
                     console.log('success')
 
-                    //Save Profile Data
-                    currentuser.token = data.token
-                    currentuser.user = data.user
+                    //save profile data
+                    store.dispatch(
+                        updateuser(data)
+                    );
 
                     //Save to disk
-                    Storage.setItem("currentuser", currentuser);
+                    Storage.setItem("currentuser", data);
 
+                    //Navigate to home
                     const resetAction = NavigationActions.reset({
                         index: 0,
                         actions: [
@@ -93,6 +105,7 @@ class LoginGuideScreen extends React.Component {
                         ]
                     });
                     this.navigate.dispatch(resetAction)
+
                 } else {
                     alert('Unable to log in with provided credentials.')
                 }
@@ -286,5 +299,10 @@ const styles = StyleSheet.create({
     }
 });
 
-export default LoginGuideScreen;
+const mapStateToProps = store => {
+    return {
+        userdata: store.user.userdata
+    };
+};
 
+export default connect(mapStateToProps)(LoginGuideScreen);

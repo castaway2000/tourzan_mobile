@@ -23,6 +23,7 @@ import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
 import { resetPassword } from '../actions/'
+import {isIphoneX} from "../global/Utilities"
 
 var { width, height } = Dimensions.get('window');
 
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
     },
     statusbar: {
         width: width,
-        height: (Platform.OS == 'ios') ? 20 : StatusBar.currentHeight,
+        height: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20 ) : StatusBar.currentHeight,
         backgroundColor: Colors.main,
         position: 'absolute',
         top: 0,

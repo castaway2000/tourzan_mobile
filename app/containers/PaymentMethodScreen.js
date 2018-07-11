@@ -13,6 +13,7 @@ import {
   View, 
   Alert,
   TouchableOpacity,
+  Platform
 } from 'react-native';
 
 import { NavigationActions } from 'react-navigation'
@@ -20,6 +21,7 @@ import IconBadge from 'react-native-icon-badge';
 import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
+import { isIphoneX } from "../global/Utilities"
 
 var { width, height } = Dimensions.get('window');
 
@@ -188,8 +190,8 @@ const styles = StyleSheet.create({
 
   // --- navigation bar --- //
    navigationbar:{
-      paddingTop:20,
-      height:64,
+      paddingTop: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20) : StatusBar.currentHeight,
+      height: (Platform.OS == 'ios') ? (isIphoneX() ? 88 : 64) : 64,
       backgroundColor: '#31dd73',
       width:width,
       alignItems:'center',

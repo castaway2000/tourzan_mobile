@@ -22,6 +22,7 @@ import { NavigationActions } from 'react-navigation'
 import Checkbox from 'react-native-custom-checkbox'
 import { Colors } from '../constants'
 import NavigationBar from '../components/NavigationBar'
+import {isIphoneX} from "../global/Utilities"
 
 var { width, height } = Dimensions.get('window');
 const backAction = NavigationActions.back({
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
     },
     statusbar: {
         width: width,
-        height: (Platform.OS == 'ios') ? 20 : StatusBar.currentHeight,
+        height: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20 ) : StatusBar.currentHeight,
         backgroundColor: Colors.main,
         position: 'absolute',
         top: 0,
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
     // --- navigation bar --- //
     navigationbar: {
         height: 44,
-        marginTop: (Platform.OS == 'ios') ? 20 : 0,
+        marginTop: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20 ) : 0,
         backgroundColor: Colors.main,
         width: width,
         alignItems: 'center',

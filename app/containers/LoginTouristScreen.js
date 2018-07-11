@@ -24,10 +24,21 @@ import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
 import { emailLogin } from '../actions/'
-import { currentuser } from '../global/CurrentUser';
-import { Storage } from '../global/Utilities';
+
+//Store
+import { connect } from 'react-redux';
+import configureStore from '../configureStore'
+const store = configureStore();
+
+//Actions
+import { updatebooking } from '../actions/bookingActions'
+import { updateuser } from '../actions/userActions'
+
+//Utilities
+import { Storage, isIphoneX } from '../global/Utilities';
 
 var { width, height } = Dimensions.get('window');
+var Toast = require('react-native-toast');
 
 const onButtonPress = () => { Alert.alert('Button has been pressed!'); };
 const backAction = NavigationActions.back({
@@ -61,9 +72,6 @@ class LoginTouristScreen extends React.Component {
 
         // Crashlytics.logException("TEST Exception");
 
-        // return
-
-
         this.setState({
             isLoading: true
         })
@@ -87,12 +95,14 @@ class LoginTouristScreen extends React.Component {
                     console.log('success')
 
                     //save profile data
-                    currentuser.token = data.token
-                    currentuser.user = data.user
+                    store.dispatch(
+                        updateuser(data)
+                    );
 
                     //Save to disk
-                    Storage.setItem("currentuser", currentuser);
+                    Storage.setItem("currentuser", data);
 
+                    //Navigate to home
                     const resetAction = NavigationActions.reset({
                         index: 0,
                         actions: [
@@ -305,5 +315,10 @@ const styles = StyleSheet.create({
     }
 });
 
-export default LoginTouristScreen
+const mapStateToProps = store => {
+    return {
+        userdata: store.user.userdata
+    };
+};
 
+export default connect(mapStateToProps)(LoginTouristScreen);

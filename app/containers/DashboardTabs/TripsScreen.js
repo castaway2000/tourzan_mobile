@@ -26,7 +26,6 @@ import Rating from 'react-native-ratings';
 import { NavigationActions } from 'react-navigation'
 
 import NavigationBar from '../../components/NavigationBar'
-import * as Actions from '../../actions/dashboard'
 import { getTourList } from '../../actions/'
 
 

@@ -15,7 +15,8 @@ import {
     TouchableOpacity,
     TouchableHighlight,
     ImageBackground,
-    ActivityIndicator
+    ActivityIndicator,
+    Platform,
 } from 'react-native';
 
 import { NavigationActions } from 'react-navigation'
@@ -28,14 +29,21 @@ import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
 import { profile } from '../actions/'
 import { Marker } from 'react-native-maps/lib/components/MapView';
-
-import { currentuser, isGuide, userid, profilePictureUrl } from '../global/CurrentUser';
-import { Storage } from '../global/Utilities';
-
 import moment from 'moment'
-
 import Stars from 'react-native-stars';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+//Store
+import { connect } from 'react-redux';
+import configureStore from '../configureStore'
+const store = configureStore();
+
+//Actions
+import { updatebooking } from '../actions/bookingActions'
+import { updateuser } from '../actions/userActions'
+
+//Utilities
+import { Storage, isIphoneX } from '../global/Utilities';
 
 var { width, height } = Dimensions.get('window');
 
@@ -161,15 +169,6 @@ class ProfileScreen extends React.Component {
         console.log('Pressed!');
     }
 
-    //Show load more.
-    showLoading() {
-        if (this.state.isLoading) {
-            return (
-                <ActivityIndicator color={'black'} size={'large'} style={styles.loadingView} />
-            );
-        }
-    }
-
     //#region Helper Func
     getUserID = () => {
 
@@ -181,7 +180,7 @@ class ProfileScreen extends React.Component {
 
         } else {
 
-            return userid()
+            return this.props.userdata.user.userid
         }
     }
 
@@ -228,7 +227,7 @@ class ProfileScreen extends React.Component {
     onContentSize(contentWidth, contentHeight) {
         console.log("<<<<<< content >>>>>>>>>", contentWidth, contentHeight);
 
-        this.setState({listViewHeight:contentHeight})
+        this.setState({ listViewHeight: contentHeight })
     }
 
     renderRow(rowData) {
@@ -397,6 +396,15 @@ class ProfileScreen extends React.Component {
         />
     }
 
+    //Show load more.
+    showLoading() {
+        if (this.state.isLoading) {
+            return (
+                <ActivityIndicator color={'black'} size={'large'} style={styles.loadingView} />
+            );
+        }
+    }
+
     render() {
         const { navigate } = this.props.navigation;
         return (
@@ -454,7 +462,7 @@ class ProfileScreen extends React.Component {
                                 {this._showRatingViewMain()}
                             </View>
                             <ListView
-                                style={{paddingHorizontal: 0, height: this.state.listViewHeight}}
+                                style={{ paddingHorizontal: 0, height: this.state.listViewHeight }}
                                 ref={ref => this.listView = ref}
                                 onContentSizeChange={this.onContentSize}
                                 dataSource={this.state.dataSource}
@@ -484,7 +492,7 @@ const styles = StyleSheet.create({
         height: 180,
     },
     navigationbar: {
-        paddingTop: 20,
+        paddingTop: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20) : StatusBar.currentHeight,
         height: 64,
         backgroundColor: 'transparent',
         width: width,
@@ -612,7 +620,7 @@ const styles = StyleSheet.create({
     },
     listview_view: {
         width: width,
-         marginTop:20
+        marginTop: 20
     },
     listview_title_view: {
         paddingHorizontal: 20,
@@ -730,6 +738,11 @@ const styles = StyleSheet.create({
     }
 });
 
+const mapStateToProps = store => {
+    return {
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata
+    };
+};
 
-export default ProfileScreen;
-
+export default connect(mapStateToProps)(ProfileScreen);

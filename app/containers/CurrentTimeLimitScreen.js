@@ -13,6 +13,7 @@ import {
   View,
   Alert,
   TouchableOpacity,
+  Platform
 } from 'react-native';
 
 import ActionSheet from 'react-native-actionsheet'
@@ -24,19 +25,10 @@ import PercentageCircle from 'react-native-percentage-circle';
 import ApplyButton from '../components/ApplyButton'
 import { Colors } from '../constants'
 
+import { Storage } from '../global/Utilities';
+import {isIphoneX} from "../global/Utilities"
+
 var Toast = require('react-native-toast');
-import * as Actions from '../actions/map'
-
-
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators(Actions, dispatch)
-};
-
-const  mapStateToProps = (state) => {
-    return {
-        isbooked: state.isbooked,
-    }
- };
 
 var { width, height } = Dimensions.get('window');
 
@@ -54,7 +46,6 @@ const resetRootAction = NavigationActions.reset({
 const CANCEL_INDEX = 0;
 const DESTRUCTIVE_INDEX = 4;
 const options = [ 'Cancel', 'End Tour' ];
-
 
 class CurrentTimeLimitScreen extends React.Component {
   static navigationOptions = {
@@ -159,7 +150,7 @@ const styles = StyleSheet.create({
 
   // --- navigation bar --- //
    navigationbar:{
-      paddingTop:20,
+      paddingTop:  (Platform.OS == 'ios')? (isIphoneX() ? 44 : 20 ) : StatusBar.currentHeight,
       height:64,
       backgroundColor: '#31dd73',
       width:width,
@@ -268,5 +259,5 @@ const styles = StyleSheet.create({
     },
 });
 
-// export default CurrentTimeLimitScreen;
-export default connect(mapStateToProps,mapDispatchToProps)(CurrentTimeLimitScreen);
+ export default CurrentTimeLimitScreen;
+//export default connect(mapStateToProps,mapDispatchToProps)(CurrentTimeLimitScreen);

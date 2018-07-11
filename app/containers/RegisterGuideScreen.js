@@ -416,16 +416,16 @@ const styles = StyleSheet.create({
     },
     top_container: {
         width: width,
-        height: height * 40 / 100,
+        height: height * 0.4,
         flexDirection: 'column',
     },
     view_title: {
         width: width,
-        height: height * 0.4 - 70,
+        height: height * 0.4 - 90,
         alignItems: 'flex-start',
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        marginLeft: 30,
+        marginLeft: 30
     },
     txt_welcome: {
         marginTop: 5,

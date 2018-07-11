@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux'
 
 import tour from './tour'
-import  map from './map'
+import user from './user'
 
-const AppReducer = combineReducers({
+export default combineReducers({
     tour,
-    map
+    user
 })
