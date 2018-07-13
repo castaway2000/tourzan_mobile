@@ -35,7 +35,7 @@ import { updatebooking } from '../actions/bookingActions'
 import { updateuser } from '../actions/userActions'
 
 //Utilities
-import { Storage, isIphoneX  } from '../global/Utilities';
+import { Storage, isIphoneX } from '../global/Utilities';
 
 var { width, height } = Dimensions.get('window');
 
@@ -55,7 +55,7 @@ class LoginGuideScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            checked: false,
+            isChecked: true,
             username: 'fakeit', //Username105 - 123123qwe, tejas.g@3rddigital.com - Cred@123098, test010 - Test@123', fakeit - newpass1234
             password: 'newpass1234', //
             isLoading: false
@@ -95,7 +95,9 @@ class LoginGuideScreen extends React.Component {
                     );
 
                     //Save to disk
-                    Storage.setItem("currentuser", data);
+                    if (this.state.isChecked) {
+                        Storage.setItem("currentuser", data);
+                    }
 
                     //Navigate to home
                     const resetAction = NavigationActions.reset({
@@ -111,6 +113,9 @@ class LoginGuideScreen extends React.Component {
                 }
             })
             .catch(err => {
+                this.setState({
+                    isLoading: false
+                })
                 alert(err)
             })
     }
@@ -139,6 +144,10 @@ class LoginGuideScreen extends React.Component {
                 <ActivityIndicator color={'black'} size={'large'} style={styles.loadingView} />
             );
         }
+    }
+
+    _onCheckboxChecked = (name, checked) => {
+        this.setState({ isChecked: checked })
     }
 
     render() {
@@ -182,9 +191,10 @@ class LoginGuideScreen extends React.Component {
                             <View style={styles.view_remember}>
                                 <View style={styles.view_checkbox}>
                                     <Checkbox
-                                        checked={true}
+                                        checked={this.state.isChecked}
                                         style={{ backgroundColor: '#f2f2f2', color: '#31dd73', borderRadius: 2 }}
                                         size={15}
+                                        onChange={(name, checked) => this._onCheckboxChecked(name, checked)} />
                                     />
                                     <Text style={styles.txt_checkbox}>Remember me</Text>
                                 </View>

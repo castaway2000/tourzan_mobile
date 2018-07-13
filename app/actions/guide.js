@@ -4,14 +4,19 @@ import { API } from '../constants'
 import configureStore from '../configureStore'
 const store = configureStore();
 
+
 function getGuideList() {
+
+    let storeState = store.getState()
+
     return new Promise((resolve, reject) => {
         fetch(API.SERVER + 'v1/guides/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'pragma': 'no-cache',
-                'Cache-Control': 'no-cache'
+                'Cache-Control': 'no-cache',
+                'Authorization': 'JWT ' + storeState.user.userdata.token,
             },
         })
             .then((res) => res.json())
@@ -20,6 +25,7 @@ function getGuideList() {
                 resolve(data);
             })
             .catch(err => {
+                reject(err)
                 console.log('Get Guide List API Error->', err);
             });
     })
@@ -57,6 +63,7 @@ function bookGuide(params) {
             })
             .catch(err => {
                 console.log('Booking Guide API Error->', err);
+                reject(err);
             });
     })
 }

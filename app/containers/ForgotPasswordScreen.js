@@ -101,6 +101,9 @@ class ForgotPasswordScreen extends React.Component {
                 }
             })
             .catch(err => {
+                this.setState({
+                    isLoading: false
+                })
                 alert(err)
             })
     }

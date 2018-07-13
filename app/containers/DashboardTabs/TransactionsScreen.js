@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 
 import {
-  Button,
-  ScrollView,
-  Dimensions,
-  StatusBar,
-  Navigator,
-  StyleSheet,
-  Image,
-  Text,
-  TextInput,
-  View,
-  Alert,
-  ListView,
-  TouchableOpacity,
-  TouchableHighlight,
-  Platform,
+    Button,
+    ScrollView,
+    Dimensions,
+    StatusBar,
+    Navigator,
+    StyleSheet,
+    Image,
+    Text,
+    TextInput,
+    View,
+    Alert,
+    ListView,
+    TouchableOpacity,
+    TouchableHighlight,
+    Platform,
 } from 'react-native';
 
 import Rating from 'react-native-ratings';
@@ -27,18 +27,27 @@ var { width, height } = Dimensions.get('window');
 
 class TransactionsScreen extends React.Component {
     static navigationOptions = {
-         header: null
+        header: null
     };
 
     constructor(props) {
         super(props);
-         var ds = new ListView.DataSource({
+        var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
         });
         this.state = {
             // for listview
-            ds:[{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"},{AwayTeam: "TeamA"}],
-            dataSource:ds,
+            ds: [
+                { AwayTeam: "TeamA" },
+                { AwayTeam: "TeamA" },
+                { AwayTeam: "TeamA" },
+                { AwayTeam: "TeamA" },
+                { AwayTeam: "TeamA" },
+                { AwayTeam: "TeamA" },
+                { AwayTeam: "TeamA" },
+                { AwayTeam: "TeamA" }
+            ],
+            dataSource: ds,
 
             // for ratingview
             starCount: 3.5,
@@ -47,157 +56,157 @@ class TransactionsScreen extends React.Component {
         this.navigate = this.props.navigation;
     }
 
-   // function for ratingview
+    // function for ratingview
     ratingCompleted(rating) {
         console.log("Rating is: " + rating)
     }
 
-     componentWillMount() {
-         this.setState({
-            dataSource:this.state.dataSource.cloneWithRows(this.state.ds),
+    componentWillMount() {
+        this.setState({
+            dataSource: this.state.dataSource.cloneWithRows(this.state.ds),
         })
-     }
-
-     pressRow(rowData){
-            const { navigate } = this.props.navigation;
-            var newDs = [];
-            newDs = this.state.ds.slice();
-            this.setState({
-                dataSource: this.state.dataSource.cloneWithRows(newDs)
-            });
-
-            this.navigate.navigate('TransactionItemDetail');
     }
 
-     renderRow(rowData){
-         
+    pressRow(rowData) {
+        const { navigate } = this.props.navigation;
+        var newDs = [];
+        newDs = this.state.ds.slice();
+        this.setState({
+            dataSource: this.state.dataSource.cloneWithRows(newDs)
+        });
+
+        this.navigate.navigate('TransactionItemDetail');
+    }
+
+    renderRow(rowData) {
+
         return (
             <TouchableHighlight style={styles.row_view}
-                onPress={()=> this.pressRow(rowData)}
-                underlayColor = '#ddd'>
-                    <View style ={styles.row}>
-                        <View style={styles.amount_view}>                      
-                             <Text style={styles.amount_text}>$357</Text>
-                        </View>
-                        <View style={styles.info_view}>
-                            <View style={styles.info_row_view}>
-                                <Image resizeMode='contain' source={require("../../assets/images/trip_item_location_icon.png")}  style={styles.location_icon}/>
-                                <Text style={styles.location_text}>07 Verona Tunnel Suite 987</Text>
-                            </View>
-                            <View style={styles.info_row_view}>
-                                <Image resizeMode='contain' source={require("../../assets/images/time_icon.png")}  style={styles.location_icon}/>
-                                <Text style={styles.time_text}>06h 20m</Text>
-                            </View>
-                        </View>
-                        <View style={styles.row_right_view}>
-                            <Text style={styles.right_text}>06 Mar 2017</Text>
-                             <TouchableOpacity style={styles.arrow_view}>
-                                <Image resizeMode='contain' source={require("../../assets/images/item_arrow.png")}  style={styles.arrow_btn} />
-                            </TouchableOpacity>
-                        </View>
-                       
+                onPress={() => this.pressRow(rowData)}
+                underlayColor='#ddd'>
+                <View style={styles.row}>
+                    <View style={styles.amount_view}>
+                        <Text style={styles.amount_text}>$357</Text>
                     </View>
+                    <View style={styles.info_view}>
+                        <View style={styles.info_row_view}>
+                            <Image resizeMode='contain' source={require("../../assets/images/trip_item_location_icon.png")} style={styles.location_icon} />
+                            <Text style={styles.location_text}>07 Verona Tunnel Suite 987</Text>
+                        </View>
+                        <View style={styles.info_row_view}>
+                            <Image resizeMode='contain' source={require("../../assets/images/time_icon.png")} style={styles.location_icon} />
+                            <Text style={styles.time_text}>06h 20m</Text>
+                        </View>
+                    </View>
+                    <View style={styles.row_right_view}>
+                        <Text style={styles.right_text}>06 Mar 2017</Text>
+                        <TouchableOpacity style={styles.arrow_view}>
+                            <Image resizeMode='contain' source={require("../../assets/images/item_arrow.png")} style={styles.arrow_btn} />
+                        </TouchableOpacity>
+                    </View>
+
+                </View>
             </TouchableHighlight>
 
-         )
-     }
+        )
+    }
 
-     render() {
+    render() {
         return (
             <ListView
                 dataSource={this.state.dataSource}
                 renderRow={this.renderRow.bind(this)}
                 renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
-                showsVerticalScrollIndicator = {false}
+                showsVerticalScrollIndicator={false}
             />
         );
     }
 }
 
 const styles = StyleSheet.create({
- container: {
-      backgroundColor:'white',
-      alignItems: 'center',
-      flexDirection: 'column',
-  },
-  icon: {
-      width: 20,
-      height: 20,
-  },
-  text_color:{
-      color:'#000',
-  },
-  row_view:{
-      marginTop: 0,
-      paddingTop:20,
-      paddingBottom:20,
-      backgroundColor:'white',
-  },
-  separator: {
-      flex: 1,
-      height: StyleSheet.hairlineWidth,
-      backgroundColor: '#ddd',
-  },
-  row:{
-      alignItems:'center',
-      flexDirection:'row',
-  },
-  amount_view:{
-      padding:10,
-      alignItems:'center',
-      borderRightWidth:0.5,
-      borderColor: "white",
-  },
-  amount_text:{
-      fontSize: 15,
-      color: Colors.color999,
-  },
-  info_view: {
-      width:width*45/100,
-      marginLeft:10,
-      flexDirection:'column',
-      justifyContent: 'center',
-  },
-  info_row_view:{
-      marginTop:5,
-      height:15,
-      flexDirection:'row',
-      alignItems:'center',
-  },
-  location_icon:{
-      width:10,
-      height:10,
-  },
-  location_text:{
-      marginLeft:5,
-      fontSize:12,
-      color:'#000',
-      textAlign:'left',
-      fontWeight:'bold',
-  },
-  time_text:{
-      marginLeft:5,
-      fontSize:12,
-      color: Colors.tintColor,
-      textAlign:'left',
-      fontWeight:'bold',
-  },
-  row_right_view:{
-      marginRight: 5,
-      width:width*30/100,
-      flexDirection:'column',
-      alignItems:'flex-end',
-  },
-  right_text:{
-      fontSize:10,
-  },
-  arrow_view:{
-      marginTop:5,
-  },
-  arrow_btn:{
-      width: 10,
-      height: 15,
-  },
+    container: {
+        backgroundColor: 'white',
+        alignItems: 'center',
+        flexDirection: 'column',
+    },
+    icon: {
+        width: 20,
+        height: 20,
+    },
+    text_color: {
+        color: '#000',
+    },
+    row_view: {
+        marginTop: 0,
+        paddingTop: 20,
+        paddingBottom: 20,
+        backgroundColor: 'white',
+    },
+    separator: {
+        flex: 1,
+        height: StyleSheet.hairlineWidth,
+        backgroundColor: '#ddd',
+    },
+    row: {
+        alignItems: 'center',
+        flexDirection: 'row',
+    },
+    amount_view: {
+        padding: 10,
+        alignItems: 'center',
+        borderRightWidth: 0.5,
+        borderColor: "white",
+    },
+    amount_text: {
+        fontSize: 15,
+        color: Colors.color999,
+    },
+    info_view: {
+        width: width * 45 / 100,
+        marginLeft: 10,
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
+    info_row_view: {
+        marginTop: 5,
+        height: 15,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    location_icon: {
+        width: 10,
+        height: 10,
+    },
+    location_text: {
+        marginLeft: 5,
+        fontSize: 12,
+        color: '#000',
+        textAlign: 'left',
+        fontWeight: 'bold',
+    },
+    time_text: {
+        marginLeft: 5,
+        fontSize: 12,
+        color: Colors.tintColor,
+        textAlign: 'left',
+        fontWeight: 'bold',
+    },
+    row_right_view: {
+        marginRight: 5,
+        width: width * 30 / 100,
+        flexDirection: 'column',
+        alignItems: 'flex-end',
+    },
+    right_text: {
+        fontSize: 10,
+    },
+    arrow_view: {
+        marginTop: 5,
+    },
+    arrow_btn: {
+        width: 10,
+        height: 15,
+    },
 });
 
 export default TransactionsScreen;

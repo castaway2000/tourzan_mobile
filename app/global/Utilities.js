@@ -46,11 +46,11 @@ const getStatusBarHeight = (safe) => {
     });
 }
 
-
 const utilities = {
     Storage,
     isIphoneX,
-    isNumber
+    isNumber,
+    getStatusBarHeight
 };
 
 module.exports = utilities;

@@ -121,6 +121,9 @@ class ProfileScreen extends React.Component {
 
             })
             .catch(err => {
+                this.setState({
+                    isLoading: false
+                })
                 alert(err)
             })
     }

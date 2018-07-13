@@ -28,6 +28,7 @@ function getChatList() {
             })
             .catch(err => {
                 console.log('Get Chat List API Error->', err);
+                reject(err);
             });
     })
 }

@@ -83,7 +83,6 @@ class ChatScreen extends React.Component {
         })
 
         this.loadChatList()
-
     }
 
     loadChatList = () => {
@@ -101,6 +100,9 @@ class ChatScreen extends React.Component {
                 })
             })
             .catch(err => {
+                this.setState({
+                    isLoading: false
+                })
                 alert(err)
             })
     }

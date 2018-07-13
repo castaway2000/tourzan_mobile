@@ -116,11 +116,12 @@ class RegisterTouristScreen extends React.Component {
                     }
                     else {
                         alert(data.error)
-
                     }
-
                 })
                 .catch(err => {
+                    this.setState({
+                        isLoading: false
+                    })
                     alert(err)
                 })
         }

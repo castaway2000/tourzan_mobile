@@ -23,10 +23,10 @@ const store = configureStore();
 import App from './App';
 
 class Wrapper extends React.Component {
-  render(){
+  render() {
     return (
       <Provider store={store}>
-          <App/>
+        <App />
       </Provider>
     );
   }

@@ -13,7 +13,8 @@ import {
     View,
     Alert,
     TouchableOpacity,
-    Platform
+    Platform,
+    ActivityIndicator
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -35,6 +36,9 @@ const store = configureStore();
 //Actions
 import { updatebooking } from '../actions/bookingActions'
 import { updateuser } from '../actions/userActions'
+
+//Webservice
+import { updateClockInOutStatus } from '../actions'
 
 //Utilities
 import { Storage, isIphoneX } from '../global/Utilities';
@@ -74,6 +78,7 @@ class MapsScreen extends React.Component {
             hour: moment().format('hh'),
             minute: moment().format('mm'),
             trueSwitchIsOn: moment().format('A') == 'AM' ? true : false,
+            isLoading: false,
         };
 
         this.onRegionChange = this.onRegionChange.bind(this);
@@ -133,6 +138,7 @@ class MapsScreen extends React.Component {
     }
 
     addressFromCoordnate = (lat, long) => {
+        /*
         Geocoder.from(lat, long)
             .then(json => {
                 var addressComponent = json.results[0].address_components[0];
@@ -141,6 +147,7 @@ class MapsScreen extends React.Component {
                 this.setState({ address: json.results[0].formatted_address })
             })
             .catch(error => console.warn(error));
+            */
     }
     //#endregion
 
@@ -249,14 +256,18 @@ class MapsScreen extends React.Component {
     }
 
     //#endregion
+    onClockInOutPressed = () => {
+
+        this.updateClockInOutStatusWS()
+    }
 
     showClockinSwitch() {
 
-        if (this.props.userdata.user.isguide) {
+        if (this.props.userdata.user.isGuide) {
             return (
                 <Switch
-                    value={this.state.trueSwitchIsOn}
-                    onValueChange={(val) => this.setState({ trueSwitchIsOn: val })}
+                    value={this.props.userdata.user.isClockedIn}
+                    onValueChange={(val) => { this.onClockInOutPressed() }}
                     disabled={false}
                     activeText={'  IN  '}
                     inActiveText={'OUT'}
@@ -268,6 +279,14 @@ class MapsScreen extends React.Component {
             )
         } else {
             return null
+        }
+    }
+
+    showLoading() {
+        if (this.state.isLoading) {
+            return (
+                <ActivityIndicator color={'black'} size={'large'} style={styles.loadingView} />
+            );
         }
     }
 
@@ -398,8 +417,57 @@ class MapsScreen extends React.Component {
                                 </TouchableOpacity>
                             )}
                 </View>
+                {this.showLoading()}
             </View>
         );
+    }
+
+    //
+    updateClockInOutStatusWS() {
+
+        this.setState({
+            isLoading: true
+        })
+
+        var { dispatch } = this.props;
+
+        //Get store data
+        let storestate = store.getState()
+
+        var params = {
+            type: 'guide',
+            userid: this.props.userdata.user.userid,
+            status: this.props.userdata.user.isClockedIn ? 'clockin' : 'clockout',
+            latitude: storestate.tour.bookingdata.lat,
+            longitude: storestate.tour.bookingdata.long,
+        }
+
+        updateClockInOutStatus(params)
+
+            .then(data => {
+
+                this.setState({
+                    isLoading: false
+                })
+
+                //Update Status
+                let storestate = store.getState()
+
+                storestate.user.userdata.isClockedIn = !storestate.user.userdata.isClockedIn
+
+                store.dispatch(
+                    updatebooking(storestate)
+                );
+
+                console.log('updateClockInOutStatusWS-->', data)
+
+            })
+            .catch(err => {
+                this.setState({
+                    isLoading: false
+                })
+                alert(err)
+            })
     }
 }
 
@@ -627,6 +695,16 @@ const styles = StyleSheet.create({
     switch_view: {
 
     },
+    loadingView: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'transparent'
+    }
 });
 
 const mapStateToProps = store => {

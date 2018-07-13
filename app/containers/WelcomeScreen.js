@@ -31,7 +31,7 @@ import { updatebooking } from '../actions/bookingActions'
 import { updateuser } from '../actions/userActions'
 
 //Utilities
-import { Storage, isIphoneX  } from '../global/Utilities';
+import { Storage, isIphoneX } from '../global/Utilities';
 
 var { width, height } = Dimensions.get('window');
 //const onButtonPress = () => { Alert.alert('Button has been pressed!'); }; 
@@ -51,23 +51,30 @@ class WelcomeScreen extends React.Component {
 
     async componentWillMount() {
 
-        SplashScreen.hide();
+        let userdata = await Storage.getItem("currentuser");
 
-        // let obj = await Storage.getItem("currentuser");
+        if (userdata) {
 
-        // //save profile data
-        // currentuser.token = obj.token
-        // currentuser.user = obj.user
+            console.log('userdata', userdata)
 
-        // const resetAction = NavigationActions.reset({
-        //     index: 0,
-        //     actions: [
-        //         NavigationActions.navigate({ routeName: 'Home' })
-        //     ]
-        // });
-        // this.navigate.dispatch(resetAction)
+            SplashScreen.hide();
+
+            store.dispatch(
+                updateuser(userdata)
+            );
+
+            const resetAction = NavigationActions.reset({
+                index: 0,
+                actions: [
+                    NavigationActions.navigate({ routeName: 'Home' })
+                ]
+            });
+            this.navigate.dispatch(resetAction)
+
+        } else {
+            SplashScreen.hide();
+        }
     };
-
 
     render() {
         const { navigate } = this.props.navigation;

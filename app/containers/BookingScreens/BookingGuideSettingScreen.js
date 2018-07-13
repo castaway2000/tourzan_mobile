@@ -154,6 +154,11 @@ class BookingGuideSettingScreen extends React.Component {
 
         //Get store data
         let storestate = store.getState()
+        storestate.tour.bookingdata.isbooked = !storestate.tour.bookingdata.isbooked
+
+        store.dispatch(
+            updatebooking(storestate.tour.bookingdata)
+        );
 
         var params = {
             token: storestate.user.userdata.token,
@@ -190,6 +195,9 @@ class BookingGuideSettingScreen extends React.Component {
 
             })
             .catch(err => {
+                this.setState({
+                    isLoading: false
+                })
                 alert(err)
             })
     }
@@ -559,12 +567,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: 'transparent'
     }
-
 });
 
 const mapStateToProps = store => {
     return {
-        bookingdata: store.tour.bookingdata
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata
     };
 };
 

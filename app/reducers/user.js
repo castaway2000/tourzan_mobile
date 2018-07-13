@@ -10,6 +10,7 @@ const initialState = {
             "guide_id": null,
             "guide_profile_image": null,
             "tourist_profile_image": null,
+            "isClockedIn": null,
             "general_profile": {
                 "phone": null,
                 "phone_is_validated": null,
@@ -40,7 +41,7 @@ const initialState = {
 const getProfilePictureUrl = (userdata) => {
 
     let url = ''
-    if (userdata.guide_id) {
+    if (isGuide(userdata)) {
         url = userdata.user.guide_profile_image
     } else {
         url = userdata.user.tourist_profile_image

@@ -29,6 +29,7 @@ function emailLogin(params) {
             })
             .catch(err => {
                 console.log('Email Login API Error', err);
+                reject(err);
             });
     })
 }
@@ -60,6 +61,7 @@ function emailSignup(params) {
             })
             .catch(err => {
                 console.log('Email Signup API Error->', err);
+                reject(err);
             });
     })
 }
@@ -86,6 +88,7 @@ function profile(params) {
             })
             .catch(err => {
                 console.log('Profile API Error->', err);
+                reject(err);
             });
     })
 }
@@ -119,6 +122,7 @@ function changePassword(params) {
             })
             .catch(err => {
                 console.log('Change Password API Error->', err);
+                reject(err);
             });
     })
 }
@@ -146,6 +150,7 @@ function resetPassword(params) {
             })
             .catch(err => {
                 console.log('Reset Password API Error->', err);
+                reject(err);
             });
     })
 }
