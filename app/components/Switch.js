@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
 	View,
 	Text,
@@ -7,6 +8,7 @@ import {
 	PanResponder,
 	TouchableWithoutFeedback
 } from 'react-native';
+import { ViewPropTypes } from 'react-native'
 
 export default class Switch extends Component {
 	static propTypes = {
@@ -22,7 +24,7 @@ export default class Switch extends Component {
 		circleSize: PropTypes.number,
 		activeTextStyle: Text.propTypes.style,
 		inactiveTextStyle: Text.propTypes.style,
-		containerStyle: View.propTypes.style,
+		containerStyle: ViewPropTypes.style,
 	};
 
 	static defaultProps = {
@@ -125,11 +127,11 @@ export default class Switch extends Component {
 			outputRange: [circleInActiveColor, circleActiveColor]
 		});
 
-    return (
+		return (
 			<TouchableWithoutFeedback onPress={this.handleSwitch}>
 				<Animated.View
-					style={[styles.container,containerStyle,{ backgroundColor: interpolatedColorAnimation, width: circleSize * 2, height: circleSize, borderRadius: circleSize }]}>
-					<Animated.View style={[styles.animatedContainer,{ transform: [{ translateX: transformSwitch }], width: circleSize * 2 },]}>
+					style={[styles.container, containerStyle, { backgroundColor: interpolatedColorAnimation, width: circleSize * 2, height: circleSize, borderRadius: circleSize }]}>
+					<Animated.View style={[styles.animatedContainer, { transform: [{ translateX: transformSwitch }], width: circleSize * 2 },]}>
 						<Text style={[styles.text, styles.inactiveText, styles.paddingRight, activeTextStyle]}>
 							{activeText}
 						</Text>
@@ -169,7 +171,7 @@ const styles = StyleSheet.create({
 		// borderColor: 'rgb(100, 100, 100)',
 	},
 	text: {
-        fontSize:7, 
+		fontSize: 7,
 		color: 'white',
 		backgroundColor: 'transparent',
 	},

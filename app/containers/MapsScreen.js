@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
 
 import {
-  Button,
-  ScrollView,
-  Dimensions,
-  StatusBar,
-  Navigator,
-  StyleSheet,
-  Image,
-  Text,
-  TextInput,
-  View,
-  Alert,
-  TouchableOpacity,
-  Platform
+    Button,
+    ScrollView,
+    Dimensions,
+    StatusBar,
+    Navigator,
+    StyleSheet,
+    Image,
+    Text,
+    TextInput,
+    View,
+    Alert,
+    TouchableOpacity,
+    Platform,
+    ActivityIndicator
 } from 'react-native';
 
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { Colors } from '../constants'
 import { NavigationActions } from 'react-navigation'
@@ -24,11 +25,27 @@ import MapView from 'react-native-maps';
 
 import Switch from '../components/Switch';
 import NavigationBar from '../components/NavigationBar';
-import * as Actions from '../actions/map'
 
 import flagImg from '../assets/images/flag-blue_small.png';
+import moment from 'moment';
 
-// var Switch = require('react-native-material-switch');
+//Store
+import configureStore from '../configureStore'
+const store = configureStore();
+
+//Actions
+import { updatebooking } from '../actions/bookingActions'
+import { updateuser } from '../actions/userActions'
+
+//Webservice
+import { updateClockInOutStatus } from '../actions'
+
+//Utilities
+import { Storage, isIphoneX } from '../global/Utilities';
+
+//Geo coder
+import Geocoder from '../global/Geocoder';
+Geocoder.init('AIzaSyAq-cJJqZ8jWN4pJQ34tNbNdhbjsbuZUJs'); // use a valid API key
 
 var { width, height } = Dimensions.get('window');
 
@@ -36,161 +53,339 @@ const backAction = NavigationActions.back({
 
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators(Actions, dispatch)
-};
-
-const  mapStateToProps = (state) => {
-    return {
-        isbooked: state.isbooked,
-    }
- };
-
 class MapsScreen extends React.Component {
+
+    //#region Constractors
     static navigationOptions = {
-        header : null,
+        header: null,
         tabBarLabel: 'Maps',
         tabBarIcon: ({ tintColor }) => (
-            <Image resizeMode='contain' source={require('../assets/images/Maps_Bottom_icon.png')} style={[styles.icon, {tintColor: tintColor}]} />
+            <Image resizeMode='contain' source={require('../assets/images/Maps_Bottom_icon.png')} style={[styles.icon, { tintColor: tintColor }]} />
         ),
     };
 
     constructor(props) {
         super(props);
         this.state = {
-            region:{
+            mapRegion: {
                 latitude: 37.78825,
                 longitude: -122.4324,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
             },
-            isSettingTime:false,
-            hour: '09',
-            minute: '18',
-            trueSwitchIsOn: true,
+            address: '',
+            isSettingTime: false,
+            hour: moment().format('hh'),
+            minute: moment().format('mm'),
+            trueSwitchIsOn: moment().format('A') == 'AM' ? true : false,
+            isLoading: false,
         };
+
+        this.onRegionChange = this.onRegionChange.bind(this);
     }
 
-    getInitialState() {
-        return {
-            region: {
-                latitude: 37.78825,
-                longitude: -122.4324,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-            },
-        };
+    //#endregion
+
+    componentWillMount() {
+        let storestate = store.getState()
+
+        console.log('storestate', storestate)
+        console.log('userdata', this.props.userdata)
     }
 
-    onRegionChange(region) {
-        () => this.onRegionChange.bind(this);
+    componentDidMount() {
+
+        this.watchID = navigator.geolocation.watchPosition((position) => {
+
+            // Create the object to update this.state.mapRegion through the onRegionChange function
+            this.addressFromCoordnate(position.coords.latitude, position.coords.longitude)
+
+            let region = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                latitudeDelta: 0.00922 * 1.5,
+                longitudeDelta: 0.00421 * 1.5
+            }
+
+            this.onRegionChange(region, position.coords.latitude, position.coords.longitude);
+
+            //Update Booking
+            let storestate = store.getState()
+            storestate.tour.bookingdata.lat = position.coords.latitude
+            storestate.tour.bookingdata.long = position.coords.longitude
+
+            store.dispatch(
+                updatebooking(storestate)
+            );
+        });
     }
 
-    onSettingTime(){
-        this.setState({ isSettingTime: true })
+    componentWillUnmount() {
+        navigator.geolocation.clearWatch(this.watchID);
     }
 
-    onUnSettingTime(){
-        this.setState({ isSettingTime: false })
+    //#region GEO RELATED
+    onRegionChange(region, lastLat, lastLong) {
+
+        this.addressFromCoordnate(region.latitude, region.longitude)
+
+        this.setState({
+            mapRegion: region,
+            // If there are no new values set the current ones
+            //lastLat: lastLat || this.state.lastLat,
+            //lastLong: lastLong || this.state.lastLong
+        });
     }
 
-    setHour(text){
-        this.setState({ hour: text })
+    addressFromCoordnate = (lat, long) => {
+        /*
+        Geocoder.from(lat, long)
+            .then(json => {
+                var addressComponent = json.results[0].address_components[0];
+                console.log('addressComponent', json.results[0].formatted_address);
+
+                this.setState({ address: json.results[0].formatted_address })
+            })
+            .catch(error => console.warn(error));
+            */
+    }
+    //#endregion
+
+    //#region Time related
+    onSettingTime() {
+
+        if (this.state.isSettingTime) {
+            if (this.isValidHour()) {
+                this.setState({ isSettingTime: false })
+            } else {
+                Alert.alert('Tourzan', 'Please enter correct hour and minutes.')
+            }
+        } else {
+            this.setState({ isSettingTime: true })
+        }
     }
 
-    setMinute(text){
-        this.setState({ minute: text })
+    onUnSettingTime() {
+
+        if (this.isValidHour()) {
+            this.setState({ isSettingTime: false })
+        } else {
+            Alert.alert('Tourzan', 'Please enter correct hour and minutes.')
+        }
+    }
+
+    setHour(text) {
+
+        var hour = parseInt(text)
+
+        if (hour) {
+            hour = hour > 12 ? 12 : hour
+
+            this.setState({ hour: hour.toString() })
+        } else {
+            this.setState({ hour: '' })
+        }
+    }
+
+    setMinute(text) {
+
+        var minute = parseInt(text)
+
+        if (minute) {
+            minute = minute > 59 ? 0 : minute
+
+            this.setState({ minute: minute.toString() })
+        } else {
+            this.setState({ minute: '' })
+        }
+    }
+
+    onChangeHourMinute(isHour, isUp) {
+
+        var hour = parseInt(this.state.hour)
+        var minute = parseInt(this.state.minute)
+
+        if (isHour) {
+
+            hour = (hour + 1 * (isUp ? 1 : -1))
+            hour = (hour < 1) ? 12 : hour
+            hour = (hour > 12) ? 1 : hour
+
+            this.setState({ hour: ("0" + hour).slice(-2).toString() })
+        } else {
+
+            minute = minute + 1 * (isUp ? 1 : -1)
+            minute = (minute < 0) ? 59 : minute
+            minute = (minute > 59) ? 0 : minute
+
+            this.setState({ minute: ("0" + minute).slice(-2).toString() })
+        }
+    }
+
+    isValidHour = () => {
+        var hour = parseInt(this.state.hour)
+        var minute = parseInt(this.state.minute)
+        if ((hour && (hour >= 0) || (hour <= 12)) && (minute && (minute >= 0) || (minute < 60))) {
+            return true
+        }
+        return false
+    }
+
+    onBookingPressed = () => {
+
+        /*
+        console.log('props', this.props.bookingdata)
+
+        console.log('store', store.getState())
+
+        let storestate = store.getState()
+        storestate.tour.bookingdata.isbooked = !storestate.tour.bookingdata.isbooked 
+
+        store.dispatch(
+            updatebooking(storestate)
+        );
+
+        console.log('props', this.props.bookingdata)
+
+        console.log('store', store.getState())
+        */
+
+        const { navigate } = this.props.navigation;
+
+        navigate('BookingSearching')
+    }
+
+    //#endregion
+    onClockInOutPressed = () => {
+
+        this.updateClockInOutStatusWS()
+    }
+
+    showClockinSwitch() {
+
+        if (this.props.userdata.user.isGuide) {
+            return (
+                <Switch
+                    value={this.props.userdata.user.isClockedIn}
+                    onValueChange={(val) => { this.onClockInOutPressed() }}
+                    disabled={false}
+                    activeText={'  IN  '}
+                    inActiveText={'OUT'}
+                    backgroundActive={'#31dd73'}
+                    backgroundInactive={'#c2c3c9'}
+                    circleActiveColor={'white'}
+                    circleInActiveColor={'white'}
+                />
+            )
+        } else {
+            return null
+        }
+    }
+
+    showLoading() {
+        if (this.state.isLoading) {
+            return (
+                <ActivityIndicator color={'black'} size={'large'} style={styles.loadingView} />
+            );
+        }
     }
 
     render() {
         const { navigate } = this.props.navigation;
-        console.log('map_debug', this.props.isbooked);
+
         return (
-            <View style={styles.container}> 
-                <View style = {styles.statusbar}/>
-                    <View style={styles.top_container}>
+            <View style={styles.container}>
+                <View style={styles.statusbar} />
+                <View style={styles.top_container}>
                     <View style={styles.backButton}>
+                        {this.showClockinSwitch()}
                     </View>
                     <Text style={styles.centerText}>TOURZAN</Text>
-                    <TouchableOpacity onPress={() => {navigate('Profile')}}>
-                        <Image resizeMode='cover' source={require("../assets/images/person1.png")}  style={styles.rightView} />
+                    <TouchableOpacity onPress={() => { navigate('Profile') }}>
+                        <Image resizeMode='cover' source={{ uri: this.props.userdata.user.profilepicture }} style={styles.rightView} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.map_container}>
-                    <MapView style={styles.map_view}
-                        region={this.state.region}
-                        onRegionChange={this.onRegionChange}>
-                        <MapView.Marker
-                            coordinate={this.state.region}
-                            centerOffset={{ x: -18, y: -60 }}
-                            anchor={{ x: 0.69, y: 1 }}
-                            image={flagImg}/>
+                    {
+                        <MapView style={styles.map_view}
+                            showsUserLocation={true}
+                            showsMyLocationButton={true}
+                            region={this.state.mapRegion}
+                            onRegionChange={this.onRegionChange}>
+                            <MapView.Marker
+                                coordinate={this.state.mapRegion}
+                                centerOffset={{ x: 0, y: -10 }}
+                                anchor={{ x: 1, y: 1 }}
+                                image={flagImg} />
                         </MapView>
+                    }
                     <View style={styles.locationInfo_view}>
                         <View style={styles.location_address_view}>
-                            <Image resizeMode='contain' source={require("../assets/images/location_maps.png")} style={styles.icon_image}/>
-                            <Text style={styles.row_text}>052 Maggio Road Apt. o16</Text>
+                            <Image resizeMode='contain' source={require("../assets/images/location_maps.png")} style={styles.icon_image} />
+                            <Text style={styles.row_text}>{this.state.address}</Text>
                         </View>
-                        <View style={styles.devide_line}/>
+                        <View style={styles.devide_line} />
                         {this.state.isSettingTime ? (
                             <View style={styles.setting_time_view}>
-                                <View style={styles.setting_time_top_view}>
-                                    <Image resizeMode='contain' source={require("../assets/images/time_icon.png")} style={styles.icon_image}/>
-                                    <Text  style={styles.row_text}>{this. state.hour} : {this.state.minute} {this.state.trueSwitchIsOn? 'AM': 'PM'}</Text>
-                                </View>
+                                <TouchableOpacity onPress={() => this.onSettingTime()}>
+                                    <View style={styles.setting_time_top_view}>
+                                        <Image resizeMode='contain' source={require("../assets/images/time_icon.png")} style={styles.icon_image} />
+                                        <Text style={styles.row_text}>{this.state.hour} : {this.state.minute} {this.state.trueSwitchIsOn ? 'AM' : 'PM'}</Text>
+                                    </View>
+                                </TouchableOpacity>
                                 <View style={styles.setting_time_main_view}>
                                     <View style={styles.setting_time_lb_view}>
-                                        <Text  style={styles.setting_time_lb}>Set your time schedule</Text>
+                                        <Text style={styles.setting_time_lb}>Set your time schedule</Text>
                                         <TouchableOpacity onPress={() => this.onUnSettingTime()}>
-                                            <Image resizeMode='contain' source={require("../assets/images/checked_gray.png")} style={styles.setting_time_check_icon}/>
+                                            <Image resizeMode='contain' source={require("../assets/images/checked_gray.png")} style={styles.setting_time_check_icon} />
                                         </TouchableOpacity>
                                     </View>
                                     <View style={styles.setting_time_picker_view}>
                                         <View style={styles.setting_time_picker_main_view}>
                                             <View style={styles.hour_view}>
-                                                <TouchableOpacity onPress={() => {navigate('')}}>
-                                                    <Image resizeMode='contain' source={require("../assets/images/caret-arrow-up.png")}  style={styles.up_down_arrow_view} />
+                                                <TouchableOpacity onPress={() => this.onChangeHourMinute(true, true)}>
+                                                    <Image resizeMode='contain' source={require("../assets/images/caret-arrow-up.png")} style={styles.up_down_arrow_view} />
                                                 </TouchableOpacity>
                                                 <TextInput
                                                     style={styles.hour_text}
-                                                    underlineColorAndroid = 'transparent'
-                                                    value = {this.state.hour}
-                                                    keyboardType = 'numeric'
-                                                    maxLength = {2}
-                                                    onChangeText = {(text) => this.setHour(text)}
+                                                    underlineColorAndroid='transparent'
+                                                    value={this.state.hour}
+                                                    keyboardType='numeric'
+                                                    maxLength={2}
+                                                    onChangeText={(text) => this.setHour(text)}
                                                     onSubmitEditing={this._onLogin}
                                                 />
-                                                <TouchableOpacity onPress={() => {navigate('')}}>
-                                                    <Image resizeMode='contain' source={require("../assets/images/caret-arrow-down.png")}  style={styles.up_down_arrow_view} />
+                                                <TouchableOpacity onPress={() => this.onChangeHourMinute(true, false)}>
+                                                    <Image resizeMode='contain' source={require("../assets/images/caret-arrow-down.png")} style={styles.up_down_arrow_view} />
                                                 </TouchableOpacity>
                                             </View>
-                                            <View style={styles.double_dut_view}>   
+                                            <View style={styles.double_dut_view}>
                                                 <Text style={styles.double_dut_symbol}>:</Text>
                                             </View>
                                             <View style={styles.minute_view}>
-                                                <TouchableOpacity onPress={() => {navigate('')}}>
-                                                    <Image resizeMode='contain' source={require("../assets/images/caret-arrow-up.png")}  style={styles.up_down_arrow_view} />
+                                                <TouchableOpacity onPress={() => this.onChangeHourMinute(false, true)}>
+                                                    <Image resizeMode='contain' source={require("../assets/images/caret-arrow-up.png")} style={styles.up_down_arrow_view} />
                                                 </TouchableOpacity>
                                                 <TextInput
                                                     style={styles.hour_text}
-                                                    underlineColorAndroid = 'transparent'
-                                                    value = {this.state.minute}
-                                                    keyboardType = 'numeric'
-                                                    maxLength = {2}
-                                                    onChangeText = {(text) => this.setMinute(text)}
+                                                    underlineColorAndroid='transparent'
+                                                    value={this.state.minute}
+                                                    keyboardType='numeric'
+                                                    maxLength={2}
+                                                    onChangeText={(text) => this.setMinute(text)}
                                                     onSubmitEditing={this._onLogin}
                                                 />
-                                                <TouchableOpacity onPress={() => {navigate('')}}>
-                                                    <Image resizeMode='contain' source={require("../assets/images/caret-arrow-down.png")}  style={styles.up_down_arrow_view} />
+                                                <TouchableOpacity onPress={() => this.onChangeHourMinute(false, false)}>
+                                                    <Image resizeMode='contain' source={require("../assets/images/caret-arrow-down.png")} style={styles.up_down_arrow_view} />
                                                 </TouchableOpacity>
                                             </View>
                                         </View>
                                         <Switch
-                                            value={true}
+                                            value={this.state.trueSwitchIsOn}
                                             onValueChange={(val) => this.setState({ trueSwitchIsOn: val })}
                                             disabled={false}
                                             activeText={'AM'}
-                                            inActiveText={'PM'}        
+                                            inActiveText={'PM'}
                                             backgroundActive={'#31dd73'}
                                             backgroundInactive={'#c2c3c9'}
                                             circleActiveColor={'white'}
@@ -200,249 +395,323 @@ class MapsScreen extends React.Component {
                                 </View>
                             </View>
                         ) : (
-                            <TouchableOpacity style={styles.location_time_touchable_view} onPress={() => this.onSettingTime()}>
-                                <View style={styles.location_time_view}>
-                                    <View style={styles.location_time_left_child}>
-                                        <Image resizeMode='contain' source={require("../assets/images/time_icon.png")} style={styles.icon_image}/>
-                                        <Text style={styles.row_text}>{this. state.hour} : {this.state.minute} {this.state.trueSwitchIsOn? 'AM': 'PM'}</Text>
+                                <TouchableOpacity style={styles.location_time_touchable_view} onPress={() => this.onSettingTime()}>
+                                    <View style={styles.location_time_view}>
+                                        <View style={styles.location_time_left_child}>
+                                            <Image resizeMode='contain' source={require("../assets/images/time_icon.png")} style={styles.icon_image} />
+                                            <Text style={styles.row_text}>{this.state.hour} : {this.state.minute} {this.state.trueSwitchIsOn ? 'AM' : 'PM'}</Text>
+                                        </View>
+                                        <Image resizeMode='contain' source={require("../assets/images/edit_time.png")} style={styles.edit_time} />
                                     </View>
-                                    <Image resizeMode='contain' source={require("../assets/images/edit_time.png")} style={styles.edit_time}/>
-                                </View>
-                            </TouchableOpacity>
+                                </TouchableOpacity>
                             )}
-                        </View>
-                        {
-                            !this.props.isbooked ? (
-                            <TouchableOpacity style={styles.booking_view} onPress={() => {navigate('BookingSearching')}}>
-                            <Image resizeMode='cover' source={require("../assets/images/book.png")} style={styles.booking_green_btn} />
-                        </TouchableOpacity>
+                    </View>
+                    {
+                        !this.props.bookingdata.isbooked ? (
+                            <TouchableOpacity style={styles.booking_view} onPress={() => { this.onBookingPressed() }}>
+                                <Image resizeMode='cover' source={require("../assets/images/book.png")} style={styles.booking_green_btn} />
+                            </TouchableOpacity>
                         ) : (
-                            <TouchableOpacity style={styles.booking_view} onPress={() => {navigate('CurrentTimeLimit')}}>
-                            <Image resizeMode='cover' source={require("../assets/images/book_time.png")} style={styles.booking_green_btn} />
-                        </TouchableOpacity>
-                        )}
+                                <TouchableOpacity style={styles.booking_view} onPress={() => { navigate('CurrentTimeLimit') }}>
+                                    <Image resizeMode='cover' source={require("../assets/images/book_time.png")} style={styles.booking_green_btn} />
+                                </TouchableOpacity>
+                            )}
                 </View>
+                {this.showLoading()}
             </View>
         );
+    }
+
+    //
+    updateClockInOutStatusWS() {
+
+        this.setState({
+            isLoading: true
+        })
+
+        var { dispatch } = this.props;
+
+        //Get store data
+        let storestate = store.getState()
+
+        var params = {
+            type: 'guide',
+            userid: this.props.userdata.user.userid,
+            status: this.props.userdata.user.isClockedIn ? 'clockin' : 'clockout',
+            latitude: storestate.tour.bookingdata.lat,
+            longitude: storestate.tour.bookingdata.long,
+        }
+
+        updateClockInOutStatus(params)
+
+            .then(data => {
+
+                this.setState({
+                    isLoading: false
+                })
+
+                //Update Status
+                let storestate = store.getState()
+
+                storestate.user.userdata.isClockedIn = !storestate.user.userdata.isClockedIn
+
+                store.dispatch(
+                    updatebooking(storestate)
+                );
+
+                console.log('updateClockInOutStatusWS-->', data)
+
+            })
+            .catch(err => {
+                this.setState({
+                    isLoading: false
+                })
+                alert(err)
+            })
     }
 }
 
 const styles = StyleSheet.create({
-  icon: {
-     width: 20,
-     height: 20,
-  },
-  container: {
-      flex: 1,
-      alignItems: 'center',
-      flexDirection: 'column',
-  },
-  statusbar:{
-      width: width,
-      height: (Platform.OS == 'ios')? 20 : StatusBar.currentHeight,
-      backgroundColor: Colors.main,
-      position: 'absolute',
-      top: 0,
-      left: 0,
-  },
-  top_container:{
-      marginTop: (Platform.OS == 'ios')? 20 : 0,
-      height:44,
-      backgroundColor: Colors.main,
-      width:width,
-      alignItems:'center',
-      flexDirection:'row',
-      justifyContent:'space-between',
-  },
-    backButton:{
-        marginLeft:20,
-        height:20,
-        width:20,
+    icon: {
+        width: 20,
+        height: 20,
     },
-    centerText:{
-        color:'white',
-        textAlign:'center',
-        fontSize:17,
-        width:width-160,
-        fontWeight:'bold',
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'column',
     },
-    rightView:{
-        marginRight:20,
-        height:35,
-        width:35
+    statusbar: {
+        width: width,
+        height: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20) : StatusBar.currentHeight,
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        position: 'absolute',
+        top: 0,
+        left: 0,
     },
-    map_container:{
-         flex: 1,
-         width:width,
-         alignItems:'center',
-         backgroundColor:'transparent',
+    top_container: {
+        marginTop: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20) : 0,
+        height: 44,
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        width: width,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
-    map_view:{
+    backButton: {
+        marginLeft: 20,
+        height: 20,
+        width: 20,
+        justifyContent: 'center'
+    },
+    centerText: {
+        color: 'black',
+        textAlign: 'center',
+        fontSize: 17,
+        width: width - 160,
+        fontWeight: 'bold',
+    },
+    rightView: {
+        marginRight: 20,
+        height: 36,
+        width: 36,
+        borderRadius: 18,
+    },
+    map_container: {
+        flex: 1,
+        width: width,
+        alignItems: 'center',
+        backgroundColor: 'transparent',
+    },
+    map_view: {
         flex: 1,
         width: width,
     },
     locationInfo_view: {
         position: 'absolute',
-        width: width-60,
+        width: width - 60,
         top: 25,
         backgroundColor: 'white',
         borderRadius: 5,
         borderWidth: 1,
         borderColor: '#ddd',
-        flexDirection:'column',
-        justifyContent:'flex-start',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        shadowColor: '#000000',
+        shadowOffset: {
+            width: 0,
+            height: 0
+        },
+        shadowRadius: 10,
+        shadowOpacity: 0.2
     },
-    location_address_view:{
-        height:55,
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'flex-start',
-        width:width-60,
-        paddingHorizontal:20,
+    location_address_view: {
+        height: 55,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        width: width - 60,
+        paddingHorizontal: 20,
     },
-    devide_line:{
-        backgroundColor:'#c2c3c9',
+    devide_line: {
+        backgroundColor: '#c2c3c9',
         height: 1,
-        width: width-60,
+        width: width - 60,
     },
-    location_time_touchable_view:{
-        height:45,
-        flexDirection:'row',
-        alignItems:'center',
-        paddingLeft:20,
+    location_time_touchable_view: {
+        height: 45,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 20,
     },
-    location_time_view:{
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'space-between',
+    location_time_view: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
         height: 30,
-        width:width-120,
+        width: width - 120,
     },
-    location_time_left_child:{
-        flexDirection:'row',
-        alignItems:'center',
+    location_time_left_child: {
+        flexDirection: 'row',
+        alignItems: 'center',
         height: 30,
         // width:width-90,
     },
-    booking_view:{
+    booking_view: {
         position: 'absolute',
         width: 85,
         height: 85,
         bottom: 20,
-        backgroundColor:'transparent',
+        backgroundColor: 'transparent',
     },
     booking_green_btn: {
         backgroundColor: 'transparent',
         width: 85,
         height: 85,
     },
-    icon_image:{
-        marginLeft:10,
-        height:15,
-        width:15,
+    icon_image: {
+        marginLeft: 10,
+        height: 15,
+        width: 15,
     },
-    row_text:{
-        marginLeft:15,
+    row_text: {
+        marginLeft: 15,
     },
-    edit_time:{
-        height:15,
-        width:15,
+    edit_time: {
+        height: 15,
+        width: 15,
     },
 
-// --- setting time view --- //
-    setting_time_view:{
-        flexDirection:'column',
-        alignItems:'center',
+    // --- setting time view --- //
+    setting_time_view: {
+        flexDirection: 'column',
+        alignItems: 'center',
+
     },
-    setting_time_top_view:{
-        backgroundColor:'#f9fbfe',
-        flexDirection:'row',
-        alignItems:'center',
-        paddingVertical:10,
-        width:width-62,
-        borderBottomWidth:1,
-        borderColor:'#c2c3c9',
-        paddingHorizontal:20,
+    setting_time_top_view: {
+        backgroundColor: '#f9fbfe',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 13,
+        width: width - 62,
+        borderBottomWidth: 1,
+        borderColor: '#c2c3c9',
+        paddingHorizontal: 20,
     },
-    setting_time_main_view:{
-        backgroundColor:'white',
-        flexDirection:'column',
-        alignItems:'center',
+    setting_time_main_view: {
+        backgroundColor: 'white',
+        flexDirection: 'column',
+        alignItems: 'center',
     },
-    setting_time_lb_view:{
-        paddingVertical:10,
-        width:width-120,
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'space-between',
-        borderBottomWidth:1,
-        borderColor:'#c2c3c9',
+    setting_time_lb_view: {
+        paddingVertical: 10,
+        width: width - 120,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        borderBottomWidth: 1,
+        borderColor: '#c2c3c9',
     },
-    setting_time_lb:{
-        color:'black',
+    setting_time_lb: {
+        color: 'black',
     },
-    setting_time_check_icon:{
-        height:15,
-        width:15,
+    setting_time_check_icon: {
+        height: 15,
+        width: 15,
     },
-    setting_time_picker_view:{
-        width:width-120-20,
-        paddingVertical:20,
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'space-between',
+    setting_time_picker_view: {
+        width: width - 120 - 20,
+        paddingVertical: 20,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
-    setting_time_picker_main_view:{
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'center',
+    setting_time_picker_main_view: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    hour_view:{
-        flexDirection:'column',
-        alignItems:'center',
-        justifyContent:'center',
+    hour_view: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    hour_text:{
-        fontSize:25,
-        fontWeight:'bold',
-        color:'black',
-        height:50,
-        width:40,
-        borderWidth:1,
-        borderColor:'#979797',
-        borderRadius:5,
-        textAlign:'center',
+    hour_text: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: 'black',
+        height: 50,
+        width: 40,
+        borderWidth: 1,
+        borderColor: '#979797',
+        borderRadius: 5,
+        textAlign: 'center',
     },
-    hour_lb:{
-        textAlign:'center',
-        marginTop:10,
-        fontSize:15,
-        color:'#9fa0a2',
+    hour_lb: {
+        textAlign: 'center',
+        marginTop: 10,
+        fontSize: 15,
+        color: '#9fa0a2',
     },
-    double_dut_view:{
-        marginBottom:20,
-        width:60,
-        alignItems:'center',
+    double_dut_view: {
+        marginBottom: 20,
+        width: 60,
+        alignItems: 'center',
     },
-    double_dut_symbol:{
-        textAlign:'center',
-        fontSize:25,
-        fontWeight:'bold',
-        color:'black',
+    double_dut_symbol: {
+        textAlign: 'center',
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: 'black',
     },
-    minute_view:{
-        flexDirection:'column',
-        alignItems:'center',
+    minute_view: {
+        flexDirection: 'column',
+        alignItems: 'center',
     },
-    up_down_arrow_view:{
-        width:40,
-        height:40,
+    up_down_arrow_view: {
+        width: 40,
+        height: 40,
     },
-    switch_view:{
-    
+    switch_view: {
+
     },
-          
+    loadingView: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'transparent'
+    }
 });
 
-// export default MapsScreen;
-export default connect(mapStateToProps,mapDispatchToProps)(MapsScreen);
+const mapStateToProps = store => {
+    return {
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata
+    };
+};
+
+export default connect(mapStateToProps)(MapsScreen);

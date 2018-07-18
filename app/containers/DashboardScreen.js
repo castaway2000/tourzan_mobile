@@ -15,9 +15,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-// import {connect} from 'react-redux';
-// import { bindActionCreators } from 'redux'
-
 import { TabNavigator } from 'react-navigation';
 import { NavigationActions } from 'react-navigation'
 import { StackNavigator } from 'react-navigation';
@@ -32,6 +29,19 @@ import TripItemDetailScreen from './ItemDetailScreens/TripItemDetailScreen';
 import GuideItemDetailScreen from './ItemDetailScreens/GuideItemDetailScreen';
 import TransactionItemDetailScreen from './ItemDetailScreens/TransactionItemDetailScreen';
 import DashboardTapNavigator from './DashboardTabs/DashboardTapNavigator'
+import ProfileScreen from './ProfileScreen';
+
+//Store
+import { connect } from 'react-redux';
+import configureStore from '../configureStore'
+const store = configureStore();
+
+//Actions
+import { updatebooking } from '../actions/bookingActions'
+import { updateuser } from '../actions/userActions'
+
+//Utilities
+import { Storage, isIphoneX } from '../global/Utilities';
 
 var { width, height } = Dimensions.get('window');
 
@@ -55,9 +65,9 @@ var { width, height } = Dimensions.get('window');
       TripItemDetail:{screen: TripItemDetailScreen},
       GuideItemDetail:{screen: GuideItemDetailScreen},
       TransactionItemDetail: {screen: TransactionItemDetailScreen},
+      Profile: {screen: ProfileScreen},
     },{ 
       headerMode: 'screen',
-      mode: 'modal',
       initialRouteName: 'DashboardTapNavigator',
   }
 );
@@ -105,9 +115,11 @@ const styles = StyleSheet.create({
 
 });
 
+const mapStateToProps = store => {
+    return {
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata
+    };
+};
 
-export default DashboardScreen;
-// export default connect(mapStateToProps,mapDispatchToProps)(DashboardScreen);
-
-
-
+export default connect(mapStateToProps)(DashboardScreen);

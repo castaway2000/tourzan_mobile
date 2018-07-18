@@ -3,6 +3,9 @@
 .DS_Store
 
 # Xcode
+*.vscode
+
+# Xcode
 #
 build/
 *.pbxuser
@@ -46,8 +49,15 @@ buck-out/
 # It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
 # screenshots whenever they are needed.
 # For more information about the recommended setup visit:
-# https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Gitignore.md
+# https://docs.fastlane.tools/best-practices/source-control/
 
-fastlane/report.xml
-fastlane/Preview.html
-fastlane/screenshots
+*/fastlane/report.xml
+*/fastlane/Preview.html
+*/fastlane/screenshots
+
+# Bundle artifact
+*.jsbundle
+
+Ios/Pods/*
+android/app/src/main/assets/index.android.bundle
+android/app/src/main/assets/index.android.bundle.meta

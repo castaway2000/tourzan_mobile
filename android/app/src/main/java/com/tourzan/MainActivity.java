@@ -1,7 +1,11 @@
 package com.tourzan;
 
+import android.content.Intent;
+import android.os.Bundle;
+
 import com.facebook.react.ReactActivity;
-import com.oblador.vectoricons.VectorIconsPackage;
+
+import org.devio.rn.splashscreen.SplashScreen;
 
 public class MainActivity extends ReactActivity {
 
@@ -12,5 +16,17 @@ public class MainActivity extends ReactActivity {
     @Override
     protected String getMainComponentName() {
         return "Tourzan";
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        SplashScreen.show(this);  // here
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 }

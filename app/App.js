@@ -37,6 +37,7 @@ import TransactionsScreen from './containers/DashboardTabs/TransactionsScreen';
 import TripItemDetailScreen from './containers/ItemDetailScreens/TripItemDetailScreen';
 import GuideItemDetailScreen from './containers/ItemDetailScreens/GuideItemDetailScreen';
 import TransactionItemDetailScreen from './containers/ItemDetailScreens/TransactionItemDetailScreen';
+
 import ChatRoomScreen from './containers/ChatRoomScreen';
 import ProfileScreen from './containers/ProfileScreen';
 import PaymentMethodScreen from './containers/PaymentMethodScreen';
@@ -48,80 +49,123 @@ import BookingGuideSettingScreen from './containers/BookingScreens/BookingGuideS
 import SettingsScreen from './containers/SettingsScreen';
 import ChangePasswordScreen from './containers/ChangePasswordScreen';
 
+import FAQScreen from './containers/FAQScreen'
+import PrivacyPolicyScreen from './containers/PrivacyPolicyScreen'
+import TermsofUseScreen from './containers/TermsofUseScreen'
+
+import OfferScreen from './containers/OfferScreen'
+
+import ExtendTimeScreen from './containers/ExtendTimeScreen'
+
 var { width, height } = Dimensions.get('window');
 
 console.disableYellowBox = true;
 
-const ChatStackNavigator = StackNavigator({
-    Chats: { screen: ChatScreen, },
-    // ChatRoom : {screen: ChatRoomScreen},
-},{ 
-    headerMode: 'screen', 
-    initialRouteName: 'Chats',
-  },
-);
-
+/**
+ * MAP TAB
+ */
 const MapChatStackNavigator = StackNavigator({
-    Maps: { screen: MapsScreen, },
-    Profile : {screen: ProfileScreen},
-    ProfileCharRoom : {screen: ChatRoomScreen},
-},{ 
-    navigationOptions:{
+  Maps: { screen: MapsScreen, },
+  Profile: { screen: ProfileScreen },
+  ProfileCharRoom: { screen: ChatRoomScreen },
+}, {
+    navigationOptions: {
       header: null
     },
     initialRouteName: 'Maps',
   },
 );
 
+/**
+ * DASHBOARD TAB
+ */
+const DashboardStackNavigator = StackNavigator({
+  Dashboard: { screen: DashboardScreen },
+  Maps: { screen: MapsScreen, },
+  Profile: { screen: ProfileScreen },
+  ProfileCharRoom: { screen: ChatRoomScreen },
+}, {
+    navigationOptions: {
+      header: null
+    },
+    initialRouteName: 'Dashboard',
+  },
+);
+
+/**
+ * CHAT TAB
+ */
+const ChatStackNavigator = StackNavigator({
+  Chats: { screen: ChatScreen, },
+  // ChatRoom : {screen: ChatRoomScreen},
+}, {
+    headerMode: 'screen',
+    initialRouteName: 'Chats',
+  },
+);
+
+/**
+ * MORE TAB
+ */
 const MoreStackNavigator = StackNavigator({
-    More : {screen: MoreScreen},
-    Settings : {screen : SettingsScreen},
-    ChangePassword : {screen : ChangePasswordScreen},
-},{ 
-    headerMode: 'screen', 
+  More: { screen: MoreScreen },
+  Settings: { screen: SettingsScreen },
+  ChangePassword: { screen: ChangePasswordScreen },
+}, {
+    headerMode: 'screen',
     initialRouteName: 'More',
   },
 );
 
 const MainTapNavigator = TabNavigator({
-    MapsNav: { screen: MapChatStackNavigator, },
-    Dashboard: { screen: DashboardScreen, },
-    Chat: { screen: ChatStackNavigator, },
-    Marketplace: { screen: MarketplaceScreen, },
-    MoreNav:{screen: MoreStackNavigator,},
-  }, {
-    navigationOptions:{
-      header:null,
+  MapsNav: { screen: MapChatStackNavigator, },
+  Dashboard: { screen: DashboardStackNavigator, },
+  Chat: { screen: ChatStackNavigator, },
+  Marketplace: { screen: MarketplaceScreen, },
+  MoreNav: { screen: MoreStackNavigator, },
+
+}, {
+    navigationOptions: {
+      header: null,
     },
-    tabBarPosition:'bottom',
+    tabBarPosition: 'bottom',
     lazy: false,
+    swipeEnabled: false,
+    animationEnabled: false,
     tabBarOptions: {
       activeTintColor: '#31dd73',
-      inactiveTintColor:'#999',
-      labelStyle:{fontSize:9, width:width/5-5,},
-      showIcon:'true',
-      style: {backgroundColor: 'white'},
-      indicatorStyle:{opacity:1},
+      inactiveTintColor: '#999',
+      labelStyle: { fontSize: 9, width: width / 5 - 5, },
+      showIcon: 'true',
+      style: { backgroundColor: 'white' },
+      indicatorStyle: { opacity: 1 },
     },
-});
+  });
 
 const App = StackNavigator({
-    Welcome: { screen: WelcomeScreen },
-    LoginGuide : {screen: LoginGuideScreen},
-    LoginTourist : {screen: LoginTouristScreen},
-    RegisterTourist : {screen: RegisterTourist},
-    RegisterGuide : {screen: RegisterGuide},
-    ForgotPassword : {screen : ForgotPassword},
-    Home: {screen: MainTapNavigator},
-    BookingSearching: {screen:BookingSearchingScreen},
-    BookingGuideSetting: {screen:BookingGuideSettingScreen},
-    ProfileCharRoomFromBooking : {screen: ChatRoomScreen},
-    PaymentMethod : {screen: PaymentMethodScreen},
-    TimeLimit: {screen: SetTimeLimitScreen},
-    CurrentTimeLimit:{screen: CurrentTimeLimitScreen},
-    ChatRoom : {screen: ChatRoomScreen},
-},{ 
-    headerMode: 'screen' 
+  Welcome: { screen: WelcomeScreen },
+  LoginGuide: { screen: LoginGuideScreen },
+  LoginTourist: { screen: LoginTouristScreen },
+  RegisterTourist: { screen: RegisterTourist },
+  RegisterGuide: { screen: RegisterGuide },
+  ForgotPassword: { screen: ForgotPassword },
+  Home: { screen: MainTapNavigator },
+  BookingSearching: { screen: BookingSearchingScreen },
+  BookingGuideSetting: { screen: BookingGuideSettingScreen },
+  ProfileCharRoomFromBooking: { screen: ChatRoomScreen },
+  PaymentMethod: { screen: PaymentMethodScreen },
+  TimeLimit: { screen: SetTimeLimitScreen },
+  CurrentTimeLimit: { screen: CurrentTimeLimitScreen },
+  ChatRoom: { screen: ChatRoomScreen },
+  FAQScreen: { screen: FAQScreen },
+  PrivacyPolicyScreen: { screen: PrivacyPolicyScreen },
+  TermsofUseScreen: { screen: TermsofUseScreen },
+  Offer: { screen: OfferScreen },
+  Profile: { screen: ProfileScreen },
+  ProfileCharRoom: { screen: ChatRoomScreen },
+  ExtendTime: { screen: ExtendTimeScreen }
+}, {
+    headerMode: 'screen'
   },
 );
 

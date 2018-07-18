@@ -53,6 +53,9 @@ class CompleteTourScreen extends React.Component {
   }
 
   componentDidMount() {
+
+    Toast.show.bind(null, 'key code pressed');
+    
     // if you want to react to keyDown 
     KeyEvent.onKeyDownListener((keyCode) => {
       console.log(`Key code pressed: key down`);

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "415593621466",
+    "firebase_url": "https://push-notifications-2cd1c.firebaseio.com",
+    "project_id": "push-notifications-2cd1c",
+    "storage_bucket": "push-notifications-2cd1c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:415593621466:android:6337a68ec322b977",
+        "android_client_info": {
+          "package_name": "com.tourzan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "415593621466-7ib1qoeikqkrpao47t45s6h3hl53t7o3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxT5wSfGEWJ36e3Fwq9UhVnyZddZgbOo4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

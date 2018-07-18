@@ -1,8 +1,8 @@
 //import liraries
 import React, { Component } from 'react';
-import { 
-    View, 
-    Text, 
+import {
+    View,
+    Text,
     StyleSheet,
     Dimensions,
     Platform,
@@ -12,12 +12,32 @@ import {
     TouchableOpacity,
     TouchableWithoutFeedback,
 } from 'react-native';
+
 import { Colors } from '../../constants'
 import GuidesScreen from './GuidesScreen'
 import TransactionsScreen from './TransactionsScreen'
 import TripsScreen from './TripsScreen'
 
+//FCM
+import FCM, { NotificationActionType } from "react-native-fcm";
+import { registerKilledListener, registerAppListener } from "../../global/Firebase/Listeners"
+import firebaseClient from "../../global/Firebase/FirebaseClient";
+
+//Store
+import { connect } from 'react-redux';
+import configureStore from '../../configureStore'
+const store = configureStore();
+
+//Actions
+import { updatebooking } from '../../actions/bookingActions'
+import { updateuser } from '../../actions/userActions'
+
+//Utilities
+import { Storage, isIphoneX } from '../../global/Utilities';
+
 var { width, height } = Dimensions.get('window');
+
+registerKilledListener();
 
 // create a component
 class DashboardTapNavigator extends React.Component {
@@ -35,7 +55,59 @@ class DashboardTapNavigator extends React.Component {
         }
     }
 
-    onTrips(){
+    async componentDidMount() {
+
+        FCM.createNotificationChannel({
+            id: 'default',
+            name: 'Default',
+            description: 'used for example',
+            priority: 'high'
+        })
+
+        registerAppListener(this.props.navigation);
+
+        FCM.getInitialNotification().then(notif => {
+            this.setState({
+                initNotif: notif
+            });
+
+            console.log('Notification received!', notif)
+
+            // if (notif && notif.targetScreen === "detail") {
+            //     setTimeout(() => {
+            //         this.props.navigation.navigate("Detail");
+            //     }, 500);
+            // }
+
+        });
+
+        try {
+            let result = await FCM.requestPermissions({
+                badge: false,
+                sound: true,
+                alert: true
+            });
+        } catch (e) {
+            console.error(e);
+        }
+
+        FCM.getFCMToken().then(token => {
+            console.log("TOKEN (getFCMToken)", token);
+            this.setState({ token: token || "" });
+        });
+
+        if (Platform.OS === "ios") {
+            FCM.getAPNSToken().then(token => {
+                console.log("APNS TOKEN (getFCMToken)", token);
+            });
+        }
+
+        // topic example
+        // FCM.subscribeToTopic('sometopic')
+        // FCM.unsubscribeFromTopic('sometopic')
+    }
+
+    onTrips() {
         this.setState({
             isTrips: true,
             isGuides: false,
@@ -43,7 +115,7 @@ class DashboardTapNavigator extends React.Component {
         })
     }
 
-    onGuides(){
+    onGuides() {
         this.setState({
             isTrips: false,
             isGuides: true,
@@ -51,7 +123,7 @@ class DashboardTapNavigator extends React.Component {
         })
     }
 
-    onTransaction(){
+    onTransaction() {
         this.setState({
             isTrips: false,
             isGuides: false,
@@ -59,63 +131,67 @@ class DashboardTapNavigator extends React.Component {
         })
     }
 
-    showDashbaord(){
-        if(this.state.isTrips){
-            return(
-                < TripsScreen navigation = {this.props.navigation}/>
+    showDashbaord() {
+        if (this.state.isTrips) {
+            return (
+                < TripsScreen navigation={this.props.navigation} />
             )
         }
-        if(this.state.isGuides){
-            return(
-                < GuidesScreen navigation = {this.props.navigation}/>
+        if (this.state.isGuides) {
+            return (
+                < GuidesScreen navigation={this.props.navigation} />
             )
         }
-        if(this.state.isTransaction){
-            return(
-                < TransactionsScreen navigation = {this.props.navigation}/>
+        if (this.state.isTransaction) {
+            return (
+                < TransactionsScreen navigation={this.props.navigation} />
             )
         }
-
     }
 
     render() {
+
+        const { navigate } = this.props.navigation;
+
         return (
             <View style={styles.container}>
-                <View style = {styles.statusbar}/>
-                <View style = {styles.headView}>
-                    <Text style = {styles.title}>DASHBOARD</Text>
-                    <Image resizeMode='cover' source={require("../../assets/images/person1.png")}  style={styles.personImg} />
+                <View style={styles.statusbar} />
+                <View style={styles.headView}>
+                    <Text style={styles.title}>DASHBOARD</Text>
+                    <TouchableOpacity style={styles.personImgButton} onPress={() => { navigate('Profile') }}>
+                        <Image resizeMode='cover' source={{ uri: this.props.userdata.user.profilepicture }} style={styles.personImg} />
+                    </TouchableOpacity>
                 </View>
-                <View style = {styles.mainView}>
-                    <View style = {styles.tabbarView}>
-                        <TouchableWithoutFeedback onPress = {() => this.onTrips()}>
-                            <View style = {styles.tripsButtonView}>
-                                <Image resizeMode='contain' source={require('../../assets/images/trips_icon.png')}  style={ this.state.isTrips?  [styles.icon, {tintColor: 'white'}] : styles.icon } />
-                                <Text style = { this.state.isTrips?  [styles.tabtxt, {color: 'white'}] : styles.tabtxt }>LIST OF TRIPS</Text>
+                <View style={styles.mainView}>
+                    <View style={styles.tabbarView}>
+                        <TouchableWithoutFeedback onPress={() => this.onTrips()}>
+                            <View style={styles.tripsButtonView}>
+                                <Image resizeMode='contain' source={require('../../assets/images/trips_icon.png')} style={this.state.isTrips ? [styles.icon, { tintColor: 'white' }] : styles.icon} />
+                                <Text style={this.state.isTrips ? [styles.tabtxt, { color: 'white' }] : styles.tabtxt}>LIST OF TRIPS</Text>
                             </View>
                         </TouchableWithoutFeedback>
-                        <TouchableWithoutFeedback onPress = {() => this.onGuides()}>
-                            <View style = {styles.tripsButtonView}>
-                                <Image resizeMode='contain' source={require('../../assets/images/guides_icon.png')} style={ this.state.isGuides?  [styles.icon, {tintColor: 'white'}] : styles.icon } />
-                                <Text style = { this.state.isGuides?  [styles.tabtxt, {color: 'white'}] : styles.tabtxt }>PREV GUIDES</Text>
+                        <TouchableWithoutFeedback onPress={() => this.onGuides()}>
+                            <View style={styles.tripsButtonView}>
+                                <Image resizeMode='contain' source={require('../../assets/images/guides_icon.png')} style={this.state.isGuides ? [styles.icon, { tintColor: 'white' }] : styles.icon} />
+                                <Text style={this.state.isGuides ? [styles.tabtxt, { color: 'white' }] : styles.tabtxt}>PREV GUIDES</Text>
                             </View>
                         </TouchableWithoutFeedback>
-                        <TouchableWithoutFeedback onPress = {() => this.onTransaction()}>
-                            <View style = {styles.tripsButtonView}>
-                                <Image resizeMode='contain' source={require('../../assets/images/transactions_icon.png')} style={ this.state.isTransaction?  [styles.icon, {tintColor: 'white'}] : styles.icon } />
-                                <Text style = { this.state.isTransaction?  [styles.tabtxt, {color: 'white'}] : styles.tabtxt }>TRANSACTION</Text>
+                        <TouchableWithoutFeedback onPress={() => this.onTransaction()}>
+                            <View style={styles.tripsButtonView}>
+                                <Image resizeMode='contain' source={require('../../assets/images/transactions_icon.png')} style={this.state.isTransaction ? [styles.icon, { tintColor: 'white' }] : styles.icon} />
+                                <Text style={this.state.isTransaction ? [styles.tabtxt, { color: 'white' }] : styles.tabtxt}>TRANSACTION</Text>
                             </View>
                         </TouchableWithoutFeedback>
                     </View>
-                    <View style = {styles.tab_listView}>
+                    <View style={styles.tab_listView}>
                         {this.showDashbaord()}
                     </View>
-                    
+
                 </View>
-                
+
             </View>
         );
-    }g
+    } g
 }
 
 // define your styles
@@ -126,9 +202,9 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-between',
     },
-    statusbar:{
+    statusbar: {
         width: width,
-        height: (Platform.OS == 'ios')? 20 : 0,
+        height: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20) : 0,
         backgroundColor: Colors.main,
         position: 'absolute',
         top: 0,
@@ -137,16 +213,16 @@ const styles = StyleSheet.create({
     headView: {
         width: width,
         height: 44,
-        marginTop: (Platform.OS == 'ios')? 20:0,
+        marginTop: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20) : 0,
         backgroundColor: Colors.main,
         alignItems: 'center',
         justifyContent: 'center',
     },
     title: {
-        textAlign:'center',
-        fontSize:17,
-        width:width-160,
-        fontWeight:'bold',
+        textAlign: 'center',
+        fontSize: 17,
+        width: width - 160,
+        fontWeight: 'bold',
         color: 'white',
     },
     mainView: {
@@ -156,12 +232,12 @@ const styles = StyleSheet.create({
     tabbarView: {
         width: width,
         height: 55,
-        marginTop:1,
+        marginTop: 1,
         backgroundColor: Colors.main,
         flexDirection: 'row'
     },
     tripsButtonView: {
-        width: width/3,
+        width: width / 3,
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
@@ -177,18 +253,29 @@ const styles = StyleSheet.create({
         marginTop: 5
     },
     personImg: {
-        marginRight:20, 
-        height:35, 
-        width:35,
+        height: 36,
+        width: 36,
+        borderRadius: 18,
+    },
+    personImgButton: {
+        height: 36,
+        width: 36,
         position: 'absolute',
-        right: 25
+        right: 10,
+        borderRadius: 18,
     },
     tab_listView: {
         width: width,
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
     }
 });
 
-//make this component available to the app
-export default DashboardTapNavigator;
+const mapStateToProps = store => {
+    return {
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata
+    };
+};
+
+export default connect(mapStateToProps)(DashboardTapNavigator);

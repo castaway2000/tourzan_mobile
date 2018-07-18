@@ -1,0 +1,2 @@
+export const UPDATE_BOOKING = 'UPDATE_BOOKING';
+export const UPDATE_USER = 'UPDATE_USER';
