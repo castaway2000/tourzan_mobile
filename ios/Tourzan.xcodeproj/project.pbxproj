@@ -22,6 +22,8 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		350AF1BC20DB86C000A6D40B /* libSMXCrashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 350AF1B920DB6DAB00A6D40B /* libSMXCrashlytics.a */; };
 		350C1DAE20E3CE87008E1D53 /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 350C1DAD20E3CE79008E1D53 /* libSplashScreen.a */; };
+		35627C7820EB772300EC9DA7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 35627C7720EB772300EC9DA7 /* GoogleService-Info.plist */; };
+		35627CC820EB7CF700EC9DA7 /* libRNFIRMessaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 35627CC420EB7C0C00EC9DA7 /* libRNFIRMessaging.a */; };
 		358B8D3D20CE971E004B3C1D /* libRCTBackgroundGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 358B8D1A20CE9709004B3C1D /* libRCTBackgroundGeolocation.a */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
@@ -195,6 +197,13 @@
 			remoteGlobalIDString = 3D7682761D8E76B80014119E;
 			remoteInfo = SplashScreen;
 		};
+		35627CC320EB7C0C00EC9DA7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 35627C9920EB7C0B00EC9DA7 /* RNFIRMessaging.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNFIRMessaging;
+		};
 		358B8D1920CE9709004B3C1D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 358B8D1120CE9709004B3C1D /* RCTBackgroundGeolocation.xcodeproj */;
@@ -352,6 +361,9 @@
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		350AF1B320DB6DAB00A6D40B /* SMXCrashlytics.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SMXCrashlytics.xcodeproj; path = "../node_modules/react-native-fabric/ios/SMXCrashlytics.xcodeproj"; sourceTree = "<group>"; };
 		350C1D8020E3CE78008E1D53 /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SplashScreen.xcodeproj; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; };
+		35627C7720EB772300EC9DA7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		35627C9920EB7C0B00EC9DA7 /* RNFIRMessaging.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFIRMessaging.xcodeproj; path = "../node_modules/react-native-fcm/ios/RNFIRMessaging.xcodeproj"; sourceTree = "<group>"; };
+		35627D0420EB8FAD00EC9DA7 /* Tourzan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Tourzan.entitlements; path = Tourzan/Tourzan.entitlements; sourceTree = "<group>"; };
 		358B8D1120CE9709004B3C1D /* RCTBackgroundGeolocation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBackgroundGeolocation.xcodeproj; path = "../node_modules/react-native-mauron85-background-geolocation/ios/RCTBackgroundGeolocation.xcodeproj"; sourceTree = "<group>"; };
 		5772DC9FB37A500DF63E1921 /* libPods-Tourzan.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tourzan.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
@@ -378,6 +390,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				35627CC820EB7CF700EC9DA7 /* libRNFIRMessaging.a in Frameworks */,
 				350C1DAE20E3CE87008E1D53 /* libSplashScreen.a in Frameworks */,
 				350AF1BC20DB86C000A6D40B /* libSMXCrashlytics.a in Frameworks */,
 				358B8D3D20CE971E004B3C1D /* libRCTBackgroundGeolocation.a in Frameworks */,
@@ -483,10 +496,12 @@
 		13B07FAE1A68108700A75B9A /* Tourzan */ = {
 			isa = PBXGroup;
 			children = (
+				35627D0420EB8FAD00EC9DA7 /* Tourzan.entitlements */,
 				967A478120B077A900A54D5E /* Fonts */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
+				35627C7720EB772300EC9DA7 /* GoogleService-Info.plist */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
@@ -544,6 +559,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		35627C9A20EB7C0B00EC9DA7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				35627CC420EB7C0C00EC9DA7 /* libRNFIRMessaging.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		358B8D1220CE9709004B3C1D /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -573,6 +596,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				35627C9920EB7C0B00EC9DA7 /* RNFIRMessaging.xcodeproj */,
 				350C1D8020E3CE78008E1D53 /* SplashScreen.xcodeproj */,
 				350AF1B320DB6DAB00A6D40B /* SMXCrashlytics.xcodeproj */,
 				358B8D1120CE9709004B3C1D /* RCTBackgroundGeolocation.xcodeproj */,
@@ -695,10 +719,13 @@
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = A729GA8W3V;
+						DevelopmentTeam = QV2N88PZ82;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
 								enabled = 1;
 							};
 						};
@@ -768,6 +795,10 @@
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+				},
+				{
+					ProductGroup = 35627C9A20EB7C0B00EC9DA7 /* Products */;
+					ProjectRef = 35627C9920EB7C0B00EC9DA7 /* RNFIRMessaging.xcodeproj */;
 				},
 				{
 					ProductGroup = 350AF1B420DB6DAB00A6D40B /* Products */;
@@ -940,6 +971,13 @@
 			remoteRef = 350C1DAC20E3CE79008E1D53 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		35627CC420EB7C0C00EC9DA7 /* libRNFIRMessaging.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNFIRMessaging.a;
+			remoteRef = 35627CC320EB7C0C00EC9DA7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		358B8D1A20CE9709004B3C1D /* libRCTBackgroundGeolocation.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1091,6 +1129,7 @@
 				967A478E20B077A900A54D5E /* Feather.ttf in Resources */,
 				967A479320B077A900A54D5E /* FontAwesome.ttf in Resources */,
 				967A478F20B077A900A54D5E /* Entypo.ttf in Resources */,
+				35627C7820EB772300EC9DA7 /* GoogleService-Info.plist in Resources */,
 				967A479020B077A900A54D5E /* MaterialCommunityIcons.ttf in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
@@ -1217,12 +1256,13 @@
 			baseConfigurationReference = E528B3CB69CBE7347173DCE3 /* Pods-Tourzan.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Tourzan/Tourzan.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 5;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = QV2N88PZ82;
 				GCC_INPUT_FILETYPE = automatic;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1230,6 +1270,7 @@
 					ode_modules,
 					"eact-native-mapslibios/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
+					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
 				);
 				INFOPLIST_FILE = Tourzan/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1239,6 +1280,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.Tourzan;
 				PRODUCT_NAME = Tourzan;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1251,11 +1293,12 @@
 			baseConfigurationReference = 8206D057EBB52ABC2CB6D7FE /* Pods-Tourzan.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Tourzan/Tourzan.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 5;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = QV2N88PZ82;
 				GCC_INPUT_FILETYPE = automatic;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1263,6 +1306,7 @@
 					ode_modules,
 					"eact-native-mapslibios/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
+					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
 				);
 				INFOPLIST_FILE = Tourzan/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1272,6 +1316,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.Tourzan;
 				PRODUCT_NAME = Tourzan;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";

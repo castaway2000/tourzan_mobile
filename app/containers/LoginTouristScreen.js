@@ -24,10 +24,21 @@ import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
 import { emailLogin } from '../actions/'
-import { currentuser } from '../global/CurrentUser';
-import { Storage } from '../global/Utilities';
+
+//Store
+import { connect } from 'react-redux';
+import configureStore from '../configureStore'
+const store = configureStore();
+
+//Actions
+import { updatebooking } from '../actions/bookingActions'
+import { updateuser } from '../actions/userActions'
+
+//Utilities
+import { Storage, isIphoneX } from '../global/Utilities';
 
 var { width, height } = Dimensions.get('window');
+var Toast = require('react-native-toast');
 
 const onButtonPress = () => { Alert.alert('Button has been pressed!'); };
 const backAction = NavigationActions.back({
@@ -48,7 +59,7 @@ class LoginTouristScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            checked: false,
+            isChecked: true,
             username: 'test010', //Username105 - 123123qwe, tejas.g@3rddigital.com - Cred@123098, test010 - Test@123', fakeit - newpass1234
             password: 'Cred@123', //
             isLoading: false
@@ -60,9 +71,6 @@ class LoginTouristScreen extends React.Component {
         // console.log("lOGIN TAPPED");
 
         // Crashlytics.logException("TEST Exception");
-
-        // return
-
 
         this.setState({
             isLoading: true
@@ -87,12 +95,16 @@ class LoginTouristScreen extends React.Component {
                     console.log('success')
 
                     //save profile data
-                    currentuser.token = data.token
-                    currentuser.user = data.user
+                    store.dispatch(
+                        updateuser(data)
+                    );
 
                     //Save to disk
-                    Storage.setItem("currentuser", currentuser);
+                    if (this.state.isChecked) {
+                        Storage.setItem("currentuser", data);
+                    }
 
+                    //Navigate to home
                     const resetAction = NavigationActions.reset({
                         index: 0,
                         actions: [
@@ -100,13 +112,15 @@ class LoginTouristScreen extends React.Component {
                         ]
                     });
                     this.navigate.dispatch(resetAction)
-                }
-                else {
+                } else {
                     alert('Unable to log in with provided credentials.')
                 }
 
             })
             .catch(err => {
+                this.setState({
+                    isLoading: false
+                })
                 alert(err)
             })
     }
@@ -139,6 +153,10 @@ class LoginTouristScreen extends React.Component {
                 <ActivityIndicator color={'black'} size={'large'} style={styles.loadingView} />
             );
         }
+    }
+
+    _onCheckboxChecked = (name, checked) => {
+        this.setState({ isChecked: checked })
     }
 
     render() {
@@ -182,9 +200,10 @@ class LoginTouristScreen extends React.Component {
                         <View style={styles.view_remember}>
                             <View style={styles.view_checkbox}>
                                 <Checkbox
-                                    checked={true}
+                                    checked={this.state.isChecked}
                                     style={{ backgroundColor: '#f2f2f2', color: '#31dd73', borderRadius: 2 }}
                                     size={15}
+                                    onChange={(name, checked) => this._onCheckboxChecked(name, checked)} />
                                 />
                                 <Text style={styles.txt_checkbox}>Remember me</Text>
                             </View>
@@ -305,5 +324,10 @@ const styles = StyleSheet.create({
     }
 });
 
-export default LoginTouristScreen
+const mapStateToProps = store => {
+    return {
+        userdata: store.user.userdata
+    };
+};
 
+export default connect(mapStateToProps)(LoginTouristScreen);

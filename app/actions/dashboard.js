@@ -1,9 +1,0 @@
-import * as types from './types'
-
-// This is an action creator, it simply specifies the action.
-// this is what we call to send an action.
-export  function hideOrShowDashboardNavigationbar()  {
-  return {
-    type: types.HIDE_DASHBOARD_NAVIGATIONBAR
-  }
-}

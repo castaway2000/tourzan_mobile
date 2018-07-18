@@ -13,7 +13,8 @@ import {
     View,
     Alert,
     TouchableOpacity,
-    Platform
+    Platform,
+    ActivityIndicator
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -24,17 +25,27 @@ import MapView from 'react-native-maps';
 
 import Switch from '../components/Switch';
 import NavigationBar from '../components/NavigationBar';
-import * as Actions from '../actions/map'
 
 import flagImg from '../assets/images/flag-blue_small.png';
 import moment from 'moment';
 
-import { currentuser, isGuide, userid, profilePictureUrl} from '../global/CurrentUser';
-import { Storage } from '../global/Utilities';
+//Store
+import configureStore from '../configureStore'
+const store = configureStore();
 
-//import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
+//Actions
+import { updatebooking } from '../actions/bookingActions'
+import { updateuser } from '../actions/userActions'
 
-// var Switch = require('react-native-material-switch');
+//Webservice
+import { updateClockInOutStatus } from '../actions'
+
+//Utilities
+import { Storage, isIphoneX } from '../global/Utilities';
+
+//Geo coder
+import Geocoder from '../global/Geocoder';
+Geocoder.init('AIzaSyAq-cJJqZ8jWN4pJQ34tNbNdhbjsbuZUJs'); // use a valid API key
 
 var { width, height } = Dimensions.get('window');
 
@@ -42,18 +53,7 @@ const backAction = NavigationActions.back({
 
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators(Actions, dispatch)
-};
-
-const mapStateToProps = (state) => {
-    return {
-        isbooked: state.isbooked,
-    }
-};
-
 class MapsScreen extends React.Component {
-
 
     //#region Constractors
     static navigationOptions = {
@@ -67,164 +67,89 @@ class MapsScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            region: {
+            mapRegion: {
                 latitude: 37.78825,
                 longitude: -122.4324,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
             },
+            address: '',
             isSettingTime: false,
             hour: moment().format('hh'),
             minute: moment().format('mm'),
             trueSwitchIsOn: moment().format('A') == 'AM' ? true : false,
+            isLoading: false,
         };
+
+        this.onRegionChange = this.onRegionChange.bind(this);
     }
 
     //#endregion
 
     componentWillMount() {
+        let storestate = store.getState()
 
-        // console.log("isGuide",isGuide())
-        // console.log("userid",userid())
-        // console.log("profilePictureUrl", profilePictureUrl())
+        console.log('storestate', storestate)
+        console.log('userdata', this.props.userdata)
+    }
 
-/*
-        this.toggleTracking()
+    componentDidMount() {
 
-        BackgroundGeolocation.on('start', () => {
-            // service started successfully
-            // you should adjust your app UI for example change switch element to indicate
-            // that service is running
-            console.log('[DEBUG] BackgroundGeolocation has been started');
-            this.setState({ isRunning: true });
-        });
+        this.watchID = navigator.geolocation.watchPosition((position) => {
 
-        BackgroundGeolocation.on('stop', () => {
-            console.log('[DEBUG] BackgroundGeolocation has been stopped');
-            this.setState({ isRunning: false });
-        });
+            // Create the object to update this.state.mapRegion through the onRegionChange function
+            this.addressFromCoordnate(position.coords.latitude, position.coords.longitude)
 
-        BackgroundGeolocation.on('background', () => {
-            console.log('[INFO] App is in background');
-            BackgroundGeolocation.configure({
-                locationProvider: BackgroundGeolocation.RAW_PROVIDER,
-                interval: 3000,
-                fastestInterval: 3000,
-            });
-            BackgroundGeolocation.stop();
-            BackgroundGeolocation.start();
-        });
+            let region = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                latitudeDelta: 0.00922 * 1.5,
+                longitudeDelta: 0.00421 * 1.5
+            }
 
-        BackgroundGeolocation.on('authorization', status => {
-            console.log(
-                '[INFO] BackgroundGeolocation authorization status: ' + status
+            this.onRegionChange(region, position.coords.latitude, position.coords.longitude);
+
+            //Update Booking
+            let storestate = store.getState()
+            storestate.tour.bookingdata.lat = position.coords.latitude
+            storestate.tour.bookingdata.long = position.coords.longitude
+
+            store.dispatch(
+                updatebooking(storestate)
             );
-            if (status !== BackgroundGeolocation.AUTHORIZED) {
-                // we need to set delay after permission prompt or otherwise alert will not be shown
-                setTimeout(() =>
-                    Alert.alert(
-                        'App requires location tracking',
-                        'Would you like to open app settings?',
-                        [
-                            {
-                                text: 'Yes',
-                                onPress: () => BackgroundGeolocation.showAppSettings()
-                            },
-                            {
-                                text: 'No',
-                                onPress: () => console.log('No Pressed'),
-                                style: 'cancel'
-                            }
-                        ]
-                    ), 1000);
-            }
         });
-
-        BackgroundGeolocation.on('foreground', () => {
-            console.log('[INFO] App is in foreground');
-            BackgroundGeolocation.configure({
-                locationProvider: BackgroundGeolocation.DISTANCE_FILTER_PROVIDER, // or RAW it depends on your needs
-                desiredAccuracy: 10,
-                interval: 30000,
-                fastestInterval: 30000,
-            });
-            BackgroundGeolocation.stop();
-            BackgroundGeolocation.start();
-        });
-
-        BackgroundGeolocation.on('location', location => {
-            console.log('[DEBUG] BackgroundGeolocation location', location);
-
-        });
-
-        BackgroundGeolocation.on('error', ({ message }) => {
-            Alert.alert('BackgroundGeolocation error', message);
-        });
-
     }
 
-    toggleTracking() {
-        BackgroundGeolocation.checkStatus(({ isRunning, locationServicesEnabled, authorization }) => {
-            if (isRunning) {
-                BackgroundGeolocation.stop();
-                return false;
-            }
-
-            if (!locationServicesEnabled) {
-                Alert.alert(
-                    'Location services disabled',
-                    'Would you like to open location settings?',
-                    [
-                        {
-                            text: 'Yes',
-                            onPress: () => BackgroundGeolocation.showLocationSettings()
-                        },
-                        {
-                            text: 'No',
-                            onPress: () => console.log('No Pressed'),
-                            style: 'cancel'
-                        }
-                    ]
-                );
-                return false;
-            }
-
-            if (authorization == 99) {
-                // authorization yet to be determined
-                BackgroundGeolocation.start();
-            } else if (authorization == BackgroundGeolocation.AUTHORIZED) {
-                // calling start will also ask user for permission if needed
-                // permission error will be handled in permisision_denied event
-                BackgroundGeolocation.start();
-            } else {
-                Alert.alert(
-                    'App requires location tracking',
-                    'Please grant permission',
-                    [
-                        {
-                            text: 'Ok',
-                            onPress: () => BackgroundGeolocation.start()
-                        }
-                    ]
-                );
-            }
-        });*/
+    componentWillUnmount() {
+        navigator.geolocation.clearWatch(this.watchID);
     }
 
-    getInitialState() {
-        return {
-            region: {
-                latitude: 37.78825,
-                longitude: -122.4324,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-            },
-        };
+    //#region GEO RELATED
+    onRegionChange(region, lastLat, lastLong) {
+
+        this.addressFromCoordnate(region.latitude, region.longitude)
+
+        this.setState({
+            mapRegion: region,
+            // If there are no new values set the current ones
+            //lastLat: lastLat || this.state.lastLat,
+            //lastLong: lastLong || this.state.lastLong
+        });
     }
 
-    onRegionChange(region) {
-        () => this.onRegionChange.bind(this);
+    addressFromCoordnate = (lat, long) => {
+        /*
+        Geocoder.from(lat, long)
+            .then(json => {
+                var addressComponent = json.results[0].address_components[0];
+                console.log('addressComponent', json.results[0].formatted_address);
+
+                this.setState({ address: json.results[0].formatted_address })
+            })
+            .catch(error => console.warn(error));
+            */
     }
+    //#endregion
 
     //#region Time related
     onSettingTime() {
@@ -241,6 +166,7 @@ class MapsScreen extends React.Component {
     }
 
     onUnSettingTime() {
+
         if (this.isValidHour()) {
             this.setState({ isSettingTime: false })
         } else {
@@ -253,7 +179,7 @@ class MapsScreen extends React.Component {
         var hour = parseInt(text)
 
         if (hour) {
-            hour = hour > 11 ? 11 : hour
+            hour = hour > 12 ? 12 : hour
 
             this.setState({ hour: hour.toString() })
         } else {
@@ -282,8 +208,8 @@ class MapsScreen extends React.Component {
         if (isHour) {
 
             hour = (hour + 1 * (isUp ? 1 : -1))
-            hour = (hour < 0) ? 11 : hour
-            hour = (hour > 11) ? 0 : hour
+            hour = (hour < 1) ? 12 : hour
+            hour = (hour > 12) ? 1 : hour
 
             this.setState({ hour: ("0" + hour).slice(-2).toString() })
         } else {
@@ -299,46 +225,104 @@ class MapsScreen extends React.Component {
     isValidHour = () => {
         var hour = parseInt(this.state.hour)
         var minute = parseInt(this.state.minute)
-        if ((hour && (hour > 0) && (hour < 12)) && (minute && (minute > 0) && (minute < 59))) {
+        if ((hour && (hour >= 0) || (hour <= 12)) && (minute && (minute >= 0) || (minute < 60))) {
             return true
         }
         return false
     }
+
+    onBookingPressed = () => {
+
+        /*
+        console.log('props', this.props.bookingdata)
+
+        console.log('store', store.getState())
+
+        let storestate = store.getState()
+        storestate.tour.bookingdata.isbooked = !storestate.tour.bookingdata.isbooked 
+
+        store.dispatch(
+            updatebooking(storestate)
+        );
+
+        console.log('props', this.props.bookingdata)
+
+        console.log('store', store.getState())
+        */
+
+        const { navigate } = this.props.navigation;
+
+        navigate('BookingSearching')
+    }
+
     //#endregion
-    
-    
+    onClockInOutPressed = () => {
+
+        this.updateClockInOutStatusWS()
+    }
+
+    showClockinSwitch() {
+
+        if (this.props.userdata.user.isGuide) {
+            return (
+                <Switch
+                    value={this.props.userdata.user.isClockedIn}
+                    onValueChange={(val) => { this.onClockInOutPressed() }}
+                    disabled={false}
+                    activeText={'  IN  '}
+                    inActiveText={'OUT'}
+                    backgroundActive={'#31dd73'}
+                    backgroundInactive={'#c2c3c9'}
+                    circleActiveColor={'white'}
+                    circleInActiveColor={'white'}
+                />
+            )
+        } else {
+            return null
+        }
+    }
+
+    showLoading() {
+        if (this.state.isLoading) {
+            return (
+                <ActivityIndicator color={'black'} size={'large'} style={styles.loadingView} />
+            );
+        }
+    }
+
     render() {
         const { navigate } = this.props.navigation;
-        console.log('map_debug', this.props.isbooked);
 
         return (
             <View style={styles.container}>
                 <View style={styles.statusbar} />
                 <View style={styles.top_container}>
                     <View style={styles.backButton}>
+                        {this.showClockinSwitch()}
                     </View>
                     <Text style={styles.centerText}>TOURZAN</Text>
-                    <TouchableOpacity onPress={() => { navigate('Profile') } }>
-                        <Image resizeMode='cover' source={{uri: profilePictureUrl()}} style={styles.rightView} />
+                    <TouchableOpacity onPress={() => { navigate('Profile') }}>
+                        <Image resizeMode='cover' source={{ uri: this.props.userdata.user.profilepicture }} style={styles.rightView} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.map_container}>
-                
-                {/*
-                    <MapView style={styles.map_view}
-                        region={this.state.region}
-                        onRegionChange={this.onRegionChange}>
-                        <MapView.Marker
-                            coordinate={this.state.region}
-                            centerOffset={{ x: 0, y: 0 }}
-                            anchor={{ x: 0.69, y: 1 }}
-                            image={flagImg} />
-                    </MapView>*/
+                    {
+                        <MapView style={styles.map_view}
+                            showsUserLocation={true}
+                            showsMyLocationButton={true}
+                            region={this.state.mapRegion}
+                            onRegionChange={this.onRegionChange}>
+                            <MapView.Marker
+                                coordinate={this.state.mapRegion}
+                                centerOffset={{ x: 0, y: -10 }}
+                                anchor={{ x: 1, y: 1 }}
+                                image={flagImg} />
+                        </MapView>
                     }
                     <View style={styles.locationInfo_view}>
                         <View style={styles.location_address_view}>
                             <Image resizeMode='contain' source={require("../assets/images/location_maps.png")} style={styles.icon_image} />
-                            <Text style={styles.row_text}>052 Maggio Road Apt. o16</Text>
+                            <Text style={styles.row_text}>{this.state.address}</Text>
                         </View>
                         <View style={styles.devide_line} />
                         {this.state.isSettingTime ? (
@@ -423,8 +407,8 @@ class MapsScreen extends React.Component {
                             )}
                     </View>
                     {
-                        !this.props.isbooked ? (
-                            <TouchableOpacity style={styles.booking_view} onPress={() => { navigate('BookingSearching') }}>
+                        !this.props.bookingdata.isbooked ? (
+                            <TouchableOpacity style={styles.booking_view} onPress={() => { this.onBookingPressed() }}>
                                 <Image resizeMode='cover' source={require("../assets/images/book.png")} style={styles.booking_green_btn} />
                             </TouchableOpacity>
                         ) : (
@@ -433,8 +417,57 @@ class MapsScreen extends React.Component {
                                 </TouchableOpacity>
                             )}
                 </View>
+                {this.showLoading()}
             </View>
         );
+    }
+
+    //
+    updateClockInOutStatusWS() {
+
+        this.setState({
+            isLoading: true
+        })
+
+        var { dispatch } = this.props;
+
+        //Get store data
+        let storestate = store.getState()
+
+        var params = {
+            type: 'guide',
+            userid: this.props.userdata.user.userid,
+            status: this.props.userdata.user.isClockedIn ? 'clockin' : 'clockout',
+            latitude: storestate.tour.bookingdata.lat,
+            longitude: storestate.tour.bookingdata.long,
+        }
+
+        updateClockInOutStatus(params)
+
+            .then(data => {
+
+                this.setState({
+                    isLoading: false
+                })
+
+                //Update Status
+                let storestate = store.getState()
+
+                storestate.user.userdata.isClockedIn = !storestate.user.userdata.isClockedIn
+
+                store.dispatch(
+                    updatebooking(storestate)
+                );
+
+                console.log('updateClockInOutStatusWS-->', data)
+
+            })
+            .catch(err => {
+                this.setState({
+                    isLoading: false
+                })
+                alert(err)
+            })
     }
 }
 
@@ -450,26 +483,26 @@ const styles = StyleSheet.create({
     },
     statusbar: {
         width: width,
-        height: (Platform.OS == 'ios') ? 20 : StatusBar.currentHeight,
+        height: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20) : StatusBar.currentHeight,
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
         position: 'absolute',
         top: 0,
         left: 0,
     },
     top_container: {
-        marginTop: (Platform.OS == 'ios') ? 20 : 0,
+        marginTop: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20) : 0,
         height: 44,
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
         width: width,
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        
     },
     backButton: {
         marginLeft: 20,
         height: 20,
         width: 20,
+        justifyContent: 'center'
     },
     centerText: {
         color: 'black',
@@ -482,7 +515,7 @@ const styles = StyleSheet.create({
         marginRight: 20,
         height: 36,
         width: 36,
-        borderRadius:18,
+        borderRadius: 18,
     },
     map_container: {
         flex: 1,
@@ -504,6 +537,13 @@ const styles = StyleSheet.create({
         borderColor: '#ddd',
         flexDirection: 'column',
         justifyContent: 'flex-start',
+        shadowColor: '#000000',
+        shadowOffset: {
+            width: 0,
+            height: 0
+        },
+        shadowRadius: 10,
+        shadowOpacity: 0.2
     },
     location_address_view: {
         height: 55,
@@ -566,6 +606,7 @@ const styles = StyleSheet.create({
     setting_time_view: {
         flexDirection: 'column',
         alignItems: 'center',
+
     },
     setting_time_top_view: {
         backgroundColor: '#f9fbfe',
@@ -654,8 +695,23 @@ const styles = StyleSheet.create({
     switch_view: {
 
     },
-
+    loadingView: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'transparent'
+    }
 });
 
-// export default MapsScreen;
-export default connect(mapStateToProps, mapDispatchToProps)(MapsScreen);
+const mapStateToProps = store => {
+    return {
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata
+    };
+};
+
+export default connect(mapStateToProps)(MapsScreen);

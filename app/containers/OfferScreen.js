@@ -13,6 +13,7 @@ import {
   View,
   Alert,
   TouchableOpacity,
+  Platform
 } from 'react-native';
 
 import { NavigationActions } from 'react-navigation'
@@ -20,11 +21,24 @@ import Rating from 'react-native-ratings';
 import ApplyButton from '../components/ApplyButton'
 import { Colors } from '../constants'
 
+//Store
+import { connect } from 'react-redux';
+import configureStore from '../configureStore'
+const store = configureStore();
+
+//Actions
+import { updatebooking } from '../actions/bookingActions'
+import { updateuser } from '../actions/userActions'
+
+//Utilities
+import { Storage, isIphoneX } from '../global/Utilities';
+
 var Toast = require('react-native-toast');
 
 var { width, height } = Dimensions.get('window');
 
 const backAction = NavigationActions.back({
+    
 });
 
 const resetRootAction = NavigationActions.reset({
@@ -136,13 +150,13 @@ const styles = StyleSheet.create({
 
   // --- navigation bar --- //
     navigationbar:{
-      paddingTop:20,
-      height:64,
+      paddingTop: (Platform.OS == 'ios') ?  (isIphoneX() ? 44 : 20 ) : StatusBar.currentHeight,
+      height: 64,
       backgroundColor: '#31dd73',
-      width:width,
-      alignItems:'center',
-      flexDirection:'row',
-      justifyContent:'space-between',
+      width: width,
+      alignItems: 'center',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
     },
     backButton:{
             marginLeft:20,
@@ -333,5 +347,11 @@ const styles = StyleSheet.create({
     },
 });
 
-export default OfferScreen;
+const mapStateToProps = store => {
+    return {
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata
+    };
+};
 
+export default connect(mapStateToProps)(OfferScreen);

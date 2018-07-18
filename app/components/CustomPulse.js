@@ -6,7 +6,7 @@ const { height, width } = Dimensions.get('window');
 export default class CustomPulse extends React.Component {
 	constructor(props) {
 		super(props);
-	
+
 		this.anim = new Animated.Value(0);
 	}
 
@@ -16,7 +16,7 @@ export default class CustomPulse extends React.Component {
 			duration: this.props.interval,
 			easing: Easing.in,
 		})
-		.start();
+			.start();
 	}
 
 	render() {
@@ -26,8 +26,8 @@ export default class CustomPulse extends React.Component {
 			<View style={[styles.circleWrapper, {
 				width: pulseMaxSize,
 				height: pulseMaxSize,
-				marginLeft: -pulseMaxSize/2,
-				marginTop: -pulseMaxSize/2,
+				marginLeft: -pulseMaxSize / 2,
+				marginTop: -pulseMaxSize / 2,
 			}]}>
 				<Animated.View
 					style={[styles.circle, {
@@ -41,7 +41,7 @@ export default class CustomPulse extends React.Component {
 							inputRange: [0, 1],
 							outputRange: [1, pulseMaxSize]
 						}),
-						borderRadius: pulseMaxSize/2,
+						borderRadius: pulseMaxSize / 2,
 						opacity: this.anim.interpolate({
 							inputRange: [0, 1],
 							outputRange: [1, 0]
@@ -50,7 +50,7 @@ export default class CustomPulse extends React.Component {
 				/>
 			</View>
 		);
-	}	
+	}
 }
 
 
@@ -59,8 +59,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		position: 'absolute',
-		left: width/2,
-		top: height/2,
+		left: width / 2,
+		top: height / 2,
 	},
 	circle: {
 		borderWidth: 4 * StyleSheet.hairlineWidth,

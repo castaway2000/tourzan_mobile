@@ -21,8 +21,17 @@ import Checkbox from 'react-native-custom-checkbox'
 import { Colors } from '../constants'
 import NavigationBar from '../components/NavigationBar'
 
-import { currentuser, isGuide, userid, profilePictureUrl } from '../global/CurrentUser';
-import { Storage } from '../global/Utilities';
+//Store
+import { connect } from 'react-redux';
+import configureStore from '../configureStore'
+const store = configureStore();
+
+//Actions
+import { updatebooking } from '../actions/bookingActions'
+import { updateuser } from '../actions/userActions'
+
+//Utilities
+import { Storage, isIphoneX } from '../global/Utilities';
 
 var { width, height } = Dimensions.get('window');
 const backAction = NavigationActions.back({
@@ -50,16 +59,16 @@ class SettingsScreen extends React.Component {
 
         let fullname = ''
 
-        if (currentuser.user.first_name) {
-            fullname = currentuser.user.first_name
+        if (this.props.userdata.user.first_name) {
+            fullname = this.props.userdata.user.first_name
         }
 
-        if (currentuser.user.last_name) {
-            fullname = fullname + ' ' + currentuser.user.last_name
+        if (this.props.userdata.user.last_name) {
+            fullname = fullname + ' ' + this.props.userdata.user.last_name
         }
 
         if (!fullname) {
-            fullname = currentuser.user.username
+            fullname = this.props.userdata.user.username
         }
 
         return fullname
@@ -79,9 +88,9 @@ class SettingsScreen extends React.Component {
                 </View>
                 <View style={styles.main_view}>
                     <View style={styles.main_top_view}>
-                        <Image resizeMode='cover' source={{ uri: profilePictureUrl() }} style={styles.user_photo_img} />
+                        <Image resizeMode='cover' source={{ uri: this.props.userdata.user.profilepicture }} style={styles.user_photo_img} />
                         <Text style={styles.profile_name_text}>{this._fullname()}</Text>
-                        <Text style={styles.profile_email_text} >{currentuser.user.email ? currentuser.user.email : '-'}</Text>
+                        <Text style={styles.profile_email_text} >{this.props.userdata.user.email ? this.props.userdata.user.email : '-'}</Text>
                     </View>
                     <View style={styles.main_info_view}>
                         <TouchableOpacity style={styles.row_view} onPress={() => { this.navigate.navigate('ChangePassword') }}>
@@ -93,7 +102,7 @@ class SettingsScreen extends React.Component {
                         <View style={styles.row_icon_view}>
                             <Image resizeMode='contain' source={require("../assets/images/Icon_email.png")} style={styles.row_small_icon} />
                             {/* <TextInput underlineColorAndroid='transparent' style={styles.row_icon_lb} value={'adamparker@gmail.com'}></TextInput> */}
-                            <Text style={styles.row_icon_lb}>{currentuser.user.email ? currentuser.user.email : '-'}</Text>
+                            <Text style={styles.row_icon_lb}>{this.props.userdata.user.email ? this.props.userdata.user.email : '-'}</Text>
                         </View>
                         <View style={styles.row_icon_view}>
                             <Image resizeMode='contain' source={require("../assets/images/trip_item_location_icon.png")} style={styles.row_small_icon} />
@@ -126,7 +135,7 @@ const styles = StyleSheet.create({
 
     statusbar: {
         width: width,
-        height: (Platform.OS == 'ios') ? 20 : StatusBar.currentHeight,
+        height: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20 ) : StatusBar.currentHeight,
         backgroundColor: Colors.main,
         position: 'absolute',
         top: 0,
@@ -136,7 +145,7 @@ const styles = StyleSheet.create({
     // --- navigation bar --- //
     navigationbar: {
         height: 44,
-        marginTop: (Platform.OS == 'ios') ? 20 : 0,
+        marginTop: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20 )  : 0,
         backgroundColor: Colors.main,
         width: width,
         alignItems: 'center',
@@ -271,5 +280,11 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SettingsScreen;
+const mapStateToProps = store => {
+    return {
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata
+    };
+};
 
+export default connect(mapStateToProps)(SettingsScreen);

@@ -20,8 +20,17 @@ import { NavigationActions } from 'react-navigation'
 import { GiftedChat } from 'react-native-gifted-chat';
 import { Colors } from '../constants'
 
-import { currentuser, isGuide, userid, profilePictureUrl } from '../global/CurrentUser';
-import { Storage } from '../global/Utilities';
+//Store
+import { connect } from 'react-redux';
+import configureStore from '../configureStore'
+const store = configureStore();
+
+//Actions
+import { updatebooking } from '../actions/bookingActions'
+import { updateuser } from '../actions/userActions'
+
+//Utilities
+import { Storage, isIphoneX } from '../global/Utilities';
 
 var { width, height } = Dimensions.get('window');
 
@@ -55,7 +64,7 @@ class ChatRoomScreen extends React.Component {
                 user: {
                     _id: element.user,
                     name: 'React Native',
-                    avatar: 'https://news-cdn.softpedia.com/images/news2/microsoft-releases-windows-10-cumulative-updates-kb4284822-kb4284830-kb4284833-1.jpg',
+                    avatar: 'http://34.212.65.102/static/img/Tourzan-transparant.png',
                 },
             }
 
@@ -71,7 +80,7 @@ class ChatRoomScreen extends React.Component {
                     user: {
                         _id: 2,
                         name: 'React Native',
-                        avatar: 'https://news-cdn.softpedia.com/images/news2/microsoft-releases-windows-10-cumulative-updates-kb4284822-kb4284830-kb4284833-1.jpg',
+                        avatar: 'http://34.212.65.102/static/img/Tourzan-transparant.png',
                     },
                 }),
             }));
@@ -83,8 +92,8 @@ class ChatRoomScreen extends React.Component {
     }
 
     componentDidMount() {
-        this.socket = new WebSocket('ws://34.212.65.102/ws/chat/331c4f3e-466d-4e09-a7e5-e8f710a3ce90/');
-        console.log(this.socket )
+        this.socket = new WebSocket('ws://34.212.65.102/ws/chat/85370fc6-e253-4f2f-946f-6d5034aef072/');
+        console.log(this.socket)
 
 
         this.socket.onopen = () => {
@@ -93,7 +102,7 @@ class ChatRoomScreen extends React.Component {
         };
 
         this.socket.onmessage = (e) => {
-            console.log('A message was received',e.data);
+            console.log('A message was received', e.data);
         };
 
         this.socket.onerror = (e) => {
@@ -111,15 +120,15 @@ class ChatRoomScreen extends React.Component {
 
         console.log('sending...');
 
-        let message1 = {chat_uuid:"331c4f3e-466d-4e09-a7e5-e8f710a3ce90",message:"From Iphone 6"}
+        let message1 = { chat_uuid: "85370fc6-e253-4f2f-946f-6d5034aef072", message: "From Iphone 6" }
 
         let messagestringfy = JSON.stringify(message1)
 
         this.socket.send(messagestringfy);
-        
+
         //this.socket.send(JSON.stringify({ "chat_uuid": "85370fc6-e253-4f2f-946f-6d5034aef072", "message": "From vs code!!!!" }))
         let message = {
-            chat_uuid: '331c4f3e-466d-4e09-a7e5-e8f710a3ce90',
+            chat_uuid: '85370fc6-e253-4f2f-946f-6d5034aef072',
             message: messages
         }
 
@@ -167,7 +176,7 @@ class ChatRoomScreen extends React.Component {
 
         var { params } = this.props.navigation.state
 
-        var isguide = isGuide()
+        var isguide = this.props.userdata.user.isGuide
 
         if (isguide) {
             return params.chatData.tourist
@@ -186,7 +195,7 @@ const styles = StyleSheet.create({
     },
     statusbar: {
         width: width,
-        height: (Platform.OS == 'ios') ? 20 : StatusBar.currentHeight,
+        height: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20) : StatusBar.currentHeight,
         backgroundColor: Colors.main,
         position: 'absolute',
         top: 0,
@@ -197,7 +206,7 @@ const styles = StyleSheet.create({
         height: 20,
     },
     top_container: {
-        marginTop: (Platform.OS == 'ios') ? 20 : 0,
+        marginTop: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20) : 0,
         height: 44,
         backgroundColor: Colors.main,
         width: width,
@@ -223,10 +232,16 @@ const styles = StyleSheet.create({
         width: 35
     },
     bottom_container: {
-        height: (Platform.OS == 'ios') ? height - 64 : height - 66,
+        height: (Platform.OS == 'ios') ? height - ((Platform.OS == 'ios') ? (isIphoneX() ? 130 : 44) : 0) : height - 66,
         width: width,
     },
 });
 
-export default ChatRoomScreen;
+const mapStateToProps = store => {
+    return {
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata
+    };
+};
 
+export default connect(mapStateToProps)(ChatRoomScreen);

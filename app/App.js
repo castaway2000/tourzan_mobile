@@ -55,6 +55,7 @@ import TermsofUseScreen from './containers/TermsofUseScreen'
 
 import OfferScreen from './containers/OfferScreen'
 
+import ExtendTimeScreen from './containers/ExtendTimeScreen'
 
 var { width, height } = Dimensions.get('window');
 
@@ -129,8 +130,8 @@ const MainTapNavigator = TabNavigator({
     },
     tabBarPosition: 'bottom',
     lazy: false,
-    //swipeEnabled:true,
-    //animationEnabled:true,
+    swipeEnabled: false,
+    animationEnabled: false,
     tabBarOptions: {
       activeTintColor: '#31dd73',
       inactiveTintColor: '#999',
@@ -162,6 +163,7 @@ const App = StackNavigator({
   Offer: { screen: OfferScreen },
   Profile: { screen: ProfileScreen },
   ProfileCharRoom: { screen: ChatRoomScreen },
+  ExtendTime: { screen: ExtendTimeScreen }
 }, {
     headerMode: 'screen'
   },

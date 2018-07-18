@@ -1,42 +1,54 @@
 import React, { Component } from 'react';
 
 import {
-  Button,
-  ScrollView,
-  Dimensions,
-  StatusBar,
-  Navigator,
-  StyleSheet,
-  Image,
-  Text,
-  TextInput,
-  View,
-  Alert,
-  TouchableOpacity,
+    Button,
+    ScrollView,
+    Dimensions,
+    StatusBar,
+    Navigator,
+    StyleSheet,
+    Image,
+    Text,
+    TextInput,
+    View,
+    Alert,
+    TouchableOpacity,
+    Platform,
+    ActivityIndicator
 } from 'react-native';
 
 import ActionSheet from 'react-native-actionsheet'
-import {connect} from 'react-redux';
-import { bindActionCreators } from 'redux'
 import { NavigationActions } from 'react-navigation'
 import KeyEvent from 'react-native-keyevent';
 import PercentageCircle from 'react-native-percentage-circle';
 import ApplyButton from '../components/ApplyButton'
 import { Colors } from '../constants'
 
+//Utilities
+import { isIphoneX, isNumber, Storage } from "../global/Utilities"
+
+//Store
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
+import configureStore from '../configureStore'
+const store = configureStore();
+
+//Actions
+import { updatebooking } from '../actions/bookingActions'
+
+//Webservice
+import {
+    getTourList,
+    updateClockInOutStatus,
+    endTrip,
+    cancelTrip,
+    declineTrip,
+    acceptTrip,
+    updateTrip,
+    extendTime
+} from '../actions'
+
 var Toast = require('react-native-toast');
-import * as Actions from '../actions/map'
-
-
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators(Actions, dispatch)
-};
-
-const  mapStateToProps = (state) => {
-    return {
-        isbooked: state.isbooked,
-    }
- };
 
 var { width, height } = Dimensions.get('window');
 
@@ -44,229 +56,307 @@ const backAction = NavigationActions.back({
 });
 
 const resetRootAction = NavigationActions.reset({
-        index: 0,
-        actions: [
-            NavigationActions.navigate({ routeName: 'Home' }),
-        ],
-        key: null
- });
+    index: 0,
+    actions: [
+        NavigationActions.navigate({ routeName: 'Home' }),
+    ],
+    key: null
+});
 
 const CANCEL_INDEX = 0;
 const DESTRUCTIVE_INDEX = 4;
-const options = [ 'Cancel', 'End Tour' ];
-
+const options = ['Cancel', 'End Tour'];
 
 class CurrentTimeLimitScreen extends React.Component {
-  static navigationOptions = {
-      title: 'Time Limit',
-      header : null,
-  };
-
- constructor(props) {
-    super(props);
-    this.navigate = this.props.navigation;
-
-    this.state = {
-      selected: ''
+    static navigationOptions = {
+        title: 'Time Limit',
+        header: null,
     };
-    this.handlePress = this.handlePress.bind(this);
-    this.showActionSheet = this.showActionSheet.bind(this);
-  }
 
-  componentDidMount() {
-    // if you want to react to keyDown 
-    KeyEvent.onKeyDownListener((keyCode) => {
-      console.log(`Key code pressed: key down`);
-      Toast.show.bind(null, 'key code pressed');
-    });
- 
-    // // if you want to react to keyUp 
-    // KeyEvent.onKeyUpListener((keyCode) => {
-    //   console.log(`Key code pressed: ${keyCode}`);
-    // });
-  }
+    constructor(props) {
+        super(props);
+        this.navigate = this.props.navigation;
 
-  showActionSheet() {
-    this.ActionSheet.show()
-  }
- 
-  handlePress(i) {
-    this.setState({
-      selected: i
-    });
-
-    if (this.state.selected == 1 ) { 
-        this.props.getBookedState();
-        this.props.navigation.navigate('CompleteTour');
+        this.state = {
+            selected: '',
+            isLoading: false,
+        };
+        this.handlePress = this.handlePress.bind(this);
+        this.showActionSheet = this.showActionSheet.bind(this);
     }
-  }
 
-  onCompleteTourBtnClick(){
-      this.showActionSheet();
-  }
 
-  onExtendTimeBtnClick(){
-     this.props.navigation.navigate('ExtendTime');
-  }
+    componentDidMount() {
+        // if you want to react to keyDown 
+        KeyEvent.onKeyDownListener((keyCode) => {
+            console.log(`Key code pressed: key down`);
+            Toast.show.bind(null, 'key code pressed');
+        });
 
-  render() {
-      return (
-        <View style={styles.container}>  
-            <View  style={styles.navigationbar}>
-                    <TouchableOpacity  onPress={() => {this.props.navigation.dispatch(backAction)}}>
+        // // if you want to react to keyUp 
+        // KeyEvent.onKeyUpListener((keyCode) => {
+        //   console.log(`Key code pressed: ${keyCode}`);
+        // });
+    }
+
+    showActionSheet() {
+        this.ActionSheet.show()
+    }
+
+    handlePress(i) {
+        this.setState({
+            selected: i
+        });
+
+        if (this.state.selected == 1) {
+            this.endTripWS()
+        }
+    }
+
+    onCompleteTourBtnClick() {
+        this.showActionSheet();
+    }
+
+    onExtendTimeBtnClick() {
+        this.props.navigation.navigate('ExtendTime');
+    }
+
+    showLoading() {
+        if (this.state.isLoading) {
+            return (
+                <ActivityIndicator color={'black'} size={'large'} style={styles.loadingView} />
+            );
+        }
+    }
+
+    render() {
+        return (
+            <View style={styles.container}>
+                <View style={styles.navigationbar}>
+                    <TouchableOpacity onPress={() => { this.props.navigation.dispatch(backAction) }}>
                         <Image resizeMode='cover' source={require("../assets/images/back.png")} style={styles.backButton} />
                     </TouchableOpacity>
                     <Text style={styles.centerText}>Time Limit</Text>
                     <View style={styles.rightView}>
                     </View>
-            </View>
-            <View style={styles.main_view}>
-                <View style={styles.current_spent_time_view}>
-                    <Image resizeMode='contain' source={require("../assets/images/circular_clock.png")} style={styles.time_icon} />
-                    <Text style={styles.current_spent_time_text}>03h 40m</Text>
                 </View>
-                <View style={styles.main_top_view}>
-                     <PercentageCircle radius={100} percent={75} innerColor='#31dd73' borderWidth={10} color={"#3498db"}>
-                        <Text style={styles.circle_progress_text}>-1h  30m</Text>
-                     </PercentageCircle>
-                </View>
-                <View style={styles.main_bottom_view}>
-                     <TouchableOpacity style={styles.extend_time_view} onPress={() => this.onExtendTimeBtnClick()} title='Extend Time'>
+                <View style={styles.main_view}>
+                    <View style={styles.current_spent_time_view}>
+                        <Image resizeMode='contain' source={require("../assets/images/circular_clock.png")} style={styles.time_icon} />
+                        <Text style={styles.current_spent_time_text}>03h 40m</Text>
+                    </View>
+                    <View style={styles.main_top_view}>
+                        <PercentageCircle radius={100} percent={75} innerColor='#31dd73' borderWidth={10} color={"#3498db"}>
+                            <Text style={styles.circle_progress_text}>-1h  30m</Text>
+                        </PercentageCircle>
+                    </View>
+                    <View style={styles.main_bottom_view}>
+                        <TouchableOpacity style={styles.extend_time_view} onPress={() => this.onExtendTimeBtnClick()} title='Extend Time'>
                             <Text style={styles.extend_time_btn} >Extend Time</Text>
-                    </TouchableOpacity>
-                    <ApplyButton onPress={() => this.onCompleteTourBtnClick()} name={'Complete Tour'} style={styles.done_btn}/>
+                        </TouchableOpacity>
+                        <ApplyButton onPress={() => this.onCompleteTourBtnClick()} name={'Complete Tour'} style={styles.done_btn} />
+                    </View>
                 </View>
-            </View>
-            <ActionSheet
-                ref={o => this.ActionSheet = o}
-                // title={title}
-                options={options}
-                cancelButtonIndex={CANCEL_INDEX}
-                destructiveButtonIndex={DESTRUCTIVE_INDEX}
-                onPress={this.handlePress}
+                <ActionSheet
+                    ref={o => this.ActionSheet = o}
+                    // title={title}
+                    options={options}
+                    cancelButtonIndex={CANCEL_INDEX}
+                    destructiveButtonIndex={DESTRUCTIVE_INDEX}
+                    onPress={this.handlePress}
                 />
-        </View>
-      );
-   }
+                {this.showLoading()}
+            </View>
+        );
+    }
+
+    endTripWS() {
+
+        this.setState({
+            isLoading: true
+        })
+
+        var { dispatch } = this.props;
+
+        //Get store data
+        let storestate = store.getState()
+
+        
+        var params = {
+            type: 'guide',
+            userid: this.props.userdata.user.userid,
+            status: 'ended',
+        }
+
+        endTrip(params)
+
+            .then(data => {
+
+                this.setState({
+                    isLoading: false
+                })
+
+                Alert.alert(
+                    'Tourzan',
+                    'Your trip has successfully ended.',
+                    [
+                        {
+                            text: 'OK', onPress: () => {
+                                this.props.navigation.navigate('CompleteTour');
+                            }
+                        },
+                    ],
+                    { cancelable: false }
+                )
+
+                console.log('endTripWS-->', data)
+
+            })
+            .catch(err => {
+                this.setState({
+                    isLoading: false
+                })
+                alert(err)
+            })
+    }
 }
 
 const styles = StyleSheet.create({
-  container: {
-      flex: 1,
-      alignItems: 'center',
-      flexDirection: 'column',
-  },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'column',
+    },
 
-  // --- navigation bar --- //
-   navigationbar:{
-      paddingTop:20,
-      height:64,
-      backgroundColor: '#31dd73',
-      width:width,
-      alignItems:'center',
-      flexDirection:'row',
-      justifyContent:'space-between',
-  },
-  backButton:{
-        marginLeft:20,
-        height:15,
-        width:10,
+    // --- navigation bar --- //
+    navigationbar: {
+        paddingTop: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20) : StatusBar.currentHeight,
+        height: 64,
+        backgroundColor: '#31dd73',
+        width: width,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
-    centerText:{
-        color:'white',
-        textAlign:'center',
-        fontSize:17,
-        width:width-160,
-        fontWeight:'bold',
+    backButton: {
+        marginLeft: 20,
+        height: 15,
+        width: 10,
     },
-    rightView:{
-        marginRight:20,
-        height:20,
-        width:20
+    centerText: {
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 17,
+        width: width - 160,
+        fontWeight: 'bold',
+    },
+    rightView: {
+        marginRight: 20,
+        height: 20,
+        width: 20
     },
 
     /// ------- main view -------///
-    main_view:{
-        flexDirection:'column',
-        alignItems:'center',
-        width:width,
-        height:height-44,
-        backgroundColor:'#31dd73',
+    main_view: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: width,
+        height: height - 44,
+        backgroundColor: '#31dd73',
     },
 
     // --- current time view ---//
-    current_spent_time_view:{
-        marginTop:10,
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'center',
-        borderWidth:1,
-        borderColor:'#78e7a2',
-        borderRadius:5,
-        paddingVertical:10,
-        paddingHorizontal:20,
+    current_spent_time_view: {
+        marginTop: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderColor: '#78e7a2',
+        borderRadius: 5,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
     },
-    current_spent_time_text:{
-        fontSize:12,
-        color:'white',
-        textAlign:'center',
-        marginLeft:5,
+    current_spent_time_text: {
+        fontSize: 12,
+        color: 'white',
+        textAlign: 'center',
+        marginLeft: 5,
     },
-    time_icon:{
-        width:10,
-        height:10,
+    time_icon: {
+        width: 10,
+        height: 10,
     },
 
-    
+
     // --- main top view -- //
-    main_top_view:{
-        width:width,
-        flex:0.5,
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'center',
+    main_top_view: {
+        width: width,
+        flex: 0.5,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    circle_progress_text:{
-        fontSize:40,
-        color:'white',  
+    circle_progress_text: {
+        fontSize: 40,
+        color: 'white',
     },
 
 
     // --- main bottom view -- //
-    main_bottom_view:{
-        width:width,
-        flex:0.5,
-        flexDirection:'column',
-        alignItems:'center',
-        backgroundColor:'white',
+    main_bottom_view: {
+        width: width,
+        flex: 0.5,
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: 'white',
     },
-    done_btn:{
-        marginTop:30,
-        width:width-60,
+    done_btn: {
+        marginTop: 30,
+        width: width - 60,
     },
-    note_text:{
-        marginTop:50,
+    note_text: {
+        marginTop: 50,
         fontSize: 12,
-        color:'black',
-        width:200,
-        textAlign:'center',
+        color: 'black',
+        width: 200,
+        textAlign: 'center',
     },
-    extend_time_view:{
-        marginTop:40,
+    extend_time_view: {
+        marginTop: 40,
     },
-    extend_time_btn:{
-        color:'black',
-        paddingTop:10,
-        textAlign:'center',
+    extend_time_btn: {
+        color: 'black',
+        paddingTop: 10,
+        textAlign: 'center',
         fontSize: 18,
-        height:50,
-        width:width-60,
-        backgroundColor:'white',
-        borderWidth:1,
-        borderRadius:5,
+        height: 50,
+        width: width - 60,
+        backgroundColor: 'white',
+        borderWidth: 1,
+        borderRadius: 5,
         borderColor: '#ddd'
     },
+
+    // --- Loading -- //
+    loadingView: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'transparent'
+    }
 });
 
-// export default CurrentTimeLimitScreen;
-export default connect(mapStateToProps,mapDispatchToProps)(CurrentTimeLimitScreen);
+//MAP
+const mapStateToProps = store => {
+    return {
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata
+    };
+};
+
+export default connect(mapStateToProps)(CurrentTimeLimitScreen);

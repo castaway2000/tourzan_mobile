@@ -1,12 +1,12 @@
 // import root from './reducers/rootReducer';
-import map from './reducers/map';
+import reducers from './reducers';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
 // This connects the reducer to the store
 export default function configureStore() {
   let store = createStore(
-    map,
+    reducers,
     applyMiddleware(thunk)
   );
 

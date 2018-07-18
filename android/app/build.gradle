@@ -118,7 +118,7 @@ android {
 
 
     defaultConfig {
-        applicationId "com.tourzan1"
+        applicationId "com.tourzan"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
@@ -126,6 +126,7 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
+        multiDexEnabled true
     }
     splits {
         abi {
@@ -167,12 +168,17 @@ dependencies {
 
     compile project(':react-native-fabric')
 
-    compile "com.google.android.gms:play-services-base:11+"
-    compile 'com.google.android.gms:play-services-location:11+'
-    compile 'com.google.android.gms:play-services-maps:11+'
+    compile "com.google.android.gms:play-services-base:12.+"
+    compile 'com.google.android.gms:play-services-location:12.+'
+    compile 'com.google.android.gms:play-services-maps:12.+'
     compile('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
         transitive = true;
     }
+
+    compile project(':react-native-fcm')
+
+    compile 'com.android.support:multidex:1.0.1'
+
     // compile(project(':react-native-maps')){
     //     exclude group: 'com.google.android.gms', module: 'play-services-base'
     //     exclude group: 'com.google.android.gms', module: 'play-services-maps'
@@ -187,3 +193,5 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
+apply plugin: 'com.google.gms.google-services'
