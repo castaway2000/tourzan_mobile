@@ -23,8 +23,7 @@ import NavigationBar from '../components/NavigationBar'
 
 //Store
 import { connect } from 'react-redux';
-import configureStore from '../configureStore'
-const store = configureStore();
+import { store } from '../store/index'
 
 //Actions
 import { updatebooking } from '../actions/bookingActions'
@@ -135,7 +134,7 @@ const styles = StyleSheet.create({
 
     statusbar: {
         width: width,
-        height: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20 ) : StatusBar.currentHeight,
+        height: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20) : StatusBar.currentHeight,
         backgroundColor: Colors.main,
         position: 'absolute',
         top: 0,
@@ -145,7 +144,7 @@ const styles = StyleSheet.create({
     // --- navigation bar --- //
     navigationbar: {
         height: 44,
-        marginTop: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20 )  : 0,
+        marginTop: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20) : 0,
         backgroundColor: Colors.main,
         width: width,
         alignItems: 'center',
@@ -283,7 +282,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = store => {
     return {
         bookingdata: store.tour.bookingdata,
-        userdata: store.user.userdata
+        userdata: store.user.userdata,
+        currentlocation: store.location.currentlocation,
     };
 };
 

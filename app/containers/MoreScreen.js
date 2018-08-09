@@ -23,8 +23,7 @@ import NavigationBar from '../components/NavigationBar'
 
 //Store
 import { connect } from 'react-redux';
-import configureStore from '../configureStore'
-const store = configureStore();
+import {store} from '../store/index'
 
 //Actions
 import { updatebooking } from '../actions/bookingActions'

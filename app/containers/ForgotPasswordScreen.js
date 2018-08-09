@@ -22,7 +22,7 @@ import Checkbox from 'react-native-custom-checkbox'
 import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
-import { resetPassword } from '../actions/'
+import { resetPassword } from '../actions'
 import {isIphoneX} from "../global/Utilities"
 
 var { width, height } = Dimensions.get('window');

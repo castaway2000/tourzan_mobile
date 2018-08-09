@@ -27,7 +27,7 @@ import Button from 'react-native-button';
 import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
-import { profile } from '../actions/'
+import { profile } from '../actions'
 import { Marker } from 'react-native-maps/lib/components/MapView';
 import moment from 'moment'
 import Stars from 'react-native-stars';
@@ -35,8 +35,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 //Store
 import { connect } from 'react-redux';
-import configureStore from '../configureStore'
-const store = configureStore();
+import { store } from '../store/index'
 
 //Actions
 import { updatebooking } from '../actions/bookingActions'
@@ -256,7 +255,6 @@ class ProfileScreen extends React.Component {
             </TouchableHighlight>
         )
     }
-
 
     //Show full name
     _showProfilePicture = () => {
@@ -744,7 +742,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = store => {
     return {
         bookingdata: store.tour.bookingdata,
-        userdata: store.user.userdata
+        userdata: store.user.userdata,
+        currentlocation: store.location.currentlocation,
     };
 };
 

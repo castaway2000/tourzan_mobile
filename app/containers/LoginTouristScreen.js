@@ -23,12 +23,11 @@ import Checkbox from 'react-native-custom-checkbox'
 import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
-import { emailLogin } from '../actions/'
+import { emailLogin } from '../actions'
 
 //Store
 import { connect } from 'react-redux';
-import configureStore from '../configureStore'
-const store = configureStore();
+import {store} from '../store/index'
 
 //Actions
 import { updatebooking } from '../actions/bookingActions'
@@ -326,7 +325,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = store => {
     return {
-        userdata: store.user.userdata
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata,
+        currentlocation: store.location.currentlocation,
     };
 };
 

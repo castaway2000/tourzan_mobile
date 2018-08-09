@@ -10,9 +10,9 @@
 #import <React/RCTRootView.h>
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
-#import "SplashScreen.h"  // here
+#import "RNSplashScreen.h"  // here
 
-//Add the following lines
+//Add the following lines 
 #import <asl.h>
 #import <React/RCTLog.h>
 #import "RNFIRMessaging.h"
@@ -49,7 +49,7 @@
   
   [self.window makeKeyAndVisible];
   
-  [SplashScreen show];  // here
+  //[SplashScreen show];  // here
   
   [FIRApp configure];
   

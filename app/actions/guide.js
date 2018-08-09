@@ -1,9 +1,7 @@
 import { API } from '../constants'
 
 //Store
-import configureStore from '../configureStore'
-const store = configureStore();
-
+import {store} from '../store/index'
 
 function getGuideList() {
 
@@ -38,13 +36,13 @@ function bookGuide(params) {
     var formData = new FormData();
     formData.append('token', params.token)
     formData.append('user_id', params.userid)
-    formData.append('guide_id', params.guideid)
+    formData.append('guides', params.guides)
     formData.append('latitude', params.latitude)
     formData.append('longitude', params.longitude)
     formData.append('time_limit', params.timelimit)
     formData.append('booking_type', params.bookingtype)
 
-    console.log('bookGuide param:', params)
+    console.log('bookGuide param:', formData)
 
     return new Promise((resolve, reject) => {
         fetch(API.SERVER + 'v1/mobile/book_guide/', {

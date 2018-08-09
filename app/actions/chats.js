@@ -1,9 +1,7 @@
 import { API } from '../constants'
 
 //Store
-import configureStore from '../configureStore'
-const store = configureStore();
-
+import {store} from '../store/index'
 
 function getChatList() {
 

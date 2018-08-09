@@ -21,7 +21,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { Colors } from '../../constants'
 import { NavigationActions, StackActions } from 'react-navigation'
-import Rating from 'react-native-ratings';
+import Stars from 'react-native-stars';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import NavigationBar from '../../components/NavigationBar'
 import ApplyButton from '../../components/ApplyButton'
@@ -33,14 +34,17 @@ import { Storage, isIphoneX } from '../../global/Utilities';
 import { bookGuide } from '../../actions'
 
 //Store
-import configureStore from '../../configureStore'
-const store = configureStore();
+import { store } from '../../store/index'
 
 //Actions
 import { updatebooking } from '../../actions/bookingActions'
 import { updateuser } from '../../actions/userActions'
 
-import { Marker } from '../../../node_modules/react-native-maps/lib/components/MapView';
+import { Marker } from 'react-native-maps/lib/components/MapView';
+
+//Geo coder
+import Geocoder from '../../global/Geocoder';
+Geocoder.init('AIzaSyAq-cJJqZ8jWN4pJQ34tNbNdhbjsbuZUJs'); // use a valid API key
 
 var { width, height } = Dimensions.get('window');
 
@@ -73,24 +77,16 @@ class BookingGuideSettingScreen extends React.Component {
             isHourlyOrManual: false,
             isCheckHoulryOrManual: false,
             isLoading: false,
+            address: '',
         };
         this.navigate = this.props.navigation;
     }
 
     componentDidMount() {
-
+        this.showAddress()
     }
 
     onConfirm() {
-
-        //Update Booking
-        let storestate = store.getState()
-
-        storestate.tour.bookingdata.isAutomatic = !this.state.isCheckHoulryOrManual
-
-        store.dispatch(
-            updatebooking(storestate)
-        );
 
         this.bookGuideWS()
 
@@ -146,6 +142,10 @@ class BookingGuideSettingScreen extends React.Component {
 
     bookGuideWS() {
 
+        var { params } = this.props.navigation.state
+
+        var guide = params.guide
+        
         this.setState({
             isLoading: true
         })
@@ -154,18 +154,19 @@ class BookingGuideSettingScreen extends React.Component {
 
         //Get store data
         let storestate = store.getState()
-        storestate.tour.bookingdata.isbooked = !storestate.tour.bookingdata.isbooked
+        storestate.tour.bookingdata.isbooked = true
+        storestate.tour.bookingdata.isAutomatic = !this.state.isCheckHoulryOrManual
 
         store.dispatch(
             updatebooking(storestate.tour.bookingdata)
         );
 
         var params = {
-            token: storestate.user.userdata.token,
+            token: this.props.userdata.token,
             userid: this.props.userdata.user.userid,
-            guideid: 14,
-            latitude: storestate.tour.bookingdata.lat,
-            longitude: storestate.tour.bookingdata.long,
+            guides: '['  + parseInt(guide.id) + ']',
+            latitude: this.props.currentlocation.lat,
+            longitude: this.props.currentlocation.long,
             timelimit: storestate.tour.bookingdata.timeLimit,
             bookingtype: storestate.tour.bookingdata.isAutomatic ? 'automatic' : 'manual'
         }
@@ -210,8 +211,71 @@ class BookingGuideSettingScreen extends React.Component {
         }
     }
 
+    //Full name
+    fullname = () => {
+
+        var { params } = this.props.navigation.state
+
+        var guide = params.guide
+
+        if (!guide) {
+            return ''
+        }
+
+        let isGuide = guide.is_guide
+
+        let fullname = ''
+
+        if (guide.first_name) {
+            fullname = guide.first_name
+        }
+
+        if (guide.last_name) {
+            fullname = fullname + ' ' + guide.last_name
+        }
+
+        if (!fullname) {
+            fullname = isGuide ? 'Guide' : 'Tourist'
+        }
+
+        return fullname
+    }
+
+    rating = () => {
+
+        var { params } = this.props.navigation.state
+
+        var guide = params.guide
+
+        return guide.guide_data.guide_rating
+    }
+
+    showAddress = () => {
+
+        var { params } = this.props.navigation.state
+
+        var guide = params.guide
+
+        if (!guide.latitude || !guide.longitude) {
+            this.setState({ address: 'No location' })
+        }
+
+        Geocoder.from(guide.latitude, guide.longitude)
+            .then(json => {
+                var addressComponent = json.results[0].address_components[0];
+
+                this.setState({ address: json.results[0].formatted_address })
+            })
+            .catch(error => console.warn(error));
+    }
+
     render() {
+
         const { navigate } = this.props.navigation;
+
+        var { params } = this.props.navigation.state
+
+        var guide = params.guide
 
         return (
             <View style={styles.container}>
@@ -230,12 +294,21 @@ class BookingGuideSettingScreen extends React.Component {
                         <View style={styles.top_container_bg_view}>
                         </View>
                         <View style={styles.top_info_view} pointerEvents="none">
-                            <Text style={styles.top_name_text}>Bradon Delgado</Text>
+                            <Text style={styles.top_name_text}>{this.fullname()}</Text>
                             <View style={styles.top_location_view}>
                                 <Image resizeMode='contain' source={require("../../assets/images/location_maps.png")} style={styles.top_location_icon} />
-                                <Text style={styles.top_location_text}>Jewellborough</Text>
+                                <Text style={styles.top_location_text}>{this.state.address}</Text>
                             </View>
-                            <Rating ratingCount={5} imageSize={12} style={{ marginTop: 5 }} onFinishRating={this.ratingCompleted} />
+                            {/* <Rating ratingCount={5} imageSize={12} style={{ marginTop: 5 }} onFinishRating={this.ratingCompleted} /> */}
+                            <Stars
+                                rating={this.rating()}
+                                count={5}
+                                half={true}
+                                spacing={0}
+                                fullStar={<Icon name={'star'} style={[styles.starStyle]} />}
+                                emptyStar={<Icon name={'star-outline'} style={[styles.starStyle, styles.emptyStarStyle]} />}
+                                halfStar={<Icon name={'star-half'} style={[styles.starStyle]} />}
+                            />
                         </View>
                     </View>
                     <View style={styles.setting_container}>
@@ -352,7 +425,7 @@ class BookingGuideSettingScreen extends React.Component {
                     <View style={styles.bottom_container}>
                         <ApplyButton onPress={() => this.onConfirm()} name={'Confirm'} style={styles.confirm_btn} />
                     </View>
-                    <Image resizeMode='cover' source={require("../../assets/images/person1.png")} style={styles.top_avatar_icon} />
+                    <Image resizeMode='cover' source={{uri: guide.profile_picture}} style={styles.top_avatar_icon} />
                 </View>
                 {this.showLoading()}
             </View>
@@ -421,6 +494,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#ddd',
         marginTop: 10,
+        backgroundColor: 'lightgray'
     },
     top_info_view: {
         backgroundColor: 'white',
@@ -566,14 +640,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'transparent'
+    },
+
+    //--- star style ---//
+    starStyle: {
+        color: '#f3bc17',
+        backgroundColor: 'transparent',
+    },
+    emptyStarStyle: {
+        color: '#f3bc17',
     }
 });
+
 
 const mapStateToProps = store => {
     return {
         bookingdata: store.tour.bookingdata,
-        userdata: store.user.userdata
+        userdata: store.user.userdata,
+        currentlocation: store.location.currentlocation,
     };
 };
+
 
 export default connect(mapStateToProps)(BookingGuideSettingScreen);

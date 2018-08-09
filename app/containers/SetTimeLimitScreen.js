@@ -28,8 +28,7 @@ import moment from 'moment'
 import { isIphoneX, isNumber, Storage } from "../global/Utilities"
 
 //Store
-import configureStore from '../configureStore'
-const store = configureStore();
+import {store} from '../store/index'
 
 //Actions
 import { updatebooking } from '../actions/bookingActions'
@@ -50,10 +49,10 @@ class SetTimeLimitScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            hour: moment.utc(this.props.bookingdata.timeLimit *1000).format('HH'),
-            minute: moment.utc(this.props.bookingdata.timeLimit *1000).format('mm'),
-
+            hour: moment.utc(this.props.bookingdata.timeLimit * 1000).format('HH'),
+            minute: moment.utc(this.props.bookingdata.timeLimit * 1000).format('mm'),
         }
+
         this.navigate = this.props.navigation;
     }
 
@@ -84,7 +83,7 @@ class SetTimeLimitScreen extends React.Component {
         storestate.tour.bookingdata.timeLimit = parseInt(this.state.hour) * 60 * 60 + parseInt(this.state.minute) * 60
 
         store.dispatch(
-            updatebooking(storestate)
+            updatebooking(storestate.tour.bookingdata)
         );
 
         this.navigate.dispatch(backAction);
@@ -122,6 +121,10 @@ class SetTimeLimitScreen extends React.Component {
         this.setState({ minute: minutes.toString() })
     }
 
+    _onSubmitEditing = () => {
+
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -143,7 +146,7 @@ class SetTimeLimitScreen extends React.Component {
                                 keyboardType='numeric'
                                 maxLength={2}
                                 onChangeText={(text) => this.setHour(text)}
-                                onSubmitEditing={this._onLogin}
+                                onSubmitEditing={this._onSubmitEditing}
                             />
                             <Text style={styles.hour_lb}>Hours</Text>
                         </View>
@@ -158,7 +161,7 @@ class SetTimeLimitScreen extends React.Component {
                                 keyboardType='numeric'
                                 maxLength={2}
                                 onChangeText={(text) => this.setMinute(text)}
-                                onSubmitEditing={this._onLogin}
+                                onSubmitEditing={this._onSubmitEditing}
                             />
                             <Text style={styles.hour_lb}>Minutes</Text>
                         </View>
@@ -285,7 +288,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = store => {
     return {
-        bookingdata: store.tour.bookingdata
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata,
+        currentlocation: store.location.currentlocation,
     };
 };
 

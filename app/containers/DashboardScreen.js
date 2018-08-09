@@ -33,8 +33,7 @@ import ProfileScreen from './ProfileScreen';
 
 //Store
 import { connect } from 'react-redux';
-import configureStore from '../configureStore'
-const store = configureStore();
+import {store} from '../store/index'
 
 //Actions
 import { updatebooking } from '../actions/bookingActions'
@@ -118,7 +117,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = store => {
     return {
         bookingdata: store.tour.bookingdata,
-        userdata: store.user.userdata
+        userdata: store.user.userdata,
+        currentlocation: store.location.currentlocation,
     };
 };
 

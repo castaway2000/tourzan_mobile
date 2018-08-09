@@ -20,6 +20,21 @@ import {
 import { NavigationActions } from 'react-navigation'
 import PulseLoader from '../../components/CustomPulseLoader';
 
+//Store
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
+import { store } from '../../store/index'
+
+//Utilities
+import { isIphoneX, isNumber, Storage } from "../../global/Utilities"
+
+//Actions
+import { updatebooking } from '../../actions/bookingActions'
+
+//Webservice
+import { updateClockInOutStatus, getnearbyguides, profile } from '../../actions'
+
+
 var { width, height } = Dimensions.get('window');
 
 const timer = require('react-native-timer');
@@ -42,8 +57,10 @@ class BookingSearchingScreen extends React.Component {
 
     componentWillMount() {
         console.log("bookingSearchingScreen = componentDidMount Calling");
-        timer.clearTimeout(this);
-        timer.setTimeout(this, '', () => this.navigate.navigate('BookingGuideSetting'), 5000);
+        //timer.clearTimeout(this);
+        //timer.setTimeout(this, '', () => this.navigate.navigate('BookingGuideSetting'), 5000);
+
+        this.onGetNearbyGuide()
     }
 
     render() {
@@ -71,6 +88,69 @@ class BookingSearchingScreen extends React.Component {
                 </View>
             </View>
         );
+    }
+
+    onGetNearbyGuide() {
+
+        console.log('this.props.userdata', this.props.userdata)
+
+        var { dispatch } = this.props;
+
+        var params = {
+            userid: this.props.userdata.user.userid,
+            latitude: this.props.currentlocation.lat,
+            longitude: this.props.currentlocation.long,
+            units: 'km',
+            range: '100',
+        }
+
+        getnearbyguides(params)
+
+            .then(data => {
+
+                console.log('Get onGetNearbyGuide-->', data)
+
+                if (data) {
+                    if (data.length < 1) {
+                        Alert.alert('Tourzan', 'No nearby guide available. Please try again later.')
+                        this.props.navigation.dispatch(backAction)
+                    } else {
+                        //timer.setTimeout(this, '', () => this.navigate.navigate('BookingGuideSetting', { guides: data }), 5000);
+                        this.onGetProfile(data[0])
+                    }
+                } else {
+                    Alert.alert('Tourzan', 'No nearby guide available. Please try again later.')
+                    this.props.navigation.dispatch(backAction)
+                }
+            })
+            .catch(err => {
+                alert(err)
+            })
+    }
+
+    onGetProfile(user) {
+
+        var { dispatch } = this.props;
+
+        var params = {
+            userid: user.user
+        }
+
+        profile(params)
+
+            .then(data => {
+
+                console.log('Get onGetProfile-->', data)
+
+                if (data) {
+                    timer.setTimeout(this, '', () => this.navigate.navigate('BookingGuideSetting', { guide: data }), 5000);
+                } else {
+                    Alert.alert('Tourzan', 'No nearby guide available. Please try again later.')
+                }
+            })
+            .catch(err => {
+                alert(err)
+            })
     }
 }
 
@@ -121,5 +201,14 @@ const styles = StyleSheet.create({
 
 });
 
-export default BookingSearchingScreen;
+const mapStateToProps = store => {
+    return {
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata,
+        currentlocation: store.location.currentlocation,
+    };
+};
+
+export default connect(mapStateToProps)(BookingSearchingScreen);
+
 

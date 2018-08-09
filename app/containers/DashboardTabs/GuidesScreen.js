@@ -22,7 +22,23 @@ import Rating from 'react-native-ratings';
 import { NavigationActions } from 'react-navigation'
 import { Colors } from '../../constants'
 import NavigationBar from '../../components/NavigationBar'
-import { getGuideList } from '../../actions/'
+import { getGuideList } from '../../actions'
+
+//FCM
+import FCM, { NotificationActionType } from "react-native-fcm";
+import { registerKilledListener, registerAppListener } from "../../global/Firebase/Listeners"
+import firebaseClient from "../../global/Firebase/FirebaseClient";
+
+//Store
+import { connect } from 'react-redux';
+import {store} from '../../store/index'
+
+//Actions
+import { updatebooking } from '../../actions/bookingActions'
+import { updateuser } from '../../actions/userActions'
+
+//Utilities
+import { Storage, isIphoneX } from '../../global/Utilities';
 
 var { width, height } = Dimensions.get('window');
 
@@ -228,7 +244,12 @@ const styles = StyleSheet.create({
     },
 });
 
+const mapStateToProps = store => {
+    return {
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata,
+        currentlocation: store.location.currentlocation,
+    };
+};
 
-export default GuideScreen;
-
-
+export default connect(mapStateToProps)(GuideScreen);

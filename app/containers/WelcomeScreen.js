@@ -22,8 +22,7 @@ import { NavigationActions } from 'react-navigation'
 import SplashScreen from 'react-native-splash-screen'
 
 //Store
-import configureStore from '../configureStore'
-const store = configureStore();
+import { store } from '../store/index'
 
 //Actions
 import { connect } from 'react-redux';

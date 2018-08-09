@@ -19,14 +19,24 @@ import {
     ActivityIndicator,
 } from 'react-native';
 
-import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { Colors } from '../../constants'
 import Rating from 'react-native-ratings';
 import { NavigationActions } from 'react-navigation'
 
 import NavigationBar from '../../components/NavigationBar'
-import { getTourList } from '../../actions/'
+import { getTourList } from '../../actions'
+
+//Store
+import { connect } from 'react-redux';
+import {store} from '../../store/index'
+
+//Actions
+import { updatebooking } from '../../actions/bookingActions'
+import { updateuser } from '../../actions/userActions'
+
+//Utilities
+import { Storage, isIphoneX } from '../../global/Utilities';
 
 
 var { width, height } = Dimensions.get('window');
@@ -52,7 +62,7 @@ class TripsScreen extends React.Component {
 
     // functions for listview
     componentWillMount() {
-        this.getTourList()
+       // this.getTourList()
     }
 
     getTourList() {
@@ -234,6 +244,12 @@ const styles = StyleSheet.create({
     }
 });
 
+const mapStateToProps = store => {
+    return {
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata,
+        currentlocation: store.location.currentlocation,
+    };
+};
 
-// export default TripsScreen
-export default connect()(TripsScreen);
+export default connect(mapStateToProps)(TripsScreen);

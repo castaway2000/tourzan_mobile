@@ -16,10 +16,7 @@ import {
 } from 'react-native';
 
 import { Provider } from 'react-redux';
-
-import configureStore from './configureStore'
-const store = configureStore();
-
+import {store} from './store/index'
 import App from './App';
 
 class Wrapper extends React.Component {
