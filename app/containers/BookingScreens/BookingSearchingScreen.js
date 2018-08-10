@@ -116,7 +116,14 @@ class BookingSearchingScreen extends React.Component {
                         this.props.navigation.dispatch(backAction)
                     } else {
                         //timer.setTimeout(this, '', () => this.navigate.navigate('BookingGuideSetting', { guides: data }), 5000);
-                        this.onGetProfile(data[0])
+
+                        if (data[0]) {
+                            this.onGetProfile(data[0])
+                        } else {
+                            Alert.alert('Tourzan', 'No nearby guide available. Please try again later.')
+                            this.props.navigation.dispatch(backAction)
+                        }
+                        
                     }
                 } else {
                     Alert.alert('Tourzan', 'No nearby guide available. Please try again later.')

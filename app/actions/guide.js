@@ -7,9 +7,12 @@ function getGuideList() {
 
     let storeState = store.getState()
 
+    console.log(' storeState.user.userdata.token', storeState.user.userdata.token)
+    
+
     return new Promise((resolve, reject) => {
         fetch(API.SERVER + 'v1/guides/', {
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'pragma': 'no-cache',

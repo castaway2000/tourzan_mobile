@@ -68,7 +68,6 @@ class ChatScreen extends React.Component {
         }
     }
 
-
     // function for ratingview
     ratingCompleted(rating) {
         console.log("Rating is: " + rating)
@@ -81,7 +80,7 @@ class ChatScreen extends React.Component {
             dataSource: this.state.dataSource.cloneWithRows(this.state.ds),
         })
 
-        this.loadChatList()
+        //this.loadChatList()
     }
 
     loadChatList = () => {

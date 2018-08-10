@@ -197,11 +197,10 @@ function updateTrip(params) {
 
     var formData = new FormData();
 
-    formData.append('type', params.type); //'guide'
-    formData.append('user_id', params.userid); //13
-    formData.append('status', params.status); //update
-    formData.append('latitude', params.guideid); //14.12340
-    formData.append('longitude', params.guideid); //12.54321
+    formData.append('status', params.status); //update_trip
+    formData.append('latitude', params.latitude);
+    formData.append('longitude', params.longitude);
+    formData.append('trip_id', params.tripid);
 
     return new Promise((resolve, reject) => {
         fetch(API.SERVER + 'v1/mobile/update_trip/', {

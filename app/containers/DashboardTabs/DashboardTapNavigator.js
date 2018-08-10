@@ -25,7 +25,7 @@ import firebaseClient from "../../global/Firebase/FirebaseClient";
 
 //Store
 import { connect } from 'react-redux';
-import {store} from '../../store/index'
+import { store } from '../../store/index'
 
 //Actions
 import { updatebooking } from '../../actions/bookingActions'
@@ -72,12 +72,6 @@ class DashboardTapNavigator extends React.Component {
 
             console.log('Notification received!', notif)
 
-            // if (notif && notif.targetScreen === "detail") {
-            //     setTimeout(() => {
-            //         this.props.navigation.navigate("Detail");
-            //     }, 500);
-            // }
-
         });
 
         try {
@@ -93,6 +87,16 @@ class DashboardTapNavigator extends React.Component {
         FCM.getFCMToken().then(token => {
             console.log("TOKEN (getFCMToken)", token);
             this.setState({ token: token || "" });
+
+            //Get store data
+            let storestate = store.getState()
+            storestate.tour.bookingdata.push_token = token
+
+            store.dispatch(
+                updatebooking(storestate.tour.bookingdata)
+            );
+
+            //
         });
 
         if (Platform.OS === "ios") {

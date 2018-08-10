@@ -3,12 +3,12 @@ import moment from 'moment'
 
 const initialState = {
     bookingdata: {
-        isbooked: false,
+        isTripInProgress: false,
         isAutomatic: true,
         timeLimit: 18000, //second //5 hour
         lat: 0.0,
         long: 0.0,
-        bookedTime: '2018-07-17 17:00:00', //yyyy-MM-dd HH:mm:ss
+        bookedTime: moment().format('YYYY-MM-DD H:mm:ss'), //yyyy-MM-dd HH:mm:ss
         remainingTime: 0, //second
         tripid: 5
     }
@@ -22,15 +22,19 @@ const update = (state, action) => {
 
         const today = moment();
 
-        const bookedTime = moment(bd.bookedTime, 'YYYY-MM-DD h:mm:ss');
+        const bookedTime = moment(bd.bookedTime, 'YYYY-MM-DD H:mm:ss');
 
         const diff = today.diff(bookedTime, 'second');
 
         bd.remainingTime = bd.timeLimit - diff
 
+        console.log('bookedTime', bookedTime.format('YYYY-MM-DD H:mm:ss'))
+        console.log('today', today.format('YYYY-MM-DD H:mm:ss'))
+
         console.log('diff', diff)
         console.log('timeLimit', bd.timeLimit)
         console.log('remainingTime', bd.remainingTime)
+        console.log('----------------------------------------------------------')
 
     }
 

@@ -39,7 +39,7 @@ import { updatelocation } from '../actions/locationActions'
 import * as Actions from '../actions';
 
 //Webservice
-import { updateClockInOutStatus, acceptTrip, declineTrip, cancelTrip } from '../actions'
+import { updateClockInOutStatus, acceptTrip, declineTrip, cancelTrip, updateTrip } from '../actions'
 
 //Utilities
 import { Storage, isIphoneX } from '../global/Utilities';
@@ -86,9 +86,8 @@ class MapsScreen extends React.Component {
     }
 
     //#endregion
-
     componentWillMount() {
-        //let storestate = store.getState()
+
     }
 
     componentDidMount() {
@@ -97,6 +96,11 @@ class MapsScreen extends React.Component {
 
             // Create the object to update this.state.mapRegion through the onRegionChange function
             this.addressFromCoordnate(position.coords.latitude, position.coords.longitude)
+
+            //Update location store
+            store.dispatch(
+                updatelocation({ lat: position.coords.latitude, long: position.coords.longitude })
+            );
 
             let region = {
                 latitude: position.coords.latitude,
@@ -107,14 +111,10 @@ class MapsScreen extends React.Component {
 
             this.onRegionChange(region, position.coords.latitude, position.coords.longitude);
 
-            //Update Booking
-            let storestate = store.getState()
-            storestate.tour.bookingdata.lat = position.coords.latitude
-            storestate.tour.bookingdata.long = position.coords.longitude
-
-            store.dispatch(
-                updatebooking(storestate.tour.bookingdata)
-            );
+            //Update trip
+            if (this.props.bookingdata.isTripInProgress) {
+                this.updateTripWS()
+            }
         });
     }
 
@@ -126,11 +126,6 @@ class MapsScreen extends React.Component {
     onRegionChange(region, lastLat, lastLong) {
 
         this.addressFromCoordnate(region.latitude, region.longitude)
-
-        //Update location store
-        store.dispatch(
-            updatelocation({ lat: region.latitude, long: region.longitude })
-        );
 
         this.setState({
             mapRegion: region,
@@ -236,23 +231,6 @@ class MapsScreen extends React.Component {
 
     onBookingPressed = () => {
 
-        /*
-        console.log('props', this.props.bookingdata)
-
-        console.log('store', store.getState())
-
-        let storestate = store.getState()
-        storestate.tour.bookingdata.isbooked = !storestate.tour.bookingdata.isbooked 
-
-        store.dispatch(
-            updatebooking(storestate)
-        );
-
-        console.log('props', this.props.bookingdata)
-
-        console.log('store', store.getState())
-        */
-
         const { navigate } = this.props.navigation;
 
         navigate('BookingSearching')
@@ -295,9 +273,11 @@ class MapsScreen extends React.Component {
 
     showBottomBookButton() {
 
+        const { navigate } = this.props.navigation;
+
         if (!this.props.userdata.user.isGuide) {
             return (
-                !this.props.bookingdata.isbooked ? (
+                !this.props.bookingdata.isTripInProgress ? (
                     <TouchableOpacity style={styles.booking_view} onPress={() => { this.onBookingPressed() }}>
                         <Image resizeMode='cover' source={require("../assets/images/book.png")} style={styles.booking_green_btn} />
                     </TouchableOpacity>
@@ -309,16 +289,15 @@ class MapsScreen extends React.Component {
             )
         } else {
             return (
-                this.props.bookingdata.isbooked ? (
+                this.props.bookingdata.isTripInProgress ? (
                     <TouchableOpacity style={styles.booking_view} onPress={() => { this.onBookingPressed() }}>
                         <Image resizeMode='cover' source={require("../assets/images/book.png")} style={styles.booking_green_btn} />
                     </TouchableOpacity>
                 ) : (
-                    null
+                        null
                     )
             )
         }
-
     }
 
     render() {
@@ -455,14 +434,11 @@ class MapsScreen extends React.Component {
 
         var { dispatch } = this.props;
 
-        //Get store data
-        let storestate = store.getState()
-
         var params = {
             userid: this.props.userdata.user.userid,
             status: this.props.userdata.user.isClockedIn ? 'clockout' : 'clockin',
-            latitude: storestate.tour.bookingdata.lat,
-            longitude: storestate.tour.bookingdata.long,
+            latitude: this.props.bookingdata.lat,
+            longitude: this.props.bookingdata.long,
         }
 
         updateClockInOutStatus(params)
@@ -479,7 +455,7 @@ class MapsScreen extends React.Component {
                     updateuser(this.props.userdata)
                 );
 
-                Alert.alert('Tourzan','You are successfully clocked ' + (this.props.userdata.user.isClockedIn ? 'in' : 'out'))
+                Alert.alert('Tourzan', 'You are successfully clocked ' + (this.props.userdata.user.isClockedIn ? 'in' : 'out'))
 
                 console.log('this.props.user.isClockedIn-->', this.props.userdata.user.isClockedIn)
                 console.log('updateClockInOutStatusWS-->', data)
@@ -495,14 +471,7 @@ class MapsScreen extends React.Component {
 
     acceptTripWS() {
 
-        this.setState({
-            isLoading: true
-        })
-
         var { dispatch } = this.props;
-
-        //Get store data
-        let storestate = store.getState()
 
         var params = {
             status: 'isAccepted',
@@ -513,19 +482,6 @@ class MapsScreen extends React.Component {
         acceptTrip(params)
 
             .then(data => {
-
-                this.setState({
-                    isLoading: false
-                })
-
-                //Update Status
-                let storestate = store.getState()
-
-                storestate.user.userdata.isClockedIn = !storestate.user.userdata.isClockedIn
-
-                store.dispatch(
-                    updateuser(storestate.user.userdata)
-                );
 
                 console.log('acceptTripWS-->', data)
 
@@ -546,9 +502,6 @@ class MapsScreen extends React.Component {
 
         var { dispatch } = this.props;
 
-        //Get store data
-        let storestate = store.getState()
-
         var params = {
             type: 'guide',
             status: 'isDeclined',
@@ -563,13 +516,10 @@ class MapsScreen extends React.Component {
                     isLoading: false
                 })
 
-                //Update Status
-                let storestate = store.getState()
-
-                storestate.user.userdata.isClockedIn = !storestate.user.userdata.isClockedIn
+                this.props.userdata.isClockedIn = !this.props.userdata.isClockedIn
 
                 store.dispatch(
-                    updateuser(storestate.user.userdata)
+                    updateuser(this.props.userdata)
                 );
 
                 console.log('declineTrip-->', data)
@@ -583,7 +533,36 @@ class MapsScreen extends React.Component {
             })
     }
 
+    updateTripWS() {
 
+        var { dispatch } = this.props;
+
+        var params = {
+            status: 'update_trip',
+            latitude: this.props.currentlocation.lat,
+            longitude: this.props.currentlocation.long,
+            tripid: this.props.bookingdata.tripid,
+        }
+
+        updateTrip(params)
+
+            .then(data => {
+
+                this.setState({
+                    isLoading: false
+                })
+
+                this.props.userdata.isClockedIn = !this.props.userdata.isClockedIn
+
+                store.dispatch(
+                    updateuser(this.props.userdata)
+                );
+
+                console.log('updateTrip-->', data)
+            })
+            .catch(err => {
+            })
+    }
 }
 
 const styles = StyleSheet.create({

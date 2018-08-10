@@ -1,14 +1,20 @@
 import { API } from '../constants'
 
 //Store
-import {store} from '../store/index'
+import { store } from '../store/index'
 
 function emailLogin(params) {
+
+    //Get store data
+    let storestate = store.getState()
 
     var formData = new FormData();
 
     formData.append('username', params.username);
     formData.append('password', params.password);
+    formData.append('push_token', storestate.tour.bookingdata.push_token ? storestate.tour.bookingdata.push_token : '0');
+
+    console.log('formData', formData)
 
     return new Promise((resolve, reject) => {
         fetch(API.SERVER + 'v1/rest-auth/login/', {
@@ -34,6 +40,9 @@ function emailLogin(params) {
 
 function emailSignup(params) {
 
+    //Get store data
+    let storestate = store.getState()
+
     console.log(params)
 
     var formData = new FormData();
@@ -41,7 +50,10 @@ function emailSignup(params) {
     formData.append('email', params.email)
     formData.append('password1', params.password)
     formData.append('password2', params.confirm)
+    formData.append('push_token', storestate.tour.bookingdata.push_token ? storestate.tour.bookingdata.push_token : '0');
 
+    console.log('formData', formData)
+    
     return new Promise((resolve, reject) => {
         fetch(API.SERVER + 'v1/signup_user/', {
             method: 'POST',

@@ -62,7 +62,7 @@ class TripsScreen extends React.Component {
 
     // functions for listview
     componentWillMount() {
-       // this.getTourList()
+       this.getTourList()
     }
 
     getTourList() {
@@ -88,6 +88,8 @@ class TripsScreen extends React.Component {
         this.props.navigation.navigate('TripItemDetail', { tourData: rowData });
     }
 
+
+
     showTourList() {
         return (
             this.state.toursList.map((rowData, index) => {
@@ -98,7 +100,7 @@ class TripsScreen extends React.Component {
                         underlayColor='#ddd'
                         key={index}>
                         <View style={styles.row}>
-                            <Image resizeMode='cover' source={{ uri: rowData.image_small }} style={styles.avatar_img} />
+                            <Image resizeMode='cover' source={ rowData.image_small ? { uri: rowData.image_small } : require("../../assets/images/trip_avatar.png") } style={styles.avatar_img} />
                             <View style={styles.info_view}>
                                 <View style={styles.location_view}>
                                     <Image resizeMode='contain' source={require("../../assets/images/trip_item_location_icon.png")} style={styles.location_icon} />

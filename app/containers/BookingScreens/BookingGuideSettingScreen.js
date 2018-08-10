@@ -17,6 +17,8 @@ import {
     ActivityIndicator,
 } from 'react-native';
 
+import moment from 'moment'
+
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { Colors } from '../../constants'
@@ -31,7 +33,7 @@ import ApplyButton from '../../components/ApplyButton'
 import { Storage, isIphoneX } from '../../global/Utilities';
 
 //Webservice
-import { bookGuide } from '../../actions'
+import { bookGuide, acceptTrip } from '../../actions'
 
 //Store
 import { store } from '../../store/index'
@@ -145,7 +147,7 @@ class BookingGuideSettingScreen extends React.Component {
         var { params } = this.props.navigation.state
 
         var guide = params.guide
-        
+
         this.setState({
             isLoading: true
         })
@@ -154,8 +156,10 @@ class BookingGuideSettingScreen extends React.Component {
 
         //Get store data
         let storestate = store.getState()
-        storestate.tour.bookingdata.isbooked = true
+        storestate.tour.bookingdata.isTripInProgress = true
         storestate.tour.bookingdata.isAutomatic = !this.state.isCheckHoulryOrManual
+
+        storestate.tour.bookingdata.bookedTime = moment().format('YYYY-MM-DD H:mm:ss');
 
         store.dispatch(
             updatebooking(storestate.tour.bookingdata)
@@ -164,7 +168,7 @@ class BookingGuideSettingScreen extends React.Component {
         var params = {
             token: this.props.userdata.token,
             userid: this.props.userdata.user.userid,
-            guides: '['  + parseInt(guide.id) + ']',
+            guides: '[' + parseInt(guide.id) + ']',
             latitude: this.props.currentlocation.lat,
             longitude: this.props.currentlocation.long,
             timelimit: storestate.tour.bookingdata.timeLimit,
@@ -178,6 +182,8 @@ class BookingGuideSettingScreen extends React.Component {
                 this.setState({
                     isLoading: false
                 })
+
+                this.acceptTripWS()
 
                 Alert.alert(
                     'Tourzan',
@@ -267,6 +273,36 @@ class BookingGuideSettingScreen extends React.Component {
                 this.setState({ address: json.results[0].formatted_address })
             })
             .catch(error => console.warn(error));
+    }
+
+    profileImage = () => {
+
+        var profileImage = null;
+        var profileImageobj = {};
+
+        var { params } = this.props.navigation.state
+
+        var guide = params.guide
+
+        let isGuide = guide.is_guide
+
+        if (!isGuide) {
+            profileImage = guide.profile_picture
+        } else {
+            if (guide.profile_picture) {
+                profileImage = guide.profile_picture
+            } else if (uide.guide_data.profile_image) {
+                profileImage = uide.guide_data.profile_image
+            }
+        }
+
+        if (profileImage) {
+            profileImageobj = { uri: profileImage }
+        } else {
+            profileImage = require("../../assets/images/defaultavatar.png")
+        }
+
+        return profileImage
     }
 
     render() {
@@ -425,7 +461,7 @@ class BookingGuideSettingScreen extends React.Component {
                     <View style={styles.bottom_container}>
                         <ApplyButton onPress={() => this.onConfirm()} name={'Confirm'} style={styles.confirm_btn} />
                     </View>
-                    <Image resizeMode='cover' source={{uri: guide.profile_picture}} style={styles.top_avatar_icon} />
+                    <Image resizeMode='cover' source={this.profileImage()} style={styles.top_avatar_icon} />
                 </View>
                 {this.showLoading()}
             </View>
@@ -513,7 +549,8 @@ const styles = StyleSheet.create({
     },
     top_location_view: {
         marginTop: 5,
-        height: 15,
+        marginLeft: 30,
+        marginRight: 30,
         flexDirection: 'row',
         alignItems: 'center',
     },

@@ -94,9 +94,8 @@ class GuideScreen extends React.Component {
                         key={index}>
                         <View style={styles.row}>
                             <View style={styles.avatar_view}>
-                                <Image resizeMode='cover' source={{ uri: rowData.header_image }} style={styles.avatar_img} defaultSource={require('../../assets/images/user_placeholder.png')} />
+                                <Image resizeMode='cover' source={ rowData.header_image ? { uri: rowData.header_image } : require("../../assets/images/defaultavatar.png") } style={styles.avatar_img} defaultSource={require('../../assets/images/user_placeholder.png')} />
                                 <View style={styles.rate_view} pointerEvents="none">
-                                    {/*<Rating ratingCount={5} imageSize={8} onFinishRating={this.ratingCompleted}/>*/}
                                     <Text style={styles.rating_text}>Rating: {rowData.rating}</Text>
                                 </View>
                             </View>
