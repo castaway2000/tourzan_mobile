@@ -12,7 +12,7 @@ function emailLogin(params) {
 
     formData.append('username', params.username);
     formData.append('password', params.password);
-    formData.append('push_token', storestate.tour.bookingdata.push_token ? storestate.tour.bookingdata.push_token : '0');
+    //formData.append('push_token', storestate.tour.bookingdata.push_token ? storestate.tour.bookingdata.push_token : '0');
 
     console.log('formData', formData)
 
@@ -50,7 +50,7 @@ function emailSignup(params) {
     formData.append('email', params.email)
     formData.append('password1', params.password)
     formData.append('password2', params.confirm)
-    formData.append('push_token', storestate.tour.bookingdata.push_token ? storestate.tour.bookingdata.push_token : '0');
+    //formData.append('push_token', storestate.tour.bookingdata.push_token ? storestate.tour.bookingdata.push_token : '0');
 
     console.log('formData', formData)
     
@@ -83,6 +83,34 @@ function profile(params) {
 
     return new Promise((resolve, reject) => {
         fetch(API.SERVER + 'v1/user_profile/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'pragma': 'no-cache',
+                'Cache-Control': 'no-cache'
+            },
+            body: formData
+        })
+            .then((res) => res.json())
+            .then(data => {
+                console.log('Profile API Success->', data);
+                resolve(data);
+            })
+            .catch(err => {
+                console.log('Profile API Error->', err);
+                reject(err);
+            });
+    })
+}
+
+function usermixins(params) {
+    console.log(params)
+    var formData = new FormData();
+    formData.append('id', params.id)
+    formData.append('user_type', params.usertype)
+
+    return new Promise((resolve, reject) => {
+        fetch(API.SERVER + 'v1/user_mixins/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -170,5 +198,6 @@ module.exports = {
     emailSignup,
     profile,
     changePassword,
-    resetPassword
+    resetPassword,
+    usermixins
 }

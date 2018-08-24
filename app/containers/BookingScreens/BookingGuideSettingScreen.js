@@ -183,11 +183,9 @@ class BookingGuideSettingScreen extends React.Component {
                     isLoading: false
                 })
 
-                this.acceptTripWS()
-
                 Alert.alert(
-                    'Tourzan',
-                    'Your request has been sent guide will respond as soon as possible.',
+                    'Book Guide Responce',
+                    JSON.stringify(data),
                     [
                         {
                             text: 'OK', onPress: () => {

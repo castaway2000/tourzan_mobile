@@ -79,7 +79,7 @@ class PrivacyPolicyScreen extends Component {
                         onLoad={() => this.hideSpinner()}
                         source={{
                             uri:
-                                'https://www.tourzan.com/en/privacy_policy/'
+                                'https://api.tourzan.com/en/privacy_policy/'
                         }}
                     />
                 </View>

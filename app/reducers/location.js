@@ -2,8 +2,8 @@ import { UPDATE_CURRENT_LOCATION} from '../actions/actionTypes'
 
 const initialState = {
     currentlocation: {
-        lat: 0,
-        long: 0
+        lat: null,
+        long: null,
     }
 };
 

@@ -1,4 +1,4 @@
-import { Platform, AsyncStorage, AppState } from 'react-native';
+import { Platform, AsyncStorage, AppState, Alert } from 'react-native';
 
 import FCM, { FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType, NotificationActionType, NotificationActionOption, NotificationCategoryOption } from "react-native-fcm";
 
@@ -44,9 +44,13 @@ export function registerKilledListener() {
 }
 
 // these callback will be triggered only when app is foreground or background
-export function registerAppListener(navigation) {
+export function registerAppListener(mapScreen) {
+
   FCM.on(FCMEvent.Notification, notif => {
-    console.log("Notification", notif);
+
+    //console.log("Notification str", notif);
+
+    mapScreen.notificationBannerTapped(notif)
 
     if (Platform.OS === 'ios' && notif._notificationType === NotificationType.WillPresent && !notif.local_notification) {
       // this notification is only to decide if you want to show the notification when user if in foreground.
@@ -55,16 +59,7 @@ export function registerAppListener(navigation) {
       return;
     }
 
-    if (notif.opened_from_tray) {
-      if (notif.targetScreen === 'detail') {
-        setTimeout(() => {
-          navigation.navigate('Detail')
-        }, 500)
-      }
-      setTimeout(() => {
-        alert(`User tapped notification\n${JSON.stringify(notif)}`)
-      }, 500)
-    }
+    
 
     if (Platform.OS === 'ios') {
       //optional

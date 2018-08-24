@@ -78,7 +78,7 @@ class TermsofUseScreen extends Component {
                         onLoad={() => this.hideSpinner()}
                         source={{
                             uri:
-                                'https://www.tourzan.com/en/tos/'
+                                'https://api.tourzan.com/en/tos/'
                         }}
                     />
                 </View>

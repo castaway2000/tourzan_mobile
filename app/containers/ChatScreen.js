@@ -15,7 +15,8 @@ import {
     TouchableOpacity,
     TouchableHighlight,
     ListView,
-    Platform
+    Platform,
+    FlatList
 } from 'react-native';
 
 import Rating from 'react-native-ratings';
@@ -23,7 +24,6 @@ import { NavigationActions } from 'react-navigation'
 import IconBadge from 'react-native-icon-badge';
 import { Colors } from '../constants'
 import NavigationBar from '../components/NavigationBar'
-import { getChatList } from '../actions/'
 import moment from 'moment'
 
 //Store
@@ -36,6 +36,20 @@ import { updateuser } from '../actions/userActions'
 
 //Utilities
 import { Storage, isIphoneX } from '../global/Utilities';
+
+//Webservice
+import {
+    getChatList,
+    getTourList,
+    updateClockInOutStatus,
+    endTrip,
+    cancelTrip,
+    declineTrip,
+    acceptTrip,
+    updateTrip,
+    extendTime,
+    usermixins
+} from '../actions'
 
 var SearchBar = require('react-native-search-bar');
 var { width, height } = Dimensions.get('window');
@@ -55,13 +69,10 @@ class ChatScreen extends React.Component {
 
     constructor(props) {
         super(props);
-        var ds = new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 != r2
-        });
+
         this.state = {
             // for listview
             ds: [],
-            dataSource: ds,
 
             // for ratingview
             starCount: 3.5,
@@ -76,11 +87,7 @@ class ChatScreen extends React.Component {
     // functions for listview
     componentDidMount() {
 
-        this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(this.state.ds),
-        })
-
-        //this.loadChatList()
+        this.loadChatList()
     }
 
     loadChatList = () => {
@@ -92,9 +99,59 @@ class ChatScreen extends React.Component {
                 })
                 console.log('getChatList data-->', data)
 
+                if (data.length && data.length > 0) {
+                    this.setState({
+                        ds: data
+                    })
+    
+                    for (let i = 0; i < data.length; i++) {
+    
+                        data[i].pic = require("../assets/images/chat_avatar.png")
+    
+                        this.loadUserNameProfilePics(data, i)
+                    }
+                }
+            })
+            .catch(err => {
                 this.setState({
-                    dataSource: this.state.dataSource.cloneWithRows(data),
-                    ds: data
+                    isLoading: false
+                })
+                alert(err)
+            })
+    }
+
+    loadUserNameProfilePics = (profiles, index) => {
+
+        //let params = {id: this.props.userdata.isGuide ? profiles[index].guide : profiles[index].tourist , usertype: this.props.userdata.isGuide ? 'guide' : 'tourist'}
+
+        let params = {id: this.props.userdata.isGuide ? profiles[index].tourist : profiles[index].guide , usertype: 'tourist'}
+
+        usermixins(params)
+            .then(data => {
+               
+                var newArray = profiles.slice();
+
+                if (!newArray[index].topic) {
+
+                    if (data.username) {
+                        newArray[index].topic = data.username
+                    }
+
+                    if (data.first_name && data.last_name) {
+                        newArray[index].topic = data.first_name + ' ' + data.last_name
+                    }
+
+                    newArray[index].topic = 'Chat with ' + (newArray[index].topic ? newArray[index].topic : (newArray[index].username ? newArray[index].username : 'User'))
+                }
+
+                if (data.pic) {
+                    newArray[index].pic = {uri: data.pic}
+                } else {
+                    newArray[index].pic = require("../assets/images/chat_avatar.png")
+                }
+
+                this.setState({
+                    ds: newArray
                 })
             })
             .catch(err => {
@@ -166,32 +223,25 @@ class ChatScreen extends React.Component {
         return ' '
     }
 
-    getTopicText = (rowData) => {
+    renderItem(rowData) {
 
-        if (rowData.messages && rowData.messages.length > 0) {
-            return rowData.messages[0].topic
-        }
+        let { item, index } = rowData;
 
-        return ' '
-    }
-
-
-    renderRow(rowData) {
         return (
 
             <TouchableHighlight style={styles.row_view}
-                onPress={() => this.pressRow(rowData)}
+                onPress={() => this.pressRow(item)}
                 underlayColor='#ddd'>
                 <View style={styles.row}>
                     <View style={styles.avatar_view}>
-                        <Image resizeMode='cover' source={require("../assets/images/chat_avatar.png")} style={styles.avatar_img} />
+                        <Image resizeMode='cover' source={item.pic} style={styles.avatar_img} />
                     </View>
                     <View style={styles.info_view}>
-                        <Text style={styles.name_text}>{this.getTopicText(rowData)}</Text>
-                        <Text style={styles.description_text}>{this.getMessagesText(rowData)}</Text>
+                        <Text style={styles.name_text}>{item.topic}</Text>
+                        <Text style={styles.description_text}>{this.getMessagesText(item)}</Text>
                     </View>
                     <View style={styles.row_right_view}>
-                        <Text style={styles.right_text}>{this.getChatDate(rowData)}</Text>
+                        <Text style={styles.right_text}>{this.getChatDate(item)}</Text>
                         <View style={{ marginTop: 5 }}>
                             <IconBadge
                                 MainElement={
@@ -203,7 +253,7 @@ class ChatScreen extends React.Component {
                                     }} />
                                 }
                                 BadgeElement={
-                                    <Text style={{ color: '#fff' }}>{3}</Text>
+                                    <Text style={{ color: '#fff' }}>{0}</Text>
                                 }
                                 IconBadgeStyle={
                                     {
@@ -213,7 +263,7 @@ class ChatScreen extends React.Component {
                                         backgroundColor: '#31dd73'
                                     }
                                 }
-                                Hidden={this.state.BadgeCount == 0}
+                                Hidden={true}
                             />
                         </View>
                     </View>
@@ -248,10 +298,11 @@ class ChatScreen extends React.Component {
                             />
                         </View>
                     </View>
-                    <ListView
-                        dataSource={this.state.dataSource}
+                    <FlatList
+                        data={this.state.ds}
                         removeClippedSubviews={false}
-                        renderRow={this.renderRow.bind(this)}
+                        extraData={this.state}
+                        renderItem={this.renderItem.bind(this)}
                         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
                     //renderHeader={() => <SearchListHeader />}
                     />
@@ -323,7 +374,6 @@ const styles = StyleSheet.create({
         // flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#31dd73',
-
     },
     search_hedear_row_view: {
         flexDirection: 'row',

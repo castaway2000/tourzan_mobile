@@ -47,6 +47,7 @@ import {
     updateTrip,
     extendTime
 } from '../actions'
+
 import { Actions } from '../../node_modules/react-native-gifted-chat';
 
 var Toast = require('react-native-toast');

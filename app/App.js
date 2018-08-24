@@ -57,6 +57,8 @@ import OfferScreen from './containers/OfferScreen'
 
 import ExtendTimeScreen from './containers/ExtendTimeScreen'
 
+import CompleteTourScreen from './containers/CompleteTourScreen'
+
 var { width, height } = Dimensions.get('window');
 
 console.disableYellowBox = true;
@@ -163,7 +165,8 @@ const App = StackNavigator({
   Offer: { screen: OfferScreen },
   Profile: { screen: ProfileScreen },
   ProfileCharRoom: { screen: ChatRoomScreen },
-  ExtendTime: { screen: ExtendTimeScreen }
+  ExtendTime: { screen: ExtendTimeScreen },
+  CompleteTour: { screen: CompleteTourScreen }
 }, {
     headerMode: 'screen'
   },

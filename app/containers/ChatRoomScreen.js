@@ -22,7 +22,7 @@ import { Colors } from '../constants'
 
 //Store
 import { connect } from 'react-redux';
-import {store} from '../store/index'
+import { store } from '../store/index'
 
 //Actions
 import { updatebooking } from '../actions/bookingActions'
@@ -62,28 +62,13 @@ class ChatRoomScreen extends React.Component {
                 createdAt: new Date(),
                 user: {
                     _id: element.user,
-                    name: 'React Native',
-                    avatar: 'http://34.212.65.102/static/img/Tourzan-transparant.png',
+                    name: '',
+                    avatar: 'https://saberapplications.com/static/img/Tourzan-transparant.png',
                 },
             }
 
             this.state.messages.push(data)
         }
-
-        setTimeout(() => {
-            this.setState((previousState) => ({
-                messages: GiftedChat.append(previousState.messages, {
-                    _id: 1,
-                    text: 'Hello developer',
-                    createdAt: new Date(),
-                    user: {
-                        _id: 2,
-                        name: 'React Native',
-                        avatar: 'http://34.212.65.102/static/img/Tourzan-transparant.png',
-                    },
-                }),
-            }));
-        }, 5000);
 
         this.setState({
             messages: this.state.messages
@@ -91,20 +76,36 @@ class ChatRoomScreen extends React.Component {
     }
 
     componentDidMount() {
-        this.socket = new WebSocket('ws://34.212.65.102/ws/chat/85370fc6-e253-4f2f-946f-6d5034aef072/');
-        console.log(this.socket)
 
+        this.socket = new WebSocket('wss://saberapplications.com/ws/chat/3279c0ef-4b1b-4319-9baf-150f475d62b4/');
+        this.socket.binaryType = 'blob'
+
+        console.log(this.socket)
 
         this.socket.onopen = () => {
             console.log('Socket connected...!');
-
         };
 
         this.socket.onmessage = (e) => {
-            console.log('A message was received', e.data);
+            console.log('A message was received.', e.data);
+
+            let cm = {
+                text: e.data.message, _id: -1,
+                createdAt: new Date(),
+                user: {
+                    _id: -2,
+                    name: '',
+                    avatar: '',
+                }
+            }
+
+            this.setState((previousState) => ({
+                messages: GiftedChat.append(previousState.messages, cm),
+            }));
         };
 
         this.socket.onerror = (e) => {
+
             // an error occurred
             console.log('An error occurred', e.message);
         };
@@ -119,17 +120,13 @@ class ChatRoomScreen extends React.Component {
 
         console.log('sending...');
 
-        let message1 = { chat_uuid: "85370fc6-e253-4f2f-946f-6d5034aef072", message: "From Iphone 6" }
+        //let message1 = {chat_uuid: "3279c0ef-4b1b-4319-9baf-150f475d62b4", message: "test"}
+
+        let message1 = {"message": "test", "user": "guide100", "dt": "08/16/2018 07:23:14"}
 
         let messagestringfy = JSON.stringify(message1)
 
         this.socket.send(messagestringfy);
-
-        //this.socket.send(JSON.stringify({ "chat_uuid": "85370fc6-e253-4f2f-946f-6d5034aef072", "message": "From vs code!!!!" }))
-        let message = {
-            chat_uuid: '85370fc6-e253-4f2f-946f-6d5034aef072',
-            message: messages
-        }
 
         this.setState((previousState) => ({
             messages: GiftedChat.append(previousState.messages, messages),
@@ -144,6 +141,8 @@ class ChatRoomScreen extends React.Component {
 
     render() {
         const { navigate } = this.props.navigation;
+        var { params } = this.props.navigation.state
+        
         return (
             <View style={styles.container}>
                 <View style={styles.statusbar} />
@@ -151,9 +150,9 @@ class ChatRoomScreen extends React.Component {
                     <TouchableOpacity onPress={() => { this.props.navigation.dispatch(backAction) }}>
                         <Image resizeMode='cover' source={require("../assets/images/back.png")} style={styles.backButton} />
                     </TouchableOpacity>
-                    <Text style={styles.centerText}>Luella Palmer</Text>
+                    <Text style={styles.centerText}>{params.chatData.topic}</Text>
                     <TouchableOpacity onPress={() => { navigate('Profile', { userid: this.getOpponmentUserID() }) }}>
-                        <Image resizeMode='cover' source={require("../assets/images/chat_avatar.png")} style={styles.rightView} />
+                        <Image resizeMode='cover' source={params.chatData.pic} style={styles.rightView} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.bottom_container}>
@@ -228,10 +227,11 @@ const styles = StyleSheet.create({
     rightView: {
         marginRight: 20,
         height: 35,
-        width: 35
+        width: 35,
+        borderRadius:17
     },
     bottom_container: {
-        height: (Platform.OS == 'ios') ? height - ((Platform.OS == 'ios') ? (isIphoneX() ? 130 : 44) : 0) : height - 66,
+        height: (Platform.OS == 'ios') ? height - ((Platform.OS == 'ios') ? (isIphoneX() ? 130 : 64) : 0) : height - 66,
         width: width,
     },
 });

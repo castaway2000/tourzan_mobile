@@ -69,7 +69,7 @@ class WelcomeScreen extends React.Component {
                 ]
             });
             this.navigate.dispatch(resetAction)
-
+            
         } else {
             SplashScreen.hide();
         }
@@ -85,14 +85,14 @@ class WelcomeScreen extends React.Component {
                         <Image resizeMode='cover' source={require("../assets/images/grey_logo.png")} style={styles.logo} />
                         <Text style={styles.txt_welcome}>WELCOME!</Text>
                         <View style={styles.line}></View>
-                        <Text style={styles.txt_bottom}>Wine Tours La Dolce Vita</Text>
+                        <Text style={styles.txt_bottom}>The Best On Demand Showaround Service</Text>
                     </View>
                     <View style={styles.bottom_container}>
                         <ApplyButton
                             onPress={() => navigate('LoginTourist')}
-                            name="Login Tourist" />
+                            name="Login as a Traveler" />
                         <TouchableOpacity onPress={() => navigate('LoginGuide')} title="Login Guide">
-                            <Text style={styles.button_guide}>Tour Guide</Text>
+                            <Text style={styles.button_guide}>Login as a Guide</Text>
                         </TouchableOpacity>
                     </View>
                 </ImageBackground>

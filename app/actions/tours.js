@@ -98,10 +98,10 @@ function cancelTrip(params) {
 
     var formData = new FormData();
 
-    formData.append('user_id', params.userid); 
+    formData.append('user_id', params.userid);
     formData.append('status', params.status);
-    formData.append('type', params.type); 
-    formData.append('trip_id', params.tripid); 
+    formData.append('type', params.type);
+    formData.append('trip_id', params.tripid);
 
     return new Promise((resolve, reject) => {
         fetch(API.SERVER + 'v1/mobile/update_trip/', {
@@ -164,10 +164,11 @@ function acceptTrip(params) {
 
     var formData = new FormData();
 
-    formData.append('type', params.type); //'guide'
-    formData.append('user_id', params.userid); //13
     formData.append('status', params.status); //isAccepted
+    formData.append('user_id', params.userid); //13
     formData.append('guide_id', params.guideid); //14
+    formData.append('type', params.type); //'automatic'
+    formData.append('time', params.time); //'automatic'
 
     return new Promise((resolve, reject) => {
         fetch(API.SERVER + 'v1/mobile/update_trip/', {
@@ -219,6 +220,40 @@ function updateTrip(params) {
             })
             .catch(err => {
                 console.log('Update trip  API Error', err);
+                reject(err);
+            });
+    })
+}
+
+function loginAndUpdateTrip(params) {
+
+    console.log('Login and Update API Params', params);
+
+    var formData = new FormData();
+
+    formData.append('status', params.status); //login
+    formData.append('latitude', params.latitude);
+    formData.append('longitude', params.longitude);
+    formData.append('user_id', params.userid);
+    formData.append('device_token', params.devicetoken);
+
+    return new Promise((resolve, reject) => {
+        fetch(API.SERVER + 'v1/mobile/update_trip/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'pragma': 'no-cache',
+                'Cache-Control': 'no-cache'
+            },
+            body: formData
+        })
+            .then((res) => res.json())
+            .then(data => {
+                console.log('Login and Update API Responce', data);
+                resolve(data);
+            })
+            .catch(err => {
+                console.log('Login and Update API Error', err);
                 reject(err);
             });
     })
@@ -331,4 +366,5 @@ module.exports = {
     extendTime,
     gettripstatus,
     getnearbyguides,
+    loginAndUpdateTrip
 }

@@ -39,7 +39,7 @@ import { updatelocation } from '../actions/locationActions'
 import * as Actions from '../actions';
 
 //Webservice
-import { updateClockInOutStatus, acceptTrip, declineTrip, cancelTrip, updateTrip } from '../actions'
+import { updateClockInOutStatus, acceptTrip, declineTrip, cancelTrip, updateTrip, loginAndUpdateTrip } from '../actions'
 
 //Utilities
 import { Storage, isIphoneX } from '../global/Utilities';
@@ -48,11 +48,18 @@ import { Storage, isIphoneX } from '../global/Utilities';
 import Geocoder from '../global/Geocoder';
 Geocoder.init('AIzaSyAq-cJJqZ8jWN4pJQ34tNbNdhbjsbuZUJs'); // use a valid API key
 
+//FCM
+import FCM, { NotificationActionType } from "react-native-fcm";
+import { registerKilledListener, registerAppListener } from "../global/Firebase/Listeners"
+import firebaseClient from "../global/Firebase/FirebaseClient";
+
 var { width, height } = Dimensions.get('window');
 
 const backAction = NavigationActions.back({
 
 });
+
+registerKilledListener();
 
 class MapsScreen extends React.Component {
 
@@ -69,8 +76,8 @@ class MapsScreen extends React.Component {
         super(props);
         this.state = {
             mapRegion: {
-                latitude: 37.78825,
-                longitude: -122.4324,
+                latitude: 0.0,
+                longitude: 0.0,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
             },
@@ -86,11 +93,16 @@ class MapsScreen extends React.Component {
     }
 
     //#endregion
-    componentWillMount() {
+    async componentWillMount() {
 
+        this.loginAndUpdateTripWS()
+
+        this.handelNotifications()
     }
 
     componentDidMount() {
+
+
 
         this.watchID = navigator.geolocation.watchPosition((position) => {
 
@@ -102,6 +114,7 @@ class MapsScreen extends React.Component {
                 updatelocation({ lat: position.coords.latitude, long: position.coords.longitude })
             );
 
+            //Update map
             let region = {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
@@ -110,6 +123,9 @@ class MapsScreen extends React.Component {
             }
 
             this.onRegionChange(region, position.coords.latitude, position.coords.longitude);
+
+            //Update location and device token
+            this.loginAndUpdateTripWS()
 
             //Update trip
             if (this.props.bookingdata.isTripInProgress) {
@@ -136,6 +152,7 @@ class MapsScreen extends React.Component {
     }
 
     addressFromCoordnate = (lat, long) => {
+
         /*
         Geocoder.from(lat, long)
             .then(json => {
@@ -233,12 +250,32 @@ class MapsScreen extends React.Component {
 
         const { navigate } = this.props.navigation;
 
+        if (!this.props.currentlocation.long || !this.props.currentlocation.lat) {
+            Alert.alert('Tourzan', 'Your current location not found.')
+            return
+        }
+
         navigate('BookingSearching')
+    }
+
+    onMyLocation = () => {
+
+        if (this.props.currentlocation.lat && this.props.currentlocation.long) {
+
+            //Update map
+            let region = {
+                latitude: this.props.currentlocation.lat,
+                longitude: this.props.currentlocation.long,
+                latitudeDelta: 0.00922 * 1.5,
+                longitudeDelta: 0.00421 * 1.5
+            }
+
+            this.onRegionChange(region, this.props.currentlocation.lat, this.props.currentlocation.long);
+        }
     }
 
     //#endregion
     onClockInOutPressed = () => {
-
         this.updateClockInOutStatusWS()
     }
 
@@ -322,11 +359,11 @@ class MapsScreen extends React.Component {
                             showsMyLocationButton={true}
                             region={this.state.mapRegion}
                             onRegionChange={this.onRegionChange}>
-                            <MapView.Marker
+                            {/* <MapView.Marker
                                 coordinate={this.state.mapRegion}
                                 centerOffset={{ x: 0, y: -10 }}
                                 anchor={{ x: 1, y: 1 }}
-                                image={flagImg} />
+                                image={flagImg} /> */}
                         </MapView>
                     }
                     <View style={styles.locationInfo_view}>
@@ -419,6 +456,12 @@ class MapsScreen extends React.Component {
 
                     {this.showBottomBookButton()}
 
+                    <View style={styles.myLocationButton}>
+                        <TouchableOpacity onPress={() => this.onMyLocation()}>
+                            <Image resizeMode='cover' source={require("../assets/images/current-location.png")} style={styles.myLocationButtonIcon} />
+                        </TouchableOpacity>
+                    </View>
+
                 </View>
                 {this.showLoading()}
             </View>
@@ -437,8 +480,8 @@ class MapsScreen extends React.Component {
         var params = {
             userid: this.props.userdata.user.userid,
             status: this.props.userdata.user.isClockedIn ? 'clockout' : 'clockin',
-            latitude: this.props.bookingdata.lat,
-            longitude: this.props.bookingdata.long,
+            latitude: this.props.currentlocation.lat,
+            longitude: this.props.currentlocation.long,
         }
 
         updateClockInOutStatus(params)
@@ -457,9 +500,6 @@ class MapsScreen extends React.Component {
 
                 Alert.alert('Tourzan', 'You are successfully clocked ' + (this.props.userdata.user.isClockedIn ? 'in' : 'out'))
 
-                console.log('this.props.user.isClockedIn-->', this.props.userdata.user.isClockedIn)
-                console.log('updateClockInOutStatusWS-->', data)
-
             })
             .catch(err => {
                 this.setState({
@@ -469,14 +509,18 @@ class MapsScreen extends React.Component {
             })
     }
 
-    acceptTripWS() {
+    acceptTripWS(touristId, timeLimit) {
 
         var { dispatch } = this.props;
 
+        //"extradata":{"time_limit":18000,"user_id":117,"latitude":23.073076,"type":1,"body":"You have received a booking offer!","longitude":72.513348}
+
         var params = {
             status: 'isAccepted',
-            userid: this.props.userdata.user.userid,
+            userid: touristId,
             guideid: this.props.userdata.user.guide_id,
+            type: 'automatic',
+            time: timeLimit,
         }
 
         acceptTrip(params)
@@ -537,6 +581,10 @@ class MapsScreen extends React.Component {
 
         var { dispatch } = this.props;
 
+        if (!this.props.currentlocation.lat || this.props.currentlocation.long) {
+            return
+        }
+
         var params = {
             status: 'update_trip',
             latitude: this.props.currentlocation.lat,
@@ -548,20 +596,127 @@ class MapsScreen extends React.Component {
 
             .then(data => {
 
-                this.setState({
-                    isLoading: false
-                })
-
-                this.props.userdata.isClockedIn = !this.props.userdata.isClockedIn
-
-                store.dispatch(
-                    updateuser(this.props.userdata)
-                );
-
                 console.log('updateTrip-->', data)
             })
             .catch(err => {
             })
+    }
+
+    loginAndUpdateTripWS() {
+
+        var { dispatch } = this.props;
+
+        if (!this.props.currentlocation.lat || !this.props.currentlocation.long || !this.props.bookingdata.push_token || !this.props.userdata.user.userid) {
+            return
+        }
+
+        var params = {
+            status: 'login',
+            latitude: this.props.currentlocation.lat,
+            longitude: this.props.currentlocation.long,
+            userid: this.props.userdata.user.userid,
+            devicetoken: this.props.bookingdata.push_token,
+        }
+
+        loginAndUpdateTrip(params)
+
+            .then(data => {
+
+                console.log('loginAndUpdateTripWS-->', data)
+            })
+            .catch(err => {
+
+            })
+    }
+
+    //Notifications
+    async handelNotifications() {
+
+        FCM.createNotificationChannel({
+            id: 'default',
+            name: 'Default',
+            description: 'used for example',
+            priority: 'high'
+        })
+
+        registerAppListener(this)
+
+        try {
+            let result = await FCM.requestPermissions({
+                badge: false,
+                sound: true,
+                alert: true
+            });
+        } catch (e) {
+            console.error(e);
+        }
+
+        FCM.getInitialNotification().then(notif => {
+            //Works on both iOS and Android
+
+            FCM.removeAllDeliveredNotifications();
+        });
+
+        FCM.getFCMToken().then(token => {
+
+            console.log("TOKEN (getFCMToken)", token);
+
+            this.setState({ token: token || "" });
+
+            //Get store data
+            let storestate = store.getState()
+            storestate.tour.bookingdata.push_token = token
+
+            store.dispatch(
+                updatebooking(storestate.tour.bookingdata)
+            );
+        });
+
+        if (Platform.OS === "ios") {
+            FCM.getAPNSToken().then(token => {
+            });
+        }
+    }
+
+    notificationBannerTapped(notif) {
+
+        if (notif.opened_from_tray) {
+
+            console.log('notif.custom_notification.color:', JSON.parse(notif.custom_notification))
+
+            console.log('notif.custom_notification.color:', JSON.parse(notif.custom_notification).extradata)
+
+            //console.log('notif.custom_notification.color:',notif.custom_notification['color'])
+
+            if (notif.extradata) {
+
+                //"extradata":{"time_limit":18000,"user_id":117,"latitude":23.073076,"type":1,"body":"You have received a booking offer!","longitude":72.513348}
+
+                Alert.alert(
+                    'Tourzan',
+                    JSON.stringify(notif.extradata.body),
+                    [
+                        {
+                            text: 'Cancel', onPress: () => {
+                                //notif.extradata.time_limit)
+                                //
+                            }
+                        },
+                        {
+                            text: 'Reject', onPress: () => {
+
+                            }, style: 'cancel'
+                        },
+                        {
+                            text: 'Accept', onPress: () => {
+                                this.acceptTripWS(notif.extradata.user_id, notif.extradata.time_limit)
+                            }
+                        },
+                    ],
+                    { cancelable: false }
+                )
+            }
+        }
     }
 }
 
@@ -798,6 +953,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'transparent'
+    },
+    myLocationButton: {
+        backgroundColor: "transparent",
+        position: 'absolute',
+        right: 5,
+        bottom: 5
+    },
+    myLocationButtonIcon: {
+        width: 40,
+        height: 40
     }
 });
 

@@ -10,7 +10,7 @@
 #import <React/RCTRootView.h>
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
-#import "RNSplashScreen.h"  // here
+#import "RNSplashScreen.h"
 
 //Add the following lines 
 #import <asl.h>

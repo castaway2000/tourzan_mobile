@@ -63,6 +63,7 @@ class MoreScreen extends React.Component {
     onLogout() {
 
         Alert.alert("Tourzan", 'Are you sure you want to logout?', [{
+            
             text: 'OK', onPress: () => {
 
                 Storage.removeItem("currentuser");

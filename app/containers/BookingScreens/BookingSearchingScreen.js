@@ -68,8 +68,8 @@ class BookingSearchingScreen extends React.Component {
             <View style={styles.container}>
                 <View style={styles.main_view}>
                     <View style={styles.logo_view}>
-                        <Image resizeMode='center' source={require('../../assets/images/guide_search_logo.png')} style={styles.logo_icon} />
-                        <Text style={styles.logo_text}>Let's find you a tour guide</Text>
+                        <Image resizeMode='contain' source={require('../../assets/images/guide_search_logo.png')} style={styles.logo_icon} />
+                        {/* <Text style={styles.logo_text}>Let's find you a tour guide</Text> */}
                     </View>
                     <View style={styles.bottom_view}>
                         <Text style={styles.bottom_text}>Tour guide will wait for you up to 5 mins</Text>
@@ -110,23 +110,24 @@ class BookingSearchingScreen extends React.Component {
 
                 console.log('Get onGetNearbyGuide-->', data)
 
+                Alert.alert('Get Nearby Guide Responce', JSON.stringify(data))
+
                 if (data) {
                     if (data.length < 1) {
-                        Alert.alert('Tourzan', 'No nearby guide available. Please try again later.')
+                       // Alert.alert('Tourzan', 'No nearby guide available. Please try again later.')
                         this.props.navigation.dispatch(backAction)
                     } else {
                         //timer.setTimeout(this, '', () => this.navigate.navigate('BookingGuideSetting', { guides: data }), 5000);
-
                         if (data[0]) {
                             this.onGetProfile(data[0])
                         } else {
-                            Alert.alert('Tourzan', 'No nearby guide available. Please try again later.')
+                           // Alert.alert('Tourzan', 'No nearby guide available. Please try again later.')
                             this.props.navigation.dispatch(backAction)
                         }
                         
                     }
                 } else {
-                    Alert.alert('Tourzan', 'No nearby guide available. Please try again later.')
+//                    Alert.alert('Tourzan', 'No nearby guide available. Please try again later.')
                     this.props.navigation.dispatch(backAction)
                 }
             })
