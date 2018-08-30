@@ -23,7 +23,6 @@ import KeyEvent from 'react-native-keyevent';
 import PercentageCircle from 'react-native-percentage-circle';
 import ApplyButton from '../components/ApplyButton'
 import { Colors } from '../constants'
-var TimerMixin = require('react-timer-mixin');
 
 //Utilities
 import { isIphoneX, isNumber, Storage } from "../global/Utilities"

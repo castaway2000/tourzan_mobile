@@ -17,6 +17,9 @@
 #import <React/RCTLog.h>
 #import "RNFIRMessaging.h"
 
+#import "BraintreeCore.h"
+#import "RCTLinkingManager.h"
+
 @import Firebase;
 
 @implementation AppDelegate
@@ -52,6 +55,8 @@
   //[SplashScreen show];  // here
   
   [FIRApp configure];
+  
+  [BTAppSwitch setReturnURLScheme:self.paymentsURLScheme];
   
   [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
   
@@ -122,5 +127,22 @@ RCTLogFunction CrashlyticsReactLogFunction = ^(
  - (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler{
     [RNFIRMessaging didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
   }
+
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+  
+  if ([url.scheme localizedCaseInsensitiveCompare:self.paymentsURLScheme] == NSOrderedSame) {
+    return [BTAppSwitch handleOpenURL:url options:options];
+  }
+  
+  return [RCTLinkingManager application:application openURL:url options:options];
+}
+
+- (NSString *)paymentsURLScheme {
+  NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+  return [NSString stringWithFormat:@"%@.%@", bundleIdentifier, @"payments"];
+}
 
 @end

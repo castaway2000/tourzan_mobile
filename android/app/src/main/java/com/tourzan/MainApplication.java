@@ -7,6 +7,7 @@ import com.crashlytics.android.Crashlytics;
 import com.evollu.react.fcm.FIRMessagingPackage;
 import com.facebook.common.logging.FLog;
 import com.facebook.react.ReactApplication;
+import tech.bam.RNBraintreeDropIn.RNBraintreeDropInPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -32,6 +33,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+            new RNBraintreeDropInPackage(),
                     new SplashScreenReactPackage(),
                     new MapsPackage(),
                     new FabricPackage(),

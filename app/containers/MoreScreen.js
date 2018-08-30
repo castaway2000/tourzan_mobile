@@ -109,6 +109,10 @@ class MoreScreen extends React.Component {
                         <Text style={styles.row_lb}>Terms of Use</Text>
                         <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon} />
                     </TouchableOpacity>
+                    <TouchableOpacity style={styles.row_view} onPress={() => this.navigate.navigate('ContactUs')}>
+                        <Text style={styles.row_lb}>Contact Us</Text>
+                        <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon} />
+                    </TouchableOpacity>
                     <View style={styles.blank_logout_view}>
                     </View>
                     <TouchableOpacity style={styles.row_view} onPress={() => this.onLogout()}>

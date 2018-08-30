@@ -52,6 +52,7 @@ import ChangePasswordScreen from './containers/ChangePasswordScreen';
 import FAQScreen from './containers/FAQScreen'
 import PrivacyPolicyScreen from './containers/PrivacyPolicyScreen'
 import TermsofUseScreen from './containers/TermsofUseScreen'
+import ContactUsScreen from './containers/ContactUsScreen'
 
 import OfferScreen from './containers/OfferScreen'
 
@@ -162,6 +163,7 @@ const App = StackNavigator({
   FAQScreen: { screen: FAQScreen },
   PrivacyPolicyScreen: { screen: PrivacyPolicyScreen },
   TermsofUseScreen: { screen: TermsofUseScreen },
+  ContactUs: { screen: ContactUsScreen },
   Offer: { screen: OfferScreen },
   Profile: { screen: ProfileScreen },
   ProfileCharRoom: { screen: ChatRoomScreen },

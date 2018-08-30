@@ -4235,6 +4235,10 @@ react-native-actionsheet@^2.2.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/react-native-actionsheet/-/react-native-actionsheet-2.4.2.tgz#6a00dd51a75ef2c8974312130e405af73191500f"
 
+react-native-braintree-payments-drop-in@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-braintree-payments-drop-in/-/react-native-braintree-payments-drop-in-1.0.1.tgz#0e6b64dbe56c2f24e4a3b6463103db837232a85d"
+
 react-native-button@^2.0.0, react-native-button@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/react-native-button/-/react-native-button-2.3.0.tgz#7d0a90095d415b0edf98a904556a7c4439646568"

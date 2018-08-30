@@ -26,7 +26,7 @@ import MapView from 'react-native-maps';
 import Switch from '../components/Switch';
 import NavigationBar from '../components/NavigationBar';
 
-import flagImg from '../assets/images/flag-blue_small.png';
+import flagImg from '../assets/images/guide-dot.png';
 import moment from 'moment';
 
 //Store
@@ -39,10 +39,18 @@ import { updatelocation } from '../actions/locationActions'
 import * as Actions from '../actions';
 
 //Webservice
-import { updateClockInOutStatus, acceptTrip, declineTrip, cancelTrip, updateTrip, loginAndUpdateTrip } from '../actions'
+import {
+    updateClockInOutStatus,
+    acceptTrip,
+    declineTrip,
+    cancelTrip,
+    updateTrip,
+    loginAndUpdateTrip,
+    getnearbyguides
+} from '../actions'
 
 //Utilities
-import { Storage, isIphoneX } from '../global/Utilities';
+import { isIphoneX } from '../global/Utilities';
 
 //Geo coder
 import Geocoder from '../global/Geocoder';
@@ -87,6 +95,7 @@ class MapsScreen extends React.Component {
             minute: moment().format('mm'),
             trueSwitchIsOn: moment().format('A') == 'AM' ? true : false,
             isLoading: false,
+            nearByGuides: []
         };
 
         this.onRegionChange = this.onRegionChange.bind(this);
@@ -102,8 +111,6 @@ class MapsScreen extends React.Component {
 
     componentDidMount() {
 
-
-
         this.watchID = navigator.geolocation.watchPosition((position) => {
 
             // Create the object to update this.state.mapRegion through the onRegionChange function
@@ -118,14 +125,17 @@ class MapsScreen extends React.Component {
             let region = {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
-                latitudeDelta: 0.00922 * 1.5,
-                longitudeDelta: 0.00421 * 1.5
+                latitudeDelta: 0.00922 * 150,
+                longitudeDelta: 0.00421 * 150
             }
 
             this.onRegionChange(region, position.coords.latitude, position.coords.longitude);
-
+            
             //Update location and device token
             this.loginAndUpdateTripWS()
+
+            //Get nearby guides
+            this.onGetNearbyGuide()
 
             //Update trip
             if (this.props.bookingdata.isTripInProgress) {
@@ -153,7 +163,6 @@ class MapsScreen extends React.Component {
 
     addressFromCoordnate = (lat, long) => {
 
-        /*
         Geocoder.from(lat, long)
             .then(json => {
                 var addressComponent = json.results[0].address_components[0];
@@ -162,7 +171,6 @@ class MapsScreen extends React.Component {
                 this.setState({ address: json.results[0].formatted_address })
             })
             .catch(error => console.warn(error));
-            */
     }
     //#endregion
 
@@ -359,11 +367,27 @@ class MapsScreen extends React.Component {
                             showsMyLocationButton={true}
                             region={this.state.mapRegion}
                             onRegionChange={this.onRegionChange}>
-                            {/* <MapView.Marker
-                                coordinate={this.state.mapRegion}
-                                centerOffset={{ x: 0, y: -10 }}
-                                anchor={{ x: 1, y: 1 }}
-                                image={flagImg} /> */}
+                            {
+                                this.state.nearByGuides.map((element, index) => {
+
+                                    //Update map
+                                    let region = {
+                                        latitude: element.latitude,
+                                        longitude: element.longitude,
+                                        latitudeDelta: 0.00922 * 1.5,
+                                        longitudeDelta: 0.00421 * 1.5
+                                    }
+
+                                    return (
+                                        <MapView.Marker
+                                            coordinate={region}
+                                            centerOffset={{ x: 0, y: -10 }}
+                                            anchor={{ x: 1, y: 1 }}
+                                            image={flagImg} />
+                                    )
+                                }
+                                )
+                            }
                         </MapView>
                     }
                     <View style={styles.locationInfo_view}>
@@ -629,6 +653,45 @@ class MapsScreen extends React.Component {
             })
     }
 
+    onGetNearbyGuide() {
+
+        console.log('this.props.userdata', this.props.userdata)
+
+        var { dispatch } = this.props;
+
+        var params = {
+            userid: this.props.userdata.user.userid,
+            latitude: this.props.currentlocation.lat,
+            longitude: this.props.currentlocation.long,
+            units: 'km',
+            range: '100',
+        }
+
+        getnearbyguides(params)
+
+            .then(data => {
+
+                console.log('Get onGetNearbyGuide-->', data)
+
+                Alert.alert('Get Nearby Guide Responce', JSON.stringify(data))
+
+                if (data) {
+                    if (data.length < 1) {
+
+                        console.log('No nearby guides available')
+
+                    } else {
+                        this.setState({ nearByGuides: data })
+                    }
+                } else {
+                    console.log('No nearby guides available')
+                }
+            })
+            .catch(err => {
+                alert(err)
+            })
+    }
+
     //Notifications
     async handelNotifications() {
 
@@ -682,9 +745,9 @@ class MapsScreen extends React.Component {
 
         if (notif.opened_from_tray) {
 
-            console.log('notif.custom_notification.color:', JSON.parse(notif.custom_notification))
+            //console.log('notif.custom_notification.color:', JSON.parse(notif.custom_notification))
 
-            console.log('notif.custom_notification.color:', JSON.parse(notif.custom_notification).extradata)
+            //console.log('notif.custom_notification.color:', JSON.parse(notif.custom_notification).extradata)
 
             //console.log('notif.custom_notification.color:',notif.custom_notification['color'])
 
@@ -693,8 +756,8 @@ class MapsScreen extends React.Component {
                 //"extradata":{"time_limit":18000,"user_id":117,"latitude":23.073076,"type":1,"body":"You have received a booking offer!","longitude":72.513348}
 
                 Alert.alert(
-                    'Tourzan',
-                    JSON.stringify(notif.extradata.body),
+                    'Debug',
+                    JSON.stringify(notif),
                     [
                         {
                             text: 'Cancel', onPress: () => {
@@ -799,7 +862,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        width: width - 60,
+        width: width - 70,
         paddingHorizontal: 20,
     },
     devide_line: {
