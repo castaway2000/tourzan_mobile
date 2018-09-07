@@ -59,6 +59,9 @@ import OfferScreen from './containers/OfferScreen'
 import ExtendTimeScreen from './containers/ExtendTimeScreen'
 
 import CompleteTourScreen from './containers/CompleteTourScreen'
+import CardListScreen from './containers/CardListScreen'
+
+
 
 var { width, height } = Dimensions.get('window');
 
@@ -168,7 +171,8 @@ const App = StackNavigator({
   Profile: { screen: ProfileScreen },
   ProfileCharRoom: { screen: ChatRoomScreen },
   ExtendTime: { screen: ExtendTimeScreen },
-  CompleteTour: { screen: CompleteTourScreen }
+  CompleteTour: { screen: CompleteTourScreen },
+  CardList: {screen: CardListScreen}
 }, {
     headerMode: 'screen'
   },

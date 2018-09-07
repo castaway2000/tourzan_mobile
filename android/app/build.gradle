@@ -19,6 +19,7 @@ apply plugin: 'io.fabric'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    maven { url "https://dl.bintray.com/onfido/maven" }
 }
 import com.android.build.OutputFile
 
@@ -179,6 +180,15 @@ dependencies {
     implementation project(':react-native-fcm')
 
     implementation 'com.android.support:multidex:1.0.1'
+
+
+    //Onfido
+    compile "com.onfido.sdk.capture:onfido-capture-sdk:1.0.0"
+
+    //necessary due to conflics of dependencies
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+
 
     // compile(project(':react-native-maps')){
     //     exclude group: 'com.google.android.gms', module: 'play-services-base'

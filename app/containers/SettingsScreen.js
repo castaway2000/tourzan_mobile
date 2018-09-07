@@ -14,6 +14,7 @@ import {
     Alert,
     TouchableOpacity,
     Platform,
+    NativeModules
 } from 'react-native';
 
 import { NavigationActions } from 'react-navigation'
@@ -73,6 +74,21 @@ class SettingsScreen extends React.Component {
         return fullname
     }
 
+    verifyOnfidoIdentity() {
+        if (Platform.OS =='ios') {
+            NativeModules.OnfidoSDK.startSDK();
+          } else {
+            NativeModules.OnfidoSDK.startSDK(
+              (applicantId) => { 
+                  //this.setTextContent("Verification complete", "To perform another verification, press \"Launch\"") 
+                },
+              (errorCause) => { 
+                  //this.setTextContent("Flow not finished", "To try again, press \"Launch\"") 
+                }
+            );
+          }
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -107,10 +123,17 @@ class SettingsScreen extends React.Component {
                             <Image resizeMode='contain' source={require("../assets/images/trip_item_location_icon.png")} style={styles.row_small_icon} />
                             <Text style={styles.row_icon_lb}>Pending from webside</Text>
                         </View>
-                        <TouchableOpacity style={styles.row_credit_view}>
+                        <TouchableOpacity style={styles.row_credit_view} onPress = {() => this.navigate.navigate('CardList')}>
                             <View style={styles.row_icon_small_view}>
                                 <Image resizeMode='contain' source={require("../assets/images/wallet_icon.png")} style={styles.row_small_icon} />
                                 <Text style={styles.row_icon_lb}>Credit Card</Text>
+                            </View>
+                            <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon} />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.row_credit_view} onPress = {() => this.verifyOnfidoIdentity()}>
+                            <View style={styles.row_icon_small_view}>
+                                <Image resizeMode='contain' source={require("../assets/images/wallet_icon.png")} style={styles.row_small_icon} />
+                                <Text style={styles.row_icon_lb}>Identity Verification</Text>
                             </View>
                             <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon} />
                         </TouchableOpacity>

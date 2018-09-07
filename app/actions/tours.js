@@ -168,7 +168,7 @@ function acceptTrip(params) {
     formData.append('user_id', params.userid); //13
     formData.append('guide_id', params.guideid); //14
     formData.append('type', params.type); //'automatic'
-    formData.append('time', params.time); //'automatic'
+    formData.append('time', params.time); //'second'
 
     return new Promise((resolve, reject) => {
         fetch(API.SERVER + 'v1/mobile/update_trip/', {

@@ -14,7 +14,7 @@ import {
     Alert,
     TouchableOpacity,
     Platform,
-    ActivityIndicator
+    ActivityIndicator,
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -60,6 +60,7 @@ Geocoder.init('AIzaSyAq-cJJqZ8jWN4pJQ34tNbNdhbjsbuZUJs'); // use a valid API key
 import FCM, { NotificationActionType } from "react-native-fcm";
 import { registerKilledListener, registerAppListener } from "../global/Firebase/Listeners"
 import firebaseClient from "../global/Firebase/FirebaseClient";
+
 
 var { width, height } = Dimensions.get('window');
 
@@ -151,7 +152,7 @@ class MapsScreen extends React.Component {
     //#region GEO RELATED
     onRegionChange(region, lastLat, lastLong) {
 
-        this.addressFromCoordnate(region.latitude, region.longitude)
+        //this.addressFromCoordnate(region.latitude, region.longitude)
 
         this.setState({
             mapRegion: region,
@@ -542,7 +543,7 @@ class MapsScreen extends React.Component {
         var params = {
             status: 'isAccepted',
             userid: touristId,
-            guideid: this.props.userdata.user.guide_id,
+            guideid: this.props.userdata.user.userid,
             type: 'automatic',
             time: timeLimit,
         }
@@ -673,7 +674,7 @@ class MapsScreen extends React.Component {
 
                 console.log('Get onGetNearbyGuide-->', data)
 
-                Alert.alert('Get Nearby Guide Responce', JSON.stringify(data))
+                //Alert.alert('Get Nearby Guide Responce', JSON.stringify(data))
 
                 if (data) {
                     if (data.length < 1) {
@@ -745,40 +746,76 @@ class MapsScreen extends React.Component {
 
         if (notif.opened_from_tray) {
 
-            //console.log('notif.custom_notification.color:', JSON.parse(notif.custom_notification))
+            console.log('FCM Notification', notif)
 
             //console.log('notif.custom_notification.color:', JSON.parse(notif.custom_notification).extradata)
 
             //console.log('notif.custom_notification.color:',notif.custom_notification['color'])
 
-            if (notif.extradata) {
 
-                //"extradata":{"time_limit":18000,"user_id":117,"latitude":23.073076,"type":1,"body":"You have received a booking offer!","longitude":72.513348}
+            if (Platform.OS === "ios") {
 
-                Alert.alert(
-                    'Debug',
-                    JSON.stringify(notif),
-                    [
-                        {
-                            text: 'Cancel', onPress: () => {
-                                //notif.extradata.time_limit)
-                                //
-                            }
-                        },
-                        {
-                            text: 'Reject', onPress: () => {
+                if (notif.custom_notification) {
 
-                            }, style: 'cancel'
-                        },
-                        {
-                            text: 'Accept', onPress: () => {
-                                this.acceptTripWS(notif.extradata.user_id, notif.extradata.time_limit)
-                            }
-                        },
-                    ],
-                    { cancelable: false }
-                )
+                    let extradata = JSON.parse(notif.custom_notification).extradata
+
+                    Alert.alert(
+                        'Debug',
+                        JSON.stringify(extradata),
+                        [
+                            {
+                                text: 'Cancel', onPress: () => {
+       
+                                }
+                            },
+                            {
+                                text: 'Reject', onPress: () => {
+    
+                                }, style: 'cancel'
+                            },
+                            {
+                                text: 'Accept', onPress: () => {
+                                    this.acceptTripWS(extradata.user_id, extradata.time_limit)
+                                }
+                            },
+                        ],
+                        { cancelable: false }
+                    )
+                }
+
+            } else {
+
+                if (notif.extradata) {
+
+                    //"extradata":{"time_limit":18000,"user_id":117,"latitude":23.073076,"type":1,"body":"You have received a booking offer!","longitude":72.513348}
+    
+                    Alert.alert(
+                        'Debug',
+                        JSON.stringify(notif.extradata),
+                        [
+                            {
+                                text: 'Cancel', onPress: () => {
+                                    //notif.extradata.time_limit)
+                                    //
+                                }
+                            },
+                            {
+                                text: 'Reject', onPress: () => {
+    
+                                }, style: 'cancel'
+                            },
+                            {
+                                text: 'Accept', onPress: () => {
+                                    this.acceptTripWS(notif.extradata.user_id, notif.extradata.time_limit)
+                                }
+                            },
+                        ],
+                        { cancelable: false }
+                    )
+                }
             }
+
+
         }
     }
 }

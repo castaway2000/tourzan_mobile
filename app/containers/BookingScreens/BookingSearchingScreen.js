@@ -69,11 +69,11 @@ class BookingSearchingScreen extends React.Component {
                 <View style={styles.main_view}>
                     <View style={styles.logo_view}>
                         <Image resizeMode='contain' source={require('../../assets/images/guide_search_logo.png')} style={styles.logo_icon} />
-                        {/* <Text style={styles.logo_text}>Let's find you a tour guide</Text> */}
+                        <Text style={styles.logo_text}>Let's find you a tour guide</Text>
                     </View>
-                    <View style={styles.bottom_view}>
+                    {/* <View style={styles.bottom_view}>
                         <Text style={styles.bottom_text}>Tour guide will wait for you up to 5 mins</Text>
-                    </View>
+                    </View> */}
                 </View>
                 <View style={styles.circle}>
                     <PulseLoader
