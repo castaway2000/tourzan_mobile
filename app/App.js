@@ -52,10 +52,16 @@ import ChangePasswordScreen from './containers/ChangePasswordScreen';
 import FAQScreen from './containers/FAQScreen'
 import PrivacyPolicyScreen from './containers/PrivacyPolicyScreen'
 import TermsofUseScreen from './containers/TermsofUseScreen'
+import ContactUsScreen from './containers/ContactUsScreen'
 
 import OfferScreen from './containers/OfferScreen'
 
 import ExtendTimeScreen from './containers/ExtendTimeScreen'
+
+import CompleteTourScreen from './containers/CompleteTourScreen'
+import CardListScreen from './containers/CardListScreen'
+
+
 
 var { width, height } = Dimensions.get('window');
 
@@ -160,10 +166,13 @@ const App = StackNavigator({
   FAQScreen: { screen: FAQScreen },
   PrivacyPolicyScreen: { screen: PrivacyPolicyScreen },
   TermsofUseScreen: { screen: TermsofUseScreen },
+  ContactUs: { screen: ContactUsScreen },
   Offer: { screen: OfferScreen },
   Profile: { screen: ProfileScreen },
   ProfileCharRoom: { screen: ChatRoomScreen },
-  ExtendTime: { screen: ExtendTimeScreen }
+  ExtendTime: { screen: ExtendTimeScreen },
+  CompleteTour: { screen: CompleteTourScreen },
+  CardList: {screen: CardListScreen}
 }, {
     headerMode: 'screen'
   },

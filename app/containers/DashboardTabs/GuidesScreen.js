@@ -22,7 +22,23 @@ import Rating from 'react-native-ratings';
 import { NavigationActions } from 'react-navigation'
 import { Colors } from '../../constants'
 import NavigationBar from '../../components/NavigationBar'
-import { getGuideList } from '../../actions/'
+import { getGuideList } from '../../actions'
+
+//FCM
+import FCM, { NotificationActionType } from "react-native-fcm";
+import { registerKilledListener, registerAppListener } from "../../global/Firebase/Listeners"
+import firebaseClient from "../../global/Firebase/FirebaseClient";
+
+//Store
+import { connect } from 'react-redux';
+import {store} from '../../store/index'
+
+//Actions
+import { updatebooking } from '../../actions/bookingActions'
+import { updateuser } from '../../actions/userActions'
+
+//Utilities
+import { Storage, isIphoneX } from '../../global/Utilities';
 
 var { width, height } = Dimensions.get('window');
 
@@ -78,9 +94,8 @@ class GuideScreen extends React.Component {
                         key={index}>
                         <View style={styles.row}>
                             <View style={styles.avatar_view}>
-                                <Image resizeMode='cover' source={{ uri: rowData.header_image }} style={styles.avatar_img} defaultSource={require('../../assets/images/user_placeholder.png')} />
+                                <Image resizeMode='cover' source={ rowData.header_image ? { uri: rowData.header_image } : require("../../assets/images/defaultavatar.png") } style={styles.avatar_img} defaultSource={require('../../assets/images/user_placeholder.png')} />
                                 <View style={styles.rate_view} pointerEvents="none">
-                                    {/*<Rating ratingCount={5} imageSize={8} onFinishRating={this.ratingCompleted}/>*/}
                                     <Text style={styles.rating_text}>Rating: {rowData.rating}</Text>
                                 </View>
                             </View>
@@ -228,7 +243,12 @@ const styles = StyleSheet.create({
     },
 });
 
+const mapStateToProps = store => {
+    return {
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata,
+        currentlocation: store.location.currentlocation,
+    };
+};
 
-export default GuideScreen;
-
-
+export default connect(mapStateToProps)(GuideScreen);

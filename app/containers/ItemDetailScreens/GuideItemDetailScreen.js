@@ -25,7 +25,7 @@ import Button from 'react-native-button';
 
 import ApplyButton from '../../components/ApplyButton'
 import NavigationBar from '../../components/NavigationBar'
-import {Colors} from '../../constants/index';
+import {Colors} from '../../constants';
 
 var { width, height } = Dimensions.get('window');
 

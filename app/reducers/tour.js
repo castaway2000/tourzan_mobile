@@ -1,17 +1,44 @@
 import { UPDATE_BOOKING } from '../actions/actionTypes'
+import moment from 'moment'
 
 const initialState = {
     bookingdata: {
-        isbooked: false,
+        isTripInProgress: false,
         isAutomatic: true,
-        timeLimit: 18000,
+        timeLimit: 18000, //second //5 hour
         lat: 0.0,
-        long: 0.0
-    },
+        long: 0.0,
+        bookedTime: moment().format('YYYY-MM-DD H:mm:ss'), //yyyy-MM-dd HH:mm:ss
+        remainingTime: 0, //second
+        tripid: 5
+    }
 };
 
 const update = (state, action) => {
-    return { ...state, bookingdata: state.bookingdata }
+    
+    let bd = action.bookingdata
+
+    if (bd.bookedTime) {
+
+        const today = moment();
+
+        const bookedTime = moment(bd.bookedTime, 'YYYY-MM-DD H:mm:ss');
+
+        const diff = today.diff(bookedTime, 'second');
+
+        bd.remainingTime = bd.timeLimit - diff
+
+        console.log('bookedTime', bookedTime.format('YYYY-MM-DD H:mm:ss'))
+        console.log('today', today.format('YYYY-MM-DD H:mm:ss'))
+
+        console.log('diff', diff)
+        console.log('timeLimit', bd.timeLimit)
+        console.log('remainingTime', bd.remainingTime)
+        console.log('----------------------------------------------------------')
+
+    }
+
+    return { ...state, bookingdata: Object.assign({}, bd) }
 }
 
 const tourReducer = (state = initialState, action) => {

@@ -14,7 +14,7 @@ import {
     Alert,
     TouchableOpacity,
     Platform,
-    ActivityIndicator
+    ActivityIndicator,
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -26,32 +26,49 @@ import MapView from 'react-native-maps';
 import Switch from '../components/Switch';
 import NavigationBar from '../components/NavigationBar';
 
-import flagImg from '../assets/images/flag-blue_small.png';
+import flagImg from '../assets/images/guide-dot.png';
 import moment from 'moment';
 
 //Store
-import configureStore from '../configureStore'
-const store = configureStore();
+import { store } from '../store/index'
 
 //Actions
 import { updatebooking } from '../actions/bookingActions'
 import { updateuser } from '../actions/userActions'
+import { updatelocation } from '../actions/locationActions'
+import * as Actions from '../actions';
 
 //Webservice
-import { updateClockInOutStatus } from '../actions'
+import {
+    updateClockInOutStatus,
+    acceptTrip,
+    declineTrip,
+    cancelTrip,
+    updateTrip,
+    loginAndUpdateTrip,
+    getnearbyguides
+} from '../actions'
 
 //Utilities
-import { Storage, isIphoneX } from '../global/Utilities';
+import { isIphoneX } from '../global/Utilities';
 
 //Geo coder
 import Geocoder from '../global/Geocoder';
 Geocoder.init('AIzaSyAq-cJJqZ8jWN4pJQ34tNbNdhbjsbuZUJs'); // use a valid API key
+
+//FCM
+import FCM, { NotificationActionType } from "react-native-fcm";
+import { registerKilledListener, registerAppListener } from "../global/Firebase/Listeners"
+import firebaseClient from "../global/Firebase/FirebaseClient";
+
 
 var { width, height } = Dimensions.get('window');
 
 const backAction = NavigationActions.back({
 
 });
+
+registerKilledListener();
 
 class MapsScreen extends React.Component {
 
@@ -68,8 +85,8 @@ class MapsScreen extends React.Component {
         super(props);
         this.state = {
             mapRegion: {
-                latitude: 37.78825,
-                longitude: -122.4324,
+                latitude: 0.0,
+                longitude: 0.0,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
             },
@@ -79,18 +96,18 @@ class MapsScreen extends React.Component {
             minute: moment().format('mm'),
             trueSwitchIsOn: moment().format('A') == 'AM' ? true : false,
             isLoading: false,
+            nearByGuides: []
         };
 
         this.onRegionChange = this.onRegionChange.bind(this);
     }
 
     //#endregion
+    async componentWillMount() {
 
-    componentWillMount() {
-        let storestate = store.getState()
+        this.loginAndUpdateTripWS()
 
-        console.log('storestate', storestate)
-        console.log('userdata', this.props.userdata)
+        this.handelNotifications()
     }
 
     componentDidMount() {
@@ -100,23 +117,31 @@ class MapsScreen extends React.Component {
             // Create the object to update this.state.mapRegion through the onRegionChange function
             this.addressFromCoordnate(position.coords.latitude, position.coords.longitude)
 
+            //Update location store
+            store.dispatch(
+                updatelocation({ lat: position.coords.latitude, long: position.coords.longitude })
+            );
+
+            //Update map
             let region = {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
-                latitudeDelta: 0.00922 * 1.5,
-                longitudeDelta: 0.00421 * 1.5
+                latitudeDelta: 0.00922 * 150,
+                longitudeDelta: 0.00421 * 150
             }
 
             this.onRegionChange(region, position.coords.latitude, position.coords.longitude);
+            
+            //Update location and device token
+            this.loginAndUpdateTripWS()
 
-            //Update Booking
-            let storestate = store.getState()
-            storestate.tour.bookingdata.lat = position.coords.latitude
-            storestate.tour.bookingdata.long = position.coords.longitude
+            //Get nearby guides
+            this.onGetNearbyGuide()
 
-            store.dispatch(
-                updatebooking(storestate)
-            );
+            //Update trip
+            if (this.props.bookingdata.isTripInProgress) {
+                this.updateTripWS()
+            }
         });
     }
 
@@ -127,7 +152,7 @@ class MapsScreen extends React.Component {
     //#region GEO RELATED
     onRegionChange(region, lastLat, lastLong) {
 
-        this.addressFromCoordnate(region.latitude, region.longitude)
+        //this.addressFromCoordnate(region.latitude, region.longitude)
 
         this.setState({
             mapRegion: region,
@@ -138,7 +163,7 @@ class MapsScreen extends React.Component {
     }
 
     addressFromCoordnate = (lat, long) => {
-        /*
+
         Geocoder.from(lat, long)
             .then(json => {
                 var addressComponent = json.results[0].address_components[0];
@@ -147,7 +172,6 @@ class MapsScreen extends React.Component {
                 this.setState({ address: json.results[0].formatted_address })
             })
             .catch(error => console.warn(error));
-            */
     }
     //#endregion
 
@@ -233,31 +257,34 @@ class MapsScreen extends React.Component {
 
     onBookingPressed = () => {
 
-        /*
-        console.log('props', this.props.bookingdata)
-
-        console.log('store', store.getState())
-
-        let storestate = store.getState()
-        storestate.tour.bookingdata.isbooked = !storestate.tour.bookingdata.isbooked 
-
-        store.dispatch(
-            updatebooking(storestate)
-        );
-
-        console.log('props', this.props.bookingdata)
-
-        console.log('store', store.getState())
-        */
-
         const { navigate } = this.props.navigation;
+
+        if (!this.props.currentlocation.long || !this.props.currentlocation.lat) {
+            Alert.alert('Tourzan', 'Your current location not found.')
+            return
+        }
 
         navigate('BookingSearching')
     }
 
+    onMyLocation = () => {
+
+        if (this.props.currentlocation.lat && this.props.currentlocation.long) {
+
+            //Update map
+            let region = {
+                latitude: this.props.currentlocation.lat,
+                longitude: this.props.currentlocation.long,
+                latitudeDelta: 0.00922 * 1.5,
+                longitudeDelta: 0.00421 * 1.5
+            }
+
+            this.onRegionChange(region, this.props.currentlocation.lat, this.props.currentlocation.long);
+        }
+    }
+
     //#endregion
     onClockInOutPressed = () => {
-
         this.updateClockInOutStatusWS()
     }
 
@@ -290,6 +317,35 @@ class MapsScreen extends React.Component {
         }
     }
 
+    showBottomBookButton() {
+
+        const { navigate } = this.props.navigation;
+
+        if (!this.props.userdata.user.isGuide) {
+            return (
+                !this.props.bookingdata.isTripInProgress ? (
+                    <TouchableOpacity style={styles.booking_view} onPress={() => { this.onBookingPressed() }}>
+                        <Image resizeMode='cover' source={require("../assets/images/book.png")} style={styles.booking_green_btn} />
+                    </TouchableOpacity>
+                ) : (
+                        <TouchableOpacity style={styles.booking_view} onPress={() => { navigate('CurrentTimeLimit') }}>
+                            <Image resizeMode='cover' source={require("../assets/images/book_time.png")} style={styles.booking_green_btn} />
+                        </TouchableOpacity>
+                    )
+            )
+        } else {
+            return (
+                this.props.bookingdata.isTripInProgress ? (
+                    <TouchableOpacity style={styles.booking_view} onPress={() => { this.onBookingPressed() }}>
+                        <Image resizeMode='cover' source={require("../assets/images/book.png")} style={styles.booking_green_btn} />
+                    </TouchableOpacity>
+                ) : (
+                        null
+                    )
+            )
+        }
+    }
+
     render() {
         const { navigate } = this.props.navigation;
 
@@ -312,11 +368,27 @@ class MapsScreen extends React.Component {
                             showsMyLocationButton={true}
                             region={this.state.mapRegion}
                             onRegionChange={this.onRegionChange}>
-                            <MapView.Marker
-                                coordinate={this.state.mapRegion}
-                                centerOffset={{ x: 0, y: -10 }}
-                                anchor={{ x: 1, y: 1 }}
-                                image={flagImg} />
+                            {
+                                this.state.nearByGuides.map((element, index) => {
+
+                                    //Update map
+                                    let region = {
+                                        latitude: element.latitude,
+                                        longitude: element.longitude,
+                                        latitudeDelta: 0.00922 * 1.5,
+                                        longitudeDelta: 0.00421 * 1.5
+                                    }
+
+                                    return (
+                                        <MapView.Marker
+                                            coordinate={region}
+                                            centerOffset={{ x: 0, y: -10 }}
+                                            anchor={{ x: 1, y: 1 }}
+                                            image={flagImg} />
+                                    )
+                                }
+                                )
+                            }
                         </MapView>
                     }
                     <View style={styles.locationInfo_view}>
@@ -406,16 +478,15 @@ class MapsScreen extends React.Component {
                                 </TouchableOpacity>
                             )}
                     </View>
-                    {
-                        !this.props.bookingdata.isbooked ? (
-                            <TouchableOpacity style={styles.booking_view} onPress={() => { this.onBookingPressed() }}>
-                                <Image resizeMode='cover' source={require("../assets/images/book.png")} style={styles.booking_green_btn} />
-                            </TouchableOpacity>
-                        ) : (
-                                <TouchableOpacity style={styles.booking_view} onPress={() => { navigate('CurrentTimeLimit') }}>
-                                    <Image resizeMode='cover' source={require("../assets/images/book_time.png")} style={styles.booking_green_btn} />
-                                </TouchableOpacity>
-                            )}
+
+                    {this.showBottomBookButton()}
+
+                    <View style={styles.myLocationButton}>
+                        <TouchableOpacity onPress={() => this.onMyLocation()}>
+                            <Image resizeMode='cover' source={require("../assets/images/current-location.png")} style={styles.myLocationButtonIcon} />
+                        </TouchableOpacity>
+                    </View>
+
                 </View>
                 {this.showLoading()}
             </View>
@@ -431,15 +502,11 @@ class MapsScreen extends React.Component {
 
         var { dispatch } = this.props;
 
-        //Get store data
-        let storestate = store.getState()
-
         var params = {
-            type: 'guide',
             userid: this.props.userdata.user.userid,
-            status: this.props.userdata.user.isClockedIn ? 'clockin' : 'clockout',
-            latitude: storestate.tour.bookingdata.lat,
-            longitude: storestate.tour.bookingdata.long,
+            status: this.props.userdata.user.isClockedIn ? 'clockout' : 'clockin',
+            latitude: this.props.currentlocation.lat,
+            longitude: this.props.currentlocation.long,
         }
 
         updateClockInOutStatus(params)
@@ -450,16 +517,13 @@ class MapsScreen extends React.Component {
                     isLoading: false
                 })
 
-                //Update Status
-                let storestate = store.getState()
-
-                storestate.user.userdata.isClockedIn = !storestate.user.userdata.isClockedIn
+                this.props.userdata.user.isClockedIn = !this.props.userdata.user.isClockedIn
 
                 store.dispatch(
-                    updatebooking(storestate)
+                    updateuser(this.props.userdata)
                 );
 
-                console.log('updateClockInOutStatusWS-->', data)
+                Alert.alert('Tourzan', 'You are successfully clocked ' + (this.props.userdata.user.isClockedIn ? 'in' : 'out'))
 
             })
             .catch(err => {
@@ -468,6 +532,291 @@ class MapsScreen extends React.Component {
                 })
                 alert(err)
             })
+    }
+
+    acceptTripWS(touristId, timeLimit) {
+
+        var { dispatch } = this.props;
+
+        //"extradata":{"time_limit":18000,"user_id":117,"latitude":23.073076,"type":1,"body":"You have received a booking offer!","longitude":72.513348}
+
+        var params = {
+            status: 'isAccepted',
+            userid: touristId,
+            guideid: this.props.userdata.user.userid,
+            type: 'automatic',
+            time: timeLimit,
+        }
+
+        acceptTrip(params)
+
+            .then(data => {
+
+                console.log('acceptTripWS-->', data)
+
+            })
+            .catch(err => {
+                this.setState({
+                    isLoading: false
+                })
+                alert(err)
+            })
+    }
+
+    declineTripWS() {
+
+        this.setState({
+            isLoading: true
+        })
+
+        var { dispatch } = this.props;
+
+        var params = {
+            type: 'guide',
+            status: 'isDeclined',
+            userid: this.props.userdata.user.userid,
+        }
+
+        declineTrip(params)
+
+            .then(data => {
+
+                this.setState({
+                    isLoading: false
+                })
+
+                this.props.userdata.isClockedIn = !this.props.userdata.isClockedIn
+
+                store.dispatch(
+                    updateuser(this.props.userdata)
+                );
+
+                console.log('declineTrip-->', data)
+
+            })
+            .catch(err => {
+                this.setState({
+                    isLoading: false
+                })
+                alert(err)
+            })
+    }
+
+    updateTripWS() {
+
+        var { dispatch } = this.props;
+
+        if (!this.props.currentlocation.lat || this.props.currentlocation.long) {
+            return
+        }
+
+        var params = {
+            status: 'update_trip',
+            latitude: this.props.currentlocation.lat,
+            longitude: this.props.currentlocation.long,
+            tripid: this.props.bookingdata.tripid,
+        }
+
+        updateTrip(params)
+
+            .then(data => {
+
+                console.log('updateTrip-->', data)
+            })
+            .catch(err => {
+            })
+    }
+
+    loginAndUpdateTripWS() {
+
+        var { dispatch } = this.props;
+
+        if (!this.props.currentlocation.lat || !this.props.currentlocation.long || !this.props.bookingdata.push_token || !this.props.userdata.user.userid) {
+            return
+        }
+
+        var params = {
+            status: 'login',
+            latitude: this.props.currentlocation.lat,
+            longitude: this.props.currentlocation.long,
+            userid: this.props.userdata.user.userid,
+            devicetoken: this.props.bookingdata.push_token,
+        }
+
+        loginAndUpdateTrip(params)
+
+            .then(data => {
+
+                console.log('loginAndUpdateTripWS-->', data)
+            })
+            .catch(err => {
+
+            })
+    }
+
+    onGetNearbyGuide() {
+
+        console.log('this.props.userdata', this.props.userdata)
+
+        var { dispatch } = this.props;
+
+        var params = {
+            userid: this.props.userdata.user.userid,
+            latitude: this.props.currentlocation.lat,
+            longitude: this.props.currentlocation.long,
+            units: 'km',
+            range: '100',
+        }
+
+        getnearbyguides(params)
+
+            .then(data => {
+
+                console.log('Get onGetNearbyGuide-->', data)
+
+                //Alert.alert('Get Nearby Guide Responce', JSON.stringify(data))
+
+                if (data) {
+                    if (data.length < 1) {
+
+                        console.log('No nearby guides available')
+
+                    } else {
+                        this.setState({ nearByGuides: data })
+                    }
+                } else {
+                    console.log('No nearby guides available')
+                }
+            })
+            .catch(err => {
+                alert(err)
+            })
+    }
+
+    //Notifications
+    async handelNotifications() {
+
+        FCM.createNotificationChannel({
+            id: 'default',
+            name: 'Default',
+            description: 'used for example',
+            priority: 'high'
+        })
+
+        registerAppListener(this)
+
+        try {
+            let result = await FCM.requestPermissions({
+                badge: false,
+                sound: true,
+                alert: true
+            });
+        } catch (e) {
+            console.error(e);
+        }
+
+        FCM.getInitialNotification().then(notif => {
+            //Works on both iOS and Android
+
+            FCM.removeAllDeliveredNotifications();
+        });
+
+        FCM.getFCMToken().then(token => {
+
+            console.log("TOKEN (getFCMToken)", token);
+
+            this.setState({ token: token || "" });
+
+            //Get store data
+            let storestate = store.getState()
+            storestate.tour.bookingdata.push_token = token
+
+            store.dispatch(
+                updatebooking(storestate.tour.bookingdata)
+            );
+        });
+
+        if (Platform.OS === "ios") {
+            FCM.getAPNSToken().then(token => {
+            });
+        }
+    }
+
+    notificationBannerTapped(notif) {
+
+        if (notif.opened_from_tray) {
+
+            console.log('FCM Notification', notif)
+
+            //console.log('notif.custom_notification.color:', JSON.parse(notif.custom_notification).extradata)
+
+            //console.log('notif.custom_notification.color:',notif.custom_notification['color'])
+
+
+            if (Platform.OS === "ios") {
+
+                if (notif.custom_notification) {
+
+                    let extradata = JSON.parse(notif.custom_notification).extradata
+
+                    Alert.alert(
+                        'Debug',
+                        JSON.stringify(extradata),
+                        [
+                            {
+                                text: 'Cancel', onPress: () => {
+       
+                                }
+                            },
+                            {
+                                text: 'Reject', onPress: () => {
+    
+                                }, style: 'cancel'
+                            },
+                            {
+                                text: 'Accept', onPress: () => {
+                                    this.acceptTripWS(extradata.user_id, extradata.time_limit)
+                                }
+                            },
+                        ],
+                        { cancelable: false }
+                    )
+                }
+
+            } else {
+
+                if (notif.extradata) {
+
+                    //"extradata":{"time_limit":18000,"user_id":117,"latitude":23.073076,"type":1,"body":"You have received a booking offer!","longitude":72.513348}
+    
+                    Alert.alert(
+                        'Debug',
+                        JSON.stringify(notif.extradata),
+                        [
+                            {
+                                text: 'Cancel', onPress: () => {
+                                    //notif.extradata.time_limit)
+                                    //
+                                }
+                            },
+                            {
+                                text: 'Reject', onPress: () => {
+    
+                                }, style: 'cancel'
+                            },
+                            {
+                                text: 'Accept', onPress: () => {
+                                    this.acceptTripWS(notif.extradata.user_id, notif.extradata.time_limit)
+                                }
+                            },
+                        ],
+                        { cancelable: false }
+                    )
+                }
+            }
+
+
+        }
     }
 }
 
@@ -550,7 +899,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        width: width - 60,
+        width: width - 70,
         paddingHorizontal: 20,
     },
     devide_line: {
@@ -704,14 +1053,31 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'transparent'
+    },
+    myLocationButton: {
+        backgroundColor: "transparent",
+        position: 'absolute',
+        right: 5,
+        bottom: 5
+    },
+    myLocationButtonIcon: {
+        width: 40,
+        height: 40
     }
 });
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        actions: bindActionCreators(Actions, dispatch)
+    };
+};
 
 const mapStateToProps = store => {
     return {
         bookingdata: store.tour.bookingdata,
-        userdata: store.user.userdata
+        userdata: store.user.userdata,
+        currentlocation: store.location.currentlocation,
     };
 };
 
-export default connect(mapStateToProps)(MapsScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(MapsScreen);

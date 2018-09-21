@@ -53,7 +53,6 @@ class FAQScreen extends Component {
         if (this.state.visible) {
             return (
                 <ActivityIndicator color={'black'} size={'large'} style={styles.loadingView} />
-
             );
         }
     }
@@ -78,7 +77,7 @@ class FAQScreen extends Component {
                         onLoad={() => this.hideSpinner()}
                         source={{
                             uri:
-                                'https://www.tourzan.com/en/faq/'
+                                'https://api.tourzan.com/en/faq/'
                         }}
                     />
                 </View>

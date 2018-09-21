@@ -23,6 +23,17 @@ import { NavigationActions } from 'react-navigation'
 import { Colors } from '../../constants'
 import NavigationBar from '../../components/NavigationBar'
 
+//Store
+import { connect } from 'react-redux';
+import {store} from '../../store/index'
+
+//Actions
+import { updatebooking } from '../../actions/bookingActions'
+import { updateuser } from '../../actions/userActions'
+
+//Utilities
+import { Storage, isIphoneX } from '../../global/Utilities';
+
 var { width, height } = Dimensions.get('window');
 
 class TransactionsScreen extends React.Component {
@@ -209,5 +220,12 @@ const styles = StyleSheet.create({
     },
 });
 
-export default TransactionsScreen;
+const mapStateToProps = store => {
+    return {
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata,
+        currentlocation: store.location.currentlocation,
+    };
+};
 
+export default connect(mapStateToProps)(TransactionsScreen);

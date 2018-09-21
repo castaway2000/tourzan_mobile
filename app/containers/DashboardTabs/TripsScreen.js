@@ -19,14 +19,24 @@ import {
     ActivityIndicator,
 } from 'react-native';
 
-import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { Colors } from '../../constants'
 import Rating from 'react-native-ratings';
 import { NavigationActions } from 'react-navigation'
 
 import NavigationBar from '../../components/NavigationBar'
-import { getTourList } from '../../actions/'
+import { getTourList } from '../../actions'
+
+//Store
+import { connect } from 'react-redux';
+import {store} from '../../store/index'
+
+//Actions
+import { updatebooking } from '../../actions/bookingActions'
+import { updateuser } from '../../actions/userActions'
+
+//Utilities
+import { Storage, isIphoneX } from '../../global/Utilities';
 
 
 var { width, height } = Dimensions.get('window');
@@ -52,7 +62,7 @@ class TripsScreen extends React.Component {
 
     // functions for listview
     componentWillMount() {
-        this.getTourList()
+       this.getTourList()
     }
 
     getTourList() {
@@ -78,6 +88,8 @@ class TripsScreen extends React.Component {
         this.props.navigation.navigate('TripItemDetail', { tourData: rowData });
     }
 
+
+
     showTourList() {
         return (
             this.state.toursList.map((rowData, index) => {
@@ -88,7 +100,7 @@ class TripsScreen extends React.Component {
                         underlayColor='#ddd'
                         key={index}>
                         <View style={styles.row}>
-                            <Image resizeMode='cover' source={{ uri: rowData.image_small }} style={styles.avatar_img} />
+                            <Image resizeMode='cover' source={ rowData.image_small ? { uri: rowData.image_small } : require("../../assets/images/trip_avatar.png") } style={styles.avatar_img} />
                             <View style={styles.info_view}>
                                 <View style={styles.location_view}>
                                     <Image resizeMode='contain' source={require("../../assets/images/trip_item_location_icon.png")} style={styles.location_icon} />
@@ -234,6 +246,12 @@ const styles = StyleSheet.create({
     }
 });
 
+const mapStateToProps = store => {
+    return {
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata,
+        currentlocation: store.location.currentlocation,
+    };
+};
 
-// export default TripsScreen
-export default connect()(TripsScreen);
+export default connect(mapStateToProps)(TripsScreen);

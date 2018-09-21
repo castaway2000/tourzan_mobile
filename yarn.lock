@@ -4235,6 +4235,10 @@ react-native-actionsheet@^2.2.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/react-native-actionsheet/-/react-native-actionsheet-2.4.2.tgz#6a00dd51a75ef2c8974312130e405af73191500f"
 
+react-native-braintree-payments-drop-in@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-braintree-payments-drop-in/-/react-native-braintree-payments-drop-in-1.0.1.tgz#0e6b64dbe56c2f24e4a3b6463103db837232a85d"
+
 react-native-button@^2.0.0, react-native-button@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/react-native-button/-/react-native-button-2.3.0.tgz#7d0a90095d415b0edf98a904556a7c4439646568"
@@ -4288,6 +4292,10 @@ react-native-elements@^0.13.0:
 react-native-fabric@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/react-native-fabric/-/react-native-fabric-0.5.1.tgz#e5eb65c56196355b41f230c14adcc9c4bcf60dda"
+
+react-native-fcm@^16.0.0:
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-fcm/-/react-native-fcm-16.0.0.tgz#22ff9de21a2fe5cb30f8d50b1a3b4bf3bccd6434"
 
 react-native-gifted-chat@^0.2.3:
   version "0.2.9"
@@ -4411,6 +4419,10 @@ react-native-side-menu@^0.20.1:
   version "0.20.3"
   resolved "https://registry.yarnpkg.com/react-native-side-menu/-/react-native-side-menu-0.20.3.tgz#5dffe3e237018360ed081433d505ea454cba9ca4"
 
+react-native-splash-screen@^3.0.9:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-splash-screen/-/react-native-splash-screen-3.1.0.tgz#9636f83d711dadded27167cdc3dc6aa98ec222ee"
+
 react-native-star-rating@^1.0.7:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/react-native-star-rating/-/react-native-star-rating-1.0.9.tgz#b25ea19d4494cd1c7b14e931f99e92ddce3ef70d"
@@ -4418,6 +4430,10 @@ react-native-star-rating@^1.0.7:
     prop-types "^15.5.10"
     react-native-button "^2.3.0"
     react-native-vector-icons "^4.5.0"
+
+react-native-stars@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/react-native-stars/-/react-native-stars-1.1.4.tgz#5640b1bcec447717391cb589fb4d8ade8922e1c2"
 
 react-native-switch@^1.1.0:
   version "1.5.0"
@@ -4518,7 +4534,7 @@ react-native@^0.55.4:
     xmldoc "^0.4.0"
     yargs "^9.0.0"
 
-react-navigation@^1.0.0-beta.11:
+react-navigation@^1.5.12:
   version "1.5.12"
   resolved "https://registry.yarnpkg.com/react-navigation/-/react-navigation-1.5.12.tgz#e226b4906c76dde55ddf7cc0a62ea04c77140d8a"
   dependencies:
@@ -4559,6 +4575,10 @@ react-test-renderer@16.0.0-alpha.6:
 react-timer-mixin@^0.13.2:
   version "0.13.3"
   resolved "https://registry.yarnpkg.com/react-timer-mixin/-/react-timer-mixin-0.13.3.tgz#0da8b9f807ec07dc3e854d082c737c65605b3d22"
+
+react-timer-mixin@^0.13.3:
+  version "0.13.4"
+  resolved "https://registry.yarnpkg.com/react-timer-mixin/-/react-timer-mixin-0.13.4.tgz#75a00c3c94c13abe29b43d63b4c65a88fc8264d3"
 
 react-transform-hmr@^1.0.4:
   version "1.0.4"

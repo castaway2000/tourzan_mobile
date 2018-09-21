@@ -20,8 +20,10 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
+		29A3D2BA3D9246C595E6874E /* libRNBraintreeDropIn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DB74AD0D639461EAD9D63EA /* libRNBraintreeDropIn.a */; };
 		350AF1BC20DB86C000A6D40B /* libSMXCrashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 350AF1B920DB6DAB00A6D40B /* libSMXCrashlytics.a */; };
 		350C1DAE20E3CE87008E1D53 /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 350C1DAD20E3CE79008E1D53 /* libSplashScreen.a */; };
+		35280485213589B500120A44 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 352804602135899200120A44 /* libRCTLinking.a */; };
 		35627C7820EB772300EC9DA7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 35627C7720EB772300EC9DA7 /* GoogleService-Info.plist */; };
 		35627CC820EB7CF700EC9DA7 /* libRNFIRMessaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 35627CC420EB7C0C00EC9DA7 /* libRNFIRMessaging.a */; };
 		358B8D3D20CE971E004B3C1D /* libRCTBackgroundGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 358B8D1A20CE9709004B3C1D /* libRCTBackgroundGeolocation.a */; };
@@ -197,6 +199,27 @@
 			remoteGlobalIDString = 3D7682761D8E76B80014119E;
 			remoteInfo = SplashScreen;
 		};
+		3528043D213587AD00120A44 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BCA5300941C74273AD2D665F /* RNBraintreeDropIn.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNBraintreeDropIn;
+		};
+		3528045F2135899200120A44 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 352804512135899200120A44 /* RCTLinking.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RCTLinking;
+		};
+		352804612135899200120A44 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 352804512135899200120A44 /* RCTLinking.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2D2A28471D9B043800D4039D;
+			remoteInfo = "RCTLinking-tvOS";
+		};
 		35627CC320EB7C0C00EC9DA7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 35627C9920EB7C0B00EC9DA7 /* RNFIRMessaging.xcodeproj */;
@@ -361,10 +384,12 @@
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		350AF1B320DB6DAB00A6D40B /* SMXCrashlytics.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SMXCrashlytics.xcodeproj; path = "../node_modules/react-native-fabric/ios/SMXCrashlytics.xcodeproj"; sourceTree = "<group>"; };
 		350C1D8020E3CE78008E1D53 /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SplashScreen.xcodeproj; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; };
+		352804512135899200120A44 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		35627C7720EB772300EC9DA7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		35627C9920EB7C0B00EC9DA7 /* RNFIRMessaging.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFIRMessaging.xcodeproj; path = "../node_modules/react-native-fcm/ios/RNFIRMessaging.xcodeproj"; sourceTree = "<group>"; };
 		35627D0420EB8FAD00EC9DA7 /* Tourzan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Tourzan.entitlements; path = Tourzan/Tourzan.entitlements; sourceTree = "<group>"; };
 		358B8D1120CE9709004B3C1D /* RCTBackgroundGeolocation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBackgroundGeolocation.xcodeproj; path = "../node_modules/react-native-mauron85-background-geolocation/ios/RCTBackgroundGeolocation.xcodeproj"; sourceTree = "<group>"; };
+		3DB74AD0D639461EAD9D63EA /* libRNBraintreeDropIn.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNBraintreeDropIn.a; sourceTree = "<group>"; };
 		5772DC9FB37A500DF63E1921 /* libPods-Tourzan.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tourzan.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
@@ -382,6 +407,7 @@
 		967A478B20B077A900A54D5E /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		967A478C20B077A900A54D5E /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
+		BCA5300941C74273AD2D665F /* RNBraintreeDropIn.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNBraintreeDropIn.xcodeproj; path = "../node_modules/react-native-braintree-payments-drop-in/ios/RNBraintreeDropIn.xcodeproj"; sourceTree = "<group>"; };
 		E528B3CB69CBE7347173DCE3 /* Pods-Tourzan.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tourzan.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tourzan/Pods-Tourzan.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -390,6 +416,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				35280485213589B500120A44 /* libRCTLinking.a in Frameworks */,
 				35627CC820EB7CF700EC9DA7 /* libRNFIRMessaging.a in Frameworks */,
 				350C1DAE20E3CE87008E1D53 /* libSplashScreen.a in Frameworks */,
 				350AF1BC20DB86C000A6D40B /* libSMXCrashlytics.a in Frameworks */,
@@ -408,6 +435,7 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				F4F62DDA6F6E579F5781516E /* libPods-Tourzan.a in Frameworks */,
+				29A3D2BA3D9246C595E6874E /* libRNBraintreeDropIn.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -559,6 +587,31 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		3528040F213587AC00120A44 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				3DB74AD0D639461EAD9D63EA /* libRNBraintreeDropIn.a */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		3528043A213587AD00120A44 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3528043E213587AD00120A44 /* libRNBraintreeDropIn.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		352804522135899200120A44 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				352804602135899200120A44 /* libRCTLinking.a */,
+				352804622135899200120A44 /* libRCTLinking-tvOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		35627C9A20EB7C0B00EC9DA7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -596,6 +649,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				352804512135899200120A44 /* RCTLinking.xcodeproj */,
 				35627C9920EB7C0B00EC9DA7 /* RNFIRMessaging.xcodeproj */,
 				350C1D8020E3CE78008E1D53 /* SplashScreen.xcodeproj */,
 				350AF1B320DB6DAB00A6D40B /* SMXCrashlytics.xcodeproj */,
@@ -612,6 +666,7 @@
 				832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */,
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
+				BCA5300941C74273AD2D665F /* RNBraintreeDropIn.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -634,6 +689,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				A519784D58FB10C7CCC1DB0D /* Pods */,
+				3528040F213587AC00120A44 /* Recovered References */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -769,6 +825,10 @@
 					ProjectRef = 00C302BB1ABCB91800DB3ED1 /* RCTImage.xcodeproj */;
 				},
 				{
+					ProductGroup = 352804522135899200120A44 /* Products */;
+					ProjectRef = 352804512135899200120A44 /* RCTLinking.xcodeproj */;
+				},
+				{
 					ProductGroup = 78C398B11ACF4ADC00677621 /* Products */;
 					ProjectRef = 78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */;
 				},
@@ -795,6 +855,10 @@
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+				},
+				{
+					ProductGroup = 3528043A213587AD00120A44 /* Products */;
+					ProjectRef = BCA5300941C74273AD2D665F /* RNBraintreeDropIn.xcodeproj */;
 				},
 				{
 					ProductGroup = 35627C9A20EB7C0B00EC9DA7 /* Products */;
@@ -969,6 +1033,27 @@
 			fileType = archive.ar;
 			path = libSplashScreen.a;
 			remoteRef = 350C1DAC20E3CE79008E1D53 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3528043E213587AD00120A44 /* libRNBraintreeDropIn.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNBraintreeDropIn.a;
+			remoteRef = 3528043D213587AD00120A44 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		352804602135899200120A44 /* libRCTLinking.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTLinking.a;
+			remoteRef = 3528045F2135899200120A44 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		352804622135899200120A44 /* libRCTLinking-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRCTLinking-tvOS.a";
+			remoteRef = 352804612135899200120A44 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		35627CC420EB7C0C00EC9DA7 /* libRNFIRMessaging.a */ = {
@@ -1191,6 +1276,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Tourzan/Pods-Tourzan-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/BraintreeDropIn/Braintree-UIKit-Localization.bundle",
 				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -1206,6 +1292,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Braintree-UIKit-Localization.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
@@ -1263,6 +1350,7 @@
 				CURRENT_PROJECT_VERSION = 5;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = QV2N88PZ82;
+				ENABLE_BITCODE = NO;
 				GCC_INPUT_FILETYPE = automatic;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1271,10 +1359,15 @@
 					"eact-native-mapslibios/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
+					"$(SRCROOT)/../node_modules/react-native-braintree-payments-drop-in/ios",
 				);
 				INFOPLIST_FILE = Tourzan/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Tourzan\"",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1299,6 +1392,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = QV2N88PZ82;
+				ENABLE_BITCODE = NO;
 				GCC_INPUT_FILETYPE = automatic;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1307,10 +1401,15 @@
 					"eact-native-mapslibios/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
+					"$(SRCROOT)/../node_modules/react-native-braintree-payments-drop-in/ios",
 				);
 				INFOPLIST_FILE = Tourzan/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Tourzan\"",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

@@ -23,12 +23,11 @@ import Checkbox from 'react-native-custom-checkbox'
 import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 import NavigationBar from '../components/NavigationBar'
-import { emailLogin } from '../actions/'
+import { emailLogin } from '../actions'
 
 //Store
 import { connect } from 'react-redux';
-import configureStore from '../configureStore'
-const store = configureStore();
+import { store } from '../store/index'
 
 //Actions
 import { updatebooking } from '../actions/bookingActions'
@@ -60,8 +59,8 @@ class LoginTouristScreen extends React.Component {
         super(props);
         this.state = {
             isChecked: true,
-            username: 'test010', //Username105 - 123123qwe, tejas.g@3rddigital.com - Cred@123098, test010 - Test@123', fakeit - newpass1234
-            password: 'Cred@123', //
+            username: 'test004', //Username105 - 123123qwe, tejas.g@3rddigital.com - Cred@123098, test010 - Test@123', fakeit - newpass1234
+            password: 'Test@123', //
             isLoading: false
         };
         this.navigate = this.props.navigation;
@@ -183,6 +182,7 @@ class LoginTouristScreen extends React.Component {
                             />
                             <View style={styles.line}></View>
                         </View>
+                        
                         <View>
                             <TextInput
                                 ref={this.getNextInput.bind(this)}
@@ -204,7 +204,6 @@ class LoginTouristScreen extends React.Component {
                                     style={{ backgroundColor: '#f2f2f2', color: '#31dd73', borderRadius: 2 }}
                                     size={15}
                                     onChange={(name, checked) => this._onCheckboxChecked(name, checked)} />
-                                />
                                 <Text style={styles.txt_checkbox}>Remember me</Text>
                             </View>
                             <TouchableOpacity onPress={() => this.navigate.navigate('ForgotPassword')}>
@@ -326,7 +325,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = store => {
     return {
-        userdata: store.user.userdata
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata,
+        currentlocation: store.location.currentlocation,
     };
 };
 

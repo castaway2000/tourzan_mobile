@@ -30,8 +30,7 @@ import { isIphoneX, isNumber, Storage } from "../global/Utilities"
 //Store
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import configureStore from '../configureStore'
-const store = configureStore();
+import { store } from '../store/index'
 
 //Actions
 import { updatebooking } from '../actions/bookingActions'
@@ -47,6 +46,8 @@ import {
     updateTrip,
     extendTime
 } from '../actions'
+
+import { Actions } from '../../node_modules/react-native-gifted-chat';
 
 var Toast = require('react-native-toast');
 
@@ -67,6 +68,8 @@ const CANCEL_INDEX = 0;
 const DESTRUCTIVE_INDEX = 4;
 const options = ['Cancel', 'End Tour'];
 
+import * as Actions1 from '../actions';
+
 class CurrentTimeLimitScreen extends React.Component {
     static navigationOptions = {
         title: 'Time Limit',
@@ -85,7 +88,6 @@ class CurrentTimeLimitScreen extends React.Component {
         this.showActionSheet = this.showActionSheet.bind(this);
     }
 
-
     componentDidMount() {
         // if you want to react to keyDown 
         KeyEvent.onKeyDownListener((keyCode) => {
@@ -97,6 +99,22 @@ class CurrentTimeLimitScreen extends React.Component {
         // KeyEvent.onKeyUpListener((keyCode) => {
         //   console.log(`Key code pressed: ${keyCode}`);
         // });
+
+        this.timer = TimerMixin.setInterval(() => {
+
+            let storestate = store.getState()
+
+            store.dispatch(
+                updatebooking(storestate.tour.bookingdata)
+            );
+
+            //console.log('props', this.props.bookingdata.remainingTime)
+
+        }, 5000);
+    }
+
+    componentWillUnmount() {
+        clearTimeout(this.timer);
     }
 
     showActionSheet() {
@@ -129,6 +147,47 @@ class CurrentTimeLimitScreen extends React.Component {
         }
     }
 
+
+    remainingTimeString() {
+
+        let d = Number(this.props.bookingdata.remainingTime);
+
+        var h = Math.floor(d / 3600);
+        var m = Math.floor(d % 3600 / 60);
+        var s = Math.floor(d % 3600 % 60);
+
+        var hDisplay = h + 'h';
+        var mDisplay = m + 'm';
+        // var sDisplay = s > 0 ? s + (s == 1 ? " s" : " s") : "";
+
+        return hDisplay + ' ' + mDisplay;
+    }
+
+    totalTimeString() {
+
+        let d = Number(this.props.bookingdata.timeLimit);
+
+        var h = Math.floor(d / 3600);
+        var m = Math.floor(d % 3600 / 60);
+        var s = Math.floor(d % 3600 % 60);
+
+        var hDisplay = h + 'h';
+        var mDisplay = m + 'm';
+        // var sDisplay = s > 0 ? s + (s == 1 ? " s" : " s") : "";
+
+        return hDisplay + ' ' + mDisplay;
+    }
+
+    percentageDuration() {
+
+        let rt = Number(this.props.bookingdata.remainingTime);
+        let tl = Number(this.props.bookingdata.timeLimit);
+
+        return (rt / tl) * 100
+
+
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -143,11 +202,11 @@ class CurrentTimeLimitScreen extends React.Component {
                 <View style={styles.main_view}>
                     <View style={styles.current_spent_time_view}>
                         <Image resizeMode='contain' source={require("../assets/images/circular_clock.png")} style={styles.time_icon} />
-                        <Text style={styles.current_spent_time_text}>03h 40m</Text>
+                        <Text style={styles.current_spent_time_text}>{this.totalTimeString()}</Text>
                     </View>
                     <View style={styles.main_top_view}>
-                        <PercentageCircle radius={100} percent={75} innerColor='#31dd73' borderWidth={10} color={"#3498db"}>
-                            <Text style={styles.circle_progress_text}>-1h  30m</Text>
+                        <PercentageCircle radius={100} percent={this.percentageDuration()} innerColor='#31dd73' borderWidth={10} color={"#3498db"}>
+                            <Text style={styles.circle_progress_text}>{this.remainingTimeString()}</Text>
                         </PercentageCircle>
                     </View>
                     <View style={styles.main_bottom_view}>
@@ -181,10 +240,8 @@ class CurrentTimeLimitScreen extends React.Component {
         //Get store data
         let storestate = store.getState()
 
-        
         var params = {
-            type: 'guide',
-            userid: this.props.userdata.user.userid,
+            tripid: this.props.bookingdata.tripid,
             status: 'ended',
         }
 
@@ -196,21 +253,24 @@ class CurrentTimeLimitScreen extends React.Component {
                     isLoading: false
                 })
 
-                Alert.alert(
-                    'Tourzan',
-                    'Your trip has successfully ended.',
-                    [
-                        {
-                            text: 'OK', onPress: () => {
-                                this.props.navigation.navigate('CompleteTour');
-                            }
-                        },
-                    ],
-                    { cancelable: false }
-                )
+                if (data.errors) {
+                    Alert.alert('Tourzan', 'Something went wrong! Please try again later.')
+                } else {
+                    Alert.alert(
+                        'Tourzan',
+                        'Your trip has successfully ended.',
+                        [
+                            {
+                                text: 'OK', onPress: () => {
+                                    this.props.navigation.navigate('CompleteTour');
+                                }
+                            },
+                        ],
+                        { cancelable: false }
+                    )
+                }
 
                 console.log('endTripWS-->', data)
-
             })
             .catch(err => {
                 this.setState({
@@ -352,10 +412,12 @@ const styles = StyleSheet.create({
 });
 
 //MAP
+
 const mapStateToProps = store => {
     return {
         bookingdata: store.tour.bookingdata,
-        userdata: store.user.userdata
+        userdata: store.user.userdata,
+        currentlocation: store.location.currentlocation,
     };
 };
 

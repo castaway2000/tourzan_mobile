@@ -23,8 +23,7 @@ import NavigationBar from '../components/NavigationBar'
 
 //Store
 import { connect } from 'react-redux';
-import configureStore from '../configureStore'
-const store = configureStore();
+import {store} from '../store/index'
 
 //Actions
 import { updatebooking } from '../actions/bookingActions'
@@ -64,6 +63,7 @@ class MoreScreen extends React.Component {
     onLogout() {
 
         Alert.alert("Tourzan", 'Are you sure you want to logout?', [{
+            
             text: 'OK', onPress: () => {
 
                 Storage.removeItem("currentuser");
@@ -107,6 +107,10 @@ class MoreScreen extends React.Component {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.row_view} onPress={() => this.navigate.navigate('TermsofUseScreen')}>
                         <Text style={styles.row_lb}>Terms of Use</Text>
+                        <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon} />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.row_view} onPress={() => this.navigate.navigate('ContactUs')}>
+                        <Text style={styles.row_lb}>Contact Us</Text>
                         <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon} />
                     </TouchableOpacity>
                     <View style={styles.blank_logout_view}>

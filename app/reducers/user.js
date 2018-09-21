@@ -72,15 +72,15 @@ const getUserId = (userdata) => {
 
 const update = (state, action) => {
 
-    state.userdata = action.userdata
+    let ud = action.userdata
 
-    state.userdata.user.profilepicture = getProfilePictureUrl(state.userdata)
+    ud.user.profilepicture = getProfilePictureUrl(ud)
 
-    state.userdata.user.isGuide = isGuide(state.userdata)
+    ud.user.isGuide = isGuide(ud)
 
-    state.userdata.user.userid = getUserId(state.userdata)
+    ud.user.userid = getUserId(ud)
 
-    return { ...state, userdata: state.userdata }
+    return { ...state, userdata: Object.assign({}, ud) }
 }
 
 const userReducer = (state = initialState, action) => {

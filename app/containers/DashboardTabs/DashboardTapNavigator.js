@@ -18,15 +18,9 @@ import GuidesScreen from './GuidesScreen'
 import TransactionsScreen from './TransactionsScreen'
 import TripsScreen from './TripsScreen'
 
-//FCM
-import FCM, { NotificationActionType } from "react-native-fcm";
-import { registerKilledListener, registerAppListener } from "../../global/Firebase/Listeners"
-import firebaseClient from "../../global/Firebase/FirebaseClient";
-
 //Store
 import { connect } from 'react-redux';
-import configureStore from '../../configureStore'
-const store = configureStore();
+import { store } from '../../store/index'
 
 //Actions
 import { updatebooking } from '../../actions/bookingActions'
@@ -36,8 +30,6 @@ import { updateuser } from '../../actions/userActions'
 import { Storage, isIphoneX } from '../../global/Utilities';
 
 var { width, height } = Dimensions.get('window');
-
-registerKilledListener();
 
 // create a component
 class DashboardTapNavigator extends React.Component {
@@ -57,54 +49,6 @@ class DashboardTapNavigator extends React.Component {
 
     async componentDidMount() {
 
-        FCM.createNotificationChannel({
-            id: 'default',
-            name: 'Default',
-            description: 'used for example',
-            priority: 'high'
-        })
-
-        registerAppListener(this.props.navigation);
-
-        FCM.getInitialNotification().then(notif => {
-            this.setState({
-                initNotif: notif
-            });
-
-            console.log('Notification received!', notif)
-
-            // if (notif && notif.targetScreen === "detail") {
-            //     setTimeout(() => {
-            //         this.props.navigation.navigate("Detail");
-            //     }, 500);
-            // }
-
-        });
-
-        try {
-            let result = await FCM.requestPermissions({
-                badge: false,
-                sound: true,
-                alert: true
-            });
-        } catch (e) {
-            console.error(e);
-        }
-
-        FCM.getFCMToken().then(token => {
-            console.log("TOKEN (getFCMToken)", token);
-            this.setState({ token: token || "" });
-        });
-
-        if (Platform.OS === "ios") {
-            FCM.getAPNSToken().then(token => {
-                console.log("APNS TOKEN (getFCMToken)", token);
-            });
-        }
-
-        // topic example
-        // FCM.subscribeToTopic('sometopic')
-        // FCM.unsubscribeFromTopic('sometopic')
     }
 
     onTrips() {
@@ -132,6 +76,7 @@ class DashboardTapNavigator extends React.Component {
     }
 
     showDashbaord() {
+
         if (this.state.isTrips) {
             return (
                 < TripsScreen navigation={this.props.navigation} />
@@ -274,7 +219,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = store => {
     return {
         bookingdata: store.tour.bookingdata,
-        userdata: store.user.userdata
+        userdata: store.user.userdata,
+        currentlocation: store.location.currentlocation,
     };
 };
 

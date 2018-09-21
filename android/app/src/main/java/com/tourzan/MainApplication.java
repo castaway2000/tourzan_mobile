@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
+import tech.bam.RNBraintreeDropIn.RNBraintreeDropInPackage;
 
 public class MainApplication extends MultiDexApplication implements ReactApplication {
 
@@ -32,10 +33,12 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+                    new RNBraintreeDropInPackage(),
                     new SplashScreenReactPackage(),
                     new MapsPackage(),
                     new FabricPackage(),
-                    new FIRMessagingPackage()
+                    new FIRMessagingPackage(),
+                    new AppPackage()
             );
         }
 
