@@ -82,6 +82,9 @@ class CompleteTourScreen extends React.Component {
   }
 
   render() {
+
+    let tripData = this.props.navigation.state.params.tripData
+
       return (
         <View style={styles.container}>  
             <View  style={styles.navigationbar}>
@@ -107,7 +110,7 @@ class CompleteTourScreen extends React.Component {
                                 </View>
                             </View>
                             <View style={styles.guide_info_right_view}>                      
-                                <Text style={styles.guide_info_right_text}>$367</Text>
+                                <Text style={styles.guide_info_right_text}>${tripData.guide_pay}</Text>
                             </View>
                         </View>
                         <View style={styles.guide_rating_view}>
@@ -132,7 +135,7 @@ class CompleteTourScreen extends React.Component {
                         </View>
                          <View style={styles.row_setting_btn_view}>
                             <Image resizeMode='contain' source={require("../assets/images/wallet_icon.png")}  style={styles.row_setting_btn_icon}/>
-                            <Text style={styles.row_setting_btn_text}>Total: $367</Text>
+                            <Text style={styles.row_setting_btn_text}>Total: ${tripData.price}</Text>
                         </View>
                     </View>
 

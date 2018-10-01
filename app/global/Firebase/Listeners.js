@@ -48,8 +48,6 @@ export function registerAppListener(mapScreen) {
 
   FCM.on(FCMEvent.Notification, notif => {
 
-    //console.log("Notification str", notif);
-
     mapScreen.notificationBannerTapped(notif)
 
     if (Platform.OS === 'ios' && notif._notificationType === NotificationType.WillPresent && !notif.local_notification) {

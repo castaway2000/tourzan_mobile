@@ -14,10 +14,12 @@ function emailLogin(params) {
     formData.append('password', params.password);
     //formData.append('push_token', storestate.tour.bookingdata.push_token ? storestate.tour.bookingdata.push_token : '0');
 
+    let url = API.SERVER + 'v1/rest-auth/login/'
+    console.log('Signup user api:', url)
     console.log('formData', formData)
 
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/rest-auth/login/', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -48,14 +50,16 @@ function emailSignup(params) {
     var formData = new FormData();
     formData.append('username', params.username)
     formData.append('email', params.email)
-    formData.append('password1', params.password)
-    formData.append('password2', params.confirm)
+    formData.append('password1', params.password1)
+    formData.append('password2', params.password2)
     //formData.append('push_token', storestate.tour.bookingdata.push_token ? storestate.tour.bookingdata.push_token : '0');
 
+    let url = API.SERVER + 'v1/signup_user/'
+    console.log('Signup user api:', url)
     console.log('formData', formData)
-    
+
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/signup_user/', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -193,11 +197,87 @@ function resetPassword(params) {
     })
 }
 
+function updateGuideProfile(params) {
+
+    let storeState = store.getState()
+
+    var url = API.SERVER + 'v1/edit_profile/edit_guide_profile/'
+
+    let esc = encodeURIComponent
+    let query = Object.keys(params)
+        .map(k => esc(k) + '=' + esc(params[k]))
+        .join('&')
+
+    url = url + query
+
+    console.log('deactivate url', url)
+
+    return new Promise((resolve, reject) => {
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'pragma': 'no-cache',
+                'Cache-Control': 'no-cache',
+                'Authorization': 'JWT ' + storeState.user.userdata.token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+        })
+            .then((res) => res.json())
+            .then(data => {
+                console.log('Braintree Save Token API Success->', data);
+                resolve(data);
+            })
+            .catch(err => {
+                reject(err)
+                console.log('Braintree Save Token API Error->', err);
+            });
+    })
+}
+
+function updateTouristProfile(params) {
+
+    let storeState = store.getState()
+
+    var url = API.SERVER + 'v1/edit_profile/edit_profile/'
+
+    let esc = encodeURIComponent
+    let query = Object.keys(params)
+        .map(k => esc(k) + '=' + esc(params[k]))
+        .join('&')
+
+    url = url + query
+
+    console.log('deactivate url', url)
+
+    return new Promise((resolve, reject) => {
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'pragma': 'no-cache',
+                'Cache-Control': 'no-cache',
+                'Authorization': 'JWT ' + storeState.user.userdata.token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+        })
+            .then((res) => res.json())
+            .then(data => {
+                console.log('Braintree Save Token API Success->', data);
+                resolve(data);
+            })
+            .catch(err => {
+                reject(err)
+                console.log('Braintree Save Token API Error->', err);
+            });
+    })
+}
+
 module.exports = {
     emailLogin,
     emailSignup,
     profile,
     changePassword,
     resetPassword,
-    usermixins
+    usermixins,
+    updateGuideProfile,
+    updateTouristProfile
 }

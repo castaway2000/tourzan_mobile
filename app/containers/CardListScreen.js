@@ -149,23 +149,6 @@ class CardListScreen extends React.Component {
 
                 }
             });
-
-        /*
-        BraintreeDropIn.show({
-            clientToken: 'eyJ2ZXJzaW9uIjoyLCJhdXRob3JpemF0aW9uRmluZ2VycHJpbnQiOiI0NzA4ZmE1MmI0MzdhMzc3YzRhMzU0ZTVlYmY0NzU5OWQ2ZTEwOWY0NDEwODFiYTQwOWIzMmI3MGRlZDM4NjYwfGNyZWF0ZWRfYXQ9MjAxOC0wOC0yN1QxMjoxODowNy44MDIxOTA1NzYrMDAwMFx1MDAyNm1lcmNoYW50X2lkPTM0OHBrOWNnZjNiZ3l3MmJcdTAwMjZwdWJsaWNfa2V5PTJuMjQ3ZHY4OWJxOXZtcHIiLCJjb25maWdVcmwiOiJodHRwczovL2FwaS5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tOjQ0My9tZXJjaGFudHMvMzQ4cGs5Y2dmM2JneXcyYi9jbGllbnRfYXBpL3YxL2NvbmZpZ3VyYXRpb24iLCJjaGFsbGVuZ2VzIjpbXSwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiY2xpZW50QXBpVXJsIjoiaHR0cHM6Ly9hcGkuc2FuZGJveC5icmFpbnRyZWVnYXRld2F5LmNvbTo0NDMvbWVyY2hhbnRzLzM0OHBrOWNnZjNiZ3l3MmIvY2xpZW50X2FwaSIsImFzc2V0c1VybCI6Imh0dHBzOi8vYXNzZXRzLmJyYWludHJlZWdhdGV3YXkuY29tIiwiYXV0aFVybCI6Imh0dHBzOi8vYXV0aC52ZW5tby5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tIiwiYW5hbHl0aWNzIjp7InVybCI6Imh0dHBzOi8vb3JpZ2luLWFuYWx5dGljcy1zYW5kLnNhbmRib3guYnJhaW50cmVlLWFwaS5jb20vMzQ4cGs5Y2dmM2JneXcyYiJ9LCJ0aHJlZURTZWN1cmVFbmFibGVkIjp0cnVlLCJwYXlwYWxFbmFibGVkIjp0cnVlLCJwYXlwYWwiOnsiZGlzcGxheU5hbWUiOiJBY21lIFdpZGdldHMsIEx0ZC4gKFNhbmRib3gpIiwiY2xpZW50SWQiOm51bGwsInByaXZhY3lVcmwiOiJodHRwOi8vZXhhbXBsZS5jb20vcHAiLCJ1c2VyQWdyZWVtZW50VXJsIjoiaHR0cDovL2V4YW1wbGUuY29tL3RvcyIsImJhc2VVcmwiOiJodHRwczovL2Fzc2V0cy5icmFpbnRyZWVnYXRld2F5LmNvbSIsImFzc2V0c1VybCI6Imh0dHBzOi8vY2hlY2tvdXQucGF5cGFsLmNvbSIsImRpcmVjdEJhc2VVcmwiOm51bGwsImFsbG93SHR0cCI6dHJ1ZSwiZW52aXJvbm1lbnROb05ldHdvcmsiOnRydWUsImVudmlyb25tZW50Ijoib2ZmbGluZSIsInVudmV0dGVkTWVyY2hhbnQiOmZhbHNlLCJicmFpbnRyZWVDbGllbnRJZCI6Im1hc3RlcmNsaWVudDMiLCJiaWxsaW5nQWdyZWVtZW50c0VuYWJsZWQiOnRydWUsIm1lcmNoYW50QWNjb3VudElkIjoiYWNtZXdpZGdldHNsdGRzYW5kYm94IiwiY3VycmVuY3lJc29Db2RlIjoiVVNEIn0sIm1lcmNoYW50SWQiOiIzNDhwazljZ2YzYmd5dzJiIiwidmVubW8iOiJvZmYifQ==',
-            threeDSecure: {
-                amount: 1000.0,
-            },
-        })
-            .then(result => console.log(result))
-            .catch((error) => {
-                if (error.code === 'USER_CANCELLATION') {
-                    // update your UI to handle cancellation
-                } else {
-                    // update your UI to handle other errors
-                    // for 3D secure, there are two other specific error codes: 3DSECURE_NOT_ABLE_TO_SHIFT_LIABILITY and 3DSECURE_LIABILITY_NOT_SHIFTED
-                }
-            });*/
     }
 
     render() {
@@ -196,9 +179,10 @@ class CardListScreen extends React.Component {
                             renderItem={({ item, index }) => (
                                 <View style={styles.itemContainer}>
                                     <View style={styles.item}>
-                                        <Text style={styles.itemcarddigit}>{item.card_number}</Text>
+                                        <Text style={styles.itemcarddigit}>{item.is_paypal ? item.paypal_email : item.card_number}</Text>
 
                                         <Image source={require('./../assets/images/visa-straight-32px.png')} style={{ width: 50, height: 30, position: 'absolute', bottom: 10, right: 10 }} />
+
                                         {item.is_active == true && <TouchableOpacity onPress={() => this.setDefaultCardWS(item)} style={{ width: 50, height: 30, position: 'absolute', bottom: 10, left: 10 }}>
                                             <Image source={item.is_default ? checkedCard : unCheckedCard} />
                                         </TouchableOpacity>}
@@ -280,6 +264,8 @@ class CardListScreen extends React.Component {
 
                 if (data && data.status == 'success') {
                     Alert.alert('Tourzan', data.message ? data.message : 'A new payment method was successfully added!')
+
+                    this.getAllPaymentsDetail()
                 } else {
                     Alert.alert('Tourzan', data.message ? data.message : 'Error while saving card.')
                 }
@@ -409,7 +395,7 @@ const styles = StyleSheet.create({
         width: 10,
     },
     addPayment: {
-        marginLeft: 20,
+        marginLeft: 20
     },
     centerText: {
         color: 'white',
@@ -419,8 +405,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     rightView: {
-        marginRight: 40,
-        width: 20
+        marginRight: 12,
     },
 
     // --- cell --- //

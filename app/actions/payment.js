@@ -120,7 +120,7 @@ function setDefaultCard(params) {
 
     console.log(' storeState.user.userdata.token', storeState.user.userdata.token)
 
-    let url = API.SERVER + 'v1/secret/payment-methods/' + encodeURIComponent(params.paymentmethodid)  + '/set_as_default_payment_method/'
+    let url = API.SERVER + 'v1/secret/payment-methods/' + encodeURIComponent(params.paymentmethodid) + '/set_as_default_payment_method/'
 
     http://localhost:8002/api/v1/secret/payment-methods/payment_method_id/set_as_default_payment_method
 
@@ -153,12 +153,9 @@ function deactiveteCard(params) {
 
     console.log(' storeState.user.userdata.token', storeState.user.userdata.token)
 
-    let url = API.SERVER + 'v1/secret/payment-methods/' + encodeURIComponent(params.paymentmethodid)  + '/deactivate_payment_method/'
+    let url = API.SERVER + 'v1/secret/payment-methods/' + encodeURIComponent(params.paymentmethodid) + '/deactivate_payment_method/'
 
     console.log('deactivate url', url)
-    
-    http://localhost:8002/api/v1/secret/payment-methods/payment_method_id/set_as_default_payment_method
-
 
     return new Promise((resolve, reject) => {
         fetch(url, {
@@ -182,11 +179,47 @@ function deactiveteCard(params) {
     })
 }
 
+function createApplicant(params) {
+
+    let storeState = store.getState()
+
+    console.log(params)
+
+    var formData = new FormData();
+    formData.append('first_name', params.firstname)
+    formData.append('last_name', params.lastname)
+
+    console.log('bookGuide param:', formData)
+
+    return new Promise((resolve, reject) => {
+        fetch('https://api.onfido.com/v2/applicants', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'pragma': 'no-cache',
+                'Cache-Control': 'no-cache',
+                'Authorization': 'Token token=test_tLlvRsGwFHHBHZr_mw02f372SkQwFAb3',
+            },
+            body: formData
+        })
+            .then((res) => res.json())
+            .then(data => {
+                console.log('Booking Guide API Success->', data);
+                resolve(data);
+            })
+            .catch(err => {
+                console.log('Booking Guide API Error->', err);
+                reject(err);
+            });
+    })
+}
+
 
 module.exports = {
     brainTreeToken,
     brainTreeSaveNonce,
     allPayments,
     setDefaultCard,
-    deactiveteCard
+    deactiveteCard,
+    createApplicant
 }

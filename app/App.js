@@ -61,7 +61,8 @@ import ExtendTimeScreen from './containers/ExtendTimeScreen'
 import CompleteTourScreen from './containers/CompleteTourScreen'
 import CardListScreen from './containers/CardListScreen'
 
-
+import VerificationResultScreen from './containers/VerificationResultScreen'
+import UpdateProfileScreen from './containers/UpdateProfileScreen'
 
 var { width, height } = Dimensions.get('window');
 
@@ -127,7 +128,7 @@ const MainTapNavigator = TabNavigator({
   MapsNav: { screen: MapChatStackNavigator, },
   Dashboard: { screen: DashboardStackNavigator, },
   Chat: { screen: ChatStackNavigator, },
-  Marketplace: { screen: MarketplaceScreen, },
+  //Marketplace: { screen: MarketplaceScreen, },
   MoreNav: { screen: MoreStackNavigator, },
 
 }, {
@@ -172,7 +173,11 @@ const App = StackNavigator({
   ProfileCharRoom: { screen: ChatRoomScreen },
   ExtendTime: { screen: ExtendTimeScreen },
   CompleteTour: { screen: CompleteTourScreen },
-  CardList: {screen: CardListScreen}
+  CardList: {screen: CardListScreen},
+  VerificationResult: {screen: VerificationResultScreen},
+  UpdateProfile: {screen: UpdateProfileScreen}
+  
+  
 }, {
     headerMode: 'screen'
   },

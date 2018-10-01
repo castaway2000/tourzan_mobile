@@ -23,6 +23,7 @@ import KeyEvent from 'react-native-keyevent';
 import PercentageCircle from 'react-native-percentage-circle';
 import ApplyButton from '../components/ApplyButton'
 import { Colors } from '../constants'
+var TimerMixin = require('react-timer-mixin');
 
 //Utilities
 import { isIphoneX, isNumber, Storage } from "../global/Utilities"
@@ -147,35 +148,50 @@ class CurrentTimeLimitScreen extends React.Component {
         }
     }
 
-
     remainingTimeString() {
 
-        let d = Number(this.props.bookingdata.remainingTime);
+        let tl = '';
 
-        var h = Math.floor(d / 3600);
-        var m = Math.floor(d % 3600 / 60);
-        var s = Math.floor(d % 3600 % 60);
+        if (this.props.bookingdata.isAutomatic == true) {
+            tl = 'Auto'
+        } else {
+            let d = Number(this.props.bookingdata.remainingTime);
 
-        var hDisplay = h + 'h';
-        var mDisplay = m + 'm';
-        // var sDisplay = s > 0 ? s + (s == 1 ? " s" : " s") : "";
+            var h = Math.floor(d / 3600);
+            var m = Math.floor(d % 3600 / 60);
+            var s = Math.floor(d % 3600 % 60);
 
-        return hDisplay + ' ' + mDisplay;
+            var hDisplay = h + 'h';
+            var mDisplay = m + 'm';
+            // var sDisplay = s > 0 ? s + (s == 1 ? " s" : " s") : "";
+
+            tl = hDisplay + ' ' + mDisplay;
+        }
+
+        return tl
+
     }
 
     totalTimeString() {
 
-        let d = Number(this.props.bookingdata.timeLimit);
+        let tl = '';
 
-        var h = Math.floor(d / 3600);
-        var m = Math.floor(d % 3600 / 60);
-        var s = Math.floor(d % 3600 % 60);
+        if (this.props.bookingdata.isAutomatic == true) {
+            tl = 'Auto'
+        } else {
+            let d = Number(this.props.bookingdata.timeLimit);
 
-        var hDisplay = h + 'h';
-        var mDisplay = m + 'm';
-        // var sDisplay = s > 0 ? s + (s == 1 ? " s" : " s") : "";
+            var h = Math.floor(d / 3600);
+            var m = Math.floor(d % 3600 / 60);
+            var s = Math.floor(d % 3600 % 60);
 
-        return hDisplay + ' ' + mDisplay;
+            var hDisplay = h + 'h';
+            var mDisplay = m + 'm';
+            // var sDisplay = s > 0 ? s + (s == 1 ? " s" : " s") : "";
+            tl = hDisplay + ' ' + mDisplay;
+        }
+
+        return tl
     }
 
     percentageDuration() {
@@ -184,7 +200,6 @@ class CurrentTimeLimitScreen extends React.Component {
         let tl = Number(this.props.bookingdata.timeLimit);
 
         return (rt / tl) * 100
-
 
     }
 
@@ -210,9 +225,9 @@ class CurrentTimeLimitScreen extends React.Component {
                         </PercentageCircle>
                     </View>
                     <View style={styles.main_bottom_view}>
-                        <TouchableOpacity style={styles.extend_time_view} onPress={() => this.onExtendTimeBtnClick()} title='Extend Time'>
+                        {/* <TouchableOpacity style={styles.extend_time_view} onPress={() => this.onExtendTimeBtnClick()} title='Extend Time'>
                             <Text style={styles.extend_time_btn} >Extend Time</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         <ApplyButton onPress={() => this.onCompleteTourBtnClick()} name={'Complete Tour'} style={styles.done_btn} />
                     </View>
                 </View>
@@ -253,16 +268,45 @@ class CurrentTimeLimitScreen extends React.Component {
                     isLoading: false
                 })
 
+                console.log('End trip responce:', data)
+
                 if (data.errors) {
                     Alert.alert('Tourzan', 'Something went wrong! Please try again later.')
                 } else {
+
+                    let totalFees = data.price
+
+                    /*{
+                    guide_pay: 237.8
+                    guide_trip_fees: 35.53
+                    isEnded: true
+                    price: 308.87
+                    tourist_trip_fees: 35.53
+                    trip_id: 50}*/
+
+                    //Reset Trip
+                    let storestate = store.getState()
+                    storestate.tour.bookingdata.isTripInProgress = false
+                    storestate.tour.bookingdata.tripid = 0
+                    storestate.tour.bookingdata.isAutomatic = true
+
+                    store.dispatch(
+                        updatebooking(storestate.tour.bookingdata)
+                    );
+
                     Alert.alert(
                         'Tourzan',
                         'Your trip has successfully ended.',
                         [
                             {
                                 text: 'OK', onPress: () => {
-                                    this.props.navigation.navigate('CompleteTour');
+
+                                    if (!this.props.userdata.user.isGuide) {
+                                        this.props.navigation.navigate('CompleteTour', { tripData: data });
+                                    } else {
+                                        this.props.navigation.dispatch(backAction)
+                                    }
+
                                 }
                             },
                         ],
@@ -347,7 +391,6 @@ const styles = StyleSheet.create({
         width: 10,
         height: 10,
     },
-
 
     // --- main top view -- //
     main_top_view: {

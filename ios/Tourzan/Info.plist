@@ -34,7 +34,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>8</string>
+	<string>13</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -70,14 +70,24 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Tourzan want to access your photo library in order to upload your photo.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Tourzan want to access your photo library in order to upload your photo.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Tourzan want to access your location in order to search near by guides.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Tourzan want to access your location in order to track your trip with guide.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Tourzan want to access your location in order to search near by guides.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Tourzan want to access your microphone in order to record sound.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Tourzan want to access your sensor in order to search near by guides.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Tourzan want to access your photo library in order to upload your photo.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Tourzan want to access your photo library in order to upload your photo.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>
@@ -107,14 +117,6 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>Tourzan want to access your photo library in order to upload your photo.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Tourzan want to access your photo library in order to upload your photo.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Tourzan want to access your photo library in order to upload your photo.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Tourzan want to access your photo library in order to upload your photo.</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>

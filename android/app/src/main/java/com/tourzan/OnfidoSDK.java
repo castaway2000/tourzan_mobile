@@ -1,7 +1,8 @@
-package com.reactnativesampleapp;
+package com.tourzan;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.BaseActivityEventListener;
@@ -13,8 +14,12 @@ import com.onfido.android.sdk.capture.ExitCode;
 import com.onfido.android.sdk.capture.Onfido;
 import com.onfido.android.sdk.capture.OnfidoConfig;
 import com.onfido.android.sdk.capture.OnfidoFactory;
+import com.onfido.android.sdk.capture.errors.OnfidoException;
+import com.onfido.android.sdk.capture.ui.options.FlowStep;
 import com.onfido.android.sdk.capture.upload.Captures;
 import com.onfido.api.client.data.Applicant;
+
+import org.intellij.lang.annotations.Flow;
 
 import java.util.GregorianCalendar;
 
@@ -30,15 +35,24 @@ public class OnfidoSDK extends ReactContextBaseJavaModule {
         @Override
         public void onActivityResult(final Activity activity, int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
+
             client.handleActivityResult(resultCode, data, new Onfido.OnfidoResultListener() {
                 @Override
                 public void userCompleted(Applicant applicant, Captures captures) {
+                    //communicate with your backend and initiate the check
                     mSuccessCallback.invoke(applicant.getId());
                 }
 
                 @Override
                 public void userExited(ExitCode exitCode, Applicant applicant) {
+                    //User left the sdk flow without completing it
                     mErrorCallback.invoke(exitCode.toString());
+                }
+
+                @Override
+                public void onError(OnfidoException exception, Applicant applicant) {
+                    // An exception occurred during the flow
+                    mErrorCallback.invoke(exception.toString());
                 }
             });
         }
@@ -57,7 +71,10 @@ public class OnfidoSDK extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void
-    startSDK(Callback successCallback, Callback errorCallback) {
+    startSDK(String applicantId, Callback successCallback, Callback errorCallback) {
+
+        String token = "test_tLlvRsGwFHHBHZr_mw02f372SkQwFAb3";
+
         Activity currentActivity = getCurrentActivity();
         mSuccessCallback = successCallback;
         mErrorCallback = errorCallback;
@@ -68,16 +85,21 @@ public class OnfidoSDK extends ReactContextBaseJavaModule {
         }
 
         try {
-            Applicant applicant = Applicant.builder()
-                    .withFirstName("React User")
-                    .withLastName("Test")
-                    .withDateOfBirth(new GregorianCalendar(1974, 04, 25).getGregorianChange())
+            final FlowStep[] defaultStepsWithWelcomeScreen = {
+                    FlowStep.WELCOME,                       //Welcome step with a step summary, Optional
+                    FlowStep.CAPTURE_DOCUMENT,              //Document Capture Step
+                    FlowStep.CAPTURE_FACE,                  //Face Capture Step
+                    FlowStep.FINAL                          //Final Screen Step, Optional
+            };
+
+            final OnfidoConfig config = OnfidoConfig.builder()
+                    .withToken(token)
+                    .withCustomFlow(defaultStepsWithWelcomeScreen)
+                    .withApplicant(applicantId)
                     .build();
-            OnfidoConfig onfidoConfig = OnfidoConfig.builder()
-                    .withApplicant(applicant)
-                    .withToken("test_tLlvRsGwFHHBHZr_mw02f372SkQwFAb3")
-                    .build();
-            client.startActivityForResult(currentActivity, 1, onfidoConfig);
+
+
+            client.startActivityForResult(currentActivity, 1, config);
         }
         catch (Exception e) {
             mErrorCallback.invoke(E_FAILED_TO_SHOW_ONFIDO);

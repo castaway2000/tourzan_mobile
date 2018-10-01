@@ -14,7 +14,8 @@ import {
     Alert,
     TouchableOpacity,
     Platform,
-    NativeModules
+    NativeModules,
+    ActivityIndicator
 } from 'react-native';
 
 import { NavigationActions } from 'react-navigation'
@@ -33,6 +34,12 @@ import { updateuser } from '../actions/userActions'
 //Utilities
 import { Storage, isIphoneX } from '../global/Utilities';
 
+//Webservice
+import {
+    profile,
+    createApplicant
+} from '../actions'
+
 var { width, height } = Dimensions.get('window');
 const backAction = NavigationActions.back({
 
@@ -50,7 +57,9 @@ class SettingsScreen extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            isLoading: false
+        };
         this.navigate = this.props.navigation;
     }
 
@@ -74,19 +83,12 @@ class SettingsScreen extends React.Component {
         return fullname
     }
 
-    verifyOnfidoIdentity() {
-        if (Platform.OS =='ios') {
-            NativeModules.OnfidoSDK.startSDK();
-          } else {
-            NativeModules.OnfidoSDK.startSDK(
-              (applicantId) => { 
-                  //this.setTextContent("Verification complete", "To perform another verification, press \"Launch\"") 
-                },
-              (errorCause) => { 
-                  //this.setTextContent("Flow not finished", "To try again, press \"Launch\"") 
-                }
+    showLoading() {
+        if (this.state.isLoading) {
+            return (
+                <ActivityIndicator color={'black'} size={'large'} style={styles.loadingView} />
             );
-          }
+        }
     }
 
     render() {
@@ -108,39 +110,236 @@ class SettingsScreen extends React.Component {
                         <Text style={styles.profile_email_text} >{this.props.userdata.user.email ? this.props.userdata.user.email : '-'}</Text>
                     </View>
                     <View style={styles.main_info_view}>
+                        <TouchableOpacity style={styles.row_view} onPress={() => { this.navigate.navigate('UpdateProfile') }}>
+                            <Text style={styles.row_lb}>Update Profile</Text>
+                            <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon} />
+                        </TouchableOpacity>
                         <TouchableOpacity style={styles.row_view} onPress={() => { this.navigate.navigate('ChangePassword') }}>
                             <Text style={styles.row_lb}>Update Password</Text>
                             <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon} />
                         </TouchableOpacity>
                         <View style={styles.blank_row_view}>
                         </View>
+                        
                         <View style={styles.row_icon_view}>
                             <Image resizeMode='contain' source={require("../assets/images/Icon_email.png")} style={styles.row_small_icon} />
                             {/* <TextInput underlineColorAndroid='transparent' style={styles.row_icon_lb} value={'adamparker@gmail.com'}></TextInput> */}
                             <Text style={styles.row_icon_lb}>{this.props.userdata.user.email ? this.props.userdata.user.email : '-'}</Text>
                         </View>
-                        <View style={styles.row_icon_view}>
+                        {/* <View style={styles.row_icon_view}>
                             <Image resizeMode='contain' source={require("../assets/images/trip_item_location_icon.png")} style={styles.row_small_icon} />
                             <Text style={styles.row_icon_lb}>Pending from webside</Text>
-                        </View>
-                        <TouchableOpacity style={styles.row_credit_view} onPress = {() => this.navigate.navigate('CardList')}>
+                        </View> */}
+                        <TouchableOpacity style={styles.row_credit_view} onPress={() => this.navigate.navigate('CardList')}>
                             <View style={styles.row_icon_small_view}>
                                 <Image resizeMode='contain' source={require("../assets/images/wallet_icon.png")} style={styles.row_small_icon} />
                                 <Text style={styles.row_icon_lb}>Credit Card</Text>
                             </View>
                             <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon} />
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.row_credit_view} onPress = {() => this.verifyOnfidoIdentity()}>
-                            <View style={styles.row_icon_small_view}>
-                                <Image resizeMode='contain' source={require("../assets/images/wallet_icon.png")} style={styles.row_small_icon} />
-                                <Text style={styles.row_icon_lb}>Identity Verification</Text>
-                            </View>
-                            <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon} />
-                        </TouchableOpacity>
+
+                        {this.props.userdata.user.isGuide &&
+                            <TouchableOpacity style={styles.row_credit_view} onPress={() => this.getProfileData()}>
+                                <View style={styles.row_icon_small_view}>
+                                    <Image resizeMode='contain' source={require("../assets/images/wallet_icon.png")} style={styles.row_small_icon} />
+                                    <Text style={styles.row_icon_lb}>Identity Verification</Text>
+                                </View>
+                                <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon} />
+                            </TouchableOpacity>}
                     </View>
                 </View>
+                {this.showLoading()}
             </View>
         );
+    }
+
+    //API Call get user profile
+    getProfileData() {
+
+        this.setState({
+            isLoading: true
+        })
+
+        var params = {
+            userid: this.props.userdata.user.userid
+        }
+
+        profile(params)
+
+            .then(data => {
+
+                console.log('Profile data-->', data)
+
+                if (data) {
+                    this.verifyVerification(data)
+                } else {
+                    Alert.alert('Tourzan', "Server error. Please try again.")
+                }
+
+            })
+            .catch(err => {
+                this.setState({
+                    isLoading: false
+                })
+                alert(err)
+            })
+    }
+
+    verifyVerification(data) {
+
+        /*
+        From client:
+        there are two extra details. 
+        anything other than passed or consider from verification_result object should flag for contacting tourzan.
+
+        there is also a verification_status that will have clear or awaiting approval or withdrawn. 
+        anything other than awaiting approval or completed should be cause to send them to tourzan.
+        */
+
+        /*
+        User_profile
+
+        it has three new items.
+        is_verified = True/False
+        verification status
+        and
+        verification result
+
+        status will be in progress or waiting etc
+
+        We are running the report in the background. if it csomes back as fuzzy or rejected, you will no longer be verified and will have to redo your verification
+
+        when rejected it should say the following
+
+        Your verification results came up fuzzy we need you to resubmit proper information.
+
+        please reach out to us at contactus@tourzan.com to have your verification reset.
+        */
+
+        if (data.is_verified === true) {
+
+            let type = 0
+
+            this.props.navigation.navigate('VerificationResult', { type: type })
+
+            this.setState({
+                isLoading: false
+            })
+
+            return
+        }
+
+        if (data.verification_status) {
+
+            let type = 1
+
+            if (data.verification_status == 'progress') {
+                this.props.navigation.navigate('VerificationResult', { type: type })
+            } else if (data.verification_status == 'waiting') {
+                this.props.navigation.navigate('VerificationResult', { type: type })
+            }
+
+            this.setState({
+                isLoading: false
+            })
+
+            return
+        }
+
+        if (data.verification_result) {
+
+            let type = 2
+
+            if (data.verification_result == 'rejected') {
+                this.props.navigation.navigate('VerificationResult', { type: type })
+
+                this.setState({
+                    isLoading: false
+                })
+
+                return
+            }
+        }
+
+        this.generateOnfidoApplicantID(data)
+
+    }
+
+    generateOnfidoApplicantID(data) {
+
+        if (!data.first_name || !data.last_name) {
+            Alert.alert('Tourzan', "Please complete your first name and last name to continue.")
+            return
+        }
+
+        this.setState({
+            isLoading: true
+        })
+
+        var params = {
+            firstname: data.first_name,
+            lastname: data.last_name
+        }
+
+        createApplicant(params)
+
+            .then(data => {
+
+                console.log('GenerateOnfidoApplicantID data-->', data)
+
+                this.setState({
+                    isLoading: false
+                })
+
+                if (data) {
+
+                    if (data.id) {
+
+                        //Verify Guide Identity
+                        this.verifyOnfidoIdentity(data.id)
+
+                    } else {
+                        Alert.alert('Tourzan', "Server error. Please try again.")
+                    }
+                } else {
+                    Alert.alert('Tourzan', "Server error. Please try again.")
+                }
+
+            })
+            .catch(err => {
+                this.setState({
+                    isLoading: false
+                })
+                alert(err)
+            })
+    }
+
+    verifyOnfidoIdentity(applicationId) {
+
+        if (Platform.OS == 'ios') {
+            NativeModules.OnfidoSDK.startSDK(
+                applicationId,
+                (applicationId) => {
+                    Alert.alert('Tourzan', 'Verification complete')
+                },
+                (errorCause) => {
+                    this.setState({
+                        isLoading: false
+                    })
+                    Alert.alert('Tourzan', 'Verification not finished please try again.')
+                }
+            );
+
+        } else {
+            NativeModules.OnfidoSDK.startSDK(applicationId,
+                (applicantId) => {
+                    Alert.alert('Tourzan', 'Verification complete')
+                },
+                (errorCause) => {
+                    Alert.alert('Tourzan', 'Verification not finished please try again.')
+                }
+            );
+        }
     }
 }
 
@@ -220,11 +419,13 @@ const styles = StyleSheet.create({
         borderRadius: 40,
     },
     profile_name_text: {
+        marginTop: 8,
         fontSize: 17,
         color: 'black',
         fontWeight: 'bold',
     },
     profile_email_text: {
+        marginTop: 8,
         fontSize: 13,
         color: '#31dd73',
     },
@@ -254,8 +455,9 @@ const styles = StyleSheet.create({
         width: width,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
         backgroundColor: 'white',
+        borderBottomWidth: 1,
+        borderColor: '#c2c3c9',
     },
     row_lb: {
         color: '#6e7478',
@@ -298,8 +500,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: width - 60,
         height: 40,
-        backgroundColor: 'white',
-    }
+    },
+
+    // --- Activity --- //
+    loadingView: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'transparent'
+    },
 });
 
 const mapStateToProps = store => {

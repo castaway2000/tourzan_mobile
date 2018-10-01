@@ -13,7 +13,8 @@ import {
     View,
     Alert,
     TouchableOpacity,
-    Platform
+    Platform,
+    ActivityIndicator
 } from 'react-native';
 
 import { NavigationActions } from 'react-navigation'
@@ -23,7 +24,7 @@ import NavigationBar from '../components/NavigationBar'
 
 //Store
 import { connect } from 'react-redux';
-import {store} from '../store/index'
+import { store } from '../store/index'
 
 //Actions
 import { updatebooking } from '../actions/bookingActions'
@@ -31,6 +32,18 @@ import { updateuser } from '../actions/userActions'
 
 //Utilities
 import { Storage, isIphoneX } from '../global/Utilities';
+
+//Webservice
+import {
+    updateClockInOutStatus,
+    acceptTrip,
+    declineTrip,
+    cancelTrip,
+    updateTrip,
+    loginAndUpdateTrip,
+    getnearbyguides,
+    gettripstatus
+} from '../actions'
 
 var { width, height } = Dimensions.get('window');
 const backAction = NavigationActions.back({
@@ -56,15 +69,33 @@ class MoreScreen extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            isLoading: false,
+        };
         this.navigate = this.props.navigation;
     }
 
     onLogout() {
 
         Alert.alert("Tourzan", 'Are you sure you want to logout?', [{
-            
+
             text: 'OK', onPress: () => {
+
+                //Reset Trip
+                let storestate = store.getState()
+                storestate.tour.bookingdata.isTripInProgress = false
+                storestate.tour.bookingdata.tripid = 0
+                storestate.tour.bookingdata.isAutomatic = true
+
+                store.dispatch(
+                    updatebooking(storestate.tour.bookingdata)
+                );
+
+                if (this.props.userdata.user.isGuide) {
+                    this.updateClockOutStatusWS()
+                } else {
+
+                }
 
                 Storage.removeItem("currentuser");
 
@@ -75,6 +106,53 @@ class MoreScreen extends React.Component {
 
             }
         }], { cancelable: false });
+    }
+
+    //
+    updateClockOutStatusWS() {
+
+        this.setState({
+            isLoading: true
+        })
+
+        var { dispatch } = this.props;
+
+        var params = {
+            userid: this.props.userdata.user.userid,
+            status: 'clockout',
+            latitude: this.props.currentlocation.lat,
+            longitude: this.props.currentlocation.long,
+        }
+
+        updateClockInOutStatus(params)
+
+            .then(data => {
+
+                this.setState({
+                    isLoading: false
+                })
+
+                store.dispatch(
+                    updateuser(this.props.userdata)
+                );
+
+                Alert.alert('Tourzan', 'You are successfully clocked out')
+
+            })
+            .catch(err => {
+                this.setState({
+                    isLoading: false
+                })
+                alert(err)
+            })
+    }
+
+    showLoading() {
+        if (this.state.isLoading) {
+            return (
+                <ActivityIndicator color={'black'} size={'large'} style={styles.loadingView} />
+            );
+        }
     }
 
     render() {
@@ -120,6 +198,7 @@ class MoreScreen extends React.Component {
                         <Image resizeMode='contain' source={require("../assets/images/Logout_icon.png")} style={styles.row_icon} />
                     </TouchableOpacity>
                 </View>
+                {this.showLoading()}
             </View>
         );
     }
@@ -216,6 +295,26 @@ const styles = StyleSheet.create({
         height: 15,
         width: 15,
     },
+
+    // --- Activity --- //
+    loadingView: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'transparent'
+    },
 });
 
-export default MoreScreen;
+const mapStateToProps = store => {
+    return {
+        bookingdata: store.tour.bookingdata,
+        userdata: store.user.userdata,
+        currentlocation: store.location.currentlocation,
+    };
+};
+
+export default connect(mapStateToProps)(MoreScreen);

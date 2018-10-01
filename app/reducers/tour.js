@@ -5,12 +5,10 @@ const initialState = {
     bookingdata: {
         isTripInProgress: false,
         isAutomatic: true,
-        timeLimit: 18000, //second //5 hour
-        lat: 0.0,
-        long: 0.0,
+        timeLimit: 0, //second //5 hour
         bookedTime: moment().format('YYYY-MM-DD H:mm:ss'), //yyyy-MM-dd HH:mm:ss
         remainingTime: 0, //second
-        tripid: 5
+        tripid: 0,
     }
 };
 

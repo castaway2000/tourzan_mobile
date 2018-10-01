@@ -1,7 +1,7 @@
 import { API } from '../constants'
 
 //Store
-import {store} from '../store/index'
+import { store } from '../store/index'
 
 function getGuideList() {
 
