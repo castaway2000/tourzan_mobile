@@ -44,7 +44,8 @@ import * as Actions from '../actions';
 //Webservice
 import {
     updateGuideProfile,
-    updateTouristProfile
+    updateTouristProfile,
+    autocompleteCity
 } from '../actions'
 
 //Utilities
@@ -78,6 +79,7 @@ class UpdateProfileScreen extends React.Component {
             city: '',
             rate: '',
             overview: '',
+            selectedInterests: [],
         };
     }
 
@@ -266,6 +268,7 @@ class UpdateProfileScreen extends React.Component {
                             <TouchableOpacity onPress={this._showDateTimePicker}>
                                 <View pointerEvents="none" style={styles.row_icon_view}>
                                     {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
+
                                     <TextInput
                                         underlineColorAndroid='transparent'
                                         placeholder='Date of Birth'
@@ -273,6 +276,7 @@ class UpdateProfileScreen extends React.Component {
                                         secureTextEntry={false}
                                         value={this.state.dob}
                                         onChangeText={(text) => this.setDOB(text)} />
+
                                 </View>
                             </TouchableOpacity>
 
@@ -287,16 +291,20 @@ class UpdateProfileScreen extends React.Component {
                                     onChangeText={(text) => this.setProfession(text)} />
                             </View>}
 
-                            {this.props.userdata.user.isGuide && <View style={styles.row_icon_view}>
-                                {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
-                                <TextInput
-                                    underlineColorAndroid='transparent'
-                                    placeholder='City'
-                                    style={styles.row_icon_lb}
-                                    secureTextEntry={false}
-                                    value={this.state.city}
-                                    onChangeText={(text) => this.setCity(text)} />
-                            </View>}
+                            {this.props.userdata.user.isGuide && <TouchableOpacity onPress={() => { navigate('SelectCity', { cityDidSelected: this.cityDidSelected }) }}>
+                                <View pointerEvents="none" style={styles.row_icon_view}>
+                                    {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
+                                    <TextInput
+                                        underlineColorAndroid='transparent'
+                                        placeholder='City'
+                                        style={styles.row_icon_lb}
+                                        secureTextEntry={false}
+                                        value={this.state.city}
+                                        onChangeText={(text) => this.setCity(text)} />
+                                    <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon} />
+
+                                </View>
+                            </TouchableOpacity>}
 
                             {this.props.userdata.user.isGuide && <View style={styles.row_icon_view}>
                                 {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
@@ -309,6 +317,20 @@ class UpdateProfileScreen extends React.Component {
                                     value={this.state.rate}
                                     onChangeText={(text) => this.setRate(text)} />
                             </View>}
+
+                            <TouchableOpacity onPress={() => { navigate('SelectInterests', { interestsDidSelected: this.interestsDidSelected, selectedInterests: this.state.selectedInterests }) }}>
+                                <View pointerEvents="none" style={styles.row_icon_view}>
+                                    {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
+                                    <TextInput
+                                        underlineColorAndroid='transparent'
+                                        placeholder='Interests'
+                                        style={styles.row_icon_lb}
+                                        secureTextEntry={false}
+                                        value={this.state.selectedInterests.toString()}
+                                        onChangeText={(text) => this.setCity(text)} />
+                                    <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon} />
+                                </View>
+                            </TouchableOpacity>
 
                             <View style={styles.row_icon_view}>
                                 {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
@@ -408,6 +430,20 @@ class UpdateProfileScreen extends React.Component {
                 alert(err)
             })
     }
+
+    //Select city callback
+    cityDidSelected = (city) => {
+        console.log('cityDidSelected', city.description);
+
+        this.setState({ city: city.description })
+    };
+
+    //Select city callback
+    interestsDidSelected = (interests) => {
+        console.log('interests', interests);
+
+        this.setState({ selectedInterests: interests })
+    };
 }
 
 const styles = StyleSheet.create({

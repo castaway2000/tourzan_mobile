@@ -63,6 +63,8 @@ import CardListScreen from './containers/CardListScreen'
 
 import VerificationResultScreen from './containers/VerificationResultScreen'
 import UpdateProfileScreen from './containers/UpdateProfileScreen'
+import SelectCityScreen from './containers/SelectCityScreen'
+import SelectInterestsScreen from './containers/SelectInterestsScreen'
 
 var { width, height } = Dimensions.get('window');
 
@@ -173,11 +175,12 @@ const App = StackNavigator({
   ProfileCharRoom: { screen: ChatRoomScreen },
   ExtendTime: { screen: ExtendTimeScreen },
   CompleteTour: { screen: CompleteTourScreen },
-  CardList: {screen: CardListScreen},
-  VerificationResult: {screen: VerificationResultScreen},
-  UpdateProfile: {screen: UpdateProfileScreen}
-  
-  
+  CardList: { screen: CardListScreen },
+  VerificationResult: { screen: VerificationResultScreen },
+  UpdateProfile: { screen: UpdateProfileScreen },
+  SelectCity: { screen: SelectCityScreen },
+  SelectInterests: { screen: SelectInterestsScreen }
+
 }, {
     headerMode: 'screen'
   },
