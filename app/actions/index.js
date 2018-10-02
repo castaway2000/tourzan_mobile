@@ -3,6 +3,7 @@ import tours from './tours'
 import guide from './guide'
 import chats from './chats'
 import payment from './payment'
+import googleplace from './googleplace'
 
 module.exports = {
     ...user,
@@ -10,4 +11,5 @@ module.exports = {
     ...guide,
     ...chats,
     ...payment,
+    ...googleplace,
 }

@@ -41,8 +41,8 @@ class DashboardTapNavigator extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isTrips: true,
-            isGuides: false,
+            //isTrips: true,
+            isGuides: true,
             isTransaction: false,
         }
     }
@@ -53,7 +53,7 @@ class DashboardTapNavigator extends React.Component {
 
     onTrips() {
         this.setState({
-            isTrips: true,
+            //isTrips: true,
             isGuides: false,
             isTransaction: false,
         })
@@ -61,7 +61,7 @@ class DashboardTapNavigator extends React.Component {
 
     onGuides() {
         this.setState({
-            isTrips: false,
+            //isTrips: false,
             isGuides: true,
             isTransaction: false,
         })
@@ -69,7 +69,7 @@ class DashboardTapNavigator extends React.Component {
 
     onTransaction() {
         this.setState({
-            isTrips: false,
+            //isTrips: false,
             isGuides: false,
             isTransaction: true,
         })
@@ -77,11 +77,13 @@ class DashboardTapNavigator extends React.Component {
 
     showDashbaord() {
 
+        /*
         if (this.state.isTrips) {
             return (
                 < TripsScreen navigation={this.props.navigation} />
             )
-        }
+        }*/
+        
         if (this.state.isGuides) {
             return (
                 < GuidesScreen navigation={this.props.navigation} />
@@ -109,12 +111,12 @@ class DashboardTapNavigator extends React.Component {
                 </View>
                 <View style={styles.mainView}>
                     <View style={styles.tabbarView}>
-                        <TouchableWithoutFeedback onPress={() => this.onTrips()}>
+                        {/* <TouchableWithoutFeedback onPress={() => this.onTrips()}>
                             <View style={styles.tripsButtonView}>
                                 <Image resizeMode='contain' source={require('../../assets/images/trips_icon.png')} style={this.state.isTrips ? [styles.icon, { tintColor: 'white' }] : styles.icon} />
                                 <Text style={this.state.isTrips ? [styles.tabtxt, { color: 'white' }] : styles.tabtxt}>LIST OF TRIPS</Text>
                             </View>
-                        </TouchableWithoutFeedback>
+                        </TouchableWithoutFeedback> */}
                         <TouchableWithoutFeedback onPress={() => this.onGuides()}>
                             <View style={styles.tripsButtonView}>
                                 <Image resizeMode='contain' source={require('../../assets/images/guides_icon.png')} style={this.state.isGuides ? [styles.icon, { tintColor: 'white' }] : styles.icon} />
@@ -182,7 +184,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     tripsButtonView: {
-        width: width / 3,
+        width: width / 2,
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
@@ -206,7 +208,7 @@ const styles = StyleSheet.create({
         height: 36,
         width: 36,
         position: 'absolute',
-        right: 10,
+        right: 20,
         borderRadius: 18,
     },
     tab_listView: {

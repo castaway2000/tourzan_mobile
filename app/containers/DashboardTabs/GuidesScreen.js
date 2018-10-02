@@ -57,16 +57,17 @@ class GuideScreen extends React.Component {
         this.navigate = this.props.navigation;
     }
     componentDidMount() {
-        this.getGuideList()
+        this.getAllGuideList()
     }
 
-    getGuideList() {
+    getAllGuideList() {
+        
         getGuideList()
             .then(data => {
                 console.log('download GuideList ->', data)
-                this.setState({
-                    guideList: data,
-                })
+                // this.setState({
+                //     guideList: data,
+                // })
             })
             .catch(err => {
                 alert(err)
@@ -120,9 +121,9 @@ class GuideScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <TouchableOpacity style={styles.sortBtn}>
+                {/* <TouchableOpacity style={styles.sortBtn}>
                     <Image source={require('../../assets/images/ic_tab_settings.png')} style={styles.sortImg} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <ScrollView style={styles.mTableView}>
                     {this.showGuideList()}
                 </ScrollView>

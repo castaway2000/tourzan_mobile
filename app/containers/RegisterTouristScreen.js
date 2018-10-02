@@ -38,6 +38,14 @@ const backAction = NavigationActions.back({
     // key: 'WelcomeScreen'
 });
 
+const resetRootAction = NavigationActions.reset({
+    index: 0,
+    actions: [
+        NavigationActions.navigate({ routeName: 'Welcome' }),
+    ],
+    key: null
+});
+
 var isInterestExtend = false
 var isAttractions = false
 var isBoarading = false
@@ -104,18 +112,17 @@ class RegisterTouristScreen extends React.Component {
                     this.setState({
                         isLoading: false
                     })
-                    if (data.token != undefined) {
-                        console.log('success')
-                        const resetAction = NavigationActions.reset({
-                            index: 0,
-                            actions: [
-                                NavigationActions.navigate({ routeName: 'Home' })
-                            ]
-                        });
-                        this.props.navigation.dispatch(resetAction)
-                    }
-                    else {
-                        alert(data.error)
+
+                    if (data.token) {
+
+                        Alert.alert("Tourzan", "Registration Successful. Please Login.", [{
+                            text: 'OK', onPress: () => {
+                                this.props.navigation.dispatch(resetRootAction);
+                            }
+                        }],
+                            { cancelable: false });
+                    } else {
+                        Alert.alert("Tourzan", data.error)
                     }
                 })
                 .catch(err => {
@@ -315,7 +322,8 @@ class RegisterTouristScreen extends React.Component {
                             />
                             <View style={styles.line}></View>
                         </View>
-                        <View>
+
+                        {/* <View>
                             <TextInput
                                 ref={this.getNextInput4.bind(this)}
                                 placeholder="Address"
@@ -327,6 +335,7 @@ class RegisterTouristScreen extends React.Component {
                             />
                             <View style={styles.line}></View>
                         </View>
+
                         <View>
                             <TextInput
                                 ref={this.getNextInput5.bind(this)}
@@ -339,6 +348,7 @@ class RegisterTouristScreen extends React.Component {
                             />
                             <View style={styles.line}></View>
                         </View>
+
                         <View>
                             <TextInput
                                 ref={this.getNextInput6.bind(this)}
@@ -351,6 +361,7 @@ class RegisterTouristScreen extends React.Component {
                             />
                             <View style={styles.line}></View>
                         </View>
+
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity style={styles.intestsView} onPress={() => this.onClickExtendInterests()}>
                                 <Text style={styles.label}>Interests</Text>
@@ -385,7 +396,8 @@ class RegisterTouristScreen extends React.Component {
                                         </TouchableOpacity>
                                     </View> : null
                             }
-                        </View>
+                        </View> */}
+
                         <View style={styles.line}></View>
 
                         <ApplyButton name={'Sign Up'} onPress={() => this.onSignup()} style={styles.button_login} />
@@ -566,4 +578,3 @@ const styles = StyleSheet.create({
 });
 
 export default RegisterTouristScreen;
-

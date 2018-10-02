@@ -25,7 +25,7 @@ public class AppPackage implements ReactPackage {
             ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
 
-        modules.add(new com.reactnativesampleapp.OnfidoSDK(reactContext));
+        modules.add(new OnfidoSDK(reactContext));
 
         return modules;
     }

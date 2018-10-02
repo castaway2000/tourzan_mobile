@@ -33,7 +33,7 @@ import ApplyButton from '../../components/ApplyButton'
 import { Storage, isIphoneX } from '../../global/Utilities';
 
 //Webservice
-import { bookGuide, acceptTrip } from '../../actions'
+import { bookGuide, acceptTrip, brainTreeToken } from '../../actions'
 
 //Store
 import { store } from '../../store/index'
@@ -84,6 +84,7 @@ class BookingGuideSettingScreen extends React.Component {
             isCheckHoulryOrManual: false,
             isLoading: false,
             address: '',
+            braintreeClientToken: '',
         };
         this.navigate = this.props.navigation;
     }
@@ -100,24 +101,24 @@ class BookingGuideSettingScreen extends React.Component {
     }
 
     onPaymentSetting() {
-        
+
         //this.navigate.navigate('PaymentMethod');
 
         BraintreeDropIn.show({
-          clientToken: 'eyJ2ZXJzaW9uIjoyLCJhdXRob3JpemF0aW9uRmluZ2VycHJpbnQiOiI0NzA4ZmE1MmI0MzdhMzc3YzRhMzU0ZTVlYmY0NzU5OWQ2ZTEwOWY0NDEwODFiYTQwOWIzMmI3MGRlZDM4NjYwfGNyZWF0ZWRfYXQ9MjAxOC0wOC0yN1QxMjoxODowNy44MDIxOTA1NzYrMDAwMFx1MDAyNm1lcmNoYW50X2lkPTM0OHBrOWNnZjNiZ3l3MmJcdTAwMjZwdWJsaWNfa2V5PTJuMjQ3ZHY4OWJxOXZtcHIiLCJjb25maWdVcmwiOiJodHRwczovL2FwaS5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tOjQ0My9tZXJjaGFudHMvMzQ4cGs5Y2dmM2JneXcyYi9jbGllbnRfYXBpL3YxL2NvbmZpZ3VyYXRpb24iLCJjaGFsbGVuZ2VzIjpbXSwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiY2xpZW50QXBpVXJsIjoiaHR0cHM6Ly9hcGkuc2FuZGJveC5icmFpbnRyZWVnYXRld2F5LmNvbTo0NDMvbWVyY2hhbnRzLzM0OHBrOWNnZjNiZ3l3MmIvY2xpZW50X2FwaSIsImFzc2V0c1VybCI6Imh0dHBzOi8vYXNzZXRzLmJyYWludHJlZWdhdGV3YXkuY29tIiwiYXV0aFVybCI6Imh0dHBzOi8vYXV0aC52ZW5tby5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tIiwiYW5hbHl0aWNzIjp7InVybCI6Imh0dHBzOi8vb3JpZ2luLWFuYWx5dGljcy1zYW5kLnNhbmRib3guYnJhaW50cmVlLWFwaS5jb20vMzQ4cGs5Y2dmM2JneXcyYiJ9LCJ0aHJlZURTZWN1cmVFbmFibGVkIjp0cnVlLCJwYXlwYWxFbmFibGVkIjp0cnVlLCJwYXlwYWwiOnsiZGlzcGxheU5hbWUiOiJBY21lIFdpZGdldHMsIEx0ZC4gKFNhbmRib3gpIiwiY2xpZW50SWQiOm51bGwsInByaXZhY3lVcmwiOiJodHRwOi8vZXhhbXBsZS5jb20vcHAiLCJ1c2VyQWdyZWVtZW50VXJsIjoiaHR0cDovL2V4YW1wbGUuY29tL3RvcyIsImJhc2VVcmwiOiJodHRwczovL2Fzc2V0cy5icmFpbnRyZWVnYXRld2F5LmNvbSIsImFzc2V0c1VybCI6Imh0dHBzOi8vY2hlY2tvdXQucGF5cGFsLmNvbSIsImRpcmVjdEJhc2VVcmwiOm51bGwsImFsbG93SHR0cCI6dHJ1ZSwiZW52aXJvbm1lbnROb05ldHdvcmsiOnRydWUsImVudmlyb25tZW50Ijoib2ZmbGluZSIsInVudmV0dGVkTWVyY2hhbnQiOmZhbHNlLCJicmFpbnRyZWVDbGllbnRJZCI6Im1hc3RlcmNsaWVudDMiLCJiaWxsaW5nQWdyZWVtZW50c0VuYWJsZWQiOnRydWUsIm1lcmNoYW50QWNjb3VudElkIjoiYWNtZXdpZGdldHNsdGRzYW5kYm94IiwiY3VycmVuY3lJc29Db2RlIjoiVVNEIn0sIm1lcmNoYW50SWQiOiIzNDhwazljZ2YzYmd5dzJiIiwidmVubW8iOiJvZmYifQ==',
+            clientToken: '',
         })
-          .then(result => console.log(result))
-          .catch((error) => {
-            if (error.code === 'USER_CANCELLATION') {
-              // update your UI to handle cancellation
-            } else {
-              // update your UI to handle other errors
-            }
-          });
+            .then(result => console.log(result))
+            .catch((error) => {
+                if (error.code === 'USER_CANCELLATION') {
+                    // update your UI to handle cancellation
+                } else {
+                    // update your UI to handle other errors
+                }
+            });
 
         /*
         BraintreeDropIn.show({
-            clientToken: 'eyJ2ZXJzaW9uIjoyLCJhdXRob3JpemF0aW9uRmluZ2VycHJpbnQiOiI0NzA4ZmE1MmI0MzdhMzc3YzRhMzU0ZTVlYmY0NzU5OWQ2ZTEwOWY0NDEwODFiYTQwOWIzMmI3MGRlZDM4NjYwfGNyZWF0ZWRfYXQ9MjAxOC0wOC0yN1QxMjoxODowNy44MDIxOTA1NzYrMDAwMFx1MDAyNm1lcmNoYW50X2lkPTM0OHBrOWNnZjNiZ3l3MmJcdTAwMjZwdWJsaWNfa2V5PTJuMjQ3ZHY4OWJxOXZtcHIiLCJjb25maWdVcmwiOiJodHRwczovL2FwaS5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tOjQ0My9tZXJjaGFudHMvMzQ4cGs5Y2dmM2JneXcyYi9jbGllbnRfYXBpL3YxL2NvbmZpZ3VyYXRpb24iLCJjaGFsbGVuZ2VzIjpbXSwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiY2xpZW50QXBpVXJsIjoiaHR0cHM6Ly9hcGkuc2FuZGJveC5icmFpbnRyZWVnYXRld2F5LmNvbTo0NDMvbWVyY2hhbnRzLzM0OHBrOWNnZjNiZ3l3MmIvY2xpZW50X2FwaSIsImFzc2V0c1VybCI6Imh0dHBzOi8vYXNzZXRzLmJyYWludHJlZWdhdGV3YXkuY29tIiwiYXV0aFVybCI6Imh0dHBzOi8vYXV0aC52ZW5tby5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tIiwiYW5hbHl0aWNzIjp7InVybCI6Imh0dHBzOi8vb3JpZ2luLWFuYWx5dGljcy1zYW5kLnNhbmRib3guYnJhaW50cmVlLWFwaS5jb20vMzQ4cGs5Y2dmM2JneXcyYiJ9LCJ0aHJlZURTZWN1cmVFbmFibGVkIjp0cnVlLCJwYXlwYWxFbmFibGVkIjp0cnVlLCJwYXlwYWwiOnsiZGlzcGxheU5hbWUiOiJBY21lIFdpZGdldHMsIEx0ZC4gKFNhbmRib3gpIiwiY2xpZW50SWQiOm51bGwsInByaXZhY3lVcmwiOiJodHRwOi8vZXhhbXBsZS5jb20vcHAiLCJ1c2VyQWdyZWVtZW50VXJsIjoiaHR0cDovL2V4YW1wbGUuY29tL3RvcyIsImJhc2VVcmwiOiJodHRwczovL2Fzc2V0cy5icmFpbnRyZWVnYXRld2F5LmNvbSIsImFzc2V0c1VybCI6Imh0dHBzOi8vY2hlY2tvdXQucGF5cGFsLmNvbSIsImRpcmVjdEJhc2VVcmwiOm51bGwsImFsbG93SHR0cCI6dHJ1ZSwiZW52aXJvbm1lbnROb05ldHdvcmsiOnRydWUsImVudmlyb25tZW50Ijoib2ZmbGluZSIsInVudmV0dGVkTWVyY2hhbnQiOmZhbHNlLCJicmFpbnRyZWVDbGllbnRJZCI6Im1hc3RlcmNsaWVudDMiLCJiaWxsaW5nQWdyZWVtZW50c0VuYWJsZWQiOnRydWUsIm1lcmNoYW50QWNjb3VudElkIjoiYWNtZXdpZGdldHNsdGRzYW5kYm94IiwiY3VycmVuY3lJc29Db2RlIjoiVVNEIn0sIm1lcmNoYW50SWQiOiIzNDhwazljZ2YzYmd5dzJiIiwidmVubW8iOiJvZmYifQ==',
+            clientToken: 'token',
             threeDSecure: {
                 amount: 1000.0,
             },
@@ -188,16 +189,17 @@ class BookingGuideSettingScreen extends React.Component {
 
         var { dispatch } = this.props;
 
+
         //Get store data
         let storestate = store.getState()
-        storestate.tour.bookingdata.isTripInProgress = true
-        storestate.tour.bookingdata.isAutomatic = !this.state.isCheckHoulryOrManual
+        //storestate.tour.bookingdata.isTripInProgress = true
+        //storestate.tour.bookingdata.isAutomatic = !this.state.isCheckHoulryOrManual
 
-        storestate.tour.bookingdata.bookedTime = moment().format('YYYY-MM-DD H:mm:ss');
-
-        store.dispatch(
-            updatebooking(storestate.tour.bookingdata)
-        );
+        //storestate.tour.bookingdata.bookedTime = moment().format('YYYY-MM-DD H:mm:ss');
+        /*
+                store.dispatch(
+                    updatebooking(storestate.tour.bookingdata)
+                );*/
 
         var params = {
             token: this.props.userdata.token,
@@ -231,6 +233,33 @@ class BookingGuideSettingScreen extends React.Component {
                 )
 
                 console.log('bookGuideWS-->', data)
+
+            })
+            .catch(err => {
+                this.setState({
+                    isLoading: false
+                })
+                alert(err)
+            })
+    }
+
+    getBrainTreeTokenWS() {
+
+        this.setState({
+            isLoading: true
+        })
+
+        brainTreeToken()
+
+            .then(data => {
+
+                if (data.braintree_client_token) {
+                    this.setState({ braintreeClientToken: data.braintree_client_token })
+                }
+
+                this.setState({
+                    isLoading: false
+                })
 
             })
             .catch(err => {
@@ -392,7 +421,7 @@ class BookingGuideSettingScreen extends React.Component {
                                 <Image resizeMode='contain' source={require("../../assets/images/item_arrow.png")} style={styles.row_setting_btn_right_icon} />
                             </TouchableOpacity>
                         </View>
-                        <View style={styles.row_setting_view}>
+                        {/* <View style={styles.row_setting_view}>
                             <View style={styles.setting_text_view_term}>
                                 <Text style={styles.setting_text}>Time Limit Settings</Text>
                                 {this.state.isExtendTerm ? (
@@ -477,7 +506,7 @@ class BookingGuideSettingScreen extends React.Component {
                                             </TouchableOpacity>
                                         )
                                 )}
-                        </View>
+                        </View> 
                         <View style={styles.row_setting_view}>
                             <View style={styles.setting_text_view}>
                                 <Text style={styles.setting_text}>Time Limit</Text>
@@ -488,7 +517,7 @@ class BookingGuideSettingScreen extends React.Component {
                                 </View>
                                 <Image resizeMode='contain' source={require("../../assets/images/item_arrow.png")} style={styles.row_setting_btn_right_icon} />
                             </TouchableOpacity>
-                        </View>
+                        </View>*/}
                     </View>
                     <View style={styles.bottom_container}>
                         <ApplyButton onPress={() => this.onConfirm()} name={'Confirm'} style={styles.confirm_btn} />
@@ -567,7 +596,6 @@ const styles = StyleSheet.create({
     top_info_view: {
         backgroundColor: 'white',
         width: width,
-        height: 100,
         borderBottomWidth: 1,
         borderColor: '#ddd',
         flexDirection: 'column',
@@ -585,6 +613,7 @@ const styles = StyleSheet.create({
         marginRight: 30,
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom: 10
     },
     top_location_icon: {
         width: 10,

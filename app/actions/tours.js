@@ -293,11 +293,11 @@ function extendTime(params) {
 
 function gettripstatus(params) {
 
-    console.log('Get trip status trip API Params', params);
+    console.log('Get Trip Status by Trip Id API Params', params);
 
     var formData = new FormData();
 
-    formData.append('tripid', params.type);
+    formData.append('trip_id', params.tripid);
 
     return new Promise((resolve, reject) => {
         fetch(API.SERVER + 'v1/mobile/get_trip_status/', {
@@ -323,7 +323,7 @@ function gettripstatus(params) {
 
 function getnearbyguides(params) {
 
-    console.log('Get trip status trip API Params', params);
+    console.log('Get Near By Guides API Params', params);
 
     var formData = new FormData();
 
