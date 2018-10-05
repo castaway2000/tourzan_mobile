@@ -7,10 +7,12 @@ function brainTreeToken() {
 
     let storeState = store.getState()
 
-    console.log(' storeState.user.userdata.token', storeState.user.userdata.token)
+    let url = API.SERVER + API.VERSION + '/secret/payment-methods/get_braintree_token/'
+
+    console.log('GET Braintree Server Token API URL-->', url);
 
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/secret/payment-methods/get_braintree_token/', {
+        fetch(url, {
             method: 'GET',
             headers: {
                 'pragma': 'no-cache',
@@ -20,12 +22,12 @@ function brainTreeToken() {
         })
             .then((res) => res.json())
             .then(data => {
-                console.log('Braintree Server Token API Success->', data);
+                console.log('GET Braintree Server Token API Success->', data);
                 resolve(data);
             })
             .catch(err => {
                 reject(err)
-                console.log('Braintree Server Token API Error->', err);
+                console.log('GET Braintree Server Token API Error->', err);
             });
     })
 }
@@ -34,9 +36,9 @@ function brainTreeSaveNonce(params) {
 
     let storeState = store.getState()
 
-    console.log(' storeState.user.userdata.token', storeState.user.userdata.token)
+    let url = API.SERVER + API.VERSION + '/secret/payment-methods/create_payment_method/?payment_method_nonce=' + encodeURIComponent(params.paymentmethodnonce) + '&is_default=' + encodeURIComponent(params.isdefault)
 
-    let url = API.SERVER + 'v1/secret/payment-methods/create_payment_method/?payment_method_nonce=' + encodeURIComponent(params.paymentmethodnonce) + '&is_default=' + encodeURIComponent(params.isdefault)
+    console.log('Braintree Save Nonce API URL-->', url);
 
     return new Promise((resolve, reject) => {
         fetch(url, {
@@ -50,39 +52,12 @@ function brainTreeSaveNonce(params) {
         })
             .then((res) => res.json())
             .then(data => {
-                console.log('Braintree Save Token API Success->', data);
+                console.log('Braintree Save Nonce API Success->', data);
                 resolve(data);
             })
             .catch(err => {
                 reject(err)
-                console.log('Braintree Save Token API Error->', err);
-            });
-    })
-}
-
-function brainTreeToken() {
-
-    let storeState = store.getState()
-
-    console.log(' storeState.user.userdata.token', storeState.user.userdata.token)
-
-    return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/secret/payment-methods/get_braintree_token/', {
-            method: 'GET',
-            headers: {
-                'pragma': 'no-cache',
-                'Cache-Control': 'no-cache',
-                'Authorization': 'JWT ' + storeState.user.userdata.token,
-            },
-        })
-            .then((res) => res.json())
-            .then(data => {
-                console.log('Braintree Server Token API Success->', data);
-                resolve(data);
-            })
-            .catch(err => {
-                reject(err)
-                console.log('Braintree Server Token API Error->', err);
+                console.log('Braintree Save Nonce API Error->', err);
             });
     })
 }
@@ -91,10 +66,12 @@ function allPayments() {
 
     let storeState = store.getState()
 
-    console.log(' storeState.user.userdata.token', storeState.user.userdata.token)
+    let url = API.SERVER + API.VERSION + '/secret/payment-methods/'
+
+    console.log('All Braintree Payments Token API URL-->', url);
 
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/secret/payment-methods/', {
+        fetch(url, {
             method: 'GET',
             headers: {
                 'pragma': 'no-cache',
@@ -104,12 +81,12 @@ function allPayments() {
         })
             .then((res) => res.json())
             .then(data => {
-                console.log('Braintree Server Token API Success->', data);
+                console.log('All Braintree Payments Token API Success->', data);
                 resolve(data);
             })
             .catch(err => {
                 reject(err)
-                console.log('Braintree Server Token API Error->', err);
+                console.log('All Braintree Payments Token API Error->', err);
             });
     })
 }
@@ -118,12 +95,9 @@ function setDefaultCard(params) {
 
     let storeState = store.getState()
 
-    console.log(' storeState.user.userdata.token', storeState.user.userdata.token)
+    let url = API.SERVER + API.VERSION + '/secret/payment-methods/' + encodeURIComponent(params.paymentmethodid) + '/set_as_default_payment_method/'
 
-    let url = API.SERVER + 'v1/secret/payment-methods/' + encodeURIComponent(params.paymentmethodid) + '/set_as_default_payment_method/'
-
-    http://localhost:8002/api/v1/secret/payment-methods/payment_method_id/set_as_default_payment_method
-
+    console.log('Braintree Set Default Card API URL-->', url);
 
     return new Promise((resolve, reject) => {
         fetch(url, {
@@ -137,12 +111,12 @@ function setDefaultCard(params) {
         })
             .then((res) => res.json())
             .then(data => {
-                console.log('Braintree Save Token API Success->', data);
+                console.log('Braintree Set Default Card API Success->', data);
                 resolve(data);
             })
             .catch(err => {
                 reject(err)
-                console.log('Braintree Save Token API Error->', err);
+                console.log('Braintree Set Default Card API Error->', err);
             });
     })
 }
@@ -151,11 +125,9 @@ function deactiveteCard(params) {
 
     let storeState = store.getState()
 
-    console.log(' storeState.user.userdata.token', storeState.user.userdata.token)
+    let url = API.SERVER + API.VERSION + '/secret/payment-methods/' + encodeURIComponent(params.paymentmethodid) + '/deactivate_payment_method/'
 
-    let url = API.SERVER + 'v1/secret/payment-methods/' + encodeURIComponent(params.paymentmethodid) + '/deactivate_payment_method/'
-
-    console.log('deactivate url', url)
+    console.log('raintree Deactivete Card API URL-->', url);
 
     return new Promise((resolve, reject) => {
         fetch(url, {
@@ -169,12 +141,12 @@ function deactiveteCard(params) {
         })
             .then((res) => res.json())
             .then(data => {
-                console.log('Braintree Save Token API Success->', data);
+                console.log('Braintree Deactivete Card API Success->', data);
                 resolve(data);
             })
             .catch(err => {
                 reject(err)
-                console.log('Braintree Save Token API Error->', err);
+                console.log('Braintree Deactivete Card API Error->', err);
             });
     })
 }
@@ -183,16 +155,16 @@ function createApplicant(params) {
 
     let storeState = store.getState()
 
-    console.log(params)
-
     var formData = new FormData();
     formData.append('first_name', params.firstname)
     formData.append('last_name', params.lastname)
 
-    console.log('bookGuide param:', formData)
+    let url = API.ONFIDO_CREATE_APPLICANTS
+    console.log('Braintree Create Applicant API URL-->', url);
+    console.log('Braintree Create Applicant API PARAMS-->', formData);
 
     return new Promise((resolve, reject) => {
-        fetch('https://api.onfido.com/v2/applicants', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -204,11 +176,11 @@ function createApplicant(params) {
         })
             .then((res) => res.json())
             .then(data => {
-                console.log('Booking Guide API Success->', data);
+                console.log('Braintree Create Applicant API Success->', data);
                 resolve(data);
             })
             .catch(err => {
-                console.log('Booking Guide API Error->', err);
+                console.log('Braintree Create Applicant API Error->', err);
                 reject(err);
             });
     })

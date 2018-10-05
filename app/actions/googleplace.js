@@ -7,7 +7,7 @@ function autocompleteCity(params) {
 
     let storeState = store.getState()
 
-    var url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?'
+    var url = API.GOOGLE_PLACE_AUTOCOMPLETE
 
     let esc = encodeURIComponent
     let query = Object.keys(params)
@@ -16,7 +16,7 @@ function autocompleteCity(params) {
 
     url = url + query
 
-    console.log('deactivate url', url)
+    console.log('Autocomplete City API URL-->', url);
 
     return new Promise((resolve, reject) => {
         fetch(url, {
@@ -38,7 +38,6 @@ function autocompleteCity(params) {
             });
     })
 }
-
 
 module.exports = {
     autocompleteCity,

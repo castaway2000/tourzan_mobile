@@ -83,7 +83,7 @@ class DashboardTapNavigator extends React.Component {
                 < TripsScreen navigation={this.props.navigation} />
             )
         }*/
-        
+
         if (this.state.isGuides) {
             return (
                 < GuidesScreen navigation={this.props.navigation} />
@@ -106,7 +106,7 @@ class DashboardTapNavigator extends React.Component {
                 <View style={styles.headView}>
                     <Text style={styles.title}>DASHBOARD</Text>
                     <TouchableOpacity style={styles.personImgButton} onPress={() => { navigate('Profile') }}>
-                        <Image resizeMode='cover' source={{ uri: this.props.userdata.user.profilepicture }} style={styles.personImg} />
+                        <Image resizeMode='cover' source={this.props.userdata.user.profilepicture} style={styles.personImg} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.mainView}>

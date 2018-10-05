@@ -37,7 +37,6 @@ import { updateuser } from '../actions/userActions'
 import { Storage, isIphoneX } from '../global/Utilities';
 
 var { width, height } = Dimensions.get('window');
-var Toast = require('react-native-toast');
 
 const onButtonPress = () => { Alert.alert('Button has been pressed!'); };
 const backAction = NavigationActions.back({
@@ -59,7 +58,7 @@ class LoginTouristScreen extends React.Component {
         super(props);
         this.state = {
             isChecked: true,
-            username: 'test004', //Username105 - 123123qwe, tejas.g@3rddigital.com - Cred@123098, test010 - Test@123', fakeit - newpass1234
+            username: 'tourist201', //Username105 - 123123qwe, tejas.g@3rddigital.com - Cred@123098, test010 - Test@123', fakeit - newpass1234
             password: 'Test@123', //
             isLoading: false
         };
@@ -182,7 +181,7 @@ class LoginTouristScreen extends React.Component {
                             />
                             <View style={styles.line}></View>
                         </View>
-                        
+
                         <View>
                             <TextInput
                                 ref={this.getNextInput.bind(this)}

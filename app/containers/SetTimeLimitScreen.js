@@ -33,8 +33,6 @@ import {store} from '../store/index'
 //Actions
 import { updatebooking } from '../actions/bookingActions'
 
-var Toast = require('react-native-toast');
-
 var { width, height } = Dimensions.get('window');
 
 const backAction = NavigationActions.back({
@@ -62,7 +60,6 @@ class SetTimeLimitScreen extends React.Component {
 
         KeyEvent.onKeyDownListener((keyCode) => {
             console.log(`Key code pressed: key down`);
-            Toast.show.bind(null, 'key code pressed');
         });
 
     }

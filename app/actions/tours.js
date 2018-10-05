@@ -5,10 +5,12 @@ import { store } from '../store/index'
 
 function getTourList() {
 
-    console.log('Update Clock In Out status API Params', 'null');
+    let url = API.SERVER + API.VERSION + '/tours/'
+
+    console.log('Get Tour List API URL-->', url);
 
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/tours/', {
+        fetch(url, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -30,8 +32,6 @@ function getTourList() {
 
 function updateClockInOutStatus(params) {
 
-    console.log('Update Clock In Out status API Params', params);
-
     var formData = new FormData();
 
     formData.append('user_id', params.userid);
@@ -39,8 +39,13 @@ function updateClockInOutStatus(params) {
     formData.append('latitude', params.latitude);
     formData.append('longitude', params.longitude);
 
+    let url = API.SERVER + API.VERSION + '/mobile/update_trip/'
+
+    console.log('Update Clock In Out status API URL-->', url);
+    console.log('Update Clock In Out status API PARAMS-->', formData);
+
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/mobile/update_trip/', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -63,15 +68,18 @@ function updateClockInOutStatus(params) {
 
 function endTrip(params) {
 
-    console.log('END trip API Params', params);
-
     var formData = new FormData();
 
     formData.append('trip_id', params.tripid); //'guide'
     formData.append('status', params.status); //"ended"
 
+    let url = API.SERVER + API.VERSION + '/mobile/update_trip/'
+
+    console.log('END Trip API URL-->', url);
+    console.log('END Trip API PARAMS-->', formData);
+
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/mobile/update_trip/', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -82,19 +90,17 @@ function endTrip(params) {
         })
             .then((res) => res.json())
             .then(data => {
-                console.log('END trip API Success', data);
+                console.log('END Trip API Success', data);
                 resolve(data);
             })
             .catch(err => {
-                console.log('END trip  API Error', err);
+                console.log('END Trip API Error', err);
                 reject(err);
             });
     })
 }
 
 function cancelTrip(params) {
-
-    console.log('Cancel trip API Params', params);
 
     var formData = new FormData();
 
@@ -103,8 +109,13 @@ function cancelTrip(params) {
     formData.append('type', params.type);
     formData.append('trip_id', params.tripid);
 
+    let url = API.SERVER + API.VERSION + '/mobile/update_trip/'
+
+    console.log('Cancel Trip API URL-->', url);
+    console.log('Cancel Trip API PARAMS-->', formData);
+
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/mobile/update_trip/', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -115,19 +126,17 @@ function cancelTrip(params) {
         })
             .then((res) => res.json())
             .then(data => {
-                console.log('Cancel trip API Success', data);
+                console.log('Cancel Trip API Success', data);
                 resolve(data);
             })
             .catch(err => {
-                console.log('Cancel trip  API Error', err);
+                console.log('Cancel Trip API Error', err);
                 reject(err);
             });
     })
 }
 
 function declineTrip(params) {
-
-    console.log('Decline trip API Params', params);
 
     var formData = new FormData();
 
@@ -136,8 +145,13 @@ function declineTrip(params) {
     formData.append('status', params.status); //"isDeclined"
     formData.append('trip_id', params.tripid); //
 
+    let url = API.SERVER + API.VERSION + '/mobile/update_trip/'
+
+    console.log('Decline trip API URL-->', url);
+    console.log('Decline trip API PARAMS-->', formData);
+
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/mobile/update_trip/', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -152,15 +166,13 @@ function declineTrip(params) {
                 resolve(data);
             })
             .catch(err => {
-                console.log('Decline trip  API Error', err);
+                console.log('Decline trip API Error', err);
                 reject(err);
             });
     })
 }
 
 function acceptTrip(params) {
-
-    console.log('Accept trip API Params', params);
 
     var formData = new FormData();
 
@@ -170,8 +182,13 @@ function acceptTrip(params) {
     formData.append('type', params.type); //'automatic'
     formData.append('time', params.time); //'second'
 
+    let url = API.SERVER + API.VERSION + '/mobile/update_trip/'
+
+    console.log('Accept trip API URL-->', url);
+    console.log('Accept trip API PARAMS-->', formData);
+
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/mobile/update_trip/', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -194,8 +211,6 @@ function acceptTrip(params) {
 
 function updateTrip(params) {
 
-    console.log('Update trip API Params', params);
-
     var formData = new FormData();
 
     formData.append('status', params.status); //update_trip
@@ -203,8 +218,13 @@ function updateTrip(params) {
     formData.append('longitude', params.longitude);
     formData.append('trip_id', params.tripid);
 
+    let url = API.SERVER + API.VERSION + '/mobile/update_trip/'
+
+    console.log('Update trip  API URL-->', url);
+    console.log('Update trip  API PARAMS-->', formData);
+
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/mobile/update_trip/', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -227,8 +247,6 @@ function updateTrip(params) {
 
 function loginAndUpdateTrip(params) {
 
-    console.log('Login and Update API Params', params);
-
     var formData = new FormData();
 
     formData.append('status', params.status); //login
@@ -237,8 +255,13 @@ function loginAndUpdateTrip(params) {
     formData.append('user_id', params.userid);
     formData.append('device_token', params.devicetoken);
 
+    let url = API.SERVER + API.VERSION + '/mobile/update_trip/'
+
+    console.log('Login and Update API URL-->', url);
+    console.log('Login and Update API PARAMS-->', formData);
+
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/mobile/update_trip/', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -261,16 +284,19 @@ function loginAndUpdateTrip(params) {
 
 function extendTime(params) {
 
-    console.log('Extend trip API Params', params);
-
     var formData = new FormData();
 
     formData.append('trip_id', params.tripid); //''
     formData.append('add_time', params.addtime); //in seconds
     formData.append('requester_id', params.requesterid); //
 
+    let url = API.SERVER + API.VERSION + '/mobile/extend_time/'
+
+    console.log('Extend Trip API URL-->', url);
+    console.log('Extend Trip API PARAMS-->', formData);
+
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/mobile/extend_time/', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -281,11 +307,11 @@ function extendTime(params) {
         })
             .then((res) => res.json())
             .then(data => {
-                console.log('Extend trip API Success', data);
+                console.log('Extend Trip API Success', data);
                 resolve(data);
             })
             .catch(err => {
-                console.log('Extend trip  API Error', err);
+                console.log('Extend Trip API Error', err);
                 reject(err);
             });
     })
@@ -293,14 +319,17 @@ function extendTime(params) {
 
 function gettripstatus(params) {
 
-    console.log('Get Trip Status by Trip Id API Params', params);
-
     var formData = new FormData();
 
     formData.append('trip_id', params.tripid);
 
+    let url = API.SERVER + API.VERSION + '/mobile/get_trip_status/'
+
+    console.log('Get Trip Status API URL-->', url);
+    console.log('Get Trip Status API PARAMS-->', formData);
+
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/mobile/get_trip_status/', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -311,19 +340,17 @@ function gettripstatus(params) {
         })
             .then((res) => res.json())
             .then(data => {
-                console.log('Extend trip API Success', data);
+                console.log('Get Trip Status API Success', data);
                 resolve(data);
             })
             .catch(err => {
-                console.log('Extend trip  API Error', err);
+                console.log('Get Trip Status API Error', err);
                 reject(err);
             });
     })
 }
 
 function getnearbyguides(params) {
-
-    console.log('Get Near By Guides API Params', params);
 
     var formData = new FormData();
 
@@ -333,8 +360,13 @@ function getnearbyguides(params) {
     formData.append('units', params.units); //mi or km for miles or kilometers
     formData.append('range', params.range); //10
 
+    let url = API.SERVER + API.VERSION + '/mobile/get_nearby_guides/'
+
+    console.log('Get Nearby Guides API URL-->', url);
+    console.log('Get Nearby Guides API PARAMS-->', formData);
+
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/mobile/get_nearby_guides/', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -345,11 +377,11 @@ function getnearbyguides(params) {
         })
             .then((res) => res.json())
             .then(data => {
-                console.log('Extend trip API Success', data);
+                console.log('Get Nearby Guides API Success', data);
                 resolve(data);
             })
             .catch(err => {
-                console.log('Extend trip  API Error', err);
+                console.log('Get Nearby Guides API Error', err);
                 reject(err);
             });
     })

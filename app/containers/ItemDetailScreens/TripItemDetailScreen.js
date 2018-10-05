@@ -121,7 +121,7 @@ class TripItemDetailScreen extends React.Component {
                               <View style={styles.scrollview_container}>
                                     <View style={styles.bottom_container}>
                                           <View style={styles.profile_infoView}>
-                                                <Image resizeMode='cover' source={require("../../assets/images/guide_avatar.png")} style={styles.avatar_img} />
+                                                <Image resizeMode='cover' source={require("../../assets/images/defaultavatar.png")} style={styles.avatar_img} />
                                                 <View style={styles.info_view}>
                                                       <Text style={styles.name_text}>Glen Hale</Text>
                                                       <View style={styles.location_view}>

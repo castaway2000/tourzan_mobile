@@ -65,6 +65,8 @@ import VerificationResultScreen from './containers/VerificationResultScreen'
 import UpdateProfileScreen from './containers/UpdateProfileScreen'
 import SelectCityScreen from './containers/SelectCityScreen'
 import SelectInterestsScreen from './containers/SelectInterestsScreen'
+import WriteFeedbackScreen from './containers/WriteFeedbackScreen'
+
 
 var { width, height } = Dimensions.get('window');
 
@@ -179,7 +181,8 @@ const App = StackNavigator({
   VerificationResult: { screen: VerificationResultScreen },
   UpdateProfile: { screen: UpdateProfileScreen },
   SelectCity: { screen: SelectCityScreen },
-  SelectInterests: { screen: SelectInterestsScreen }
+  SelectInterests: { screen: SelectInterestsScreen },
+  WriteFeedback: { screen: WriteFeedbackScreen }
 
 }, {
     headerMode: 'screen'

@@ -31,7 +31,7 @@ import firebaseClient from "../../global/Firebase/FirebaseClient";
 
 //Store
 import { connect } from 'react-redux';
-import {store} from '../../store/index'
+import { store } from '../../store/index'
 
 //Actions
 import { updatebooking } from '../../actions/bookingActions'
@@ -39,6 +39,19 @@ import { updateuser } from '../../actions/userActions'
 
 //Utilities
 import { Storage, isIphoneX } from '../../global/Utilities';
+
+//Webservice
+import {
+    previousGuideList
+} from '../../actions'
+
+const resetRootAction = NavigationActions.reset({
+    index: 0,
+    actions: [
+        NavigationActions.navigate({ routeName: 'Welcome' }),
+    ],
+    key: null
+});
 
 var { width, height } = Dimensions.get('window');
 
@@ -57,22 +70,43 @@ class GuideScreen extends React.Component {
         this.navigate = this.props.navigation;
     }
     componentDidMount() {
-        this.getAllGuideList()
+        this.previousGuideListWS()
     }
 
-    getAllGuideList() {
-        
-        getGuideList()
+    previousGuideListWS() {
+
+        previousGuideList()
             .then(data => {
-                console.log('download GuideList ->', data)
                 // this.setState({
                 //     guideList: data,
                 // })
+                // if (data.detail == 'Signature has expired.') {
+                //     Alert.alert("Tourzan", 'Session expired. Please login again.', [{
+                //         text: 'OK', onPress: () => {
+                //               console.log('this.props.navigation',this.props.navigation)
+                //         }
+                //     }], { cancelable: false });
+                //     return
+                // }
+
+                for (let i = 0; i < data.length; i++) {
+                    const order = data[i];
+
+                    if (order.reviews) {
+                        order.reviews.user_guide.guide_rating = order.reviews.guide_rating ? order.reviews.guide_rating : '0'
+                        order.reviews.user_guide.guide_feedback_text = order.reviews.guide_feedback_text ? order.reviews.guide_feedback_text : ''
+                        order.reviews.user_guide.fees_total = order.fees_total ? order.fees_total : 'Not available'
+
+                        this.state.guideList.push(order.reviews.user_guide)
+                    }
+                }
+
+                this.setState({ guideList: this.state.guideList })
+
             })
             .catch(err => {
                 alert(err)
             })
-
     }
 
     // function for ratingview
@@ -82,7 +116,11 @@ class GuideScreen extends React.Component {
 
     pressRow(rowData) {
         // this.navigate.navigate('GuideItemDetail');
-        this.props.navigation.navigate('GuideItemDetail', { guideData: rowData });
+        // this.props.navigation.navigate('GuideItemDetail', { guideData: rowData });
+
+        const { navigate } = this.props.navigation;
+
+        navigate('Profile', { userid: rowData.pk })
     }
 
     showGuideList() {
@@ -95,18 +133,20 @@ class GuideScreen extends React.Component {
                         key={index}>
                         <View style={styles.row}>
                             <View style={styles.avatar_view}>
-                                <Image resizeMode='cover' source={ rowData.header_image ? { uri: rowData.header_image } : require("../../assets/images/defaultavatar.png") } style={styles.avatar_img} defaultSource={require('../../assets/images/user_placeholder.png')} />
+                                <Image resizeMode='cover' source={rowData.guide_profile_image ? { uri: rowData.guide_profile_image } : require("../../assets/images/defaultavatar.png")} style={styles.avatar_img} defaultSource={require('../../assets/images/user_placeholder.png')} />
                                 <View style={styles.rate_view} pointerEvents="none">
-                                    <Text style={styles.rating_text}>Rating: {rowData.rating}</Text>
+                                    <Text style={styles.rating_text}>Rating: {rowData.guide_rating}</Text>
                                 </View>
                             </View>
                             <View style={styles.info_view}>
-                                <Text style={styles.name_text}>{rowData.name}</Text>
+
+                                <Text style={styles.name_text}>{rowData.username}</Text>
                                 <View style={styles.location_view}>
-                                    <Image resizeMode='contain' source={require("../../assets/images/location_maps.png")} style={styles.location_icon} />
-                                    <Text style={styles.location_text}>Lake Elta</Text>
+                                    {/* <Image resizeMode='contain' source={require("../../assets/images/banknote.png")} style={styles.location_icon} /> */}
+                                    {/* <Text style={styles.location_text}>Amount: </Text> */}
+                                    <Text style={styles.location_text}>${rowData.fees_total}</Text>
                                 </View>
-                                <Text style={styles.description_text} numberOfLines={3}>{rowData.overview}</Text>
+                                <Text style={styles.description_text} numberOfLines={3}>{rowData.guide_feedback_text}</Text>
                             </View>
                             <TouchableOpacity style={styles.arrow_view}>
                                 <Image resizeMode='contain' source={require("../../assets/images/item_arrow.png")} style={styles.arrow_btn} />
@@ -222,7 +262,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     location_text: {
-        marginLeft: 5,
+
         fontSize: 12,
         color: Colors.color999,
         textAlign: 'left',

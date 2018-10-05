@@ -103,19 +103,23 @@ class SelectInterestsScreen extends React.Component {
         }, 500);
     }
 
-    interestDidSelected(interest) {
+    interestDidSelected(interest, index) {
 
         let { selectedInterests } = this.props.navigation.state.params
 
-        console.log('interest', interest)
+        console.log('interest', interest, index)
 
         let i = selectedInterests.indexOf(interest.text)
 
         if (i > -1) {
             selectedInterests.splice(i, 1);
+            this.state.interests[index].isselected = false
         } else {
             selectedInterests.push(interest.text)
+            this.state.interests[index].isselected = true
         }
+
+        this.setState({ interests: this.state.interests })
     }
 
     onDone() {
@@ -138,7 +142,7 @@ class SelectInterestsScreen extends React.Component {
                     <Text style={styles.centerText}>Search interests</Text>
                     <View style={styles.rightView}>
                         <TouchableOpacity onPress={() => this.onDone()}>
-                            <Text style={styles.rightView}>DONE</Text>
+                            <Text style={styles.rightViewText}>DONE</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -157,16 +161,18 @@ class SelectInterestsScreen extends React.Component {
                         {this.state.interests.length > 0 &&
                             <FlatList
                                 data={this.state.interests}
+                                extraData={this.state}
                                 renderItem={({ item, index }) => (
-                                    <TouchableOpacity onPress={() => this.interestDidSelected(item)}>
+                                    <TouchableOpacity onPress={() => this.interestDidSelected(item, index)}>
                                         <View style={styles.itemContainer}>
                                             <View style={styles.item}>
                                                 <Text style={styles.celltext}>{item.text}</Text>
                                             </View>
+                                            {item.isselected && <Image resizeMode='contain' source={require("../assets/images/checked_green_badge.png")} style={styles.row_icon} />}
                                         </View>
+
                                     </TouchableOpacity>
                                 )}
-                                keyExtractor={item => item.id}
                                 numColumns={1} />}
 
                         {this.state.interests.length < 1 &&
@@ -201,13 +207,28 @@ class SelectInterestsScreen extends React.Component {
                             [
                                 {
                                     "text": this.state.searchText,
-                                    "id": null
+                                    "id": 0
                                 }
                             ]
-                        , message: 'No interests found.'
                     })
-
                 }
+
+                let { selectedInterests } = this.props.navigation.state.params
+
+                for (let i = 0; i < this.state.interests.length; i++) {
+                    const e = this.state.interests[i];
+
+                    for (let j = 0; j < selectedInterests.length; j++) {
+                        const f = selectedInterests[j];
+
+                        if (e.text == f) {
+                            e.isselected = true
+                        }
+                    }
+                }
+
+                this.setState({ interests: this.state.interests })
+
             })
             .catch(err => {
                 alert(err)
@@ -257,6 +278,11 @@ const styles = StyleSheet.create({
     rightView: {
         marginRight: 8,
         height: 20,
+    },
+
+    rightViewText: {
+        marginRight: 8,
+        height: 20,
         color: 'white',
         fontWeight: 'bold',
         fontSize: 14,
@@ -272,7 +298,6 @@ const styles = StyleSheet.create({
 
     // --- search --- //
     searchBarbg: {
-        fontSize: 14,
         height: 44,
         borderWidth: 4,
         borderColor: '#E4E4E4',
@@ -302,7 +327,13 @@ const styles = StyleSheet.create({
     itemContainer: {
         padding: 5,
         borderBottomWidth: 0.5,
-        borderColor: 'lightgray'
+        borderColor: 'lightgray',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    item: {
+        backgroundColor: 'white',
+        flex: 1,
     },
     listview: {
         backgroundColor: 'white',
@@ -313,7 +344,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginTop: 12,
         paddingLeft: 4,
-
+    },
+    row_icon: {
+        height: 15,
+        width: 15,
     },
 });
 

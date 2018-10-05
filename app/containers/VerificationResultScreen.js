@@ -52,6 +52,7 @@ import {
 
 //Utilities
 import { isIphoneX } from '../global/Utilities';
+import { API } from '../constants'
 
 //FCM
 import FCM, { NotificationActionType } from "react-native-fcm";
@@ -102,7 +103,7 @@ class VerificationResultScreen extends React.Component {
         }
     }
 
-    showMessage(){
+    showMessage() {
 
         const { type } = this.props.navigation.state.params;
 
@@ -116,9 +117,9 @@ class VerificationResultScreen extends React.Component {
             );
         } else if (type == 2) {
             return (
-                <Text style={styles.paragraph}>Your verification results came up fuzzy we need you to resubmit proper information. {"\n"}{"\n"}Please reach out to us at <Text onPress={ ()=> Linking.openURL('mailto:contactus@tourzan.com')} style={{color: 'blue'}}>contactus@tourzan.com</Text> to have your verification reset.</Text>
+                <Text style={styles.paragraph}>Your verification results came up fuzzy we need you to resubmit proper information. {"\n"}{"\n"}Please reach out to us at <Text onPress={() => Linking.openURL(API.CONTACT_US_EMAIL)} style={{ color: 'blue' }}>{API.CONTACT_US_EMAIL}</Text> to have your verification reset.</Text>
             );
-        }   
+        }
     }
 
     render() {
@@ -137,7 +138,7 @@ class VerificationResultScreen extends React.Component {
                 </View>
 
                 <View style={styles.paragraphView}>
-                {this.showMessage()}
+                    {this.showMessage()}
                 </View>
 
                 <View style={styles.main_view}>
@@ -231,8 +232,8 @@ const styles = StyleSheet.create({
 
     paragraphView: {
         //justifyContent: 'center',
-         alignItems: 'center',
-         flex:1
+        alignItems: 'center',
+        flex: 1
     },
 
     paragraph: {
@@ -242,7 +243,7 @@ const styles = StyleSheet.create({
         //textAlign: 'center',
         color: '#34495e',
         justifyContent: 'center',
-      },
+    },
 
 
     // --- Activity --- //

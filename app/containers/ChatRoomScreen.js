@@ -63,7 +63,7 @@ class ChatRoomScreen extends React.Component {
                 user: {
                     _id: element.user,
                     name: '',
-                    avatar: 'https://saberapplications.com/static/img/Tourzan-transparant.png',
+                    avatar: 'https://testing.tourzan.com/static/img/Tourzan-transparant.png',
                 },
             }
 
@@ -77,7 +77,7 @@ class ChatRoomScreen extends React.Component {
 
     componentDidMount() {
 
-        this.socket = new WebSocket('wss://saberapplications.com/ws/chat/3279c0ef-4b1b-4319-9baf-150f475d62b4/');
+        this.socket = new WebSocket('wss://testing.tourzan.com/ws/chat/3279c0ef-4b1b-4319-9baf-150f475d62b4/');
         this.socket.binaryType = 'blob'
 
         console.log(this.socket)

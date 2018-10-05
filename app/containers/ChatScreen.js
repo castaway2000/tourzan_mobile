@@ -106,7 +106,7 @@ class ChatScreen extends React.Component {
     
                     for (let i = 0; i < data.length; i++) {
     
-                        data[i].pic = require("../assets/images/chat_avatar.png")
+                        data[i].pic = require("../assets/images/defaultavatar.png")
     
                         this.loadUserNameProfilePics(data, i)
                     }
@@ -147,7 +147,7 @@ class ChatScreen extends React.Component {
                 if (data.pic) {
                     newArray[index].pic = {uri: data.pic}
                 } else {
-                    newArray[index].pic = require("../assets/images/chat_avatar.png")
+                    newArray[index].pic = require("../assets/images/defaultavatar.png")
                 }
 
                 this.setState({

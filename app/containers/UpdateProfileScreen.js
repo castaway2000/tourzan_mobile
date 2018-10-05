@@ -57,6 +57,8 @@ const backAction = NavigationActions.back({
 
 });
 
+import { TagSelect } from 'react-native-tag-select';
+
 class UpdateProfileScreen extends React.Component {
 
     //#region Constractors
@@ -71,7 +73,6 @@ class UpdateProfileScreen extends React.Component {
             isLoading: false,
             isDateTimePickerVisible: false,
             dobDate: new Date(),
-
             firstname: '',
             lastname: '',
             dob: '',
@@ -233,7 +234,7 @@ class UpdateProfileScreen extends React.Component {
                     <Text style={styles.centerText}>Update Profile</Text>
                     <View style={styles.rightView}>
                         <TouchableOpacity onPress={() => this.onUpdateProfile()}>
-                            <Text style={styles.rightView}>UPDATE</Text>
+                            <Text style={styles.rightViewtext}>UPDATE</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -319,16 +320,36 @@ class UpdateProfileScreen extends React.Component {
                             </View>}
 
                             <TouchableOpacity onPress={() => { navigate('SelectInterests', { interestsDidSelected: this.interestsDidSelected, selectedInterests: this.state.selectedInterests }) }}>
-                                <View pointerEvents="none" style={styles.row_icon_view}>
+                                <View pointerEvents="none" style={styles.row_icon_tag_view}>
                                     {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
-                                    <TextInput
+
+
+                                    {(this.state.selectedInterests.length < 1) && <TextInput
                                         underlineColorAndroid='transparent'
                                         placeholder='Interests'
                                         style={styles.row_icon_lb}
                                         secureTextEntry={false}
                                         value={this.state.selectedInterests.toString()}
-                                        onChangeText={(text) => this.setCity(text)} />
+                                        onChangeText={(text) => this.setCity(text)} />}
+
+                                    {(this.state.selectedInterests.length > 0) && <View style={styles.tag_container_view}>
+                                        <TagSelect
+                                            data={this.state.selectedInterests}
+                                            itemStyle={styles.item}
+                                            itemLabelStyle={styles.label}
+                                            itemStyleSelected={styles.itemSelected}
+                                            itemLabelStyleSelected={styles.labelSelected}
+                                            max={3}
+                                            ref={(tag) => {
+                                                this.tag = tag;
+                                            }}
+                                            onMaxError={() => {
+                                                Alert.alert('Ops', 'Max reached');
+                                            }} />
+                                    </View>}
+
                                     <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon} />
+
                                 </View>
                             </TouchableOpacity>
 
@@ -403,7 +424,7 @@ class UpdateProfileScreen extends React.Component {
 
         var { dispatch } = this.props;
 
-        let age = moment().diff(date, 'years', false);
+        let age = moment().diff(this.state.dobDate, 'years', false);
 
         var params = {
             'about': this.state.overview,
@@ -488,10 +509,12 @@ const styles = StyleSheet.create({
     rightView: {
         marginRight: 8,
         height: 20,
+    },
+    rightViewtext: {
         color: 'white',
-        fontWeight: 'bold',
-        fontSize: 14,
         textAlign: 'center',
+        fontSize: 17,
+        fontWeight: 'bold',
     },
 
     // --- Activity --- //
@@ -529,6 +552,16 @@ const styles = StyleSheet.create({
         borderColor: '#c2c3c9',
         backgroundColor: 'white',
     },
+    row_icon_tag_view: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 30,
+        width: width,
+        borderBottomWidth: 1,
+        borderColor: '#c2c3c9',
+        minHeight: 50,
+        backgroundColor: 'white',
+    },
     row_icon_lb: {
         marginLeft: 10,
         color: '#6e7478',
@@ -543,6 +576,26 @@ const styles = StyleSheet.create({
     row_small_icon: {
         width: 15,
         height: 15,
+    },
+
+    // --- Tags --- //
+    tag_container_view: {
+        marginTop: 8,
+        flex: 1
+    },
+    item: {
+        borderWidth: 1,
+        borderColor: Colors.main,
+        backgroundColor: Colors.main,
+    },
+    label: {
+        color: '#ffffff'
+    },
+    itemSelected: {
+        backgroundColor: '#333',
+    },
+    labelSelected: {
+        color: '#FFF',
     },
 });
 
