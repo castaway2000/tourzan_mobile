@@ -24,7 +24,7 @@ import NavigationBar from '../components/NavigationBar'
 
 //Store
 import { connect } from 'react-redux';
-import {store} from '../store/index'
+import { store } from '../store/index'
 
 //Actions
 import { updatebooking } from '../actions/bookingActions'
@@ -117,7 +117,7 @@ class MarketplaceScreen extends React.Component {
                 underlayColor='#ddd'>
                 <View style={styles.row}>
                     <View style={styles.avatar_view}>
-                        <Image resizeMode='cover' source={require("../assets/images/guide_avatar.png")} style={styles.avatar_img} />
+                        <Image resizeMode='cover' source={require("../assets/images/defaultavatar.png")} style={styles.avatar_img} />
                         <View style={styles.rate_view} pointerEvents="none">
                             <Rating ratingCount={5} imageSize={8} onFinishRating={this.ratingCompleted} />
                             <Text style={styles.rating_text}>(12)</Text>
@@ -147,7 +147,7 @@ class MarketplaceScreen extends React.Component {
                     </View>
                     <Text style={styles.centerText}>Marketplace</Text>
                     <TouchableOpacity onPress={() => { navigate('Profile') }}>
-                        <Image resizeMode='cover' source={{ uri: this.props.userdata.user.profilepicture }} style={styles.rightView} />
+                        <Image resizeMode='cover' source={this.props.userdata.user.profilepicture} style={styles.rightView} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.list_view_container}>

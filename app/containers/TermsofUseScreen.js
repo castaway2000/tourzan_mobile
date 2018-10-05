@@ -23,6 +23,7 @@ import Checkbox from 'react-native-custom-checkbox'
 import { Colors } from '../constants'
 import NavigationBar from '../components/NavigationBar'
 import {isIphoneX} from "../global/Utilities"
+import { API } from '../constants'
 
 var { width, height } = Dimensions.get('window');
 const backAction = NavigationActions.back({
@@ -78,7 +79,7 @@ class TermsofUseScreen extends Component {
                         onLoad={() => this.hideSpinner()}
                         source={{
                             uri:
-                                'https://api.tourzan.com/en/tos/'
+                                API.TOC_LINK
                         }}
                     />
                 </View>

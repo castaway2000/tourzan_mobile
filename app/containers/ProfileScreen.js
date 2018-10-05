@@ -72,6 +72,7 @@ class ProfileScreen extends React.Component {
         var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
         });
+
         this.state = {
 
             // for listview
@@ -130,11 +131,11 @@ class ProfileScreen extends React.Component {
     pressRow(rowData) {
         const { navigate } = this.props.navigation;
 
-        var newDs = [];
-        newDs = this.state.ds.slice();
-        this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(newDs)
-        })
+        // var newDs = [];
+        // newDs = this.state.ds.slice();
+        // this.setState({
+        //     dataSource: this.state.dataSource.cloneWithRows(newDs)
+        // })
     }
 
     onIntestExtention() {
@@ -186,27 +187,14 @@ class ProfileScreen extends React.Component {
         }
     }
 
-    isMyProfile = () => {
-
-        var { params } = this.props.navigation.state
-
-        if (params.userid) {
-
-            return (params.userid == userid)
-
-        } else {
-
-            return false
-        }
-    }
-
     //#endregion
-    getChatDate = (date) => {
+    getDateString = (date) => {
 
         let chatdate = moment(date)
 
         var isPast = moment(chatdate);
 
+        //2018-10-04T13:10:10.716Z
         if (moment(chatdate).isSame(moment(), 'day')) {
             return chatdate.format('hh:mm A')
         } else {
@@ -233,6 +221,8 @@ class ProfileScreen extends React.Component {
     }
 
     renderRow(rowData) {
+
+        let isGuide = this.props.userdata.user.isGuide
         return (
             <TouchableHighlight style={styles.row_view}
                 onPress={() => this.pressRow(rowData)}
@@ -244,11 +234,11 @@ class ProfileScreen extends React.Component {
                     <View style={styles.info_view}>
                         <View style={styles.list_info_location_view}>
                             <Text style={styles.list_info_name_text}>{rowData.fields.reviewers_name}</Text>
-                            <Text style={styles.list_info_time_text}>{this.getChatDate(rowData.fields.tourist_review_updated)}</Text>
+                            <Text style={styles.list_info_time_text}>{this.getDateString(isGuide ? rowData.fields.tourist_review_created : rowData.fields.guide_review_created)}</Text>
                         </View>
-                        <Text style={styles.description_text}>{rowData.fields.guide_feedback_text}</Text>
+                        <Text style={styles.description_text}>{isGuide ? rowData.fields.tourist_feedback_text : rowData.fields.guide_feedback_text}</Text>
                         <View style={styles.rate_view} pointerEvents="none">
-                            {this._showRatingViewList(parseFloat(rowData.fields.tourist_rating))}
+                            {this._showRatingViewList(parseFloat(isGuide ? rowData.fields.tourist_rating : rowData.fields.guide_rating))}
                         </View>
                     </View>
                 </View>
@@ -261,7 +251,7 @@ class ProfileScreen extends React.Component {
 
         if (!this.state.profileData) {
             return (
-                <Image resizeMode='cover' source={require("../assets/images/person1.png")} style={styles.avatar_icon} />
+                <Image resizeMode='cover' source={require("../assets/images/defaultavatar.png")} style={styles.avatar_icon} />
             )
         }
 
@@ -281,7 +271,7 @@ class ProfileScreen extends React.Component {
             )
         } else {
             return (
-                <Image resizeMode='cover' source={require("../assets/images/person1.png")} style={styles.avatar_icon} />
+                <Image resizeMode='cover' source={require("../assets/images/defaultavatar.png")} style={styles.avatar_icon} />
             )
         }
     }
@@ -384,7 +374,7 @@ class ProfileScreen extends React.Component {
 
         let isGuide = this.state.profileData.guide_data.is_guide
 
-        let rating = isGuide ? this.state.profileData.guide_data.guide_rating : this.state.profileData.tourist_rating
+        let rating = isGuide ? this.state.profileData.tourist_rating : this.state.profileData.guide_data.guide_rating
 
         return <Stars
             rating={rating}
@@ -416,7 +406,7 @@ class ProfileScreen extends React.Component {
                             <Image resizeMode='cover' source={require("../assets/images/back.png")} style={styles.backButton} />
                         </TouchableOpacity>
                         <Text style={styles.centerText}></Text>
-                        <TouchableOpacity onPress={() => { navigate('ProfileCharRoom') }}>
+                        <TouchableOpacity onPress={() => { navigate('WriteFeedback', { profileData: this.state.profileData }) }}>
                             <Image resizeMode='cover' source={require("../assets/images/profile_chat_icon.png")} style={styles.rightView} />
                         </TouchableOpacity>
                     </View>

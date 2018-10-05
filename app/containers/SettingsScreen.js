@@ -105,7 +105,7 @@ class SettingsScreen extends React.Component {
                 </View>
                 <View style={styles.main_view}>
                     <View style={styles.main_top_view}>
-                        <Image resizeMode='cover' source={{ uri: this.props.userdata.user.profilepicture }} style={styles.user_photo_img} />
+                        <Image resizeMode='cover' source={this.props.userdata.user.profilepicture} style={styles.user_photo_img} />
                         <Text style={styles.profile_name_text}>{this._fullname()}</Text>
                         <Text style={styles.profile_email_text} >{this.props.userdata.user.email ? this.props.userdata.user.email : '-'}</Text>
                     </View>
@@ -120,7 +120,7 @@ class SettingsScreen extends React.Component {
                         </TouchableOpacity>
                         <View style={styles.blank_row_view}>
                         </View>
-                        
+
                         <View style={styles.row_icon_view}>
                             <Image resizeMode='contain' source={require("../assets/images/Icon_email.png")} style={styles.row_small_icon} />
                             {/* <TextInput underlineColorAndroid='transparent' style={styles.row_icon_lb} value={'adamparker@gmail.com'}></TextInput> */}

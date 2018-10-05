@@ -5,18 +5,17 @@ import { store } from '../store/index'
 
 function emailLogin(params) {
 
-    //Get store data
     let storestate = store.getState()
 
     var formData = new FormData();
 
     formData.append('username', params.username);
     formData.append('password', params.password);
-    //formData.append('push_token', storestate.tour.bookingdata.push_token ? storestate.tour.bookingdata.push_token : '0');
 
-    let url = API.SERVER + 'v1/rest-auth/login/'
-    console.log('Signup user api:', url)
-    console.log('formData', formData)
+    let url = API.SERVER + API.VERSION + '/rest-auth/login/'
+
+    console.log('Email Login API URL-->', url);
+    console.log('Email Login API PARAMS-->', formData);
 
     return new Promise((resolve, reject) => {
         fetch(url, {
@@ -45,18 +44,16 @@ function emailSignup(params) {
     //Get store data
     let storestate = store.getState()
 
-    console.log(params)
-
     var formData = new FormData();
     formData.append('username', params.username)
     formData.append('email', params.email)
     formData.append('password1', params.password1)
     formData.append('password2', params.password2)
-    //formData.append('push_token', storestate.tour.bookingdata.push_token ? storestate.tour.bookingdata.push_token : '0');
 
-    let url = API.SERVER + 'v1/signup_user/'
-    console.log('Signup user api:', url)
-    console.log('formData', formData)
+    let url = API.SERVER + API.VERSION + '/signup_user/'
+
+    console.log('Email Signup API URL-->', url);
+    console.log('Email Signup API PARAMS-->', formData);
 
     return new Promise((resolve, reject) => {
         fetch(url, {
@@ -81,12 +78,17 @@ function emailSignup(params) {
 }
 
 function profile(params) {
-    console.log(params)
+
     var formData = new FormData();
     formData.append('user_id', params.userid)
 
+    let url = API.SERVER + API.VERSION + '/user_profile/'
+
+    console.log('Get Profile API URL-->', url);
+    console.log('Get Profile API PARAMS-->', formData);
+
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/user_profile/', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -97,24 +99,29 @@ function profile(params) {
         })
             .then((res) => res.json())
             .then(data => {
-                console.log('Profile API Success->', data);
+                console.log('Get Profile API Success->', data);
                 resolve(data);
             })
             .catch(err => {
-                console.log('Profile API Error->', err);
+                console.log('Get Profile API Error->', err);
                 reject(err);
             });
     })
 }
 
 function usermixins(params) {
-    console.log(params)
+
     var formData = new FormData();
     formData.append('id', params.id)
     formData.append('user_type', params.usertype)
 
+    let url = API.SERVER + API.VERSION + '/user_mixins/'
+
+    console.log('Usermixins API URL-->', url);
+    console.log('Usermixins API PARAMS-->', formData);
+
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/user_mixins/', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -125,11 +132,11 @@ function usermixins(params) {
         })
             .then((res) => res.json())
             .then(data => {
-                console.log('Profile API Success->', data);
+                console.log('Usermixins API Success->', data);
                 resolve(data);
             })
             .catch(err => {
-                console.log('Profile API Error->', err);
+                console.log('Usermixins API Error->', err);
                 reject(err);
             });
     })
@@ -139,15 +146,17 @@ function changePassword(params) {
 
     let storeState = store.getState()
 
-    console.log('Token is:', 'JWT ' + storeState.user.userdata.token)
-
-    console.log(params)
     var formData = new FormData();
     formData.append('new_password1', params.passwordNew)
     formData.append('new_password2', params.passwordConfirm)
 
+    let url = API.SERVER + API.VERSION + '/rest-auth/password/change/'
+
+    console.log('Change Password API URL-->', url);
+    console.log('Change Password API PARAMS-->', formData);
+
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/rest-auth/password/change/', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -170,12 +179,17 @@ function changePassword(params) {
 }
 
 function resetPassword(params) {
-    console.log(params)
+
     var formData = new FormData();
     formData.append('email', params.email)
 
+    let url = API.SERVER + API.VERSION + '/rest-auth/password/reset/'
+
+    console.log('Reset Password API URL-->', url);
+    console.log('Reset Password API PARAMS-->', formData);
+
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/rest-auth/password/reset/', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -201,7 +215,7 @@ function updateGuideProfile(params) {
 
     let storeState = store.getState()
 
-    var url = API.SERVER + 'v1/edit_profile/edit_guide_profile/'
+    var url = API.SERVER + API.VERSION + '/edit_profile/edit_guide_profile/'
 
     let esc = encodeURIComponent
     let query = Object.keys(params)
@@ -210,7 +224,7 @@ function updateGuideProfile(params) {
 
     url = url + query
 
-    console.log('deactivate url', url)
+    console.log('Update Guide Profile API URL-->', url);
 
     return new Promise((resolve, reject) => {
         fetch(url, {
@@ -224,12 +238,12 @@ function updateGuideProfile(params) {
         })
             .then((res) => res.json())
             .then(data => {
-                console.log('Braintree Save Token API Success->', data);
+                console.log('Update Guide Profile API Success->', data);
                 resolve(data);
             })
             .catch(err => {
                 reject(err)
-                console.log('Braintree Save Token API Error->', err);
+                console.log('Update Guide Profile API Error->', err);
             });
     })
 }
@@ -238,7 +252,7 @@ function updateTouristProfile(params) {
 
     let storeState = store.getState()
 
-    var url = API.SERVER + 'v1/edit_profile/edit_profile/'
+    var url = API.SERVER + API.VERSION + '/edit_profile/edit_profile/'
 
     let esc = encodeURIComponent
     let query = Object.keys(params)
@@ -247,7 +261,7 @@ function updateTouristProfile(params) {
 
     url = url + query
 
-    console.log('deactivate url', url)
+    console.log('Update Tourist Profile API URL-->', url);
 
     return new Promise((resolve, reject) => {
         fetch(url, {
@@ -261,12 +275,12 @@ function updateTouristProfile(params) {
         })
             .then((res) => res.json())
             .then(data => {
-                console.log('Braintree Save Token API Success->', data);
+                console.log('Update Tourist Profile API Success->', data);
                 resolve(data);
             })
             .catch(err => {
                 reject(err)
-                console.log('Braintree Save Token API Error->', err);
+                console.log('Update Tourist Profile API Error->', err);
             });
     })
 }
@@ -275,7 +289,7 @@ function searchInterest(params) {
 
     let storeState = store.getState()
 
-    var url = 'https://saberapplications.com/en/search_interest/?'
+    var url = API.SEARCH_INTERESTS
 
     let esc = encodeURIComponent
     let query = Object.keys(params)
@@ -284,7 +298,7 @@ function searchInterest(params) {
 
     url = url + query
 
-    console.log('deactivate url', url)
+    console.log('Get Nearby Guides API URL-->', url);
 
     return new Promise((resolve, reject) => {
         fetch(url, {
@@ -297,12 +311,51 @@ function searchInterest(params) {
         })
             .then((res) => res.json())
             .then(data => {
-                console.log('Autocomplete City API Success->', data);
+                console.log('Search Interest API Success->', data);
                 resolve(data);
             })
             .catch(err => {
                 reject(err)
-                console.log('Autocomplete City API Error->', err);
+                console.log('Search Interest API Error->', err);
+            });
+    })
+}
+
+function addReview(params) {
+
+    let storeState = store.getState()
+
+    var formData = new FormData();
+    formData.append('user_id', params.userid)
+    formData.append('order_id', params.orderid)
+    formData.append('rating', params.rating)
+    formData.append('feedback', params.feedback)
+    formData.append('title', params.title)
+
+    let url = API.SERVER + API.VERSION + '/mobile/review/'
+
+    console.log('Add Review API URL-->', url);
+    console.log('Add Review API PARAMS-->', formData);
+
+    return new Promise((resolve, reject) => {
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'pragma': 'no-cache',
+                'Cache-Control': 'no-cache',
+                'Authorization': 'JWT ' + storeState.user.userdata.token,
+            },
+            body: formData
+        })
+            .then((res) => res.json())
+            .then(data => {
+                console.log('Add Review API Success->', data);
+                resolve(data);
+            })
+            .catch(err => {
+                console.log('Add Review API Error->', err);
+                reject(err);
             });
     })
 }
@@ -316,5 +369,6 @@ module.exports = {
     usermixins,
     updateGuideProfile,
     updateTouristProfile,
-    searchInterest
+    searchInterest,
+    addReview
 }

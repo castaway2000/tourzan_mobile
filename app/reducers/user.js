@@ -47,10 +47,10 @@ const getProfilePictureUrl = (userdata) => {
         url = userdata.user.tourist_profile_image
     }
 
-    if (url) {
-        return url
+    if (url && url.length > 4) {
+        return { uri: url }
     } else {
-        return require("../assets/images/person1.png")
+        return require('../assets/images/defaultavatar.png')
     }
 };
 

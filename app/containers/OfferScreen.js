@@ -32,8 +32,6 @@ import { updateuser } from '../actions/userActions'
 //Utilities
 import { Storage, isIphoneX } from '../global/Utilities';
 
-var Toast = require('react-native-toast');
-
 var { width, height } = Dimensions.get('window');
 
 const backAction = NavigationActions.back({
@@ -98,7 +96,7 @@ class OfferScreen extends React.Component {
         
                     <View style={styles.user_info_view}>
                         <View style={styles.avatar_view}>
-                            <Image resizeMode='cover' source={require("../assets/images/guide_avatar.png")}  style={styles.avatar_img}/>
+                            <Image resizeMode='cover' source={require("../assets/images/defaultavatar.png")}  style={styles.avatar_img}/>
                             <View style={styles.rate_view} pointerEvents="none">
                                     <Rating ratingCount={5} imageSize={8} onFinishRating={this.ratingCompleted}/>
                                     <Text style={styles.rating_text}>(12)</Text>

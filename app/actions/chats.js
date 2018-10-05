@@ -1,16 +1,18 @@
 import { API } from '../constants'
 
 //Store
-import {store} from '../store/index'
+import { store } from '../store/index'
 
 function getChatList() {
 
     let storeState = store.getState()
 
-    console.log('Token is:', 'JWT ' + storeState.user.userdata.token)
+    let url = API.SERVER + API.VERSION + '/chats/'
+
+    console.log('Get Chat List API URL-->', url);
 
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/chats/', {
+        fetch(url, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

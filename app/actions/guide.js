@@ -7,10 +7,12 @@ function getGuideList() {
 
     let storeState = store.getState()
 
-    console.log('storeState.user.userdata.token', storeState.user.userdata.token)
+    let url = API.SERVER + API.VERSION + '/guides/'
+
+    console.log('Get Guide List API URL-->', url);
 
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/guides/', {
+        fetch(url, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -33,8 +35,6 @@ function getGuideList() {
 
 function bookGuide(params) {
 
-    console.log(params)
-
     var formData = new FormData();
     formData.append('token', params.token)
     formData.append('user_id', params.userid)
@@ -44,10 +44,13 @@ function bookGuide(params) {
     formData.append('time_limit', params.timelimit)
     formData.append('booking_type', params.bookingtype)
 
-    console.log('bookGuide param:', formData)
+    let url = API.SERVER + API.VERSION + '/mobile/book_guide/'
+
+    console.log('Booking Guide API URL-->', url);
+    console.log('Booking Guide API PARAMS-->', formData);
 
     return new Promise((resolve, reject) => {
-        fetch(API.SERVER + 'v1/mobile/book_guide/', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -68,7 +71,38 @@ function bookGuide(params) {
     })
 }
 
+function previousGuideList() {
+
+    let storeState = store.getState()
+
+    let url = API.SERVER + API.VERSION + '/orders/'
+
+    console.log('Previous Guide List API URL-->', url);
+
+    return new Promise((resolve, reject) => {
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'pragma': 'no-cache',
+                'Cache-Control': 'no-cache',
+                'Authorization': 'JWT ' + storeState.user.userdata.token,
+            },
+        })
+            .then((res) => res.json())
+            .then(data => {
+                console.log('Previous Guide List API Success->', data);
+                resolve(data);
+            })
+            .catch(err => {
+                reject(err)
+                console.log('Previous Guide List API Error->', err);
+            });
+    })
+}
+
 module.exports = {
     getGuideList,
-    bookGuide
+    bookGuide,
+    previousGuideList
 }

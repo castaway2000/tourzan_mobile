@@ -50,8 +50,6 @@ import {
 
 import { Actions } from '../../node_modules/react-native-gifted-chat';
 
-var Toast = require('react-native-toast');
-
 var { width, height } = Dimensions.get('window');
 
 const backAction = NavigationActions.back({
@@ -93,7 +91,6 @@ class CurrentTimeLimitScreen extends React.Component {
         // if you want to react to keyDown 
         KeyEvent.onKeyDownListener((keyCode) => {
             console.log(`Key code pressed: key down`);
-            Toast.show.bind(null, 'key code pressed');
         });
 
         // // if you want to react to keyUp 
@@ -277,12 +274,15 @@ class CurrentTimeLimitScreen extends React.Component {
                     let totalFees = data.price
 
                     /*{
-                    guide_pay: 237.8
-                    guide_trip_fees: 35.53
+                    guide_id: 58
+                    guide_pay: 1545.94
+                    guide_trip_fees: 231
                     isEnded: true
-                    price: 308.87
-                    tourist_trip_fees: 35.53
-                    trip_id: 50}*/
+                    order_id: 268
+                    price: 2007.95
+                    tourist_id: 118
+                    tourist_trip_fees: 231
+                    trip_id: 57}*/
 
                     //Reset Trip
                     let storestate = store.getState()
@@ -301,11 +301,7 @@ class CurrentTimeLimitScreen extends React.Component {
                             {
                                 text: 'OK', onPress: () => {
 
-                                    if (!this.props.userdata.user.isGuide) {
-                                        this.props.navigation.navigate('CompleteTour', { tripData: data });
-                                    } else {
-                                        this.props.navigation.dispatch(backAction)
-                                    }
+                                    this.props.navigation.navigate('CompleteTour', { tripData: data });
 
                                 }
                             },

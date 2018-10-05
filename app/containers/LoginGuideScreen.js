@@ -27,7 +27,7 @@ import { emailLogin } from '../actions'
 
 //Store
 import { connect } from 'react-redux';
-import {store} from '../store/index'
+import { store } from '../store/index'
 
 //Actions
 import { updatebooking } from '../actions/bookingActions'
@@ -55,7 +55,7 @@ class LoginGuideScreen extends React.Component {
         super(props);
         this.state = {
             isChecked: true,
-            username: 'guide101', //guide003 - Test@123, fakeit - newpass1234
+            username: 'guide202', //guide003 - Test@123, fakeit - newpass1234 guide101
             password: 'Test@123', //
             isLoading: false
         };
@@ -194,7 +194,7 @@ class LoginGuideScreen extends React.Component {
                                         style={{ backgroundColor: '#f2f2f2', color: '#31dd73', borderRadius: 2 }}
                                         size={15}
                                         onChange={(name, checked) => this._onCheckboxChecked(name, checked)} />
-                                    
+
                                     <Text style={styles.txt_checkbox}>Remember me</Text>
                                 </View>
                                 <TouchableOpacity onPress={() => this.navigate.navigate('ForgotPassword')}>

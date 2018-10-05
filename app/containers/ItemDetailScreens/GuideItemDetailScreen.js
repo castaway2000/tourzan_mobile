@@ -107,7 +107,7 @@ class GuideItemDetailScreen extends React.Component {
                 underlayColor = '#ddd'>
                     <View style ={styles.row}>
                         <View style={styles.avatar_view}>
-                            <Image resizeMode='cover' source={require("../../assets/images/guide_avatar.png")}  style={styles.avatar_img}/>
+                            <Image resizeMode='cover' source={require("../../assets/images/defaultavatar.png")}  style={styles.avatar_img}/>
                         </View>
                         <View style={styles.info_view}>
                             <View style={styles.list_info_location_view}>

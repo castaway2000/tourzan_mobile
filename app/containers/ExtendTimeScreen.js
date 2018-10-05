@@ -21,7 +21,6 @@ import KeyEvent from 'react-native-keyevent';
 import { Colors } from '../constants'
 import ApplyButton from '../components/ApplyButton'
 
-var Toast = require('react-native-toast');
 var { width, height } = Dimensions.get('window');
 
 //Utilities
@@ -61,7 +60,6 @@ class ExtendTimeScreen extends React.Component {
         // if you want to react to keyDown 
         KeyEvent.onKeyDownListener((keyCode) => {
             console.log(`Key code pressed: key down`);
-            Toast.show.bind(null, 'key code pressed');
         });
 
         // // if you want to react to keyUp 

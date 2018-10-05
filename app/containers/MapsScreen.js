@@ -15,6 +15,7 @@ import {
     TouchableOpacity,
     Platform,
     ActivityIndicator,
+    AppState
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -143,8 +144,15 @@ class MapsScreen extends React.Component {
                 //Update location and device token
                 this.loginAndUpdateTripWS()
 
-                //Get nearby guides
-                this.onGetNearbyGuide()
+                if (!this.props.userdata.user.isGuide) {
+                    //Get nearby guides
+                    this.onGetNearbyGuide()
+                } else {
+                    //Clear nearby guides on map
+                    if (this.state.nearByGuides && this.state.nearByGuides.length > 1) {
+                        this.setState({ nearByGuides: [] })
+                    }
+                }
 
                 //Update trip
                 if (this.props.bookingdata.isTripInProgress) {
@@ -153,7 +161,12 @@ class MapsScreen extends React.Component {
 
             }, 1000)
 
-        });
+        },
+            (error) => {
+
+            },
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+        );
     }
 
     componentWillUnmount() {
@@ -393,7 +406,7 @@ class MapsScreen extends React.Component {
                     </View>
                     <Text style={styles.centerText}>TOURZAN</Text>
                     <TouchableOpacity onPress={() => { navigate('Profile') }}>
-                        <Image resizeMode='cover' source={{ uri: this.props.userdata.user.profilepicture }} style={styles.rightView} />
+                        <Image resizeMode='cover' source={this.props.userdata.user.profilepicture} style={styles.rightView} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.map_container}>
@@ -770,8 +783,6 @@ class MapsScreen extends React.Component {
 
     onGetNearbyGuide() {
 
-        console.log('this.props.userdata', this.props.userdata)
-
         var { dispatch } = this.props;
 
         var params = {
@@ -831,9 +842,14 @@ class MapsScreen extends React.Component {
 
         FCM.getInitialNotification().then(notif => {
             //Works on both iOS and Android
+
+            if (!notif) {
+                return
+            }
+
             console.log('notif.custom_notification.color:', JSON.stringify(notif))
 
-
+            this.notificationBannerTapped(notif)
         });
 
         FCM.getFCMToken().then(token => {
@@ -858,6 +874,15 @@ class MapsScreen extends React.Component {
     }
 
     notificationBannerTapped(notif) {
+
+        // if ((AppState.currentState === 'background') || (AppState.currentState === 'inactive')) {
+        //     return
+        // }
+
+
+        if (!notif) {
+            return
+        }
 
         console.log('FCM Notification coming....', notif)
 
