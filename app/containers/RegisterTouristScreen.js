@@ -205,15 +205,15 @@ class RegisterTouristScreen extends React.Component {
     }
 
     changeFocus4() {
-        nextInput4.focus();
+        //nextInput4.focus();
     }
 
     changeFocus5() {
-        nextInput5.focus();
+        //nextInput5.focus();
     }
 
     changeFocus6() {
-        nextInput6.focus();
+        //nextInput6.focus();
     }
 
     onClickExtendInterests() {

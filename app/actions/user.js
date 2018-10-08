@@ -215,7 +215,7 @@ function updateGuideProfile(params) {
 
     let storeState = store.getState()
 
-    var url = API.SERVER + API.VERSION + '/edit_profile/edit_guide_profile/'
+    var url = API.SERVER + API.VERSION + '/edit_profile/edit_guide_profile/?'
 
     let esc = encodeURIComponent
     let query = Object.keys(params)
@@ -252,7 +252,7 @@ function updateTouristProfile(params) {
 
     let storeState = store.getState()
 
-    var url = API.SERVER + API.VERSION + '/edit_profile/edit_profile/'
+    var url = API.SERVER + API.VERSION + '/edit_profile/edit_profile/?'
 
     let esc = encodeURIComponent
     let query = Object.keys(params)
@@ -360,6 +360,42 @@ function addReview(params) {
     })
 }
 
+function languageSearch(params) {
+
+    let storeState = store.getState()
+
+    var url = API.SEARCH_LANGUAGES
+
+    let esc = encodeURIComponent
+    let query = Object.keys(params)
+        .map(k => esc(k) + '=' + esc(params[k]))
+        .join('&')
+
+    url = url + query
+
+    console.log('Language Search API URL-->', url);
+
+    return new Promise((resolve, reject) => {
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'pragma': 'no-cache',
+                'Cache-Control': 'no-cache',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+        })
+            .then((res) => res.json())
+            .then(data => {
+                console.log('Language Search API Success->', data);
+                resolve(data);
+            })
+            .catch(err => {
+                reject(err)
+                console.log('Language Search API Error->', err);
+            });
+    })
+}
+
 module.exports = {
     emailLogin,
     emailSignup,
@@ -370,5 +406,6 @@ module.exports = {
     updateGuideProfile,
     updateTouristProfile,
     searchInterest,
-    addReview
+    addReview,
+    languageSearch
 }

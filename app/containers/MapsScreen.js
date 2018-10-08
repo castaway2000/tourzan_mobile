@@ -30,6 +30,7 @@ import NavigationBar from '../components/NavigationBar';
 import flagImg from '../assets/images/guide-dot.png';
 import moment from 'moment';
 import MapViewDirections from 'react-native-maps-directions';
+var TimerMixin = require('react-timer-mixin');
 
 //Store
 import { store } from '../store/index'
@@ -92,7 +93,7 @@ class MapsScreen extends React.Component {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
             },
-            address: '',
+            address: 'Loading...',
             isSettingTime: false,
             hour: moment().format('hh'),
             minute: moment().format('mm'),
@@ -136,47 +137,66 @@ class MapsScreen extends React.Component {
                 this.onRegionChange(region, position.coords.latitude, position.coords.longitude);
                 this.setState({ shouldZoomToCurrentLocation: false })
             }
-
-
-            //Add delay to give some time to redux to update state
-            setTimeout(() => {
-
-                //Update location and device token
-                this.loginAndUpdateTripWS()
-
-                if (!this.props.userdata.user.isGuide) {
-                    //Get nearby guides
-                    this.onGetNearbyGuide()
-                } else {
-                    //Clear nearby guides on map
-                    if (this.state.nearByGuides && this.state.nearByGuides.length > 1) {
-                        this.setState({ nearByGuides: [] })
-                    }
-                }
-
-                //Update trip
-                if (this.props.bookingdata.isTripInProgress) {
-                    this.updateTripWS()
-                }
-
-            }, 1000)
-
         },
             (error) => {
 
             },
             { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
         );
+
+        //Get nearby guides
+        if (!this.props.userdata.user.isGuide) {
+            //Get nearby guides
+
+            if (!this.timer) {
+
+                this.timer = TimerMixin.setInterval(() => {
+
+                    if (this.props.userdata.user.isGuide) {
+
+                        //Clear nearby guides on map
+                        if (this.state.nearByGuides && this.state.nearByGuides.length > 1) {
+                            this.setState({ nearByGuides: [] })
+                        }
+                    } else {
+
+                        //Get nearby guides
+                        this.onGetNearbyGuide()
+                    }
+
+                    //Add delay to give some time to redux to update state
+                    setTimeout(() => {
+
+                        //Update location and device token
+                        this.loginAndUpdateTripWS()
+
+                        //Update trip
+                        if (this.props.bookingdata.isTripInProgress) {
+                            this.updateTripWS()
+                        }
+
+                    }, 1000)
+
+                }, 10000);
+            }
+        }
     }
 
     componentWillUnmount() {
-        navigator.geolocation.clearWatch(this.watchID);
+
+        if (this.watchID) {
+            navigator.geolocation.clearWatch(this.watchID);
+        }
+
+        if (this.timer) {
+            clearTimeout(this.timer);
+        }
     }
 
     //#region GEO RELATED
     onRegionChange(region, lastLat, lastLong) {
 
-        //this.addressFromCoordnate(region.latitude, region.longitude)
+        this.addressFromCoordnate(region.latitude, region.longitude)
 
         this.setState({
             mapRegion: region,
@@ -190,9 +210,6 @@ class MapsScreen extends React.Component {
 
         Geocoder.from(lat, long)
             .then(json => {
-                var addressComponent = json.results[0].address_components[0];
-                console.log('addressComponent', json.results[0].formatted_address);
-
                 this.setState({ address: json.results[0].formatted_address })
             })
             .catch(error => console.warn(error));
@@ -283,7 +300,7 @@ class MapsScreen extends React.Component {
 
         const { navigate } = this.props.navigation;
 
-        if (!this.props.currentlocation.long || !this.props.currentlocation.lat) {
+        if (!this.props.currentlocation.lat || !this.props.currentlocation.long) {
             Alert.alert('Tourzan', 'Your current location not found.')
             return
         }
@@ -416,7 +433,8 @@ class MapsScreen extends React.Component {
                             showsMyLocationButton={true}
                             region={this.state.mapRegion}
                             onRegionChange={this.onRegionChange}>
-                            {
+
+                            {this.state.nearByGuides &&
                                 this.state.nearByGuides.map((element, index) => {
 
                                     //Update map
@@ -432,7 +450,8 @@ class MapsScreen extends React.Component {
                                             coordinate={region}
                                             centerOffset={{ x: 0, y: -10 }}
                                             anchor={{ x: 1, y: 1 }}
-                                            image={flagImg} />
+                                            image={flagImg}
+                                            key={index} />
                                     )
                                 }
                                 )
@@ -575,6 +594,11 @@ class MapsScreen extends React.Component {
     //
     updateClockInOutStatusWS() {
 
+        if (!this.props.currentlocation.lat || !this.props.currentlocation.long) {
+            Alert.alert('Tourzan', 'Your current location is unavailable. Unable to clock ' + (this.props.userdata.user.isClockedIn ? 'in' : 'out'))
+            return
+        }
+
         this.setState({
             isLoading: true
         })
@@ -685,7 +709,7 @@ class MapsScreen extends React.Component {
 
         var { dispatch } = this.props;
 
-        if (!this.props.currentlocation.lat || this.props.currentlocation.long) {
+        if (!this.props.currentlocation.lat || !this.props.currentlocation.long) {
             return
         }
 
@@ -783,6 +807,10 @@ class MapsScreen extends React.Component {
 
     onGetNearbyGuide() {
 
+        if (!this.props.currentlocation.lat || !this.props.currentlocation.long) {
+            return
+        }
+
         var { dispatch } = this.props;
 
         var params = {
@@ -805,6 +833,8 @@ class MapsScreen extends React.Component {
                     if (data.length < 1) {
 
                         console.log('No nearby guides available')
+
+                        this.setState({ nearByGuides: [] })
 
                     } else {
                         this.setState({ nearByGuides: data })

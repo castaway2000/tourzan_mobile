@@ -1,6 +1,7 @@
 export const API = {
     SERVER: 'https://testing.tourzan.com/api/',
     SEARCH_INTERESTS: 'https://testing.tourzan.com/en/search_interest/?',
+    SEARCH_LANGUAGES: 'https://testing.tourzan.com/en/search_language/?',
     VERSION: 'v1',
 
     FAQ_LINK: 'https://api.tourzan.com/en/faq/',

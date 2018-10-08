@@ -110,15 +110,14 @@ class ProfileScreen extends React.Component {
 
             .then(data => {
 
-                this.setState({
-                    profileData: data,
-                    isLoading: false,
-                    dataSource: this.state.dataSource.cloneWithRows(data.tourist_reviews.concat(data.tourist_reviews).concat(data.tourist_reviews).concat(data.tourist_reviews).concat(data.tourist_reviews).concat(data.tourist_reviews).concat(data.tourist_reviews).concat(data.tourist_reviews)),
-                    ds: this.state.dataSource.cloneWithRows(data.tourist_reviews.concat(data.tourist_reviews).concat(data.tourist_reviews).concat(data.tourist_reviews).concat(data.tourist_reviews).concat(data.tourist_reviews).concat(data.tourist_reviews).concat(data.tourist_reviews))
-                })
-
-                console.log('Profile data-->', data)
-
+                if (data) {
+                    this.setState({
+                        profileData: data,
+                        isLoading: false,
+                        dataSource: data.tourist_reviews ? this.state.dataSource.cloneWithRows(data.tourist_reviews) : this.state.dataSource.cloneWithRows([]),
+                        ds: data.tourist_reviews ? this.state.dataSource.cloneWithRows(data.tourist_reviews) : this.state.dataSource.cloneWithRows([])
+                    })
+                }
             })
             .catch(err => {
                 this.setState({

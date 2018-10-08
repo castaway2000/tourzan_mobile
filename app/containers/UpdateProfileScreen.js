@@ -81,6 +81,9 @@ class UpdateProfileScreen extends React.Component {
             rate: '',
             overview: '',
             selectedInterests: [],
+            firstLanguage: { order: 1 },
+            secondLanguage: { order: 2 },
+            thirdLanguage: { order: 3 },
         };
     }
 
@@ -99,7 +102,7 @@ class UpdateProfileScreen extends React.Component {
 
     _handleDatePicked = (date) => {
         this._hideDateTimePicker();
-        this.setState({ dobDate: date, dob: moment(date).format('MM-DD-YYYY') })
+        this.setState({ dobDate: date, dob: moment(date).format('MM/DD/YYYY') })
     };
 
     showLoading() {
@@ -135,6 +138,36 @@ class UpdateProfileScreen extends React.Component {
         this.setState({ city: text })
     }
 
+    //Common
+    setFirstLanguage(text) {
+        this.setState({
+            firstLanguage: {
+                ...this.state.access,
+                text: text,
+            }
+        })
+    }
+
+    //Common
+    setSecondLanguage(text) {
+        this.setState({
+            secondLanguage: {
+                ...this.state.access,
+                text: text,
+            }
+        })
+    }
+
+    //Common
+    setThirdLanguage(text) {
+        this.setState({
+            thirdLanguage: {
+                ...this.state.access,
+                text: text,
+            }
+        })
+    }
+
     //Guide
     setRate(text) {
         this.setState({ rate: text.replace(/[^(((\d)+(\.)\d)|((\d)+))]/g, '_').split("_")[0] })
@@ -159,6 +192,7 @@ class UpdateProfileScreen extends React.Component {
     }
 
     validateTouristData() {
+
         if (this.state.firstname == '' || this.state.firstname.trim() == '') {
             Alert.alert('Tourzan', 'Please enter your firstname.')
             return false
@@ -176,6 +210,15 @@ class UpdateProfileScreen extends React.Component {
 
         if (this.state.profession == '' || this.state.profession.trim() == '') {
             Alert.alert('Tourzan', 'Please enter your profession.')
+            return false
+        }
+
+        //Language Validations
+
+        //
+
+        if (this.state.selectedInterests.length < 1) {
+            Alert.alert('Tourzan', 'Please select interests.')
             return false
         }
 
@@ -213,12 +256,55 @@ class UpdateProfileScreen extends React.Component {
             return false
         }
 
+        //Language Validations
+
+        //
+
+        if (this.state.selectedInterests.length < 1) {
+            Alert.alert('Tourzan', 'Please enter interests.')
+            return false
+        }
+
         if (this.state.overview == '' || this.state.overview.trim() == '') {
             Alert.alert('Tourzan', 'Please enter your overview.')
             return false
         }
 
         return true
+    }
+
+    firstLanguageText() {
+
+        let text = this.state.firstLanguage.text
+
+        if (this.state.firstLanguage.proficiency) {
+            text = text + ' (' + this.state.firstLanguage.proficiency.type + ')'
+        }
+        return text
+
+    }
+
+
+    secondLanguageText() {
+
+        let text = this.state.secondLanguage.text
+
+        if (this.state.secondLanguage.proficiency) {
+            text = text + ' (' + this.state.secondLanguage.proficiency.type + ')'
+        }
+        return text
+
+    }
+
+    thirdLanguageText() {
+
+        let text = this.state.thirdLanguage.text
+
+        if (this.state.thirdLanguage.proficiency) {
+            text = text + ' (' + this.state.thirdLanguage.proficiency.type + ')'
+        }
+        return text
+
     }
 
     render() {
@@ -292,6 +378,54 @@ class UpdateProfileScreen extends React.Component {
                                     onChangeText={(text) => this.setProfession(text)} />
                             </View>}
 
+                            {/* LANGUAGE 1 */}
+                            <TouchableOpacity onPress={() => { navigate('SelectLanguage', { selectedLanguage: this.state.firstLanguage, languageDidSelected: this.languageDidSelected }) }}>
+                                <View pointerEvents="none" style={styles.row_icon_view}>
+                                    {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
+                                    <TextInput
+                                        underlineColorAndroid='transparent'
+                                        placeholder='Native Language*'
+                                        style={styles.row_icon_lb}
+                                        secureTextEntry={false}
+                                        value={this.firstLanguageText()}
+                                        onChangeText={(text) => this.setFirstLanguage(text)} />
+                                    <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon} />
+
+                                </View>
+                            </TouchableOpacity>
+
+                            {/* LANGUAGE 2 */}
+                            <TouchableOpacity onPress={() => { navigate('SelectLanguage', { selectedLanguage: this.state.secondLanguage, languageDidSelected: this.languageDidSelected }) }}>
+                                <View pointerEvents="none" style={styles.row_icon_view}>
+                                    {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
+                                    <TextInput
+                                        underlineColorAndroid='transparent'
+                                        placeholder='Second Language'
+                                        style={styles.row_icon_lb}
+                                        secureTextEntry={false}
+                                        value={this.secondLanguageText()}
+                                        onChangeText={(text) => this.setSecondLanguage(text)} />
+                                    <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon} />
+
+                                </View>
+                            </TouchableOpacity>
+
+                            {/* LANGUAGE 3 */}
+                            <TouchableOpacity onPress={() => { navigate('SelectLanguage', { selectedLanguage: this.state.thirdLanguage, languageDidSelected: this.languageDidSelected }) }}>
+                                <View pointerEvents="none" style={styles.row_icon_view}>
+                                    {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
+                                    <TextInput
+                                        underlineColorAndroid='transparent'
+                                        placeholder='Third Language'
+                                        style={styles.row_icon_lb}
+                                        secureTextEntry={false}
+                                        value={this.thirdLanguageText()}
+                                        onChangeText={(text) => this.setThirdLanguage(text)} />
+                                    <Image resizeMode='contain' source={require("../assets/images/item_arrow.png")} style={styles.row_icon} />
+
+                                </View>
+                            </TouchableOpacity>
+
                             {this.props.userdata.user.isGuide && <TouchableOpacity onPress={() => { navigate('SelectCity', { cityDidSelected: this.cityDidSelected }) }}>
                                 <View pointerEvents="none" style={styles.row_icon_view}>
                                     {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
@@ -322,7 +456,6 @@ class UpdateProfileScreen extends React.Component {
                             <TouchableOpacity onPress={() => { navigate('SelectInterests', { interestsDidSelected: this.interestsDidSelected, selectedInterests: this.state.selectedInterests }) }}>
                                 <View pointerEvents="none" style={styles.row_icon_tag_view}>
                                     {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
-
 
                                     {(this.state.selectedInterests.length < 1) && <TextInput
                                         underlineColorAndroid='transparent'
@@ -406,6 +539,18 @@ class UpdateProfileScreen extends React.Component {
                     isLoading: false
                 })
 
+                if (data.error) {
+                    Alert.alert('Tourzan', data.detail)
+                } else {
+                    Alert.alert("Tourzan", "Profile updated successfully.", [{
+                        text: 'OK',
+                        onPress: () => {
+
+                            this.props.navigation.dispatch(backAction)
+                        }
+                    }], { cancelable: true });
+                }
+
             })
             .catch(err => {
                 this.setState({
@@ -432,7 +577,9 @@ class UpdateProfileScreen extends React.Component {
             'last_name': this.state.lastname,
             'age': age,
             'dob': this.state.dob,
-            'profession': this.state.profession
+            'profession': this.state.profession,
+            'languages': '',
+            'interests': JSON.stringify(this.state.selectedInterests)
         }
 
         updateTouristProfile(params)
@@ -442,6 +589,18 @@ class UpdateProfileScreen extends React.Component {
                 this.setState({
                     isLoading: false
                 })
+
+                if (data.error) {
+                    Alert.alert('Tourzan', data.message)
+                } else {
+                    Alert.alert("Tourzan", "Profile updated successfully.", [{
+                        text: 'OK',
+                        onPress: () => {
+
+                            this.props.navigation.dispatch(backAction)
+                        }
+                    }], { cancelable: true });
+                }
 
             })
             .catch(err => {
@@ -461,9 +620,24 @@ class UpdateProfileScreen extends React.Component {
 
     //Select city callback
     interestsDidSelected = (interests) => {
-        console.log('interests', interests);
+        console.log('interestsDidSelected', interests);
 
         this.setState({ selectedInterests: interests })
+    };
+
+    //Select city callback
+    languageDidSelected = (language) => {
+
+        console.log('languageDidSelected', language);
+
+        if (language.order == 1) {
+            this.setState({ firstLanguage: language })
+        } else if (language.order == 2) {
+            this.setState({ secondLanguage: language })
+        } else if (language.order == 3) {
+            this.setState({ thirdLanguage: language })
+        }
+        // this.setState({ selectedInterests: interests })
     };
 }
 
