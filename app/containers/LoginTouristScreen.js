@@ -86,11 +86,9 @@ class LoginTouristScreen extends React.Component {
                     isLoading: false
                 })
 
-                console.log('Login email-->', data)
-
                 if (data.token != undefined) {
 
-                    console.log('success')
+                    data.user.isLoggedInAsGuide = false
 
                     //save profile data
                     store.dispatch(

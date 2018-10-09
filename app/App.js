@@ -68,6 +68,8 @@ import SelectInterestsScreen from './containers/SelectInterestsScreen'
 import WriteFeedbackScreen from './containers/WriteFeedbackScreen'
 import SelectLanguageScreen from './containers/SelectLanguageScreen'
 import SelectLanguageProficiencyScreen from './containers/SelectLanguageProficiencyScreen'
+import AddPaymentMethodScreen from './containers/AddPaymentMethodScreen'
+import IdentityVerificationScreen from './containers/IdentityVerificationScreen'
 
 var { width, height } = Dimensions.get('window');
 
@@ -133,7 +135,7 @@ const MainTapNavigator = TabNavigator({
   MapsNav: { screen: MapChatStackNavigator, },
   Dashboard: { screen: DashboardStackNavigator, },
   Chat: { screen: ChatStackNavigator, },
-  //Marketplace: { screen: MarketplaceScreen, },
+  Marketplace: { screen: IdentityVerificationScreen, },
   MoreNav: { screen: MoreStackNavigator, },
 
 }, {
@@ -184,9 +186,10 @@ const App = StackNavigator({
   SelectCity: { screen: SelectCityScreen },
   SelectInterests: { screen: SelectInterestsScreen },
   WriteFeedback: { screen: WriteFeedbackScreen },
-  SelectLanguage: {screen: SelectLanguageScreen},
-  SelectLanguageProficiency: {screen: SelectLanguageProficiencyScreen},
-  
+  SelectLanguage: { screen: SelectLanguageScreen },
+  SelectLanguageProficiency: { screen: SelectLanguageProficiencyScreen },
+  AddPaymentMethod: { screen: AddPaymentMethodScreen },
+  IdentityVerification: { screen: IdentityVerificationScreen }
 }, {
     headerMode: 'screen'
   },

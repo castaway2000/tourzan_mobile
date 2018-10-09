@@ -89,6 +89,9 @@ class UpdateProfileScreen extends React.Component {
 
     //#endregion
     componentDidMount() {
+        //profileData: data, isGuide: false, isFromRegistration: true
+
+
 
     }
 
@@ -180,7 +183,11 @@ class UpdateProfileScreen extends React.Component {
 
     onUpdateProfile() {
 
-        if (this.props.userdata.user.isGuide) {
+        const { params } = this.props.navigation.state
+
+        let isGuide = params.isGuideRegistration ? params.isGuideRegistration : this.props.userdata.user.isGuide
+
+        if (isGuide) {
             if (this.validateGuidetData()) {
                 this.updateGuideProfileWS()
             }
@@ -281,9 +288,7 @@ class UpdateProfileScreen extends React.Component {
             text = text + ' (' + this.state.firstLanguage.proficiency.type + ')'
         }
         return text
-
     }
-
 
     secondLanguageText() {
 
@@ -293,7 +298,6 @@ class UpdateProfileScreen extends React.Component {
             text = text + ' (' + this.state.secondLanguage.proficiency.type + ')'
         }
         return text
-
     }
 
     thirdLanguageText() {
@@ -304,11 +308,13 @@ class UpdateProfileScreen extends React.Component {
             text = text + ' (' + this.state.thirdLanguage.proficiency.type + ')'
         }
         return text
-
     }
 
     render() {
         const { navigate } = this.props.navigation;
+        const { params } = this.props.navigation.state
+
+        let isGuide = params.isGuideRegistration ? params.isGuideRegistration : this.props.userdata.user.isGuide
 
         return (
             <View style={styles.container}>
@@ -367,7 +373,7 @@ class UpdateProfileScreen extends React.Component {
                                 </View>
                             </TouchableOpacity>
 
-                            {!this.props.userdata.user.isGuide && <View style={styles.row_icon_view}>
+                            {!isGuide && <View style={styles.row_icon_view}>
                                 {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
                                 <TextInput
                                     underlineColorAndroid='transparent'
@@ -426,7 +432,7 @@ class UpdateProfileScreen extends React.Component {
                                 </View>
                             </TouchableOpacity>
 
-                            {this.props.userdata.user.isGuide && <TouchableOpacity onPress={() => { navigate('SelectCity', { cityDidSelected: this.cityDidSelected }) }}>
+                            {isGuide && <TouchableOpacity onPress={() => { navigate('SelectCity', { cityDidSelected: this.cityDidSelected }) }}>
                                 <View pointerEvents="none" style={styles.row_icon_view}>
                                     {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
                                     <TextInput
@@ -441,7 +447,7 @@ class UpdateProfileScreen extends React.Component {
                                 </View>
                             </TouchableOpacity>}
 
-                            {this.props.userdata.user.isGuide && <View style={styles.row_icon_view}>
+                            {isGuide && <View style={styles.row_icon_view}>
                                 {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
                                 <TextInput
                                     underlineColorAndroid='transparent'
@@ -516,6 +522,8 @@ class UpdateProfileScreen extends React.Component {
     //
     updateGuideProfileWS() {
 
+        const { navigate } = this.props.navigation;
+
         this.setState({
             isLoading: true
         })
@@ -526,9 +534,11 @@ class UpdateProfileScreen extends React.Component {
             'dob': this.state.dob,
             'first_name': this.state.firstname,
             'last_name': this.state.lastname,
-            'city': this.state.city,
+            'city': this.state.city.split(",")[0],
             'rate': this.state.rate,
-            'overview': this.state.overview
+            'overview': this.state.overview,
+            'languages': '',
+            'interests': JSON.stringify(this.state.selectedInterests)
         }
 
         updateGuideProfile(params)
@@ -546,7 +556,17 @@ class UpdateProfileScreen extends React.Component {
                         text: 'OK',
                         onPress: () => {
 
-                            this.props.navigation.dispatch(backAction)
+                            //Nav passdata
+                            const { params } = this.props.navigation.state
+
+                            if (params.isFromRegistration) {
+
+                                //Identity verification
+                                navigate('IdentityVerification')
+
+                            } else {
+                                this.props.navigation.dispatch(backAction)
+                            }
                         }
                     }], { cancelable: true });
                 }
@@ -562,6 +582,10 @@ class UpdateProfileScreen extends React.Component {
 
     //
     updateTouristProfileWS() {
+
+        //Nav passdata
+
+        const { navigate } = this.props.navigation;
 
         this.setState({
             isLoading: true
@@ -597,7 +621,14 @@ class UpdateProfileScreen extends React.Component {
                         text: 'OK',
                         onPress: () => {
 
-                            this.props.navigation.dispatch(backAction)
+                            const { params } = this.props.navigation.state
+
+                            if (params.isFromRegistration) {
+                                navigate('AddPaymentMethod')
+                            } else {
+                                this.props.navigation.dispatch(backAction)
+                            }
+
                         }
                     }], { cancelable: true });
                 }

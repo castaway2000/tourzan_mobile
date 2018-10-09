@@ -25,6 +25,17 @@ import NavigationBar from '../components/NavigationBar'
 import { emailSignup } from '../actions/'
 import PLoading from '../components/Loading'
 
+//Store
+import { connect } from 'react-redux';
+import { store } from '../store/index'
+
+//Actions
+import { updatebooking } from '../actions/bookingActions'
+import { updateuser } from '../actions/userActions'
+
+//Utilities
+import { Storage, isIphoneX } from '../global/Utilities';
+
 var { width, height } = Dimensions.get('window');
 let nextInput1;
 let nextInput2;
@@ -81,20 +92,15 @@ class RegisterTouristScreen extends React.Component {
     onSignup() {
         if (this.state.name == '' || this.state.name.trim() == '') {
             alert('Please enter your username')
-        }
-        else if (this.state.email == '' || this.state.email.trim() == '') {
+        } else if (this.state.email == '' || this.state.email.trim() == '') {
             alert('Please enter your email address')
-        }
-        else if (this.state.password == '' || this.state.password.trim() == '') {
+        } else if (this.state.password == '' || this.state.password.trim() == '') {
             alert('Please enter your password')
-        }
-        else if (this.state.password.length < 8) {
+        } else if (this.state.password.length < 8) {
             alert('Password must be at least 8 characters.')
-        }
-        else if (this.state.password != this.state.confirmpassword) {
+        } else if (this.state.password != this.state.confirmpassword) {
             alert('Not matched password and confirm password')
-        }
-        else {
+        } else {
             this.setState({
                 isLoading: true
             })
@@ -115,14 +121,23 @@ class RegisterTouristScreen extends React.Component {
 
                     if (data.token) {
 
-                        Alert.alert("Tourzan", "Registration Successful. Please Login.", [{
+                        //save profile data
+                        store.dispatch(
+                            updateuser(data)
+                        );
+
+                        Alert.alert("Tourzan", "Registration Successful.", [{
                             text: 'OK', onPress: () => {
-                                this.props.navigation.dispatch(resetRootAction);
+
+                                //this.props.navigation.dispatch(resetRootAction);
+                                const { navigate } = this.props.navigation;
+
+                                navigate('UpdateProfile', { isGuideRegistration: false, isFromRegistration: true })
                             }
                         }],
                             { cancelable: false });
                     } else {
-                        Alert.alert("Tourzan", data.error)
+                        Alert.alert("Tourzan", JSON.stringify(data))
                     }
                 })
                 .catch(err => {

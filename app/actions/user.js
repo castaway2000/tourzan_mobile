@@ -50,7 +50,7 @@ function emailSignup(params) {
     formData.append('password1', params.password1)
     formData.append('password2', params.password2)
 
-    let url = API.SERVER + API.VERSION + '/signup_user/'
+    let url = API.SERVER + API.VERSION + '/rest-auth/registration/'
 
     console.log('Email Signup API URL-->', url);
     console.log('Email Signup API PARAMS-->', formData);
