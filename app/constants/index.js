@@ -1,7 +1,4 @@
-import { Colors } from './colors'
-import { API } from './api'
+import { Colors } from "./colors";
+import { API } from "./api";
 
-export {
-    Colors,
-    API,
-}
+export { Colors, API };

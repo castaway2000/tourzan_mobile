@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 import {
   AppRegistry,
@@ -12,12 +12,12 @@ import {
   Text,
   View,
   Alert,
-  TouchableOpacity,
-} from 'react-native';
+  TouchableOpacity
+} from "react-native";
 
-import { Provider } from 'react-redux';
-import {store} from './store/index'
-import App from './App';
+import { Provider } from "react-redux";
+import { store } from "./store/index";
+import App from "./App";
 
 class Wrapper extends React.Component {
   render() {
@@ -29,4 +29,4 @@ class Wrapper extends React.Component {
   }
 }
 
-export default Wrapper
+export default Wrapper;
