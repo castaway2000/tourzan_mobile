@@ -1,4 +1,5 @@
-import { API } from "../constants";
+import { API, Paymentrails } from "../constants";
+var CryptoJS = require("crypto-js");
 
 //Store
 import { store } from "../store/index";
@@ -163,7 +164,7 @@ function deactiveteCard(params) {
   });
 }
 
-function createApplicant(params) {
+function createApplicantBraintree(params) {
   let storeState = store.getState();
 
   var formData = new FormData();
@@ -197,11 +198,78 @@ function createApplicant(params) {
   });
 }
 
+function generateAuthorization(timestamp, endPoint, method, body = "") {
+  let apiSecret = Paymentrails.apiSecret;
+  let apiKey = Paymentrails.apiKey;
+
+  try {
+    const hmac = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA256, apiSecret);
+
+    hmac.update(`${timestamp}\n${method}\n${endPoint}\n${body}\n`);
+
+    let hash = hmac.finalize();
+
+    var signature = hash.toString(CryptoJS.enc.Hex);
+
+    return `prsign ${apiKey}:${signature}`;
+  } catch (typeError) {
+    console.log(typeError);
+    return "prsign 1:1";
+  }
+}
+
+function createRecipientsPaymentrails(body) {
+  let storeState = store.getState();
+
+  let url = API.PAYMENTRAILS_RECIPIENT;
+
+  const date = new Date();
+  const timestamp = Math.round(date / 1000);
+
+  let method = "POST";
+
+  // var body = {
+  //   type: "individual",
+  //   firstName: "John",
+  //   lastName: "Smith",
+  //   email: "jsmith@example.com"
+  // };
+
+  let auth = generateAuthorization(
+    timestamp,
+    "/v1/recipients",
+    method,
+    JSON.stringify(body)
+  );
+
+  return new Promise((resolve, reject) => {
+    fetch(url, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+        "X-PR-Timestamp": timestamp,
+        Authorization: auth
+      },
+      body: JSON.stringify(body)
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log("Paymentrails Create RecipientsAPI Success->", data);
+        resolve(data);
+      })
+      .catch(err => {
+        console.log("Paymentrails Create Recipients API Error->", err);
+        reject(err);
+      });
+  });
+}
+
 module.exports = {
   brainTreeToken,
   brainTreeSaveNonce,
   allPayments,
   setDefaultCard,
   deactiveteCard,
-  createApplicant
+  createApplicantBraintree,
+  createRecipientsPaymentrails
 };

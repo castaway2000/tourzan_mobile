@@ -45,7 +45,8 @@ import * as Actions from "../actions";
 import {
   updateGuideProfile,
   updateTouristProfile,
-  autocompleteCity
+  autocompleteCity,
+  createRecipientsPaymentrails
 } from "../actions";
 
 //Utilities
@@ -631,35 +632,78 @@ class UpdateProfileScreen extends React.Component {
 
     updateGuideProfile(params)
       .then(data => {
+        if (data.error) {
+          Alert.alert("Tourzan", data.detail);
+        } else {
+          //Nav passdata
+          const { params } = this.props.navigation.state;
+
+          if (params ? params.isFromRegistration : false) {
+            //Create Paymentrails Recipient
+            this.createRecipientsPaymentrailsWS();
+          } else {
+            Alert.alert(
+              "Tourzan",
+              "Profile updated successfully.",
+              [
+                {
+                  text: "OK",
+                  onPress: () => {
+                    //Nav passdata
+                    const { params } = this.props.navigation.state;
+
+                    this.props.navigation.dispatch(backAction);
+                  }
+                }
+              ],
+              { cancelable: true }
+            );
+          }
+        }
+      })
+      .catch(err => {
+        this.setState({
+          isLoading: false
+        });
+        alert(err);
+      });
+  }
+
+  createRecipientsPaymentrailsWS() {
+    const { navigate } = this.props.navigation;
+
+    let body = {
+      type: "individual",
+      firstName: this.state.firstname,
+      lastName: this.state.lastname,
+      email: this.props.userdata.user.email
+    };
+
+    createRecipientsPaymentrails(body)
+      .then(data => {
         this.setState({
           isLoading: false
         });
 
-        if (data.error) {
-          Alert.alert("Tourzan", data.detail);
-        } else {
-          Alert.alert(
-            "Tourzan",
-            "Profile updated successfully.",
-            [
-              {
-                text: "OK",
-                onPress: () => {
-                  //Nav passdata
-                  const { params } = this.props.navigation.state;
+        Alert.alert(
+          "Tourzan",
+          "Profile updated successfully.",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                const { params } = this.props.navigation.state;
+                const { navigate } = this.props.navigation;
 
-                  if (params ? params.isFromRegistration : false) {
-                    //Identity verification
-                    navigate("IdentityVerification");
-                  } else {
-                    this.props.navigation.dispatch(backAction);
-                  }
-                }
+                //Identity verification
+                navigate("IdentityVerification", {
+                  isFromRegistration: params ? params.isFromRegistration : false
+                });
               }
-            ],
-            { cancelable: true }
-          );
-        }
+            }
+          ],
+          { cancelable: true }
+        );
       })
       .catch(err => {
         this.setState({

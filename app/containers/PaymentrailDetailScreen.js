@@ -15,7 +15,8 @@ import {
   TouchableOpacity,
   Platform,
   ActivityIndicator,
-  NativeModules
+  NativeModules,
+  WebView
 } from "react-native";
 
 import { connect } from "react-redux";
@@ -46,12 +47,22 @@ import { createApplicantBraintree, profile } from "../actions";
 
 //Utilities
 import { isIphoneX } from "../global/Utilities";
-
 var { width, height } = Dimensions.get("window");
+
+//API
+import { API, Paymentrails } from "../constants";
 
 const backAction = NavigationActions.back({});
 
-class IdentityVerificationScreen extends React.Component {
+const resetRootAction = NavigationActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({ routeName: "Welcome" })],
+  key: null
+});
+
+var CryptoJS = require("crypto-js");
+
+class PaymentrailDetailScreen extends React.Component {
   //#region Constractors
   static navigationOptions = {
     header: null
@@ -60,14 +71,27 @@ class IdentityVerificationScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: false
+      isLoading: false,
+      shouldPocessNext: false,
+      widgetURL: ""
     };
   }
 
   //#endregion
-  componentDidMount() {}
+  componentDidMount() {
+    this.showSpinner();
+    this.generateWidgetURL();
+  }
 
   componentWillUnmount() {}
+
+  hideSpinner() {
+    this.setState({ isLoading: false });
+  }
+
+  showSpinner() {
+    this.setState({ isLoading: true });
+  }
 
   showLoading() {
     if (this.state.isLoading) {
@@ -81,8 +105,13 @@ class IdentityVerificationScreen extends React.Component {
     }
   }
 
+  onFinish() {
+    this.props.navigation.dispatch(resetRootAction);
+  }
+
   render() {
     const { navigate } = this.props.navigation;
+    const { params } = this.props.navigation.state;
 
     return (
       <View style={styles.container}>
@@ -99,146 +128,78 @@ class IdentityVerificationScreen extends React.Component {
               style={styles.backButton}
             />
           </TouchableOpacity>
-          <Text style={styles.centerText}>Identification</Text>
-          <View style={styles.rightView} />
+          <Text style={styles.centerText}>Bank Information</Text>
+
+          <View style={styles.rightView}>
+            {(params ? params.isFromRegistration : false) && (
+              <TouchableOpacity onPress={() => this.onFinish()}>
+                <Text style={styles.rightViewtext}>FINISH</Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
         <View style={styles.main_view}>
-          <ApplyButton
-            onPress={() => {
-              this.onVerifyIdentity();
-            }}
-            name="Verify Your Identity"
-          />
+          <View style={styles.webviewContainer}>
+            <WebView
+              ref={ref => {
+                this.webview = ref;
+              }}
+              onLoad={() => this.hideSpinner()}
+              source={{
+                uri: this.state.widgetURL
+              }}
+              onNavigationStateChange={event => {
+                console.log("Webview event", event);
+              }}
+            />
+          </View>
         </View>
         {this.showLoading()}
       </View>
     );
   }
 
-  onVerifyIdentity() {
-    this.getProfileData();
-  }
+  generateWidgetURL() {
+    const KEY = Paymentrails.apiKey;
+    const SECRET = Paymentrails.apiSecret;
 
-  //API Call get user profile
-  getProfileData() {
-    this.setState({
-      isLoading: true
-    });
+    const recipientEmail = this.props.userdata.user.email;
+    const recipientReferenceId = this.props.userdata.user.email;
 
-    var params = {
-      userid: this.props.userdata.user.userid
+    let widgetBaseUrl = API.PAYMENTRAILS_WIDGET;
+
+    let querystring = {
+      ts: Math.floor(new Date().getTime() / 1000),
+      key: KEY,
+      email: recipientEmail,
+      refid: recipientReferenceId,
+      hideEmail: "false",
+      roEmail: "false",
+      payoutMethods: "bank-transfer,paypal",
+      locale: "en"
     };
 
-    profile(params)
-      .then(data => {
-        console.log("Profile data-->", data);
+    let esc = encodeURIComponent;
+    let query = Object.keys(querystring)
+      .map(k => esc(k) + "=" + esc(querystring[k]))
+      .join("&");
 
-        if (data) {
-          this.generateOnfidoApplicantID(data);
-        } else {
-          Alert.alert("Tourzan", "Server error. Please try again.");
-        }
-      })
-      .catch(err => {
-        this.setState({
-          isLoading: false
-        });
-        alert(err);
-      });
-  }
+    widgetBaseUrl = widgetBaseUrl + query;
 
-  generateOnfidoApplicantID(data) {
-    if (!data.first_name || !data.last_name) {
-      Alert.alert(
-        "Tourzan",
-        "Please complete your first name and last name to continue."
-      );
-      return;
-    }
+    //Signature
+    const hmac = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA256, SECRET);
 
-    this.setState({
-      isLoading: true
-    });
+    hmac.update(query);
 
-    var params = {
-      firstname: data.first_name,
-      lastname: data.last_name
-    };
+    let hash = hmac.finalize();
 
-    createApplicantBraintree(params)
-      .then(data => {
-        console.log("GenerateOnfidoApplicantID data-->", data);
+    var signature = hash.toString(CryptoJS.enc.Hex);
 
-        this.setState({
-          isLoading: false
-        });
+    widgetBaseUrl = widgetBaseUrl + "&sign=" + signature;
 
-        if (data) {
-          if (data.id) {
-            //Verify Guide Identity
-            this.verifyOnfidoIdentity(data.id);
-          } else {
-            Alert.alert("Tourzan", "Server error. Please try again.");
-          }
-        } else {
-          Alert.alert("Tourzan", "Server error. Please try again.");
-        }
-      })
-      .catch(err => {
-        this.setState({
-          isLoading: false
-        });
-        alert(err);
-      });
-  }
+    this.setState({ widgetURL: widgetBaseUrl, shouldPocessNext: true });
 
-  alertAndnNvigateToPaymentrail() {
-    Alert.alert(
-      "Tourzan",
-      "Verification complete",
-      [
-        {
-          text: "OK",
-          onPress: () => {
-            const { params } = this.props.navigation.state;
-            const { navigate } = this.props.navigation;
-
-            //Paymentrail Detail
-            navigate("PaymentrailDetail", {
-              isFromRegistration: params ? params.isFromRegistration : false
-            });
-          }
-        }
-      ],
-      { cancelable: true }
-    );
-  }
-
-  verifyOnfidoIdentity(applicationId) {
-    if (Platform.OS == "ios") {
-      NativeModules.OnfidoSDK.startSDK(
-        applicationId,
-        applicationId => {
-          this.alertAndnNvigateToPaymentrail();
-        },
-        errorCause => {
-          this.setState({
-            isLoading: false
-          });
-          Alert.alert("Tourzan", "Verification not finished please try again.");
-        }
-      );
-    } else {
-      NativeModules.OnfidoSDK.startSDK(
-        applicationId,
-        applicantId => {
-          this.alertAndnNvigateToPaymentrail();
-        },
-        errorCause => {
-          Alert.alert("Tourzan", "Verification not finished please try again.");
-        }
-      );
-    }
+    console.log("Widget URL IS:", widgetBaseUrl);
   }
 }
 
@@ -293,8 +254,13 @@ const styles = StyleSheet.create({
   },
   rightView: {
     marginRight: 20,
-    height: 20,
-    width: 20
+    height: 20
+  },
+  rightViewtext: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 17,
+    fontWeight: "bold"
   },
 
   // --- Activity --- //
@@ -307,6 +273,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "transparent"
+  },
+  // --- webview --- //
+  webviewContainer: {
+    flex: 1,
+    backgroundColor: "#000000",
+    width: "100%"
   }
 });
 
@@ -318,4 +290,4 @@ const mapStateToProps = store => {
   };
 };
 
-export default connect(mapStateToProps)(IdentityVerificationScreen);
+export default connect(mapStateToProps)(PaymentrailDetailScreen);

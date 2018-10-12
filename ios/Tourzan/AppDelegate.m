@@ -52,7 +52,7 @@
   
   [self.window makeKeyAndVisible];
   
-  //[SplashScreen show];  // here
+  [SplashScreen show];  // here
   
   [FIRApp configure];
   

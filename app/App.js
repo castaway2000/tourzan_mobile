@@ -70,6 +70,7 @@ import SelectLanguageScreen from "./containers/SelectLanguageScreen";
 import SelectLanguageProficiencyScreen from "./containers/SelectLanguageProficiencyScreen";
 import AddPaymentMethodScreen from "./containers/AddPaymentMethodScreen";
 import IdentityVerificationScreen from "./containers/IdentityVerificationScreen";
+import PaymentrailDetailScreen from "./containers/PaymentrailDetailScreen";
 
 var { width, height } = Dimensions.get("window");
 
@@ -144,7 +145,7 @@ const MainTapNavigator = TabNavigator(
     MapsNav: { screen: MapChatStackNavigator },
     Dashboard: { screen: DashboardStackNavigator },
     Chat: { screen: ChatStackNavigator },
-    // Marketplace: { screen: IdentityVerificationScreen, },
+    // Marketplace: { screen: PaymentrailDetailScreen, },
     MoreNav: { screen: MoreStackNavigator }
   },
   {
@@ -200,7 +201,8 @@ const App = StackNavigator(
     SelectLanguage: { screen: SelectLanguageScreen },
     SelectLanguageProficiency: { screen: SelectLanguageProficiencyScreen },
     AddPaymentMethod: { screen: AddPaymentMethodScreen },
-    IdentityVerification: { screen: IdentityVerificationScreen }
+    IdentityVerification: { screen: IdentityVerificationScreen },
+    PaymentrailDetail: { screen: PaymentrailDetailScreen }
   },
   {
     headerMode: "screen"

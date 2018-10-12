@@ -35,7 +35,7 @@ import { updateuser } from "../actions/userActions";
 import { Storage, isIphoneX } from "../global/Utilities";
 
 //Webservice
-import { profile, createApplicant } from "../actions";
+import { profile, createApplicantBraintree } from "../actions";
 
 var { width, height } = Dimensions.get("window");
 const backAction = NavigationActions.back({});
@@ -171,24 +171,48 @@ class SettingsScreen extends React.Component {
                             <Image resizeMode='contain' source={require("../assets/images/trip_item_location_icon.png")} style={styles.row_small_icon} />
                             <Text style={styles.row_icon_lb}>Pending from webside</Text>
                         </View> */}
-            <TouchableOpacity
-              style={styles.row_credit_view}
-              onPress={() => this.navigate.navigate("CardList")}
-            >
-              <View style={styles.row_icon_small_view}>
+
+            {!this.props.userdata.user.isLoggedInAsGuide && (
+              <TouchableOpacity
+                style={styles.row_credit_view}
+                onPress={() => this.navigate.navigate("CardList")}
+              >
+                <View style={styles.row_icon_small_view}>
+                  <Image
+                    resizeMode="contain"
+                    source={require("../assets/images/wallet_icon.png")}
+                    style={styles.row_small_icon}
+                  />
+                  <Text style={styles.row_icon_lb}>Credit Card</Text>
+                </View>
                 <Image
                   resizeMode="contain"
-                  source={require("../assets/images/wallet_icon.png")}
-                  style={styles.row_small_icon}
+                  source={require("../assets/images/item_arrow.png")}
+                  style={styles.row_icon}
                 />
-                <Text style={styles.row_icon_lb}>Credit Card</Text>
-              </View>
-              <Image
-                resizeMode="contain"
-                source={require("../assets/images/item_arrow.png")}
-                style={styles.row_icon}
-              />
-            </TouchableOpacity>
+              </TouchableOpacity>
+            )}
+
+            {this.props.userdata.user.isLoggedInAsGuide && (
+              <TouchableOpacity
+                style={styles.row_credit_view}
+                onPress={() => this.navigate.navigate("PaymentrailDetail")}
+              >
+                <View style={styles.row_icon_small_view}>
+                  <Image
+                    resizeMode="contain"
+                    source={require("../assets/images/wallet_icon.png")}
+                    style={styles.row_small_icon}
+                  />
+                  <Text style={styles.row_icon_lb}>Bank Info</Text>
+                </View>
+                <Image
+                  resizeMode="contain"
+                  source={require("../assets/images/item_arrow.png")}
+                  style={styles.row_icon}
+                />
+              </TouchableOpacity>
+            )}
 
             {this.props.userdata.user.isLoggedInAsGuide && (
               <TouchableOpacity
@@ -338,7 +362,7 @@ class SettingsScreen extends React.Component {
       lastname: data.last_name
     };
 
-    createApplicant(params)
+    createApplicantBraintree(params)
       .then(data => {
         console.log("GenerateOnfidoApplicantID data-->", data);
 

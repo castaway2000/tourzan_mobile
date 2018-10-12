@@ -176,7 +176,7 @@ class LoginTouristScreen extends React.Component {
               source={require("../assets/images/Tourzan_Logo.png")}
             />
             <Text style={styles.txt_welcome}>TOURZAN</Text>
-            <Text style={styles.txt_bottom}>Wine Tours La Dolce Vita</Text>
+            <Text style={styles.txt_bottom}>On Demand Local Guides</Text>
           </View>
         </ImageBackground>
         <KeyboardAwareScrollView>

@@ -127,7 +127,7 @@ class RegisterGuideScreen extends React.Component {
 
             Alert.alert(
               "Tourzan",
-              "Registration Successful. Please Login.",
+              "Registration Successful.",
               [
                 {
                   text: "OK",

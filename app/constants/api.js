@@ -12,4 +12,7 @@ export const API = {
 
   GOOGLE_PLACE_AUTOCOMPLETE: "https://maps.googleapis.com/maps/api/place/autocomplete/json?",
   ONFIDO_CREATE_APPLICANTS: "https://api.onfido.com/v2/applicants",
+
+  PAYMENTRAILS_RECIPIENT: "https://api.sandbox.paymentrails.com/v1/recipients",
+  PAYMENTRAILS_WIDGET: "https://widget.paymentrails.com?",
 };

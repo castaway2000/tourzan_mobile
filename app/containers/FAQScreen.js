@@ -67,7 +67,6 @@ class FAQScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.statusbar} />
-
         <View style={styles.navigationbar}>
           <TouchableOpacity
             onPress={() => {
