@@ -85,6 +85,7 @@ class PaymentMethodScreen extends React.Component {
       <View style={styles.container}>
         <View style={styles.navigationbar}>
           <TouchableOpacity
+            style={styles.backButtomContainer}
             onPress={() => {
               this.props.navigation.dispatch(backAction);
             }}
@@ -303,8 +304,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between"
   },
+  backButtomContainer: {
+    width: 44,
+    height: 44,
+    alignItems: "center",
+    justifyContent: "center"
+  },
   backButton: {
-    marginLeft: 20,
     height: 15,
     width: 10
   },

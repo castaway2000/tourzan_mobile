@@ -20,6 +20,7 @@ import { NavigationActions } from "react-navigation";
 import { GiftedChat } from "react-native-gifted-chat";
 import { Colors } from "../constants";
 import { API } from "../constants";
+import moment from 'moment'
 
 //Store
 import { connect } from "react-redux";
@@ -29,10 +30,15 @@ import { store } from "../store/index";
 import { updatebooking } from "../actions/bookingActions";
 import { updateuser } from "../actions/userActions";
 
+//Webservice
+import { sendChatMessage } from "../actions";
+
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
 
 var { width, height } = Dimensions.get("window");
+
+var lastid = 0;
 
 const backAction = NavigationActions.back({});
 
@@ -50,14 +56,22 @@ class ChatRoomScreen extends React.Component {
     )
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      messages: [],
+      messageText: ""
+    };
+
+  }
+
   // gifted chat
   componentWillMount() {
     var { params } = this.props.navigation.state;
 
-    console.log(
-      "params.chatData.messages",
-      API.CHAT_URL + params.chatData.uuid + "/"
-    );
+    console.log("params.chatData", params.chatData);
+
+    lastid = params.chatData.messages[0].id
 
     for (let index = 0; index < params.chatData.messages.length; index++) {
       const element = params.chatData.messages[index];
@@ -65,12 +79,11 @@ class ChatRoomScreen extends React.Component {
       let data = {
         _id: element.id,
         text: element.message,
-        createdAt: new Date(),
+        createdAt: moment(element.created),
         user: {
           _id: element.user,
           name: "",
-          avatar:
-            "https://testing.tourzan.com/static/img/Tourzan-transparant.png"
+          avatar: params.chatData.picurl ? params.chatData.picurl : ""
         }
       };
 
@@ -85,27 +98,29 @@ class ChatRoomScreen extends React.Component {
   componentDidMount() {
     var { params } = this.props.navigation.state;
 
-    this.socket = new WebSocket(API.CHAT_URL + params.chatData.uuid + "/");
+    this.socket = new WebSocket(API.CHAT_URL + params.chatData.uuid + "/?token=" + this.props.userdata.token);
 
-    this.socket.binaryType = "blob";
-
-    console.log(this.socket);
+    // this.socket.binaryType = "blob";
 
     this.socket.onopen = () => {
-      console.log("Socket connected...!");
+      console.log("Socket connected...!",API.CHAT_URL + params.chatData.uuid + "/?token=" + this.props.userdata.token);
     };
 
     this.socket.onmessage = e => {
       console.log("A message was received.", e.data);
 
+      var { params } = this.props.navigation.state;
+
+      lastid = lastid + 1;
+      
       let cm = {
-        text: e.data.message,
-        _id: -1,
+        text: JSON.parse(e.data).message,
+        _id: lastid,
         createdAt: new Date(),
         user: {
-          _id: -2,
+          _id: this.props.userdata.user.userid,
           name: "",
-          avatar: ""
+          avatar: params.chatData.picurl ? params.chatData.picurl : ""
         }
       };
 
@@ -126,27 +141,31 @@ class ChatRoomScreen extends React.Component {
   }
 
   onSend(messages = []) {
-    console.log("sending...");
 
+    var { params } = this.props.navigation.state;
+
+    console.log("sending message....,");
+    
     let message1 = {
-      message: "test",
-      user: "guide100",
-      dt: "08/16/2018 07:23:14"
+      message: this.state.messageText,
+      chat_uuid: params.chatData.uuid,
     };
 
     let messagestringfy = JSON.stringify(message1);
 
     this.socket.send(messagestringfy);
+    
+    // this.sendChatMessageWS();
 
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages)
     }));
   }
 
-  constructor(props) {
-    super(props);
-    this.state = { messages: [] };
-    // this.onSend = this.onSend.bind(this);
+  setCustomText(text) {
+    this.setState({
+      messageText: text
+    });
   }
 
   render() {
@@ -158,6 +177,7 @@ class ChatRoomScreen extends React.Component {
         <View style={styles.statusbar} />
         <View style={styles.top_container}>
           <TouchableOpacity
+            style={styles.backButtomContainer}
             onPress={() => {
               this.props.navigation.dispatch(backAction);
             }}
@@ -185,8 +205,9 @@ class ChatRoomScreen extends React.Component {
           <GiftedChat
             messages={this.state.messages}
             onSend={messages => this.onSend(messages)}
+            onInputTextChanged={text => this.setCustomText(text)}
             user={{
-              _id: 1
+              _id: this.props.userdata.user.userid
             }}
           />
         </View>
@@ -195,6 +216,23 @@ class ChatRoomScreen extends React.Component {
   }
 
   //#region
+
+  sendChatMessageWS() {
+    var { dispatch } = this.props;
+    var { params } = this.props.navigation.state;
+
+    var params = {
+      chat_id: params.chatData.id,
+      chat_uuid: params.chatData.uuid,
+      message: this.state.messageText
+    };
+
+    sendChatMessage(params)
+      .then(data => {})
+      .catch(err => {
+        alert(err);
+      });
+  }
 
   getOpponmentUserID = () => {
     var { params } = this.props.navigation.state;
@@ -238,8 +276,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between"
   },
+  backButtomContainer: {
+    width: 44,
+    height: 44,
+    alignItems: "center",
+    justifyContent: "center"
+  },
   backButton: {
-    marginLeft: 20,
     height: 15,
     width: 10
   },

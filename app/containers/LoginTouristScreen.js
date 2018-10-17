@@ -237,6 +237,15 @@ class LoginTouristScreen extends React.Component {
             <TouchableOpacity onPress={() => this.onSignup()} title="SING UP">
               <Text style={styles.button_signup}> SIGN UP </Text>
             </TouchableOpacity>
+
+                          
+                          <View style={styles.termsView}>
+              <Text style={{ color: "gray", fontSize: 13 }}> By clicking "<Text style={{ color: Colors.main }}>Sign Up</Text>" I agree to the </Text>
+              <TouchableOpacity onPress={() => {this.navigate.navigate("TermsofUseScreen")}}>
+                <Text style={{ fontSize: 13, marginTop: 4 }}> Terms of Service </Text>
+              </TouchableOpacity>
+             </View>
+
           </View>
         </KeyboardAwareScrollView>
         {this.showLoading()}
@@ -341,7 +350,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "transparent"
-  }
+  },
+  termsView: {
+    marginTop: 30,
+    marginBottom: 80,
+    alignItems: "center"
+  },
 });
 
 const mapStateToProps = store => {

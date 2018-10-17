@@ -135,8 +135,7 @@ class DashboardTapNavigator extends React.Component {
                       ? [styles.tabtxt, { color: "white" }]
                       : styles.tabtxt
                   }
-                >
-                  PREV GUIDES
+                > {this.props.userdata.user.isLoggedInAsGuide ? 'PREV TOURIST' : 'PREV GUIDES'}
                 </Text>
               </View>
             </TouchableWithoutFeedback>

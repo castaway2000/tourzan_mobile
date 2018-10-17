@@ -18,9 +18,9 @@ class NavigationBar extends React.Component {
 
     return (
       <View style={[styles.container, { backgroundColor: bgColor }]}>
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity onPress={onPress} style={styles.backButtomContainer}>
           <Image
-            resizeMode="center"
+            resizeMode="contain"
             style={styles.backButton}
             source={require("../assets/images/back.png")}
           />
@@ -44,10 +44,15 @@ const styles = StyleSheet.create({
     height: 44,
     width: 50
   },
+  backButtomContainer: {
+    width: 44,
+    height: 44,
+    alignItems: "center",
+    justifyContent: "center"
+  },
   backButton: {
     height: 15,
-    width: 50,
-    resizeMode: "contain"
+    width: 50
   },
   centerText: {
     color: "#fff",

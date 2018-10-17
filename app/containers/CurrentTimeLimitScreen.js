@@ -196,7 +196,7 @@ class CurrentTimeLimitScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.navigationbar}>
-          <TouchableOpacity
+          <TouchableOpacity style={styles.backButtomContainer}
             onPress={() => {
               this.props.navigation.dispatch(backAction);
             }}
@@ -353,6 +353,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between"
+  },
+  backButtomContainer:{
+    width: 44,
+    height: 44,
+    alignItems: "center",
+    justifyContent: "center"
   },
   backButton: {
     marginLeft: 20,

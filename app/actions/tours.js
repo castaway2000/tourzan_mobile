@@ -249,8 +249,8 @@ function loginAndUpdateTrip(params) {
 
   let url = API.SERVER + API.VERSION + "/mobile/update_trip/";
 
-  console.log("Login and Update API URL-->", url);
-  console.log("Login and Update API PARAMS-->", formData);
+  // console.log("Login and Update API URL-->", url);
+  // console.log("Login and Update API PARAMS-->", formData);
 
   return new Promise((resolve, reject) => {
     fetch(url, {
@@ -264,7 +264,7 @@ function loginAndUpdateTrip(params) {
     })
       .then(res => res.json())
       .then(data => {
-        console.log("Login and Update API Responce", data);
+        // console.log("Login and Update API Responce", data);
         resolve(data);
       })
       .catch(err => {
@@ -351,8 +351,8 @@ function getnearbyguides(params) {
 
   let url = API.SERVER + API.VERSION + "/mobile/get_nearby_guides/";
 
-  console.log("Get Nearby Guides API URL-->", url);
-  console.log("Get Nearby Guides API PARAMS-->", formData);
+  // console.log("Get Nearby Guides API URL-->", url);
+  // console.log("Get Nearby Guides API PARAMS-->", formData);
 
   return new Promise((resolve, reject) => {
     fetch(url, {
@@ -366,7 +366,7 @@ function getnearbyguides(params) {
     })
       .then(res => res.json())
       .then(data => {
-        console.log("Get Nearby Guides API Success", data);
+        // console.log("Get Nearby Guides API Success", data);
         resolve(data);
       })
       .catch(err => {

@@ -16,6 +16,7 @@ import {
   ActivityIndicator,
   ImageBackground
 } from "react-native";
+
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { NavigationActions } from "react-navigation";
 import Checkbox from "react-native-custom-checkbox";
@@ -302,8 +303,8 @@ class RegisterGuideScreen extends React.Component {
             }}
           />
           <View style={styles.view_title}>
-            <Text style={styles.txt_bottom}> </Text>
-            <Text style={styles.txt_welcome}>REGISTER YOUR GUIDE PROFILE</Text>
+          <Text style={styles.txt_bottom}>REGISTER</Text>
+            <Text style={styles.txt_welcome}>Create A Guide Account</Text>
           </View>
         </ImageBackground>
         <KeyboardAwareScrollView style={styles.out_container}>
@@ -452,16 +453,9 @@ class RegisterGuideScreen extends React.Component {
             </View>
             <View style={styles.line1} />
             <View style={styles.termsView}>
-              <Text style={{ color: "gray", fontSize: 13 }}>
-                By clicking "<Text style={{ color: Colors.main }}>Sign Up</Text>
-                " I agree
-              </Text>
-              <TouchableOpacity
-                onPress={() => this.navigate.navigate("TermsofUseScreen")}
-              >
-                <Text style={{ fontSize: 13, marginTop: 4 }}>
-                  Terms of Service
-                </Text>{" "}
+              <Text style={{ color: "gray", fontSize: 13 }}>By clicking "<Text style={{ color: Colors.main }}>Sign Up</Text>" I agree to the</Text>
+              <TouchableOpacity onPress={() => {this.navigate.navigate("TermsofUseScreen")}} >
+                <Text style={{ fontSize: 13, marginTop: 4 }}> Terms of Service </Text>
               </TouchableOpacity>
             </View>
           </View>

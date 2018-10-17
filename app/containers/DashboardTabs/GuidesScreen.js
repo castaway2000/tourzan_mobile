@@ -73,6 +73,7 @@ class GuideScreen extends React.Component {
   }
 
   previousGuideListWS() {
+    
     previousGuideList()
       .then(data => {
         // this.setState({

@@ -16,7 +16,8 @@ import {
   TouchableHighlight,
   ImageBackground,
   ActivityIndicator,
-  Platform
+  Platform,
+  FlatList
 } from "react-native";
 
 import { NavigationActions } from "react-navigation";
@@ -77,14 +78,10 @@ class ProfileScreen extends React.Component {
 
     this.onContentSize = this.onContentSize.bind(this);
 
-    var ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 != r2
-    });
-
     this.state = {
       // for listview
-      ds: [],
-      dataSource: ds,
+
+      dataSource: [],
 
       // for ratingview
       starCount: 3.5,
@@ -95,10 +92,6 @@ class ProfileScreen extends React.Component {
 
   // functions for listview
   componentDidMount() {
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(this.state.ds)
-    });
-
     this.onLoadProfileData();
   }
 
@@ -118,12 +111,7 @@ class ProfileScreen extends React.Component {
           this.setState({
             profileData: data,
             isLoading: false,
-            dataSource: data.tourist_reviews
-              ? this.state.dataSource.cloneWithRows(data.tourist_reviews)
-              : this.state.dataSource.cloneWithRows([]),
-            ds: data.tourist_reviews
-              ? this.state.dataSource.cloneWithRows(data.tourist_reviews)
-              : this.state.dataSource.cloneWithRows([])
+            dataSource: data.tourist_reviews ? data.tourist_reviews : []
           });
         }
       })
@@ -237,46 +225,46 @@ class ProfileScreen extends React.Component {
     this.setState({ listViewHeight: contentHeight });
   }
 
-  renderRow(rowData) {
+  renderRow = ({ item, index }) => {
     let isGuide = this.props.userdata.user.isLoggedInAsGuide;
     return (
       <TouchableHighlight
         style={styles.row_view}
-        onPress={() => this.pressRow(rowData)}
-        underlayColor="#ddd"
+        onPress={() => this.pressRow(item)}
+        underlayColor="transparent"
       >
         <View style={styles.row}>
           <View style={styles.avatar_view}>
             <Image
               resizeMode="cover"
-              source={{ uri: rowData.fields.reviewers_picture }}
+              source={{ uri: item.fields.reviewers_picture }}
               style={styles.avatar_img}
             />
           </View>
           <View style={styles.info_view}>
             <View style={styles.list_info_location_view}>
               <Text style={styles.list_info_name_text}>
-                {rowData.fields.reviewers_name}
+                {item.fields.reviewers_name}
               </Text>
               <Text style={styles.list_info_time_text}>
                 {this.getDateString(
                   isGuide
-                    ? rowData.fields.tourist_review_created
-                    : rowData.fields.guide_review_created
+                    ? item.fields.tourist_review_created
+                    : item.fields.guide_review_created
                 )}
               </Text>
             </View>
             <Text style={styles.description_text}>
               {isGuide
-                ? rowData.fields.tourist_feedback_text
-                : rowData.fields.guide_feedback_text}
+                ? item.fields.tourist_feedback_text
+                : item.fields.guide_feedback_text}
             </Text>
             <View style={styles.rate_view} pointerEvents="none">
               {this._showRatingViewList(
                 parseFloat(
                   isGuide
-                    ? rowData.fields.tourist_rating
-                    : rowData.fields.guide_rating
+                    ? item.fields.tourist_rating
+                    : item.fields.guide_rating
                 )
               )}
             </View>
@@ -284,7 +272,7 @@ class ProfileScreen extends React.Component {
         </View>
       </TouchableHighlight>
     );
-  }
+  };
 
   //Show full name
   _showProfilePicture = () => {
@@ -298,7 +286,7 @@ class ProfileScreen extends React.Component {
       );
     }
 
-    let isGuide = this.state.profileData.guide_data.is_guide;
+    let isGuide = this.props.userdata.user.isLoggedInAsGuide;
 
     let profilepicture = "";
 
@@ -472,6 +460,7 @@ class ProfileScreen extends React.Component {
         >
           <View style={styles.navigationbar}>
             <TouchableOpacity
+              style={styles.backButtomContainer}
               onPress={() => {
                 this.props.navigation.dispatch(backAction);
               }}
@@ -498,7 +487,10 @@ class ProfileScreen extends React.Component {
             </TouchableOpacity>
           </View>
         </ImageBackground>
-        <ScrollView style={styles.scrollview_container}>
+        <ScrollView
+          nestedScrollEnabled={true}
+          style={styles.scrollview_container}
+        >
           <View style={styles.content_container}>
             <View style={styles.main_container}>
               <View pointerEvents="none" style={styles.name_view}>
@@ -548,15 +540,16 @@ class ProfileScreen extends React.Component {
                 </Text>
                 {this._showRatingViewMain()}
               </View>
-              <ListView
+              <FlatList
                 style={{
-                  paddingHorizontal: 0,
-                  height: this.state.listViewHeight
+                  width: "100%",
+                  flex: 1,
+                  marginBottom: 16
                 }}
                 ref={ref => (this.listView = ref)}
                 onContentSizeChange={this.onContentSize}
-                dataSource={this.state.dataSource}
-                renderRow={this.renderRow.bind(this)}
+                data={this.state.dataSource}
+                renderItem={this.renderRow}
               />
             </View>
           </View>
@@ -575,7 +568,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: "column",
-    backgroundColor: "white"
+    backgroundColor: "white",
+    flex: 1
   },
   top_container: {
     width: width,
@@ -591,8 +585,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between"
   },
+  backButtomContainer: {
+    width: 44,
+    height: 44,
+    alignItems: "center",
+    justifyContent: "center"
+  },
   backButton: {
-    marginLeft: 20,
     height: 15,
     width: 10
   },
@@ -609,9 +608,8 @@ const styles = StyleSheet.create({
     width: 20
   },
   scrollview_container: {
-    // flex:1,
     paddingTop: 20,
-    height: height - 100
+    backgroundColor: "transparent"
   },
   avatar_icon: {
     position: "absolute",

@@ -470,7 +470,8 @@ class MapsScreen extends React.Component {
             <MapView
               style={styles.map_view}
               showsUserLocation={true}
-              showsMyLocationButton={true}
+              showsCompass={false}
+              showsMyLocationButton={false}
               region={this.state.mapRegion}
               onRegionChange={this.onRegionChange}
             >
@@ -536,145 +537,9 @@ class MapsScreen extends React.Component {
               <Text style={styles.row_text}>{this.state.address}</Text>
             </View>
 
-            <View style={styles.devide_line} />
-            {this.state.isSettingTime ? (
-              <View style={styles.setting_time_view}>
-                <TouchableOpacity onPress={() => this.onSettingTime()}>
-                  <View style={styles.setting_time_top_view}>
-                    <Image
-                      resizeMode="contain"
-                      source={require("../assets/images/time_icon.png")}
-                      style={styles.icon_image}
-                    />
-                    <Text style={styles.row_text}>
-                      {this.state.hour} : {this.state.minute}{" "}
-                      {this.state.trueSwitchIsOn ? "AM" : "PM"}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-                <View style={styles.setting_time_main_view}>
-                  <View style={styles.setting_time_lb_view}>
-                    <Text style={styles.setting_time_lb}>
-                      Set your time schedule
-                    </Text>
-                    <TouchableOpacity onPress={() => this.onUnSettingTime()}>
-                      <Image
-                        resizeMode="contain"
-                        source={require("../assets/images/checked_gray.png")}
-                        style={styles.setting_time_check_icon}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.setting_time_picker_view}>
-                    <View style={styles.setting_time_picker_main_view}>
-                      <View style={styles.hour_view}>
-                        <TouchableOpacity
-                          onPress={() => this.onChangeHourMinute(true, true)}
-                        >
-                          <Image
-                            resizeMode="contain"
-                            source={require("../assets/images/caret-arrow-up.png")}
-                            style={styles.up_down_arrow_view}
-                          />
-                        </TouchableOpacity>
-                        <TextInput
-                          style={styles.hour_text}
-                          underlineColorAndroid="transparent"
-                          value={this.state.hour}
-                          keyboardType="numeric"
-                          maxLength={2}
-                          onChangeText={text => this.setHour(text)}
-                          onSubmitEditing={this._onLogin}
-                        />
-                        <TouchableOpacity
-                          onPress={() => this.onChangeHourMinute(true, false)}
-                        >
-                          <Image
-                            resizeMode="contain"
-                            source={require("../assets/images/caret-arrow-down.png")}
-                            style={styles.up_down_arrow_view}
-                          />
-                        </TouchableOpacity>
-                      </View>
-                      <View style={styles.double_dut_view}>
-                        <Text style={styles.double_dut_symbol}>:</Text>
-                      </View>
-                      <View style={styles.minute_view}>
-                        <TouchableOpacity
-                          onPress={() => this.onChangeHourMinute(false, true)}
-                        >
-                          <Image
-                            resizeMode="contain"
-                            source={require("../assets/images/caret-arrow-up.png")}
-                            style={styles.up_down_arrow_view}
-                          />
-                        </TouchableOpacity>
-                        <TextInput
-                          style={styles.hour_text}
-                          underlineColorAndroid="transparent"
-                          value={this.state.minute}
-                          keyboardType="numeric"
-                          maxLength={2}
-                          onChangeText={text => this.setMinute(text)}
-                          onSubmitEditing={this._onLogin}
-                        />
-                        <TouchableOpacity
-                          onPress={() => this.onChangeHourMinute(false, false)}
-                        >
-                          <Image
-                            resizeMode="contain"
-                            source={require("../assets/images/caret-arrow-down.png")}
-                            style={styles.up_down_arrow_view}
-                          />
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                    <Switch
-                      value={this.state.trueSwitchIsOn}
-                      onValueChange={val =>
-                        this.setState({ trueSwitchIsOn: val })
-                      }
-                      disabled={false}
-                      activeText={"AM"}
-                      inActiveText={"PM"}
-                      backgroundActive={"#31dd73"}
-                      backgroundInactive={"#c2c3c9"}
-                      circleActiveColor={"white"}
-                      circleInActiveColor={"white"}
-                    />
-                  </View>
-                </View>
-              </View>
-            ) : (
-              <View>
-                {!this.props.userdata.user.isLoggedInAsGuide && (
-                  <TouchableOpacity
-                    style={styles.location_time_touchable_view}
-                    onPress={() => this.onSettingTime()}
-                  >
-                    <View style={styles.location_time_view}>
-                      <View style={styles.location_time_left_child}>
-                        <Image
-                          resizeMode="contain"
-                          source={require("../assets/images/time_icon.png")}
-                          style={styles.icon_image}
-                        />
-                        <Text style={styles.row_text}>
-                          {this.state.hour} : {this.state.minute}{" "}
-                          {this.state.trueSwitchIsOn ? "AM" : "PM"}
-                        </Text>
-                      </View>
-                      <Image
-                        resizeMode="contain"
-                        source={require("../assets/images/edit_time.png")}
-                        style={styles.edit_time}
-                      />
-                    </View>
-                  </TouchableOpacity>
-                )}
-              </View>
-            )}
-          </View>
+             <View style={styles.devide_line} />
+             
+          </View> 
 
           {this.showBottomBookButton()}
 

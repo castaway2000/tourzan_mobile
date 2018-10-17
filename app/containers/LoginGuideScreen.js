@@ -225,12 +225,17 @@ class LoginGuideScreen extends React.Component {
                 onPress={() => this.onLogin()}
                 style={styles.button_login}
               />
-              <TouchableOpacity
-                onPress={() => this.navigate.navigate("RegisterGuide")}
-                title="SING UP"
-              >
+              <TouchableOpacity onPress={() => this.navigate.navigate("RegisterGuide")} title="SING UP">
                 <Text style={styles.button_signup}>SIGN UP</Text>
               </TouchableOpacity>
+              
+              <View style={styles.termsView}>
+              <Text style={{ color: "gray", fontSize: 13 }}> By clicking "<Text style={{ color: Colors.main }}>Sign Up</Text>" I agree to the </Text>
+              <TouchableOpacity onPress={() => {this.navigate.navigate("TermsofUseScreen")}}>
+                <Text style={{ fontSize: 13, marginTop: 4 }}> Terms of Service </Text>
+              </TouchableOpacity>
+             </View>
+
             </View>
           </View>
         </KeyboardAwareScrollView>
@@ -331,7 +336,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "transparent"
-  }
+  },
+  termsView: {
+    marginTop: 30,
+    marginBottom: 80,
+    alignItems: "center"
+  },
 });
 
 const mapStateToProps = store => {

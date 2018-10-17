@@ -216,9 +216,9 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent"
   },
   paddingRight: {
-    paddingRight: 5
+    paddingRight: 2
   },
   paddingLeft: {
-    paddingLeft: 5
+    paddingLeft: 2
   }
 });

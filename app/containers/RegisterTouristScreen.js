@@ -300,8 +300,8 @@ class RegisterTouristScreen extends React.Component {
             }}
           />
           <View style={styles.view_title}>
-            <Text style={styles.txt_bottom}> </Text>
-            <Text style={styles.txt_welcome}>REGISTER A PROFILE</Text>
+            <Text style={styles.txt_bottom}>REGISTER</Text>
+            <Text style={styles.txt_welcome}>Create A Tourist Account</Text>
           </View>
         </ImageBackground>
         <KeyboardAwareScrollView style={styles.out_container}>
@@ -358,81 +358,6 @@ class RegisterTouristScreen extends React.Component {
               <View style={styles.line} />
             </View>
 
-            {/* <View>
-                            <TextInput
-                                ref={this.getNextInput4.bind(this)}
-                                placeholder="Address"
-                                style={styles.inputText}
-                                underlineColorAndroid='transparent'
-                                value={this.state.address}
-                                onChangeText={(text) => this.setUserAddress(text)}
-                                onSubmitEditing={this.changeFocus5.bind(this)}
-                            />
-                            <View style={styles.line}></View>
-                        </View>
-
-                        <View>
-                            <TextInput
-                                ref={this.getNextInput5.bind(this)}
-                                placeholder="Company Name"
-                                style={styles.inputText}
-                                underlineColorAndroid='transparent'
-                                value={this.state.company}
-                                onChangeText={(text) => this.setUserCompany(text)}
-                                onSubmitEditing={this.changeFocus6.bind(this)}
-                            />
-                            <View style={styles.line}></View>
-                        </View>
-
-                        <View>
-                            <TextInput
-                                ref={this.getNextInput6.bind(this)}
-                                placeholder="Phone Number"
-                                style={styles.inputText}
-                                keyboardType='numeric'
-                                underlineColorAndroid='transparent'
-                                value={this.state.phone}
-                                onChangeText={(text) => this.setUserPhone(text)}
-                            />
-                            <View style={styles.line}></View>
-                        </View>
-
-                        <View style={{ flex: 1 }}>
-                            <TouchableOpacity style={styles.intestsView} onPress={() => this.onClickExtendInterests()}>
-                                <Text style={styles.label}>Interests</Text>
-                                <Image source={this.state.isInterestExtend ? require('../assets/images/caret-arrow-up.png') : require('../assets/images/caret-arrow-down.png')} style={styles.arrowIcon} />
-                            </TouchableOpacity>
-                            {
-                                this.state.isInterestExtend ?
-                                    <View style={styles.interest_list_view}>
-                                        <TouchableOpacity onPress={() => this.onAttractions()} style={styles.interres_list_button}>
-                                            <Text style={this.state.isAttractions ? styles.interest_item_txt1 : styles.interest_item_txt}>Attractions</Text>
-                                            {this.state.isAttractions ?
-                                                <Image source={require('../assets/images/checked_gray.png')} style={{ width: 15, height: 15 }} /> : null
-                                            }
-                                        </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => this.onBoarding()} style={styles.interres_list_button}>
-                                            <Text style={this.state.isBoarading ? styles.interest_item_txt1 : styles.interest_item_txt}>Boarding</Text>
-                                            {this.state.isBoarading ?
-                                                <Image source={require('../assets/images/checked_gray.png')} style={{ width: 15, height: 15 }} /> : null
-                                            }
-                                        </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => this.onHiking()} style={styles.interres_list_button}>
-                                            <Text style={this.state.isHiking ? styles.interest_item_txt1 : styles.interest_item_txt}>Hiking</Text>
-                                            {this.state.isHiking ?
-                                                <Image source={require('../assets/images/checked_gray.png')} style={{ width: 15, height: 15 }} /> : null
-                                            }
-                                        </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => this.onTraveling()} style={styles.interres_list_button}>
-                                            <Text style={this.state.isTraveling ? styles.interest_item_txt1 : styles.interest_item_txt}>Traveling</Text>
-                                            {this.state.isTraveling ?
-                                                <Image source={require('../assets/images/checked_gray.png')} style={{ width: 15, height: 15 }} /> : null
-                                            }
-                                        </TouchableOpacity>
-                                    </View> : null
-                            }
-                        </View> */}
-
             <View style={styles.line} />
 
             <ApplyButton
@@ -455,16 +380,9 @@ class RegisterTouristScreen extends React.Component {
             </View>
             <View style={styles.line1} />
             <View style={styles.termsView}>
-              <Text style={{ color: "gray", fontSize: 13 }}>
-                By clicking "<Text style={{ color: Colors.main }}>Sign Up</Text>
-                " I agree
-              </Text>
-              <TouchableOpacity
-                onPress={() => this.navigate.navigate("TermsofUseScreen")}
-              >
-                <Text style={{ fontSize: 13, marginTop: 4 }}>
-                  Terms of Service
-                </Text>{" "}
+              <Text style={{ color: "gray", fontSize: 13 }}> By clicking "<Text style={{ color: Colors.main }}>Sign Up</Text>" I agree to the </Text>
+              <TouchableOpacity onPress={() => {this.navigate.navigate("TermsofUseScreen")}}>
+                <Text style={{ fontSize: 13, marginTop: 4 }}> Terms of Service </Text>
               </TouchableOpacity>
             </View>
           </View>

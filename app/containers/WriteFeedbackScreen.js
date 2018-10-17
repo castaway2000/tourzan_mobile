@@ -56,6 +56,12 @@ const backAction = NavigationActions.back({
   // key: 'WelcomeScreen'
 });
 
+const resetRootAction = NavigationActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({ routeName: "Home" })],
+  key: null
+});
+
 class WriteFeedbackScreen extends React.Component {
   static navigationOptions = {
     title: "Maps",
@@ -219,6 +225,7 @@ class WriteFeedbackScreen extends React.Component {
         <View resizeMode="cover" style={styles.top_container}>
           <View style={styles.navigationbar}>
             <TouchableOpacity
+              style={styles.backButtomContainer}
               onPress={() => {
                 this.props.navigation.dispatch(backAction);
               }}
@@ -324,7 +331,19 @@ trip_id: 57}*/
         });
 
         if (data.detail) {
-          Alert.alert("Tourzan", data.detail);
+          Alert.alert(
+            "Tourzan",
+            data.detail,
+            [
+              {
+                text: "OK",
+                onPress: () => {
+                  this.props.navigation.dispatch(resetRootAction);
+                }
+              }
+            ],
+            { cancelable: false }
+          );
         } else {
           Alert.alert("Tourzan", data);
         }
@@ -362,8 +381,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between"
   },
+  backButtomContainer: {
+    width: 44,
+    height: 44,
+    alignItems: "center",
+    justifyContent: "center"
+  },
   backButton: {
-    marginLeft: 20,
     height: 15,
     width: 10
   },

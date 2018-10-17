@@ -81,6 +81,8 @@ class ChatScreen extends React.Component {
       // for ratingview
       starCount: 3.5
     };
+
+    this.chatArrayHolder = [];
   }
 
   // function for ratingview
@@ -103,11 +105,22 @@ class ChatScreen extends React.Component {
 
         if (data.length && data.length > 0) {
           this.setState({
-            ds: data
+            ds: data.reverse()
           });
 
+          //To add default profile picture
           for (let i = 0; i < data.length; i++) {
             data[i].pic = require("../assets/images/defaultavatar.png");
+
+            //To remove HTML From message
+            for (let index = 0; index < data[i].messages.length; index++) {
+              const element = data[i].messages[index];
+              const regex = /(<([^>]+)>)/gi;
+              data[i].messages[index].message = element.message.replace(
+                regex,
+                ""
+              );
+            }
 
             this.loadUserNameProfilePics(data, i);
           }
@@ -124,10 +137,16 @@ class ChatScreen extends React.Component {
   loadUserNameProfilePics = (profiles, index) => {
     //let params = {id: this.props.userdata.isGuide ? profiles[index].guide : profiles[index].tourist , usertype: this.props.userdata.isGuide ? 'guide' : 'tourist'}
 
+    let opponmentid = 0;
+
+    if (this.props.userdata.user.userid == profiles[index].tourist) {
+      opponmentid = profiles[index].guide;
+    } else {
+      opponmentid = profiles[index].tourist;
+    }
+
     let params = {
-      id: this.props.userdata.isGuide
-        ? profiles[index].tourist
-        : profiles[index].guide,
+      id: opponmentid,
       usertype: "tourist"
     };
 
@@ -155,13 +174,20 @@ class ChatScreen extends React.Component {
 
         if (data.pic) {
           newArray[index].pic = { uri: data.pic };
+          newArray[index].picurl = data.pic;
         } else {
           newArray[index].pic = require("../assets/images/defaultavatar.png");
+          newArray[index].picurl = data.pic;
         }
+
+        newArray[index].opfirstname = data.first_name;
+        newArray[index].oplastname = data.last_name;
 
         this.setState({
           ds: newArray
         });
+
+        this.chatArrayHolder = newArray.slice(0);
       })
       .catch(err => {
         this.setState({
@@ -176,9 +202,9 @@ class ChatScreen extends React.Component {
     console.log("debug", searchText);
     this.setState({ searchText });
 
-    let filteredData = this.filterNotes(searchText, this.state.ds);
+    let filteredData = this.filterNotes(searchText, this.chatArrayHolder);
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(filteredData)
+      ds: filteredData
     });
   }
 
@@ -313,16 +339,18 @@ class ChatScreen extends React.Component {
               />
             </View>
           </View>
-          <FlatList
-            data={this.state.ds}
-            removeClippedSubviews={false}
-            extraData={this.state}
-            renderItem={this.renderItem.bind(this)}
-            renderSeparator={(sectionId, rowId) => (
-              <View key={rowId} style={styles.separator} />
-            )}
-            //renderHeader={() => <SearchListHeader />}
-          />
+          <View style={Platform.OS === "ios" ? { flex: 1 } : null}>
+            <FlatList
+              data={this.state.ds}
+              removeClippedSubviews={false}
+              extraData={this.state}
+              renderItem={this.renderItem.bind(this)}
+              ItemSeparatorComponent={(sectionId, rowId) => (
+                <View key={rowId} style={styles.separator} />
+              )}
+              //renderHeader={() => <SearchListHeader />}
+            />
+          </View>
         </View>
       </View>
     );
@@ -358,7 +386,6 @@ const styles = StyleSheet.create({
     height: 20
   },
   backButton: {
-    marginLeft: 20,
     height: 20,
     width: 20
   },

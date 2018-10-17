@@ -98,6 +98,7 @@ class SettingsScreen extends React.Component {
         <View style={styles.statusbar} />
         <View style={styles.navigationbar}>
           <TouchableOpacity
+            style={styles.backButtomContainer}
             onPress={() => {
               this.props.navigation.dispatch(backAction);
             }}
@@ -154,19 +155,19 @@ class SettingsScreen extends React.Component {
             </TouchableOpacity>
             <View style={styles.blank_row_view} />
 
-            <View style={styles.row_icon_view}>
+            {/* <View style={styles.row_icon_view}>
               <Image
                 resizeMode="contain"
                 source={require("../assets/images/Icon_email.png")}
                 style={styles.row_small_icon}
               />
-              {/* <TextInput underlineColorAndroid='transparent' style={styles.row_icon_lb} value={'adamparker@gmail.com'}></TextInput> */}
+              <TextInput underlineColorAndroid='transparent' style={styles.row_icon_lb} value={'adamparker@gmail.com'}></TextInput>
               <Text style={styles.row_icon_lb}>
                 {this.props.userdata.user.email
                   ? this.props.userdata.user.email
                   : "-"}
               </Text>
-            </View>
+            </View> */}
             {/* <View style={styles.row_icon_view}>
                             <Image resizeMode='contain' source={require("../assets/images/trip_item_location_icon.png")} style={styles.row_small_icon} />
                             <Text style={styles.row_icon_lb}>Pending from webside</Text>
@@ -448,8 +449,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between"
   },
+  backButtomContainer: {
+    width: 44,
+    height: 44,
+    alignItems: "center",
+    justifyContent: "center"
+  },
   backButton: {
-    marginLeft: 20,
     height: 15,
     width: 10
   },
@@ -457,7 +463,6 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 17,
-    width: width - 160,
     fontWeight: "bold"
   },
   rightView: {

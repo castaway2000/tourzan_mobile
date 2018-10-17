@@ -322,27 +322,18 @@ class BookingGuideSettingScreen extends React.Component {
   };
 
   profileImage = () => {
-    var profileImage = null;
-    var profileImageobj = {};
+    var profileImage;
 
     var { params } = this.props.navigation.state;
 
     var guide = params.guide;
 
-    let isGuide = guide.is_guide;
-
-    if (!isGuide) {
-      profileImage = guide.profile_picture;
-    } else {
-      if (guide.profile_picture) {
-        profileImage = guide.profile_picture;
-      } else if (uide.guide_data.profile_image) {
-        profileImage = uide.guide_data.profile_image;
-      }
+    if (guide.guide_data.profile_image) {
+      profileImage = guide.guide_data.profile_image;
     }
 
     if (profileImage) {
-      profileImageobj = { uri: profileImage };
+      profileImage = { uri: profileImage };
     } else {
       profileImage = require("../../assets/images/defaultavatar.png");
     }
