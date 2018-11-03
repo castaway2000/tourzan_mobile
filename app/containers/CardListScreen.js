@@ -56,7 +56,7 @@ import {
 } from "../actions";
 
 //Utilities
-import { isIphoneX } from "../global/Utilities";
+import { Storage, isIphoneX } from "../global/Utilities";
 
 //FCM
 import FCM, { NotificationActionType } from "react-native-fcm";
@@ -99,7 +99,14 @@ class CardListScreen extends React.Component {
   //#endregion
   async componentWillMount() {}
 
-  componentDidMount() {
+  async componentDidMount() {
+    let paymentMethodTypes = await Storage.getItem("paymentMethodTypes");
+
+    //Get cached payment data if available
+    if (paymentMethodTypes) {
+      this.paymentMethodTypes = paymentMethodTypes;
+    }
+
     this.getBrainTreeTokenWS();
 
     this.getAllPaymentsDetail();
@@ -193,16 +200,18 @@ class CardListScreen extends React.Component {
                       {item.is_paypal ? item.paypal_email : item.card_number}
                     </Text>
 
-                    <Image
-                      source={require("./../assets/images/visa-straight-32px.png")}
-                      style={{
-                        width: 50,
-                        height: 30,
-                        position: "absolute",
-                        bottom: 10,
-                        right: 10
-                      }}
-                    />
+                    {item.logo && (
+                      <Image
+                        source={{ uri: item.logo }}
+                        style={{
+                          width: 50,
+                          height: 30,
+                          position: "absolute",
+                          bottom: 10,
+                          right: 10
+                        }}
+                      />
+                    )}
 
                     {item.is_active == true && (
                       <TouchableOpacity
@@ -355,10 +364,25 @@ class CardListScreen extends React.Component {
         });
 
         if (data && data.length > 0) {
+          if (this.paymentMethodTypes) {
+            for (let i = 0; i < data.length; i++) {
+              for (let j = 0; j < this.paymentMethodTypes.length; j++) {
+                const cardtype = this.paymentMethodTypes[j];
+
+                if (data[i].type == cardtype.id) {
+                  data[i].name = cardtype.name;
+                  data[i].logo = cardtype.logo;
+                }
+              }
+            }
+          }
+
           this.setState({ cards: data, message: "" });
         } else {
           this.setState({ message: "There are no Payment method added." });
         }
+
+        console.log("cards", this.state.cards);
       })
       .catch(err => {
         this.setState({

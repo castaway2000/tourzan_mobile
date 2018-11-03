@@ -419,6 +419,41 @@ function verifyToken() {
   });
 }
 
+function uploadProfilePicture(param) {
+  let storeState = store.getState();
+
+  var formData = new FormData();
+  formData.append("user_type", param.user_type);
+  formData.append("image", param.image);
+
+  let url = API.SERVER + API.VERSION + "/upload_profile_image/";
+
+  console.log("Upload Profile API URL-->", url);
+  console.log("Upload Profile API PARAMS-->", formData);
+
+  return new Promise((resolve, reject) => {
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+        pragma: "no-cache",
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token
+      },
+      body: formData
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Upload Profile API Success->", data);
+        resolve(data);
+      })
+      .catch(err => {
+        console.log("Upload Profile API Error->", err);
+        reject(err);
+      });
+  });
+}
+
 module.exports = {
   emailLogin,
   emailSignup,
@@ -431,5 +466,6 @@ module.exports = {
   searchInterest,
   addReview,
   languageSearch,
-  verifyToken
+  verifyToken,
+  uploadProfilePicture
 };

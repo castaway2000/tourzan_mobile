@@ -33,9 +33,15 @@ import { updateuser } from "../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
+import ImagePicker from "react-native-image-picker";
 
 //Webservice
-import { profile, createApplicantBraintree } from "../actions";
+import {
+  profile,
+  createApplicantBraintree,
+  paymentMethodTypes,
+  uploadProfilePicture
+} from "../actions";
 
 var { width, height } = Dimensions.get("window");
 const backAction = NavigationActions.back({});
@@ -59,6 +65,17 @@ class SettingsScreen extends React.Component {
       isLoading: false
     };
     this.navigate = this.props.navigation;
+  }
+
+  async componentDidMount() {
+    let paymentMethodTypes = await Storage.getItem("paymentMethodTypes");
+
+    console.log("cached payment data", paymentMethodTypes);
+
+    //Get cached payment data if available
+    if (!paymentMethodTypes) {
+      this.paymentMethodTypesWS();
+    }
   }
 
   //Show full name
@@ -92,6 +109,38 @@ class SettingsScreen extends React.Component {
     }
   }
 
+  onUploadProfilePicture() {
+    // More info on all the options is below in the API Reference... just some common use cases shown here
+    const options = {
+      title: "Select Avatar",
+      maxWidth: 400,
+      maxHeight: 400,
+      storageOptions: {
+        skipBackup: true,
+        path: "images"
+      }
+    };
+
+    /**
+     * The first arg is the options object for customization (it can also be null or omitted for default options),
+     * The second arg is the callback which sends object: response (more info in the API Reference)
+     */
+    ImagePicker.showImagePicker(options, response => {
+      console.log("Response = ", response);
+
+      if (response.didCancel) {
+        console.log("User cancelled image picker");
+      } else if (response.error) {
+        console.log("ImagePicker Error: ", response.error);
+      } else if (response.customButton) {
+        console.log("User tapped custom button: ", response.customButton);
+      } else {
+        const source = { uri: response.uri };
+        this.uploadProfileWS(response.data);
+      }
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -114,11 +163,51 @@ class SettingsScreen extends React.Component {
         </View>
         <View style={styles.main_view}>
           <View style={styles.main_top_view}>
-            <Image
-              resizeMode="cover"
-              source={this.props.userdata.user.profilepicture}
-              style={styles.user_photo_img}
-            />
+            <TouchableOpacity
+              onPress={() => {
+                this.onUploadProfilePicture();
+              }}
+            >
+              <Image
+                resizeMode="cover"
+                source={this.props.userdata.user.profilepicture}
+                style={styles.user_photo_img}
+              />
+
+              <View
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  alignItems: "center"
+                }}
+              >
+                <Text
+                  style={{ color: "black", fontWeight: "800", fontSize: 15 }}
+                >
+                  Edit
+                </Text>
+                />
+                <View
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    alignItems: "center"
+                  }}
+                >
+                  <Text
+                    style={{ color: "white", fontWeight: "800", fontSize: 14 }}
+                  >
+                    Edit
+                  </Text>
+                  />
+                </View>
+              </View>
+            </TouchableOpacity>
+
             <Text style={styles.profile_name_text}>{this._fullname()}</Text>
             <Text style={styles.profile_email_text}>
               {this.props.userdata.user.email
@@ -415,6 +504,89 @@ class SettingsScreen extends React.Component {
         }
       );
     }
+  }
+
+  paymentMethodTypesWS() {
+    paymentMethodTypes()
+      .then(data => {
+        if (data) {
+          Storage.setItem("paymentMethodTypes", data);
+        }
+      })
+      .catch(err => {
+        alert(err);
+      });
+  }
+
+  uploadProfileWS(imageData) {
+    this.setState({
+      isLoading: true
+    });
+
+    var params = {
+      user_type: this.props.userdata.user.isLoggedInAsGuide
+        ? "guide"
+        : "tourist",
+      image: imageData
+    };
+
+    uploadProfilePicture(params)
+      .then(data => {
+        console.log("Profile data-->", data);
+
+        if (data && data.status == 200) {
+          this.onLoadProfileData();
+        } else {
+          Alert.alert("Tourzan", "Server error. Please try again.");
+        }
+      })
+      .catch(err => {
+        this.setState({
+          isLoading: false
+        });
+        alert(err);
+      });
+  }
+
+  //API Call get user profile
+  onLoadProfileData() {
+    this.setState({
+      isLoading: true
+    });
+
+    var params = {
+      userid: this.props.userdata.user.userid
+    };
+
+    profile(params)
+      .then(data => {
+        this.setState({
+          isLoading: false
+        });
+        if (data) {
+          let isGuide = this.props.userdata.user.isLoggedInAsGuide;
+
+          if (isGuide) {
+            this.props.userdata.user.guide_profile_image =
+              data.guide_data.profile_image;
+
+            store.dispatch(updateuser(this.props.userdata));
+          } else {
+            this.props.userdata.user.tourist_profile_image =
+              data.profile_picture;
+
+            store.dispatch(updateuser(this.props.userdata));
+          }
+
+          Storage.setItem("currentuser", this.props.userdata);
+        }
+      })
+      .catch(err => {
+        this.setState({
+          isLoading: false
+        });
+        alert(err);
+      });
   }
 }
 

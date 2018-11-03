@@ -7,6 +7,15 @@ import com.crashlytics.android.Crashlytics;
 import com.evollu.react.fcm.FIRMessagingPackage;
 import com.facebook.common.logging.FLog;
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import com.marianhello.bgloc.react.BackgroundGeolocationPackage;
+import com.airbnb.android.react.maps.MapsPackage;
+import com.github.kevinejohn.keyevent.KeyEventPackage;
+import com.imagepicker.ImagePickerPackage;
+import com.evollu.react.fcm.FIRMessagingPackage;
+import com.smixx.fabric.FabricPackage;
+import tech.bam.RNBraintreeDropIn.RNBraintreeDropInPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -33,6 +42,15 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+            new VectorIconsPackage(),
+            new SplashScreenReactPackage(),
+            new BackgroundGeolocationPackage(),
+            new MapsPackage(),
+            new KeyEventPackage(),
+            new ImagePickerPackage(),
+            new FIRMessagingPackage(),
+            new FabricPackage(),
+            new RNBraintreeDropInPackage(),
                     new RNBraintreeDropInPackage(),
                     new SplashScreenReactPackage(),
                     new MapsPackage(),

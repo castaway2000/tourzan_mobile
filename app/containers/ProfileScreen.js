@@ -17,7 +17,7 @@ import {
   ImageBackground,
   ActivityIndicator,
   Platform,
-  FlatList
+  FlatList,
 } from "react-native";
 
 import { NavigationActions } from "react-navigation";
@@ -321,7 +321,11 @@ class ProfileScreen extends React.Component {
       return <Text style={styles.name_text} />;
     }
 
-    let isGuide = this.state.profileData.guide_data.is_guide;
+    if (!this.state.profileData.guide_data) {
+      return <Text style={styles.name_text} />;
+    }
+
+    let isGuide = this.props.userdata.user.isLoggedInAsGuide;
 
     let fullname = "";
 
@@ -345,7 +349,11 @@ class ProfileScreen extends React.Component {
       return <Text style={styles.name_text} />;
     }
 
-    let isGuide = this.state.profileData.guide_data.is_guide;
+    if (!this.state.profileData.guide_data) {
+      return <Text style={styles.name_text} />;
+    }
+
+    let isGuide = this.props.userdata.user.isLoggedInAsGuide;
 
     let overviewText = "";
 
@@ -372,10 +380,7 @@ class ProfileScreen extends React.Component {
       return <Text style={styles.name_text}>-</Text>;
     }
 
-    if (
-      !this.state.profileData.interests != undefined &&
-      this.state.profileData.interests.length > 0
-    ) {
+    if (this.state.profileData.interests) {
       let interests = this.state.profileData.interests;
 
       return (
@@ -412,7 +417,19 @@ class ProfileScreen extends React.Component {
       );
     }
 
-    let isGuide = this.state.profileData.guide_data.is_guide;
+    if (!this.state.profileData.guide_data) {
+      return (
+        <Rating
+          ratingCount={5}
+          startingValue={0}
+          readonly
+          imageSize={15}
+          onFinishRating={this.ratingCompleted}
+        />
+      );
+    }
+
+    let isGuide = this.props.userdata.user.isLoggedInAsGuide;
 
     let rating = isGuide
       ? this.state.profileData.tourist_rating

@@ -300,7 +300,7 @@ class BookingGuideSettingScreen extends React.Component {
 
     var guide = params.guide;
 
-    return guide.guide_data.guide_rating;
+    return guide.guide_data ? guide.guide_data.guide_rating : 0;
   };
 
   showAddress = () => {

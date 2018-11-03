@@ -12,7 +12,7 @@ import {
   TextInput,
   View,
   Alert,
-  ListView,
+  FlatList,
   TouchableOpacity,
   TouchableHighlight,
   Platform
@@ -47,13 +47,10 @@ class TransactionsScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    var ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 != r2
-    });
+
     this.state = {
-      // for listview
-      ds: [],
-      dataSource: ds
+      dataSource: [],
+      message: ""
     };
 
     this.navigate = this.props.navigation;
@@ -69,13 +66,6 @@ class TransactionsScreen extends React.Component {
   }
 
   pressRow(rowData) {
-    // const { navigate } = this.props.navigation;
-    // var newDs = [];
-    // newDs = this.state.ds.slice();
-    // this.setState({
-    //     dataSource: this.state.dataSource.cloneWithRows(newDs)
-    // });
-
     this.navigate.navigate("TransactionItemDetail", { tripData: rowData });
   }
 
@@ -108,24 +98,40 @@ class TransactionsScreen extends React.Component {
     return formatted;
   };
 
-  renderRow(rowData) {
+  renderRow = ({ item, index }) => {
     return (
       <TouchableHighlight
         style={styles.row_view}
-        onPress={() => this.pressRow(rowData)}
+        onPress={() => this.pressRow(item)}
         underlayColor="#ddd"
       >
         <View style={styles.row}>
           <View style={styles.amount_view}>
-            <Text style={styles.amount_text}>${rowData.total_price}</Text>
+            <Text style={styles.amount_text}>${item.total_price}</Text>
           </View>
           <View style={styles.verticle_line} />
 
           <View style={styles.info_view}>
-            {/* <View style={styles.info_row_view}>
-                            <Image resizeMode='contain' source={require("../../assets/images/trip_item_location_icon.png")} style={styles.location_icon} />
-                            <Text style={styles.location_text}>07 Verona Tunnel Suite 987</Text>
-                        </View> */}
+            <View style={styles.info_row_view}>
+              <Image
+                resizeMode="contain"
+                source={require("../../assets/images/cash_icon.png")}
+                style={styles.location_icon}
+              />
+              <Text style={styles.location_text}>
+                Price before fee: ${item.total_price_before_fees}
+              </Text>
+            </View>
+            <View style={styles.info_row_view}>
+              <Image
+                resizeMode="contain"
+                source={require("../../assets/images/cash_icon.png")}
+                style={styles.location_icon}
+              />
+              <Text style={styles.location_text}>
+                Service fee: ${item.additional_services_price}
+              </Text>
+            </View>
             <View style={styles.info_row_view}>
               <Image
                 resizeMode="contain"
@@ -133,13 +139,13 @@ class TransactionsScreen extends React.Component {
                 style={styles.location_icon}
               />
               <Text style={styles.time_text}>
-                {this.getTripDurationString(rowData.duration_seconds)}
+                {this.getTripDurationString(item.duration_seconds)}
               </Text>
             </View>
           </View>
           <View style={styles.row_right_view}>
             <Text style={styles.right_text}>
-              {this.getDateString(rowData.date_booked_for)}
+              {this.getDateString(item.date_booked_for)}
             </Text>
             <TouchableOpacity style={styles.arrow_view}>
               <Image
@@ -152,19 +158,37 @@ class TransactionsScreen extends React.Component {
         </View>
       </TouchableHighlight>
     );
-  }
+  };
 
   render() {
     return (
       <View style={{ flex: 1, width: "100%" }}>
-        <ListView
-          dataSource={this.state.dataSource}
-          renderRow={this.renderRow.bind(this)}
-          renderSeparator={(sectionId, rowId) => (
-            <View key={rowId} style={styles.separator} />
-          )}
-          showsVerticalScrollIndicator={false}
-        />
+        {this.state.dataSource.length < 1 && (
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              alignItems: "center",
+              width: "100%"
+            }}
+          >
+            <Text style={{ width: "100%", textAlign: "center" }}>
+              {this.state.message}
+            </Text>
+          </View>
+        )}
+
+        {this.state.dataSource.length > 0 && (
+          <FlatList
+            data={this.state.dataSource}
+            renderItem={this.renderRow}
+            renderSeparator={(sectionId, rowId) => (
+              <View key={rowId} style={styles.separator} />
+            )}
+            extraData={this.state}
+            showsVerticalScrollIndicator={true}
+          />
+        )}
       </View>
     );
   }
@@ -172,9 +196,23 @@ class TransactionsScreen extends React.Component {
   previousGuideListWS() {
     previousGuideList()
       .then(data => {
-        this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(data)
-        });
+        if (data && data.length > 0) {
+          data.sort(function(a, b) {
+            // Turn your strings into dates, and then subtract them
+            // to get a value that is either negative, positive, or zero.
+            return new Date(b.date_booked_for) - new Date(a.date_booked_for);
+          });
+
+          this.setState({
+            dataSource: data,
+            message: ""
+          });
+        } else {
+          this.setState({
+            dataSource: [],
+            message: "No data found."
+          });
+        }
       })
       .catch(err => {
         alert(err);

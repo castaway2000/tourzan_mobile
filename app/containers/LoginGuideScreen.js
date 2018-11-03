@@ -57,7 +57,7 @@ class LoginGuideScreen extends React.Component {
     super(props);
     this.state = {
       isChecked: true,
-      username: "guide202", //guide003 - Test@123, fakeit - newpass1234 guide101
+      username: "guide202", //
       password: "Test@123", //
       isLoading: false
     };

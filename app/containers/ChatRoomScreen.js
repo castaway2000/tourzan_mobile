@@ -96,6 +96,7 @@ class ChatRoomScreen extends React.Component {
   }
 
   componentDidMount() {
+
     var { params } = this.props.navigation.state;
 
     this.socket = new WebSocket(API.CHAT_URL + params.chatData.uuid + "/?token=" + this.props.userdata.token);
@@ -107,6 +108,7 @@ class ChatRoomScreen extends React.Component {
     };
 
     this.socket.onmessage = e => {
+      
       console.log("A message was received.", e.data);
 
       var { params } = this.props.navigation.state;

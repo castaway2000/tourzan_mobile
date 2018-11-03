@@ -264,6 +264,35 @@ function createRecipientsPaymentrails(body) {
   });
 }
 
+function paymentMethodTypes() {
+  let storeState = store.getState();
+
+  let url = API.SERVER + API.VERSION + "/secret/paymentmethodtypes/";
+
+  console.log("Payment Method Types API URL-->", url);
+
+  return new Promise((resolve, reject) => {
+    fetch(url, {
+      method: "GET",
+      headers: {
+        pragma: "no-cache",
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token,
+        "Content-Type": "application/x-www-form-urlencoded"
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Payment Method Types API Success->", data);
+        resolve(data);
+      })
+      .catch(err => {
+        reject(err);
+        console.log("Payment Method Types API Error->", err);
+      });
+  });
+}
+
 module.exports = {
   brainTreeToken,
   brainTreeSaveNonce,
@@ -271,5 +300,6 @@ module.exports = {
   setDefaultCard,
   deactiveteCard,
   createApplicantBraintree,
-  createRecipientsPaymentrails
+  createRecipientsPaymentrails,
+  paymentMethodTypes
 };

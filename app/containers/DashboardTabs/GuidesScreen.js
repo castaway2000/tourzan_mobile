@@ -14,7 +14,6 @@ import {
   Alert,
   TouchableOpacity,
   TouchableHighlight,
-  ListView,
   Platform
 } from "react-native";
 
@@ -63,7 +62,8 @@ class GuideScreen extends React.Component {
     super(props);
     this.state = {
       guideList: [],
-      starCount: 3.5
+      starCount: 3.5,
+      message: ""
     };
 
     this.navigate = this.props.navigation;
@@ -73,7 +73,6 @@ class GuideScreen extends React.Component {
   }
 
   previousGuideListWS() {
-    
     previousGuideList()
       .then(data => {
         // this.setState({
@@ -88,26 +87,36 @@ class GuideScreen extends React.Component {
         //     return
         // }
 
-        for (let i = 0; i < data.length; i++) {
-          const order = data[i];
+        if (data && data.length > 0) {
+          data.sort(function(a, b) {
+            // Turn your strings into dates, and then subtract them
+            // to get a value that is either negative, positive, or zero.
+            return new Date(b.date_booked_for) - new Date(a.date_booked_for);
+          });
 
-          if (order.reviews) {
-            order.reviews.user_guide.guide_rating = order.reviews.guide_rating
-              ? order.reviews.guide_rating
-              : "0";
-            order.reviews.user_guide.guide_feedback_text = order.reviews
-              .guide_feedback_text
-              ? order.reviews.guide_feedback_text
-              : "";
-            order.reviews.user_guide.fees_total = order.fees_total
-              ? order.fees_total
-              : "Not available";
+          for (let i = 0; i < data.length; i++) {
+            const order = data[i];
 
-            this.state.guideList.push(order.reviews.user_guide);
+            if (order.reviews) {
+              order.reviews.user_guide.guide_rating = order.reviews.guide_rating
+                ? order.reviews.guide_rating
+                : "0";
+              order.reviews.user_guide.guide_feedback_text = order.reviews
+                .guide_feedback_text
+                ? order.reviews.guide_feedback_text
+                : "";
+              order.reviews.user_guide.fees_total = order.fees_total
+                ? order.fees_total
+                : "Not available";
+
+              this.state.guideList.push(order.reviews.user_guide);
+            }
           }
-        }
 
-        this.setState({ guideList: this.state.guideList });
+          this.setState({ guideList: this.state.guideList, message: "" });
+        } else {
+          this.setState({ guideList: [], message: "No data found." });
+        }
       })
       .catch(err => {
         alert(err);
@@ -185,9 +194,27 @@ class GuideScreen extends React.Component {
         {/* <TouchableOpacity style={styles.sortBtn}>
                     <Image source={require('../../assets/images/ic_tab_settings.png')} style={styles.sortImg} />
                 </TouchableOpacity> */}
-        <ScrollView style={styles.mTableView}>
-          {this.showGuideList()}
-        </ScrollView>
+
+        {this.state.guideList.length < 1 && (
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              alignItems: "center",
+              width: "100%"
+            }}
+          >
+            <Text style={{ width: "100%", textAlign: "center" }}>
+              {this.state.message}
+            </Text>
+          </View>
+        )}
+
+        {this.state.guideList.length > 0 && (
+          <ScrollView style={styles.mTableView}>
+            {this.showGuideList()}
+          </ScrollView>
+        )}
       </View>
     );
   }
