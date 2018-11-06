@@ -123,6 +123,8 @@ PODS:
   - react-native-google-maps (0.15.3):
     - GoogleMaps (= 2.1.1)
     - React
+  - react-native-image-picker (0.27.1):
+    - React
   - react-native-maps (0.15.3):
     - React
   - React/Core (0.55.4):
@@ -191,6 +193,7 @@ DEPENDENCIES:
   - Google-Maps-iOS-Utils
   - GoogleMaps
   - react-native-google-maps (from `../node_modules/react-native-maps`)
+  - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - React/Core (from `../node_modules/react-native`)
   - React/CxxBridge (from `../node_modules/react-native`)
@@ -240,6 +243,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native"
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
+  react-native-image-picker:
+    :path: "../node_modules/react-native-image-picker"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
   ReactNativeSearchBar:
@@ -272,11 +277,12 @@ SPEC CHECKSUMS:
   Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
   React: aa2040dbb6f317b95314968021bd2888816e03d5
   react-native-google-maps: 7a280302cdf0bcddc7efa6ec55423b17dcbeb1fe
+  react-native-image-picker: f42de90075c5b1af53417af927631d909a1a746e
   react-native-maps: 066c2afcc89e18726377bcc685315f989ca22449
   ReactNativeSearchBar: 43b76df06f1a0a04c13e02309129da3c21cd3176
   RNVectorIcons: c0dbfbf6068fefa240c37b0f71bd03b45dddac44
   yoga: a23273df0088bf7f2bb7e5d7b00044ea57a2a54a
 
-PODFILE CHECKSUM: da109c7bb7252bce8fb7fac77e7f364d8b9b3bf9
+PODFILE CHECKSUM: 82d9384ece8194826819a41a17710343e5c954b4
 
 COCOAPODS: 1.5.3

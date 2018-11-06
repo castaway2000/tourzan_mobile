@@ -1,13 +1,13 @@
-const isSandbox = true
+const isSandbox = true;
 
 export const Braintree = {
-    environment: isSandbox ? 'braintree.Environment.Sandbox' : 'braintree.Environment.Production',
-    merchantId: isSandbox ? 'm66dhkzh66jhcw6x' : 'jdp26m7mh8vbt7cr',
-    publicKey: isSandbox ? 'gg65yby3954fpxgk' : 'yshpvpkqfmvxyyh8',
-    privateKey: isSandbox ? 'f7e5cdc42eb7f230d80f94fe7db3cc0e' : '1d284ba230be32083c8503eee2d23f08'
-}
+  environment: isSandbox ? "braintree.Environment.Sandbox" : "braintree.Environment.Production",
+  merchantId: isSandbox ? "m66dhkzh66jhcw6x" : "jdp26m7mh8vbt7cr",
+  publicKey: isSandbox ? "gg65yby3954fpxgk" : "yshpvpkqfmvxyyh8",
+  privateKey: isSandbox ? "f7e5cdc42eb7f230d80f94fe7db3cc0e" : "1d284ba230be32083c8503eee2d23f08"
+};
 
-// Production Enviorment : 
+// Production Enviorment :
 
 // environment: braintree.Environment.Production,
 // merchantId: 'jdp26m7mh8vbt7cr',

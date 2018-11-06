@@ -1,122 +1,113 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 import {
-    Button,
-    ScrollView,
-    Dimensions,
-    StatusBar,
-    Navigator,
-    StyleSheet,
-    Image,
-    Text,
-    TextInput,
-    View,
-    Alert,
-    TouchableOpacity,
-    Platform,
-    ActivityIndicator,
-} from 'react-native';
+  Button,
+  ScrollView,
+  Dimensions,
+  StatusBar,
+  Navigator,
+  StyleSheet,
+  Image,
+  Text,
+  TextInput,
+  View,
+  Alert,
+  TouchableOpacity,
+  Platform,
+  ActivityIndicator
+} from "react-native";
 
-import moment from 'moment'
+import moment from "moment";
 
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux'
-import { Colors } from '../../constants'
-import { NavigationActions, StackActions } from 'react-navigation'
-import Stars from 'react-native-stars';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { Colors } from "../../constants";
+import { NavigationActions, StackActions } from "react-navigation";
+import Stars from "react-native-stars";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import NavigationBar from '../../components/NavigationBar'
-import ApplyButton from '../../components/ApplyButton'
+import NavigationBar from "../../components/NavigationBar";
+import ApplyButton from "../../components/ApplyButton";
 
 //Utils
-import { Storage, isIphoneX } from '../../global/Utilities';
+import { Storage, isIphoneX } from "../../global/Utilities";
 
 //Webservice
-import { bookGuide, acceptTrip, brainTreeToken } from '../../actions'
+import { bookGuide, acceptTrip, brainTreeToken } from "../../actions";
 
 //Store
-import { store } from '../../store/index'
+import { store } from "../../store/index";
 
 //Actions
-import { updatebooking } from '../../actions/bookingActions'
-import { updateuser } from '../../actions/userActions'
+import { updatebooking } from "../../actions/bookingActions";
+import { updateuser } from "../../actions/userActions";
 
-import { Marker } from 'react-native-maps/lib/components/MapView';
+import { Marker } from "react-native-maps/lib/components/MapView";
 
 //Geo coder
-import Geocoder from '../../global/Geocoder';
-Geocoder.init('AIzaSyAq-cJJqZ8jWN4pJQ34tNbNdhbjsbuZUJs'); // use a valid API key
+import Geocoder from "../../global/Geocoder";
+Geocoder.init("AIzaSyAq-cJJqZ8jWN4pJQ34tNbNdhbjsbuZUJs"); // use a valid API key
 
 //Braintree Dropin
-import BraintreeDropIn from 'react-native-braintree-payments-drop-in';
+import BraintreeDropIn from "react-native-braintree-payments-drop-in";
 
-var { width, height } = Dimensions.get('window');
+var { width, height } = Dimensions.get("window");
 
-const backAction = NavigationActions.back({
+const backAction = NavigationActions.back({});
 
-});
-
-
-const popToTopAction = NavigationActions.popToTop({
-
-});
+const popToTopAction = NavigationActions.popToTop({});
 
 const resetRootAction = NavigationActions.reset({
-    index: 0,
-    actions: [
-        NavigationActions.navigate({ routeName: 'Home' }),
-    ],
-    key: null
+  index: 0,
+  actions: [NavigationActions.navigate({ routeName: "Home" })],
+  key: null
 });
 
 class BookingGuideSettingScreen extends React.Component {
-    static navigationOptions = {
-        title: 'Booking Guide Setting',
-        header: null,
+  static navigationOptions = {
+    title: "Booking Guide Setting",
+    header: null
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isExtendTerm: false,
+      isHourlyOrManual: false,
+      isCheckHoulryOrManual: false,
+      isLoading: false,
+      address: "",
+      braintreeClientToken: ""
     };
+    this.navigate = this.props.navigation;
+  }
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            isExtendTerm: false,
-            isHourlyOrManual: false,
-            isCheckHoulryOrManual: false,
-            isLoading: false,
-            address: '',
-            braintreeClientToken: '',
-        };
-        this.navigate = this.props.navigation;
-    }
+  componentDidMount() {
+    this.showAddress();
+  }
 
-    componentDidMount() {
-        this.showAddress()
-    }
+  onConfirm() {
+    this.bookGuideWS();
 
-    onConfirm() {
+    //this.navigate.navigate('Offer');
+  }
 
-        this.bookGuideWS()
+  onPaymentSetting() {
+    //this.navigate.navigate('PaymentMethod');
 
-        //this.navigate.navigate('Offer');
-    }
+    BraintreeDropIn.show({
+      clientToken: ""
+    })
+      .then(result => console.log(result))
+      .catch(error => {
+        if (error.code === "USER_CANCELLATION") {
+          // update your UI to handle cancellation
+        } else {
+          // update your UI to handle other errors
+        }
+      });
 
-    onPaymentSetting() {
-
-        //this.navigate.navigate('PaymentMethod');
-
-        BraintreeDropIn.show({
-            clientToken: '',
-        })
-            .then(result => console.log(result))
-            .catch((error) => {
-                if (error.code === 'USER_CANCELLATION') {
-                    // update your UI to handle cancellation
-                } else {
-                    // update your UI to handle other errors
-                }
-            });
-
-        /*
+    /*
         BraintreeDropIn.show({
             clientToken: 'token',
             threeDSecure: {
@@ -132,296 +123,320 @@ class BookingGuideSettingScreen extends React.Component {
                     // for 3D secure, there are two other specific error codes: 3DSECURE_NOT_ABLE_TO_SHIFT_LIABILITY and 3DSECURE_LIABILITY_NOT_SHIFTED
                 }
             });*/
-    }
+  }
 
-    onTimeLimitSetting() {
-        this.navigate.navigate('TimeLimit');
-    }
+  onTimeLimitSetting() {
+    this.navigate.navigate("TimeLimit");
+  }
 
-    onExtendTerm() {
+  onExtendTerm() {
+    console.log("onExtendTerm");
 
-        console.log('onExtendTerm')
+    this.setState(previousState => {
+      return { isExtendTerm: true };
+    });
+  }
 
-        this.setState(previousState => {
-            return { isExtendTerm: true, };
-        });
-    }
+  onUnExtendTerm() {
+    console.log("onUnExtendTerm");
 
-    onUnExtendTerm() {
+    this.setState(previousState => {
+      return { isExtendTerm: false };
+    });
+  }
 
-        console.log('onUnExtendTerm')
+  onDone() {
+    this.setState(previousState => {
+      return {
+        isHourlyOrManual: previousState.isCheckHoulryOrManual ? true : false
+      };
+    });
 
-        this.setState(previousState => {
-            return { isExtendTerm: false, };
-        });
-    }
+    this.onUnExtendTerm();
+  }
 
-    onDone() {
+  onCheckHourly() {
+    this.setState(previousState => {
+      return { isCheckHoulryOrManual: false };
+    });
+  }
 
-        this.setState(previousState => {
-            return { isHourlyOrManual: previousState.isCheckHoulryOrManual ? true : false }
-        });
+  onCheckManual() {
+    this.setState(previousState => {
+      return { isCheckHoulryOrManual: true };
+    });
+  }
 
-        this.onUnExtendTerm();
-    }
+  bookGuideWS() {
+    var { params } = this.props.navigation.state;
 
-    onCheckHourly() {
-        this.setState(previousState => {
-            return { isCheckHoulryOrManual: false, };
-        });
-    }
+    var guide = params.guide;
 
-    onCheckManual() {
-        this.setState(previousState => {
-            return { isCheckHoulryOrManual: true, };
-        });
-    }
+    this.setState({
+      isLoading: true
+    });
 
-    bookGuideWS() {
+    var { dispatch } = this.props;
 
-        var { params } = this.props.navigation.state
+    //Get store data
+    let storestate = store.getState();
+    //storestate.tour.bookingdata.isTripInProgress = true
+    //storestate.tour.bookingdata.isAutomatic = !this.state.isCheckHoulryOrManual
 
-        var guide = params.guide
-
-        this.setState({
-            isLoading: true
-        })
-
-        var { dispatch } = this.props;
-
-
-        //Get store data
-        let storestate = store.getState()
-        //storestate.tour.bookingdata.isTripInProgress = true
-        //storestate.tour.bookingdata.isAutomatic = !this.state.isCheckHoulryOrManual
-
-        //storestate.tour.bookingdata.bookedTime = moment().format('YYYY-MM-DD H:mm:ss');
-        /*
+    //storestate.tour.bookingdata.bookedTime = moment().format('YYYY-MM-DD H:mm:ss');
+    /*
                 store.dispatch(
                     updatebooking(storestate.tour.bookingdata)
                 );*/
 
-        var params = {
-            token: this.props.userdata.token,
-            userid: this.props.userdata.user.userid,
-            guides: '[' + parseInt(guide.id) + ']',
-            latitude: this.props.currentlocation.lat,
-            longitude: this.props.currentlocation.long,
-            timelimit: storestate.tour.bookingdata.timeLimit,
-            bookingtype: storestate.tour.bookingdata.isAutomatic ? 'automatic' : 'manual'
+    var params = {
+      token: this.props.userdata.token,
+      userid: this.props.userdata.user.userid,
+      guides: "[" + parseInt(guide.id) + "]",
+      latitude: this.props.currentlocation.lat,
+      longitude: this.props.currentlocation.long,
+      timelimit: storestate.tour.bookingdata.timeLimit,
+      bookingtype: storestate.tour.bookingdata.isAutomatic
+        ? "automatic"
+        : "manual"
+    };
+
+    bookGuide(params)
+      .then(data => {
+        this.setState({
+          isLoading: false
+        });
+
+        Alert.alert(
+          "Book Guide Responce",
+          JSON.stringify(data),
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                this.props.navigation.dispatch(popToTopAction);
+              }
+            }
+          ],
+          { cancelable: false }
+        );
+
+        console.log("bookGuideWS-->", data);
+      })
+      .catch(err => {
+        this.setState({
+          isLoading: false
+        });
+        alert(err);
+      });
+  }
+
+  getBrainTreeTokenWS() {
+    this.setState({
+      isLoading: true
+    });
+
+    brainTreeToken()
+      .then(data => {
+        if (data.braintree_client_token) {
+          this.setState({ braintreeClientToken: data.braintree_client_token });
         }
-
-        bookGuide(params)
-
-            .then(data => {
-
-                this.setState({
-                    isLoading: false
-                })
-
-                Alert.alert(
-                    'Book Guide Responce',
-                    JSON.stringify(data),
-                    [
-                        {
-                            text: 'OK', onPress: () => {
-                                this.props.navigation.dispatch(popToTopAction)
-                            }
-                        },
-                    ],
-                    { cancelable: false }
-                )
-
-                console.log('bookGuideWS-->', data)
-
-            })
-            .catch(err => {
-                this.setState({
-                    isLoading: false
-                })
-                alert(err)
-            })
-    }
-
-    getBrainTreeTokenWS() {
 
         this.setState({
-            isLoading: true
-        })
+          isLoading: false
+        });
+      })
+      .catch(err => {
+        this.setState({
+          isLoading: false
+        });
+        alert(err);
+      });
+  }
 
-        brainTreeToken()
+  showLoading() {
+    if (this.state.isLoading) {
+      return (
+        <ActivityIndicator
+          color={"black"}
+          size={"large"}
+          style={styles.loadingView}
+        />
+      );
+    }
+  }
 
-            .then(data => {
+  //Full name
+  fullname = () => {
+    var { params } = this.props.navigation.state;
 
-                if (data.braintree_client_token) {
-                    this.setState({ braintreeClientToken: data.braintree_client_token })
+    var guide = params.guide;
+
+    if (!guide) {
+      return "";
+    }
+
+    let isGuide = guide.is_guide;
+
+    let fullname = "";
+
+    if (guide.first_name) {
+      fullname = guide.first_name;
+    }
+
+    if (guide.last_name) {
+      fullname = fullname + " " + guide.last_name;
+    }
+
+    if (!fullname) {
+      fullname = isGuide ? "Guide" : "Tourist";
+    }
+
+    return fullname;
+  };
+
+  rating = () => {
+    var { params } = this.props.navigation.state;
+
+    var guide = params.guide;
+
+    return guide.guide_data ? guide.guide_data.guide_rating : 0;
+  };
+
+  showAddress = () => {
+    var { params } = this.props.navigation.state;
+
+    var guide = params.guide;
+
+    if (!guide.latitude || !guide.longitude) {
+      this.setState({ address: "No location" });
+    }
+
+    Geocoder.from(guide.latitude, guide.longitude)
+      .then(json => {
+        var addressComponent = json.results[0].address_components[0];
+
+        this.setState({ address: json.results[0].formatted_address });
+      })
+      .catch(error => console.warn(error));
+  };
+
+  profileImage = () => {
+    var profileImage;
+
+    var { params } = this.props.navigation.state;
+
+    var guide = params.guide;
+
+    if (guide.guide_data.profile_image) {
+      profileImage = guide.guide_data.profile_image;
+    }
+
+    if (profileImage) {
+      profileImage = { uri: profileImage };
+    } else {
+      profileImage = require("../../assets/images/defaultavatar.png");
+    }
+
+    return profileImage;
+  };
+
+  render() {
+    const { navigate } = this.props.navigation;
+
+    var { params } = this.props.navigation.state;
+
+    var guide = params.guide;
+
+    return (
+      <View style={styles.container}>
+        <View style={styles.navigationbar}>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.dispatch(resetRootAction);
+            }}
+          >
+            <Image
+              resizeMode="cover"
+              source={require("../../assets/images/back.png")}
+              style={styles.nav_back_btn}
+            />
+          </TouchableOpacity>
+          <Text style={styles.nav_center_text} />
+          <TouchableOpacity
+            onPress={() => {
+              navigate("ProfileCharRoomFromBooking");
+            }}
+          >
+            <Image
+              resizeMode="cover"
+              source={require("../../assets/images/profile_chat_icon.png")}
+              style={styles.nav_right_view}
+            />
+          </TouchableOpacity>
+        </View>
+        {/*<ScrollView style={styles.scrollview}>*/}
+        <View style={styles.content_view}>
+          <View style={styles.top_container}>
+            <View style={styles.top_container_bg_view} />
+            <View style={styles.top_info_view} pointerEvents="none">
+              <Text style={styles.top_name_text}>{this.fullname()}</Text>
+              <View style={styles.top_location_view}>
+                <Image
+                  resizeMode="contain"
+                  source={require("../../assets/images/location_maps.png")}
+                  style={styles.top_location_icon}
+                />
+                <Text style={styles.top_location_text}>
+                  {this.state.address}
+                </Text>
+              </View>
+              {/* <Rating ratingCount={5} imageSize={12} style={{ marginTop: 5 }} onFinishRating={this.ratingCompleted} /> */}
+              <Stars
+                rating={this.rating()}
+                count={5}
+                half={true}
+                spacing={0}
+                fullStar={<Icon name={"star"} style={[styles.starStyle]} />}
+                emptyStar={
+                  <Icon
+                    name={"star-outline"}
+                    style={[styles.starStyle, styles.emptyStarStyle]}
+                  />
                 }
-
-                this.setState({
-                    isLoading: false
-                })
-
-            })
-            .catch(err => {
-                this.setState({
-                    isLoading: false
-                })
-                alert(err)
-            })
-    }
-
-    showLoading() {
-        if (this.state.isLoading) {
-            return (
-                <ActivityIndicator color={'black'} size={'large'} style={styles.loadingView} />
-            );
-        }
-    }
-
-    //Full name
-    fullname = () => {
-
-        var { params } = this.props.navigation.state
-
-        var guide = params.guide
-
-        if (!guide) {
-            return ''
-        }
-
-        let isGuide = guide.is_guide
-
-        let fullname = ''
-
-        if (guide.first_name) {
-            fullname = guide.first_name
-        }
-
-        if (guide.last_name) {
-            fullname = fullname + ' ' + guide.last_name
-        }
-
-        if (!fullname) {
-            fullname = isGuide ? 'Guide' : 'Tourist'
-        }
-
-        return fullname
-    }
-
-    rating = () => {
-
-        var { params } = this.props.navigation.state
-
-        var guide = params.guide
-
-        return guide.guide_data.guide_rating
-    }
-
-    showAddress = () => {
-
-        var { params } = this.props.navigation.state
-
-        var guide = params.guide
-
-        if (!guide.latitude || !guide.longitude) {
-            this.setState({ address: 'No location' })
-        }
-
-        Geocoder.from(guide.latitude, guide.longitude)
-            .then(json => {
-                var addressComponent = json.results[0].address_components[0];
-
-                this.setState({ address: json.results[0].formatted_address })
-            })
-            .catch(error => console.warn(error));
-    }
-
-    profileImage = () => {
-
-        var profileImage = null;
-        var profileImageobj = {};
-
-        var { params } = this.props.navigation.state
-
-        var guide = params.guide
-
-        let isGuide = guide.is_guide
-
-        if (!isGuide) {
-            profileImage = guide.profile_picture
-        } else {
-            if (guide.profile_picture) {
-                profileImage = guide.profile_picture
-            } else if (uide.guide_data.profile_image) {
-                profileImage = uide.guide_data.profile_image
-            }
-        }
-
-        if (profileImage) {
-            profileImageobj = { uri: profileImage }
-        } else {
-            profileImage = require("../../assets/images/defaultavatar.png")
-        }
-
-        return profileImage
-    }
-
-    render() {
-
-        const { navigate } = this.props.navigation;
-
-        var { params } = this.props.navigation.state
-
-        var guide = params.guide
-
-        return (
-            <View style={styles.container}>
-                <View style={styles.navigationbar}>
-                    <TouchableOpacity onPress={() => { this.props.navigation.dispatch(resetRootAction) }}>
-                        <Image resizeMode='cover' source={require("../../assets/images/back.png")} style={styles.nav_back_btn} />
-                    </TouchableOpacity>
-                    <Text style={styles.nav_center_text}></Text>
-                    <TouchableOpacity onPress={() => { navigate('ProfileCharRoomFromBooking') }}>
-                        <Image resizeMode='cover' source={require("../../assets/images/profile_chat_icon.png")} style={styles.nav_right_view} />
-                    </TouchableOpacity>
+                halfStar={
+                  <Icon name={"star-half"} style={[styles.starStyle]} />
+                }
+              />
+            </View>
+          </View>
+          <View style={styles.setting_container}>
+            <View style={styles.row_setting_view}>
+              <View style={styles.setting_text_view}>
+                <Text style={styles.setting_text}>Payment Method</Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => this.onPaymentSetting()}
+                style={styles.row_setting_btn_view}
+              >
+                <View style={styles.row_setting_btn_left_view}>
+                  <Image
+                    resizeMode="contain"
+                    source={require("../../assets/images/cash_icon.png")}
+                    style={styles.row_setting_btn_icon}
+                  />
+                  <Text style={styles.row_setting_btn_text}>
+                    Set Credit Card
+                  </Text>
                 </View>
-                {/*<ScrollView style={styles.scrollview}>*/}
-                <View style={styles.content_view}>
-                    <View style={styles.top_container}>
-                        <View style={styles.top_container_bg_view}>
-                        </View>
-                        <View style={styles.top_info_view} pointerEvents="none">
-                            <Text style={styles.top_name_text}>{this.fullname()}</Text>
-                            <View style={styles.top_location_view}>
-                                <Image resizeMode='contain' source={require("../../assets/images/location_maps.png")} style={styles.top_location_icon} />
-                                <Text style={styles.top_location_text}>{this.state.address}</Text>
-                            </View>
-                            {/* <Rating ratingCount={5} imageSize={12} style={{ marginTop: 5 }} onFinishRating={this.ratingCompleted} /> */}
-                            <Stars
-                                rating={this.rating()}
-                                count={5}
-                                half={true}
-                                spacing={0}
-                                fullStar={<Icon name={'star'} style={[styles.starStyle]} />}
-                                emptyStar={<Icon name={'star-outline'} style={[styles.starStyle, styles.emptyStarStyle]} />}
-                                halfStar={<Icon name={'star-half'} style={[styles.starStyle]} />}
-                            />
-                        </View>
-                    </View>
-                    <View style={styles.setting_container}>
-                        <View style={styles.row_setting_view}>
-                            <View style={styles.setting_text_view}>
-                                <Text style={styles.setting_text}>Payment Method</Text>
-                            </View>
-                            <TouchableOpacity onPress={() => this.onPaymentSetting()} style={styles.row_setting_btn_view}>
-                                <View style={styles.row_setting_btn_left_view}>
-                                    <Image resizeMode='contain' source={require("../../assets/images/cash_icon.png")} style={styles.row_setting_btn_icon} />
-                                    <Text style={styles.row_setting_btn_text}>Set Credit Card</Text>
-                                </View>
-                                <Image resizeMode='contain' source={require("../../assets/images/item_arrow.png")} style={styles.row_setting_btn_right_icon} />
-                            </TouchableOpacity>
-                        </View>
-                        {/* <View style={styles.row_setting_view}>
+                <Image
+                  resizeMode="contain"
+                  source={require("../../assets/images/item_arrow.png")}
+                  style={styles.row_setting_btn_right_icon}
+                />
+              </TouchableOpacity>
+            </View>
+            {/* <View style={styles.row_setting_view}>
                             <View style={styles.setting_text_view_term}>
                                 <Text style={styles.setting_text}>Time Limit Settings</Text>
                                 {this.state.isExtendTerm ? (
@@ -518,246 +533,251 @@ class BookingGuideSettingScreen extends React.Component {
                                 <Image resizeMode='contain' source={require("../../assets/images/item_arrow.png")} style={styles.row_setting_btn_right_icon} />
                             </TouchableOpacity>
                         </View>*/}
-                    </View>
-                    <View style={styles.bottom_container}>
-                        <ApplyButton onPress={() => this.onConfirm()} name={'Confirm'} style={styles.confirm_btn} />
-                    </View>
-                    <Image resizeMode='cover' source={this.profileImage()} style={styles.top_avatar_icon} />
-                </View>
-                {this.showLoading()}
-            </View>
-        );
-    }
+          </View>
+          <View style={styles.bottom_container}>
+            <ApplyButton
+              onPress={() => this.onConfirm()}
+              name={"Confirm"}
+              style={styles.confirm_btn}
+            />
+          </View>
+          <Image
+            resizeMode="cover"
+            source={this.profileImage()}
+            style={styles.top_avatar_icon}
+          />
+        </View>
+        {this.showLoading()}
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        alignItems: 'center',
-        flexDirection: 'column',
-    },
+  container: {
+    alignItems: "center",
+    flexDirection: "column"
+  },
 
-    // ---- top naviatgion bar ----//
-    navigationbar: {
-        paddingTop: (Platform.OS == 'ios') ? (isIphoneX() ? 44 : 20) : StatusBar.currentHeight,
-        height: 64,
-        backgroundColor: '#31dd73',
-        width: width,
-        alignItems: 'center',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    nav_back_btn: {
-        marginLeft: 20,
-        height: 15,
-        width: 10,
-    },
-    nav_center_text: {
-        color: '#000',
-        textAlign: 'center',
-        fontSize: 17,
-        width: width - 160,
-        fontWeight: 'bold',
-    },
-    nav_right_view: {
-        marginRight: 20,
-        height: 20,
-        width: 20
-    },
+  // ---- top naviatgion bar ----//
+  navigationbar: {
+    paddingTop:
+      Platform.OS == "ios" ? (isIphoneX() ? 44 : 20) : StatusBar.currentHeight,
+    height: 64,
+    backgroundColor: "#31dd73",
+    width: width,
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  nav_back_btn: {
+    marginLeft: 20,
+    height: 15,
+    width: 10
+  },
+  nav_center_text: {
+    color: "#000",
+    textAlign: "center",
+    fontSize: 17,
+    width: width - 160,
+    fontWeight: "bold"
+  },
+  nav_right_view: {
+    marginRight: 20,
+    height: 20,
+    width: 20
+  },
 
-    // --- scroll view --- //
-    scrollview: {
+  // --- scroll view --- //
+  scrollview: {},
+  content_view: {
+    //   height:1000,
+    alignItems: "center"
+  },
 
-    },
-    content_view: {
-        //   height:1000,
-        alignItems: 'center',
-    },
+  // --- top container ---//
+  top_container: {
+    flexDirection: "column",
+    alignItems: "center"
+  },
+  top_container_bg_view: {
+    height: 50,
+    width: width,
+    backgroundColor: "#31dd73"
+  },
+  top_avatar_icon: {
+    position: "absolute",
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    marginTop: 10,
+    backgroundColor: "lightgray"
+  },
+  top_info_view: {
+    backgroundColor: "white",
+    width: width,
+    borderBottomWidth: 1,
+    borderColor: "#ddd",
+    flexDirection: "column",
+    alignItems: "center"
+  },
+  top_name_text: {
+    marginTop: 30,
+    fontSize: 15,
+    color: "#000",
+    textAlign: "left"
+  },
+  top_location_view: {
+    marginTop: 5,
+    marginLeft: 30,
+    marginRight: 30,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10
+  },
+  top_location_icon: {
+    width: 10,
+    height: 10
+  },
+  top_location_text: {
+    marginLeft: 5,
+    fontSize: 12,
+    color: Colors.color999,
+    textAlign: "left"
+  },
 
-    // --- top container ---//
-    top_container: {
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    top_container_bg_view: {
-        height: 50,
-        width: width,
-        backgroundColor: '#31dd73',
-    },
-    top_avatar_icon: {
-        position: 'absolute',
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        borderWidth: 1,
-        borderColor: '#ddd',
-        marginTop: 10,
-        backgroundColor: 'lightgray'
-    },
-    top_info_view: {
-        backgroundColor: 'white',
-        width: width,
-        borderBottomWidth: 1,
-        borderColor: '#ddd',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    top_name_text: {
-        marginTop: 30,
-        fontSize: 15,
-        color: '#000',
-        textAlign: 'left',
-    },
-    top_location_view: {
-        marginTop: 5,
-        marginLeft: 30,
-        marginRight: 30,
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 10
-    },
-    top_location_icon: {
-        width: 10,
-        height: 10,
-    },
-    top_location_text: {
-        marginLeft: 5,
-        fontSize: 12,
-        color: Colors.color999,
-        textAlign: 'left',
-    },
+  //--- setting container ---//
+  setting_container: {
+    flexDirection: "column",
+    alignItems: "center"
+  },
+  row_setting_view: {
+    flexDirection: "column",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderColor: "#ddd"
+  },
+  setting_text_view: {
+    paddingVertical: 7,
+    paddingLeft: 20,
+    width: width,
+    backgroundColor: "#f9fbfc",
+    borderBottomWidth: 1,
+    borderColor: "#ddd"
+  },
+  setting_text: {
+    fontSize: 13,
+    color: Colors.tintColor
+  },
+  row_setting_btn_view: {
+    width: width,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderColor: "#ddd",
+    justifyContent: "space-between",
+    backgroundColor: "white"
+  },
+  row_setting_btn_left_view: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 30
+  },
+  row_setting_btn_icon: {
+    height: 20,
+    width: 20
+  },
+  row_setting_btn_text: {
+    marginLeft: 10,
+    fontSize: 15,
+    color: "black"
+  },
+  row_setting_btn_time_text: {
+    fontSize: 15,
+    color: "black"
+  },
+  row_setting_btn_right_icon: {
+    height: 20,
+    width: 20,
+    marginRight: 30
+  },
+  setting_term_extend_view: {
+    flexDirection: "column",
+    alignItems: "flex-start"
+  },
+  hourly_setting_view: {
+    width: width,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderColor: "#ddd",
+    justifyContent: "space-between",
+    backgroundColor: "white"
+  },
+  manual_setting_view: {
+    width: width,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderColor: "#ddd",
+    justifyContent: "space-between",
+    backgroundColor: "white"
+  },
+  done_text: {
+    fontSize: 15,
+    color: "#31dd73",
+    marginRight: 20
+  },
+  setting_text_view_term: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 7,
+    paddingLeft: 20,
+    width: width,
+    backgroundColor: "#f9fbfc",
+    borderBottomWidth: 1,
+    borderColor: "#ddd"
+  },
 
-    //--- setting container ---//
-    setting_container: {
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    row_setting_view: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        borderBottomWidth: 1,
-        borderColor: '#ddd',
-    },
-    setting_text_view: {
-        paddingVertical: 7,
-        paddingLeft: 20,
-        width: width,
-        backgroundColor: '#f9fbfc',
-        borderBottomWidth: 1,
-        borderColor: '#ddd',
-    },
-    setting_text: {
-        fontSize: 13,
-        color: Colors.tintColor
-    },
-    row_setting_btn_view: {
-        width: width,
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 15,
-        borderBottomWidth: 1,
-        borderColor: '#ddd',
-        justifyContent: 'space-between',
-        backgroundColor: 'white',
-    },
-    row_setting_btn_left_view: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginLeft: 30,
-    },
-    row_setting_btn_icon: {
-        height: 20,
-        width: 20,
-    },
-    row_setting_btn_text: {
-        marginLeft: 10,
-        fontSize: 15,
-        color: 'black',
-    },
-    row_setting_btn_time_text: {
-        fontSize: 15,
-        color: 'black',
-    },
-    row_setting_btn_right_icon: {
-        height: 20,
-        width: 20,
-        marginRight: 30,
-    },
-    setting_term_extend_view: {
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-    },
-    hourly_setting_view: {
-        width: width,
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 15,
-        borderBottomWidth: 1,
-        borderColor: '#ddd',
-        justifyContent: 'space-between',
-        backgroundColor: 'white',
-    },
-    manual_setting_view: {
-        width: width,
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 15,
-        borderBottomWidth: 1,
-        borderColor: '#ddd',
-        justifyContent: 'space-between',
-        backgroundColor: 'white',
-    },
-    done_text: {
-        fontSize: 15,
-        color: '#31dd73',
-        marginRight: 20,
-    },
-    setting_text_view_term: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingVertical: 7,
-        paddingLeft: 20,
-        width: width,
-        backgroundColor: '#f9fbfc',
-        borderBottomWidth: 1,
-        borderColor: '#ddd',
-    },
+  //--- bottom container ---//
+  confirm_btn: {
+    marginTop: 30,
+    marginBottom: 200
+  },
 
-    //--- bottom container ---//
-    confirm_btn: {
-        marginTop: 30,
-        marginBottom: 200,
-    },
+  loadingView: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "transparent"
+  },
 
-    loadingView: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'transparent'
-    },
-
-    //--- star style ---//
-    starStyle: {
-        color: '#f3bc17',
-        backgroundColor: 'transparent',
-    },
-    emptyStarStyle: {
-        color: '#f3bc17',
-    }
+  //--- star style ---//
+  starStyle: {
+    color: "#f3bc17",
+    backgroundColor: "transparent"
+  },
+  emptyStarStyle: {
+    color: "#f3bc17"
+  }
 });
 
-
 const mapStateToProps = store => {
-    return {
-        bookingdata: store.tour.bookingdata,
-        userdata: store.user.userdata,
-        currentlocation: store.location.currentlocation,
-    };
+  return {
+    bookingdata: store.tour.bookingdata,
+    userdata: store.user.userdata,
+    currentlocation: store.location.currentlocation
+  };
 };
-
 
 export default connect(mapStateToProps)(BookingGuideSettingScreen);

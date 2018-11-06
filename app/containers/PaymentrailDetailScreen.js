@@ -15,7 +15,8 @@ import {
   TouchableOpacity,
   Platform,
   ActivityIndicator,
-  Linking
+  NativeModules,
+  WebView
 } from "react-native";
 
 import { connect } from "react-redux";
@@ -29,9 +30,11 @@ import NavigationBar from "../components/NavigationBar";
 
 import flagImg from "../assets/images/guide-dot.png";
 import moment from "moment";
+import MapViewDirections from "react-native-maps-directions";
+import ApplyButton from "../components/ApplyButton";
 
 //Store
-import { store } from "../store";
+import { store } from "../store/index";
 
 //Actions
 import { updatebooking } from "../actions/bookingActions";
@@ -40,33 +43,26 @@ import { updatelocation } from "../actions/locationActions";
 import * as Actions from "../actions";
 
 //Webservice
-import {
-  updateClockInOutStatus,
-  acceptTrip,
-  declineTrip,
-  cancelTrip,
-  updateTrip,
-  loginAndUpdateTrip,
-  getnearbyguides
-} from "../actions";
+import { createApplicantBraintree, profile } from "../actions";
 
 //Utilities
 import { isIphoneX } from "../global/Utilities";
-import { API } from "../constants";
-
-//FCM
-import FCM, { NotificationActionType } from "react-native-fcm";
-import {
-  registerKilledListener,
-  registerAppListener
-} from "../global/Firebase/Listeners";
-import firebaseClient from "../global/Firebase/FirebaseClient";
-
 var { width, height } = Dimensions.get("window");
+
+//API
+import { API, Paymentrails } from "../constants";
 
 const backAction = NavigationActions.back({});
 
-class VerificationResultScreen extends React.Component {
+const resetRootAction = NavigationActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({ routeName: "Welcome" })],
+  key: null
+});
+
+var CryptoJS = require("crypto-js");
+
+class PaymentrailDetailScreen extends React.Component {
   //#region Constractors
   static navigationOptions = {
     header: null
@@ -75,17 +71,27 @@ class VerificationResultScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      nearByGuides: [],
-      isLoading: false
+      isLoading: false,
+      shouldPocessNext: false,
+      widgetURL: ""
     };
   }
 
   //#endregion
-  componentWillMount() {}
-
-  componentDidMount() {}
+  componentDidMount() {
+    this.showSpinner();
+    this.generateWidgetURL();
+  }
 
   componentWillUnmount() {}
+
+  hideSpinner() {
+    this.setState({ isLoading: false });
+  }
+
+  showSpinner() {
+    this.setState({ isLoading: true });
+  }
 
   showLoading() {
     if (this.state.isLoading) {
@@ -99,42 +105,13 @@ class VerificationResultScreen extends React.Component {
     }
   }
 
-  showMessage() {
-    const { type } = this.props.navigation.state.params;
-
-    if (type == 0) {
-      return (
-        <Text style={styles.paragraph}>Your profile already verified!</Text>
-      );
-    } else if (type == 1) {
-      return (
-        <Text style={styles.paragraph}>
-          We are running the report in the background. if it comes back as fuzzy
-          or rejected, you will no longer be verified and will have to redo your
-          verification.
-        </Text>
-      );
-    } else if (type == 2) {
-      return (
-        <Text style={styles.paragraph}>
-          Your verification results came up fuzzy we need you to resubmit proper
-          information. {"\n"}
-          {"\n"}
-          Please reach out to us at{" "}
-          <Text
-            onPress={() => Linking.openURL(API.CONTACT_US_EMAIL)}
-            style={{ color: "blue" }}
-          >
-            {API.CONTACT_US_EMAIL}
-          </Text>{" "}
-          to have your verification reset.
-        </Text>
-      );
-    }
+  onFinish() {
+    this.props.navigation.dispatch(resetRootAction);
   }
 
   render() {
     const { navigate } = this.props.navigation;
+    const { params } = this.props.navigation.state;
 
     return (
       <View style={styles.container}>
@@ -152,45 +129,78 @@ class VerificationResultScreen extends React.Component {
               style={styles.backButton}
             />
           </TouchableOpacity>
-          <Text style={styles.centerText}>Onfido Verification Status</Text>
-          <View style={styles.rightView} />
+          <Text style={styles.centerText}>Bank Information</Text>
+
+          <View style={styles.rightView}>
+            {(params ? params.isFromRegistration : false) && (
+              <TouchableOpacity onPress={() => this.onFinish()}>
+                <Text style={styles.rightViewtext}>FINISH</Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
-
-        <View style={styles.paragraphView}>{this.showMessage()}</View>
-
-        <View style={styles.main_view} />
+        <View style={styles.main_view}>
+          <View style={styles.webviewContainer}>
+            <WebView
+              ref={ref => {
+                this.webview = ref;
+              }}
+              onLoad={() => this.hideSpinner()}
+              source={{
+                uri: this.state.widgetURL
+              }}
+              onNavigationStateChange={event => {
+                console.log("Webview event", event);
+              }}
+            />
+          </View>
+        </View>
         {this.showLoading()}
       </View>
     );
   }
 
-  //
-  updateClockInOutStatusWS() {
-    this.setState({
-      isLoading: true
-    });
+  generateWidgetURL() {
+    const KEY = Paymentrails.apiKey;
+    const SECRET = Paymentrails.apiSecret;
 
-    var { dispatch } = this.props;
+    const recipientEmail = this.props.userdata.user.email;
+    const recipientReferenceId = this.props.userdata.user.email;
 
-    var params = {
-      userid: this.props.userdata.user.userid,
-      status: this.props.userdata.user.isClockedIn ? "clockout" : "clockin",
-      latitude: this.props.currentlocation.lat,
-      longitude: this.props.currentlocation.long
+    let widgetBaseUrl = API.PAYMENTRAILS_WIDGET;
+
+    let querystring = {
+      ts: Math.floor(new Date().getTime() / 1000),
+      key: KEY,
+      email: recipientEmail,
+      refid: recipientReferenceId,
+      hideEmail: "false",
+      roEmail: "false",
+      payoutMethods: "bank-transfer,paypal",
+      locale: "en"
     };
 
-    updateClockInOutStatus(params)
-      .then(data => {
-        this.setState({
-          isLoading: false
-        });
-      })
-      .catch(err => {
-        this.setState({
-          isLoading: false
-        });
-        alert(err);
-      });
+    let esc = encodeURIComponent;
+    let query = Object.keys(querystring)
+      .map(k => esc(k) + "=" + esc(querystring[k]))
+      .join("&");
+
+    widgetBaseUrl = widgetBaseUrl + query;
+
+    //Signature
+    const hmac = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA256, SECRET);
+
+    hmac.update(query);
+
+    let hash = hmac.finalize();
+
+    var signature = hash.toString(CryptoJS.enc.Hex);
+
+    widgetBaseUrl = widgetBaseUrl + "&sign=" + signature;
+
+    this.setState({ widgetURL: widgetBaseUrl, shouldPocessNext: true });
+
+    console.log("Widget URL IS:", widgetBaseUrl);
   }
 }
 
@@ -209,6 +219,16 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0
+  },
+
+  // --- main view --- //
+  main_view: {
+    flexDirection: "column",
+    alignItems: "center",
+    backgroundColor: "#f9fbfe",
+    justifyContent: "center",
+    flex: 1,
+    width: "100%"
   },
 
   // --- navigation bar --- //
@@ -240,25 +260,13 @@ const styles = StyleSheet.create({
   },
   rightView: {
     marginRight: 20,
-    height: 20,
-    width: 20
+    height: 20
   },
-
-  // --- Text --- //
-
-  paragraphView: {
-    //justifyContent: 'center',
-    alignItems: "center",
-    flex: 1
-  },
-
-  paragraph: {
-    padding: 10,
-    fontSize: 20,
-    fontWeight: "bold",
-    //textAlign: 'center',
-    color: "#34495e",
-    justifyContent: "center"
+  rightViewtext: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 17,
+    fontWeight: "bold"
   },
 
   // --- Activity --- //
@@ -271,14 +279,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "transparent"
+  },
+  // --- webview --- //
+  webviewContainer: {
+    flex: 1,
+    backgroundColor: "#000000",
+    width: "100%"
   }
 });
-
-const mapDispatchToProps = dispatch => {
-  return {
-    actions: bindActionCreators(Actions, dispatch)
-  };
-};
 
 const mapStateToProps = store => {
   return {
@@ -288,7 +296,4 @@ const mapStateToProps = store => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(VerificationResultScreen);
+export default connect(mapStateToProps)(PaymentrailDetailScreen);

@@ -14,8 +14,7 @@ import {
   Alert,
   TouchableOpacity,
   Platform,
-  ActivityIndicator,
-  Linking
+  ActivityIndicator
 } from "react-native";
 
 import { connect } from "react-redux";
@@ -23,15 +22,17 @@ import { bindActionCreators } from "redux";
 import { Colors } from "../constants";
 import { NavigationActions } from "react-navigation";
 import MapView from "react-native-maps";
+import ApplyButton from "../components/ApplyButton";
 
 import Switch from "../components/Switch";
 import NavigationBar from "../components/NavigationBar";
 
 import flagImg from "../assets/images/guide-dot.png";
 import moment from "moment";
+import MapViewDirections from "react-native-maps-directions";
 
 //Store
-import { store } from "../store";
+import { store } from "../store/index";
 
 //Actions
 import { updatebooking } from "../actions/bookingActions";
@@ -47,26 +48,31 @@ import {
   cancelTrip,
   updateTrip,
   loginAndUpdateTrip,
-  getnearbyguides
+  getnearbyguides,
+  brainTreeToken,
+  brainTreeSaveNonce,
+  allPayments,
+  setDefaultCard,
+  deactiveteCard
 } from "../actions";
 
 //Utilities
 import { isIphoneX } from "../global/Utilities";
-import { API } from "../constants";
 
-//FCM
-import FCM, { NotificationActionType } from "react-native-fcm";
-import {
-  registerKilledListener,
-  registerAppListener
-} from "../global/Firebase/Listeners";
-import firebaseClient from "../global/Firebase/FirebaseClient";
+//Braintree Dropin
+import BraintreeDropIn from "react-native-braintree-payments-drop-in";
 
 var { width, height } = Dimensions.get("window");
 
 const backAction = NavigationActions.back({});
 
-class VerificationResultScreen extends React.Component {
+const resetRootAction = NavigationActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({ routeName: "Welcome" })],
+  key: null
+});
+
+class AddPaymentMethodScreen extends React.Component {
   //#region Constractors
   static navigationOptions = {
     header: null
@@ -75,15 +81,16 @@ class VerificationResultScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      nearByGuides: [],
-      isLoading: false
+      isLoading: false,
+      braintreeClientToken: "",
+      paymentButtonText: "Please wait..."
     };
   }
 
-  //#endregion
-  componentWillMount() {}
-
-  componentDidMount() {}
+  //#endregion this.state.braintreeClientToken.length > 0
+  componentDidMount() {
+    this.getBrainTreeTokenWS();
+  }
 
   componentWillUnmount() {}
 
@@ -95,40 +102,6 @@ class VerificationResultScreen extends React.Component {
           size={"large"}
           style={styles.loadingView}
         />
-      );
-    }
-  }
-
-  showMessage() {
-    const { type } = this.props.navigation.state.params;
-
-    if (type == 0) {
-      return (
-        <Text style={styles.paragraph}>Your profile already verified!</Text>
-      );
-    } else if (type == 1) {
-      return (
-        <Text style={styles.paragraph}>
-          We are running the report in the background. if it comes back as fuzzy
-          or rejected, you will no longer be verified and will have to redo your
-          verification.
-        </Text>
-      );
-    } else if (type == 2) {
-      return (
-        <Text style={styles.paragraph}>
-          Your verification results came up fuzzy we need you to resubmit proper
-          information. {"\n"}
-          {"\n"}
-          Please reach out to us at{" "}
-          <Text
-            onPress={() => Linking.openURL(API.CONTACT_US_EMAIL)}
-            style={{ color: "blue" }}
-          >
-            {API.CONTACT_US_EMAIL}
-          </Text>{" "}
-          to have your verification reset.
-        </Text>
       );
     }
   }
@@ -152,37 +125,37 @@ class VerificationResultScreen extends React.Component {
               style={styles.backButton}
             />
           </TouchableOpacity>
-          <Text style={styles.centerText}>Onfido Verification Status</Text>
+          <Text style={styles.centerText}>Add Payment Method</Text>
           <View style={styles.rightView} />
         </View>
-
-        <View style={styles.paragraphView}>{this.showMessage()}</View>
-
-        <View style={styles.main_view} />
+        <View style={styles.main_view}>
+          <ApplyButton
+            onPress={() => {
+              this.onAddPaymentMethod();
+            }}
+            name={this.state.paymentButtonText}
+          />
+        </View>
         {this.showLoading()}
       </View>
     );
   }
 
   //
-  updateClockInOutStatusWS() {
+  getBrainTreeTokenWS() {
     this.setState({
       isLoading: true
     });
 
-    var { dispatch } = this.props;
-
-    var params = {
-      userid: this.props.userdata.user.userid,
-      status: this.props.userdata.user.isClockedIn ? "clockout" : "clockin",
-      latitude: this.props.currentlocation.lat,
-      longitude: this.props.currentlocation.long
-    };
-
-    updateClockInOutStatus(params)
+    brainTreeToken()
       .then(data => {
+        if (data.braintree_client_token) {
+          this.setState({ braintreeClientToken: data.braintree_client_token });
+        }
+
         this.setState({
-          isLoading: false
+          isLoading: false,
+          paymentButtonText: "Add Your Payment Method"
         });
       })
       .catch(err => {
@@ -190,6 +163,85 @@ class VerificationResultScreen extends React.Component {
           isLoading: false
         });
         alert(err);
+      });
+  }
+
+  saveNonceToServer(result) {
+    /* Result
+        description: "ending in 31"
+        isDefault: false
+        nonce: "tokencc_bf_hkmznk_95253c_nzgzkq_q6f6mz_m9z"
+        type: "AMEX"
+        */
+
+    this.setState({
+      isLoading: true
+    });
+
+    let params = {
+      paymentmethodnonce: result.nonce,
+      isdefault: result.isDefault
+    };
+
+    brainTreeSaveNonce(params)
+      .then(data => {
+        this.setState({
+          isLoading: false
+        });
+
+        if (data && data.status == "success") {
+          Alert.alert(
+            "Tourzan",
+            "A new payment method was successfully added. Please login again.",
+            [
+              {
+                text: "OK",
+                onPress: () => {
+                  this.props.navigation.dispatch(resetRootAction);
+                }
+              }
+            ],
+            { cancelable: false }
+          );
+
+          //Finish
+        } else {
+          Alert.alert(
+            "Tourzan",
+            data.message ? data.message : "Error while saving card."
+          );
+        }
+      })
+      .catch(err => {
+        this.setState({
+          isLoading: false
+        });
+        alert(err);
+      });
+  }
+
+  onAddPaymentMethod() {
+    BraintreeDropIn.show({
+      clientToken: this.state.braintreeClientToken
+    })
+      .then(result => {
+        console.log("result:", result);
+        /* Result
+                    description: "ending in 31"
+                    isDefault: false
+                    nonce: "tokencc_bf_hkmznk_95253c_nzgzkq_q6f6mz_m9z"
+                    type: "AMEX"
+                    */
+
+        this.saveNonceToServer(result);
+      })
+      .catch(error => {
+        if (error.code === "USER_CANCELLATION") {
+          // update your UI to handle cancellation
+        } else {
+          // update your UI to handle other errors
+          console.log("result:", result);
+        }
       });
   }
 }
@@ -209,6 +261,16 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0
+  },
+
+  // --- main view --- //
+  main_view: {
+    flexDirection: "column",
+    alignItems: "center",
+    backgroundColor: "#f9fbfe",
+    justifyContent: "center",
+    flex: 1,
+    width: "100%"
   },
 
   // --- navigation bar --- //
@@ -244,23 +306,6 @@ const styles = StyleSheet.create({
     width: 20
   },
 
-  // --- Text --- //
-
-  paragraphView: {
-    //justifyContent: 'center',
-    alignItems: "center",
-    flex: 1
-  },
-
-  paragraph: {
-    padding: 10,
-    fontSize: 20,
-    fontWeight: "bold",
-    //textAlign: 'center',
-    color: "#34495e",
-    justifyContent: "center"
-  },
-
   // --- Activity --- //
   loadingView: {
     position: "absolute",
@@ -274,12 +319,6 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapDispatchToProps = dispatch => {
-  return {
-    actions: bindActionCreators(Actions, dispatch)
-  };
-};
-
 const mapStateToProps = store => {
   return {
     bookingdata: store.tour.bookingdata,
@@ -288,7 +327,4 @@ const mapStateToProps = store => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(VerificationResultScreen);
+export default connect(mapStateToProps)(AddPaymentMethodScreen);

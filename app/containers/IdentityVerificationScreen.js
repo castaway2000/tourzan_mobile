@@ -15,7 +15,7 @@ import {
   TouchableOpacity,
   Platform,
   ActivityIndicator,
-  Linking
+  NativeModules
 } from "react-native";
 
 import { connect } from "react-redux";
@@ -29,9 +29,11 @@ import NavigationBar from "../components/NavigationBar";
 
 import flagImg from "../assets/images/guide-dot.png";
 import moment from "moment";
+import MapViewDirections from "react-native-maps-directions";
+import ApplyButton from "../components/ApplyButton";
 
 //Store
-import { store } from "../store";
+import { store } from "../store/index";
 
 //Actions
 import { updatebooking } from "../actions/bookingActions";
@@ -40,33 +42,16 @@ import { updatelocation } from "../actions/locationActions";
 import * as Actions from "../actions";
 
 //Webservice
-import {
-  updateClockInOutStatus,
-  acceptTrip,
-  declineTrip,
-  cancelTrip,
-  updateTrip,
-  loginAndUpdateTrip,
-  getnearbyguides
-} from "../actions";
+import { createApplicantBraintree, profile } from "../actions";
 
 //Utilities
 import { isIphoneX } from "../global/Utilities";
-import { API } from "../constants";
-
-//FCM
-import FCM, { NotificationActionType } from "react-native-fcm";
-import {
-  registerKilledListener,
-  registerAppListener
-} from "../global/Firebase/Listeners";
-import firebaseClient from "../global/Firebase/FirebaseClient";
 
 var { width, height } = Dimensions.get("window");
 
 const backAction = NavigationActions.back({});
 
-class VerificationResultScreen extends React.Component {
+class IdentityVerificationScreen extends React.Component {
   //#region Constractors
   static navigationOptions = {
     header: null
@@ -75,14 +60,11 @@ class VerificationResultScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      nearByGuides: [],
       isLoading: false
     };
   }
 
   //#endregion
-  componentWillMount() {}
-
   componentDidMount() {}
 
   componentWillUnmount() {}
@@ -95,40 +77,6 @@ class VerificationResultScreen extends React.Component {
           size={"large"}
           style={styles.loadingView}
         />
-      );
-    }
-  }
-
-  showMessage() {
-    const { type } = this.props.navigation.state.params;
-
-    if (type == 0) {
-      return (
-        <Text style={styles.paragraph}>Your profile already verified!</Text>
-      );
-    } else if (type == 1) {
-      return (
-        <Text style={styles.paragraph}>
-          We are running the report in the background. if it comes back as fuzzy
-          or rejected, you will no longer be verified and will have to redo your
-          verification.
-        </Text>
-      );
-    } else if (type == 2) {
-      return (
-        <Text style={styles.paragraph}>
-          Your verification results came up fuzzy we need you to resubmit proper
-          information. {"\n"}
-          {"\n"}
-          Please reach out to us at{" "}
-          <Text
-            onPress={() => Linking.openURL(API.CONTACT_US_EMAIL)}
-            style={{ color: "blue" }}
-          >
-            {API.CONTACT_US_EMAIL}
-          </Text>{" "}
-          to have your verification reset.
-        </Text>
       );
     }
   }
@@ -152,38 +100,45 @@ class VerificationResultScreen extends React.Component {
               style={styles.backButton}
             />
           </TouchableOpacity>
-          <Text style={styles.centerText}>Onfido Verification Status</Text>
+          <Text style={styles.centerText}>Identification</Text>
           <View style={styles.rightView} />
         </View>
-
-        <View style={styles.paragraphView}>{this.showMessage()}</View>
-
-        <View style={styles.main_view} />
+        <View style={styles.main_view}>
+          <ApplyButton
+            onPress={() => {
+              this.onVerifyIdentity();
+            }}
+            name="Verify Your Identity"
+          />
+        </View>
         {this.showLoading()}
       </View>
     );
   }
 
-  //
-  updateClockInOutStatusWS() {
+  onVerifyIdentity() {
+    this.getProfileData();
+  }
+
+  //API Call get user profile
+  getProfileData() {
     this.setState({
       isLoading: true
     });
 
-    var { dispatch } = this.props;
-
     var params = {
-      userid: this.props.userdata.user.userid,
-      status: this.props.userdata.user.isClockedIn ? "clockout" : "clockin",
-      latitude: this.props.currentlocation.lat,
-      longitude: this.props.currentlocation.long
+      userid: this.props.userdata.user.userid
     };
 
-    updateClockInOutStatus(params)
+    profile(params)
       .then(data => {
-        this.setState({
-          isLoading: false
-        });
+        console.log("Profile data-->", data);
+
+        if (data) {
+          this.generateOnfidoApplicantID(data);
+        } else {
+          Alert.alert("Tourzan", "Server error. Please try again.");
+        }
       })
       .catch(err => {
         this.setState({
@@ -191,6 +146,100 @@ class VerificationResultScreen extends React.Component {
         });
         alert(err);
       });
+  }
+
+  generateOnfidoApplicantID(data) {
+    if (!data.first_name || !data.last_name) {
+      Alert.alert(
+        "Tourzan",
+        "Please complete your first name and last name to continue."
+      );
+      return;
+    }
+
+    this.setState({
+      isLoading: true
+    });
+
+    var params = {
+      firstname: data.first_name,
+      lastname: data.last_name
+    };
+
+    createApplicantBraintree(params)
+      .then(data => {
+        console.log("GenerateOnfidoApplicantID data-->", data);
+
+        this.setState({
+          isLoading: false
+        });
+
+        if (data) {
+          if (data.id) {
+            //Verify Guide Identity
+            this.verifyOnfidoIdentity(data.id);
+          } else {
+            Alert.alert("Tourzan", "Server error. Please try again.");
+          }
+        } else {
+          Alert.alert("Tourzan", "Server error. Please try again.");
+        }
+      })
+      .catch(err => {
+        this.setState({
+          isLoading: false
+        });
+        alert(err);
+      });
+  }
+
+  alertAndnNvigateToPaymentrail() {
+    Alert.alert(
+      "Tourzan",
+      "Verification complete",
+      [
+        {
+          text: "OK",
+          onPress: () => {
+            const { params } = this.props.navigation.state;
+            const { navigate } = this.props.navigation;
+
+            //Paymentrail Detail
+            navigate("PaymentrailDetail", {
+              isFromRegistration: params ? params.isFromRegistration : false
+            });
+          }
+        }
+      ],
+      { cancelable: true }
+    );
+  }
+
+  verifyOnfidoIdentity(applicationId) {
+    if (Platform.OS == "ios") {
+      NativeModules.OnfidoSDK.startSDK(
+        applicationId,
+        applicationId => {
+          this.alertAndnNvigateToPaymentrail();
+        },
+        errorCause => {
+          this.setState({
+            isLoading: false
+          });
+          Alert.alert("Tourzan", "Verification not finished please try again.");
+        }
+      );
+    } else {
+      NativeModules.OnfidoSDK.startSDK(
+        applicationId,
+        applicantId => {
+          this.alertAndnNvigateToPaymentrail();
+        },
+        errorCause => {
+          Alert.alert("Tourzan", "Verification not finished please try again.");
+        }
+      );
+    }
   }
 }
 
@@ -209,6 +258,16 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0
+  },
+
+  // --- main view --- //
+  main_view: {
+    flexDirection: "column",
+    alignItems: "center",
+    backgroundColor: "#f9fbfe",
+    justifyContent: "center",
+    flex: 1,
+    width: "100%"
   },
 
   // --- navigation bar --- //
@@ -244,23 +303,6 @@ const styles = StyleSheet.create({
     width: 20
   },
 
-  // --- Text --- //
-
-  paragraphView: {
-    //justifyContent: 'center',
-    alignItems: "center",
-    flex: 1
-  },
-
-  paragraph: {
-    padding: 10,
-    fontSize: 20,
-    fontWeight: "bold",
-    //textAlign: 'center',
-    color: "#34495e",
-    justifyContent: "center"
-  },
-
   // --- Activity --- //
   loadingView: {
     position: "absolute",
@@ -274,12 +316,6 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapDispatchToProps = dispatch => {
-  return {
-    actions: bindActionCreators(Actions, dispatch)
-  };
-};
-
 const mapStateToProps = store => {
   return {
     bookingdata: store.tour.bookingdata,
@@ -288,7 +324,4 @@ const mapStateToProps = store => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(VerificationResultScreen);
+export default connect(mapStateToProps)(IdentityVerificationScreen);

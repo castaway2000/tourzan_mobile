@@ -1,10 +1,10 @@
-import { UPDATE_BOOKING } from './actionTypes';
+import { UPDATE_BOOKING } from "./actionTypes";
 
-const updatebooking = (bookingdata) => {
+const updatebooking = bookingdata => {
   return {
     type: UPDATE_BOOKING,
     bookingdata: bookingdata
   };
 };
 
-export { updatebooking }
+export { updatebooking };

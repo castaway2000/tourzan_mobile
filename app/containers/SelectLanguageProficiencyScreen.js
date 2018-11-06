@@ -41,7 +41,7 @@ import { updatelocation } from "../actions/locationActions";
 import * as Actions from "../actions";
 
 //Webservice
-import { autocompleteCity } from "../actions";
+import {} from "../actions";
 
 //Utilities
 import { isIphoneX } from "../global/Utilities";
@@ -50,60 +50,41 @@ var { width, height } = Dimensions.get("window");
 
 const backAction = NavigationActions.back({});
 
-class SelectCityScreen extends React.Component {
+class SelectLanguageProficiencyScreen extends React.Component {
   //#region Constractors
   static navigationOptions = {
-    header: null
+    header: null,
+    selectedLanguage: { text: "", id: "", level: "", order: "" }
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      cities: [],
-      isLoading: false,
-      message: "",
-      searchText: ""
+      proficiencys: [
+        { type: "Native", level: 1 },
+        { type: "Advanced", level: 2 },
+        { type: "Intermediate", level: 3 },
+        { type: "Beignner", level: 4 }
+      ]
     };
   }
 
   //#endregion
   componentDidMount() {
-    this.refs.SearchBar.focus();
+    console.log(
+      "this.props.navigation.state.params",
+      this.props.navigation.state.params.selectedLanguage
+    );
   }
 
-  showLoading() {
-    if (this.state.isLoading) {
-      return (
-        <ActivityIndicator
-          color={"black"}
-          size={"large"}
-          style={styles.loadingView}
-        />
-      );
-    }
-  }
+  proficiencyDidSelected(proficiency) {
+    this.props.navigation.state.params.selectedLanguage.proficiency = proficiency;
 
-  setSearchText(text) {
-    this.setState({ searchText: text });
+    this.props.navigation.state.params.languageDidSelected(
+      this.props.navigation.state.params.selectedLanguage
+    );
 
-    if (text.length < 1) {
-      this.setState({ message: "" });
-      return;
-    }
-
-    if (this.searchWaiting) {
-      clearTimeout(this.searchWaiting);
-    }
-
-    this.searchWaiting = setTimeout(() => {
-      this.searchWaiting = null;
-      this.getAutocompleteCity();
-    }, 500);
-  }
-
-  cityDidSelected(city) {
-    this.props.navigation.state.params.cityDidSelected(city);
-    this.props.navigation.dispatch(backAction);
+    this.props.navigation.pop(2);
   }
 
   render() {
@@ -125,7 +106,7 @@ class SelectCityScreen extends React.Component {
               style={styles.backButton}
             />
           </TouchableOpacity>
-          <Text style={styles.centerText}>Search City</Text>
+          <Text style={styles.centerText}>Select Proficiency</Text>
           <View style={styles.rightView}>
             {/* <TouchableOpacity onPress={() => this.onDone()}>
                             <Text style={styles.rightView}>DONE</Text>
@@ -133,26 +114,17 @@ class SelectCityScreen extends React.Component {
           </View>
         </View>
         <View style={styles.view}>
-          <View style={styles.searchBarbg}>
-            <TextInput
-              style={styles.searchBar}
-              value={this.state.searchText}
-              ref="SearchBar"
-              onChangeText={text => this.setSearchText(text)}
-              underlineColorAndroid="transparent"
-              placeholder="Search"
-            />
-          </View>
-
           <View style={styles.listview}>
-            {this.state.cities.length > 0 && (
+            {this.state.proficiencys.length > 0 && (
               <FlatList
-                data={this.state.cities}
+                data={this.state.proficiencys}
                 renderItem={({ item, index }) => (
-                  <TouchableOpacity onPress={() => this.cityDidSelected(item)}>
+                  <TouchableOpacity
+                    onPress={() => this.proficiencyDidSelected(item)}
+                  >
                     <View style={styles.itemContainer}>
-                      <View style={styles.item}>
-                        <Text style={styles.celltext}>{item.description}</Text>
+                      <View style={styles.type}>
+                        <Text style={styles.celltext}>{item.type}</Text>
                       </View>
                     </View>
                   </TouchableOpacity>
@@ -161,46 +133,11 @@ class SelectCityScreen extends React.Component {
                 numColumns={1}
               />
             )}
-
-            {this.state.cities.length < 1 && (
-              <View
-                style={{ flex: 1, flexDirection: "row", alignItems: "center" }}
-              >
-                <Text style={{ width: "100%", textAlign: "center" }}>
-                  {this.state.message}
-                </Text>
-              </View>
-            )}
           </View>
         </View>
-        {this.showLoading()}
       </View>
     );
   }
-
-  //
-  getAutocompleteCity = () => {
-    var { dispatch } = this.props;
-
-    var params = {
-      key: "AIzaSyDvAVjQNstV2ENih9MtQDi9DmbrJjhUcDk",
-      input: this.state.searchText,
-      types: "(cities)",
-      language: "en"
-    };
-
-    autocompleteCity(params)
-      .then(data => {
-        if (data.predictions && data.predictions.length > 0) {
-          this.setState({ cities: data.predictions });
-        } else {
-          this.setState({ cities: [], message: "No cities found." });
-        }
-      })
-      .catch(err => {
-        alert(err);
-      });
-  };
 }
 
 const styles = StyleSheet.create({
@@ -248,11 +185,7 @@ const styles = StyleSheet.create({
   },
   rightView: {
     marginRight: 8,
-    height: 20,
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 14,
-    textAlign: "center"
+    height: 20
   },
 
   // --- view --- //
@@ -260,21 +193,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     backgroundColor: "#E4E4E4"
-  },
-
-  // --- search --- //
-  searchBarbg: {
-    fontSize: 14,
-    height: 44,
-    borderWidth: 4,
-    borderColor: "#E4E4E4",
-    backgroundColor: "white",
-    borderRadius: 14
-  },
-  searchBar: {
-    paddingLeft: 10,
-    fontSize: 14,
-    flex: 1
   },
 
   // --- Activity --- //
@@ -315,4 +233,4 @@ const mapStateToProps = store => {
   };
 };
 
-export default connect(mapStateToProps)(SelectCityScreen);
+export default connect(mapStateToProps)(SelectLanguageProficiencyScreen);

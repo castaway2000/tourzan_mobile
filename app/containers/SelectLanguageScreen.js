@@ -41,7 +41,7 @@ import { updatelocation } from "../actions/locationActions";
 import * as Actions from "../actions";
 
 //Webservice
-import { autocompleteCity } from "../actions";
+import { languageSearch } from "../actions";
 
 //Utilities
 import { isIphoneX } from "../global/Utilities";
@@ -50,7 +50,7 @@ var { width, height } = Dimensions.get("window");
 
 const backAction = NavigationActions.back({});
 
-class SelectCityScreen extends React.Component {
+class SelectLanguageScreen extends React.Component {
   //#region Constractors
   static navigationOptions = {
     header: null
@@ -59,7 +59,7 @@ class SelectCityScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cities: [],
+      languages: [],
       isLoading: false,
       message: "",
       searchText: ""
@@ -69,6 +69,11 @@ class SelectCityScreen extends React.Component {
   //#endregion
   componentDidMount() {
     this.refs.SearchBar.focus();
+
+    console.log(
+      "this.props.navigation.state.params",
+      this.props.navigation.state.params.selectedLanguage
+    );
   }
 
   showLoading() {
@@ -97,13 +102,26 @@ class SelectCityScreen extends React.Component {
 
     this.searchWaiting = setTimeout(() => {
       this.searchWaiting = null;
-      this.getAutocompleteCity();
+      this.languageSearchWS();
     }, 500);
   }
 
-  cityDidSelected(city) {
-    this.props.navigation.state.params.cityDidSelected(city);
-    this.props.navigation.dispatch(backAction);
+  languageDidSelected(language) {
+    // this.props.navigation.state.params.languageDidSelected(language);
+    // this.props.navigation.dispatch(backAction)
+
+    const { navigate } = this.props.navigation;
+
+    this.props.navigation.state.params.selectedLanguage.id = language.id;
+    this.props.navigation.state.params.selectedLanguage.text = language.text;
+
+    console.log("languageDidSelected", this.props.navigation.state.params);
+
+    navigate("SelectLanguageProficiency", {
+      selectedLanguage: this.props.navigation.state.params.selectedLanguage,
+      languageDidSelected: this.props.navigation.state.params
+        .languageDidSelected
+    });
   }
 
   render() {
@@ -125,7 +143,7 @@ class SelectCityScreen extends React.Component {
               style={styles.backButton}
             />
           </TouchableOpacity>
-          <Text style={styles.centerText}>Search City</Text>
+          <Text style={styles.centerText}>Search Language</Text>
           <View style={styles.rightView}>
             {/* <TouchableOpacity onPress={() => this.onDone()}>
                             <Text style={styles.rightView}>DONE</Text>
@@ -145,14 +163,16 @@ class SelectCityScreen extends React.Component {
           </View>
 
           <View style={styles.listview}>
-            {this.state.cities.length > 0 && (
+            {this.state.languages.length > 0 && (
               <FlatList
-                data={this.state.cities}
+                data={this.state.languages}
                 renderItem={({ item, index }) => (
-                  <TouchableOpacity onPress={() => this.cityDidSelected(item)}>
+                  <TouchableOpacity
+                    onPress={() => this.languageDidSelected(item)}
+                  >
                     <View style={styles.itemContainer}>
                       <View style={styles.item}>
-                        <Text style={styles.celltext}>{item.description}</Text>
+                        <Text style={styles.celltext}>{item.text}</Text>
                       </View>
                     </View>
                   </TouchableOpacity>
@@ -162,7 +182,7 @@ class SelectCityScreen extends React.Component {
               />
             )}
 
-            {this.state.cities.length < 1 && (
+            {this.state.languages.length < 1 && (
               <View
                 style={{ flex: 1, flexDirection: "row", alignItems: "center" }}
               >
@@ -179,22 +199,19 @@ class SelectCityScreen extends React.Component {
   }
 
   //
-  getAutocompleteCity = () => {
+  languageSearchWS = () => {
     var { dispatch } = this.props;
 
     var params = {
-      key: "AIzaSyDvAVjQNstV2ENih9MtQDi9DmbrJjhUcDk",
-      input: this.state.searchText,
-      types: "(cities)",
-      language: "en"
+      q: this.state.searchText
     };
 
-    autocompleteCity(params)
+    languageSearch(params)
       .then(data => {
-        if (data.predictions && data.predictions.length > 0) {
-          this.setState({ cities: data.predictions });
+        if (data.items && data.items.length > 0) {
+          this.setState({ languages: data.items });
         } else {
-          this.setState({ cities: [], message: "No cities found." });
+          this.setState({ languages: [], message: "No languages found." });
         }
       })
       .catch(err => {
@@ -248,11 +265,7 @@ const styles = StyleSheet.create({
   },
   rightView: {
     marginRight: 8,
-    height: 20,
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 14,
-    textAlign: "center"
+    height: 20
   },
 
   // --- view --- //
@@ -264,7 +277,6 @@ const styles = StyleSheet.create({
 
   // --- search --- //
   searchBarbg: {
-    fontSize: 14,
     height: 44,
     borderWidth: 4,
     borderColor: "#E4E4E4",
@@ -273,7 +285,6 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     paddingLeft: 10,
-    fontSize: 14,
     flex: 1
   },
 
@@ -315,4 +326,4 @@ const mapStateToProps = store => {
   };
 };
 
-export default connect(mapStateToProps)(SelectCityScreen);
+export default connect(mapStateToProps)(SelectLanguageScreen);

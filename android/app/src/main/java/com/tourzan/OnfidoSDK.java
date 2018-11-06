@@ -34,25 +34,34 @@ public class OnfidoSDK extends ReactContextBaseJavaModule {
     private final ActivityEventListener mActivityEventListener = new BaseActivityEventListener() {
         @Override
         public void onActivityResult(final Activity activity, int requestCode, int resultCode, Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
 
             client.handleActivityResult(resultCode, data, new Onfido.OnfidoResultListener() {
                 @Override
                 public void userCompleted(Applicant applicant, Captures captures) {
                     //communicate with your backend and initiate the check
-                    mSuccessCallback.invoke(applicant.getId());
+
+                    if (mSuccessCallback != null) {
+                        mSuccessCallback.invoke(applicant.getId());
+                    }
                 }
 
                 @Override
                 public void userExited(ExitCode exitCode, Applicant applicant) {
                     //User left the sdk flow without completing it
-                    mErrorCallback.invoke(exitCode.toString());
+
+                    if (mErrorCallback != null) {
+                        mErrorCallback.invoke(exitCode.toString());
+                    }
                 }
 
                 @Override
                 public void onError(OnfidoException exception, Applicant applicant) {
                     // An exception occurred during the flow
-                    mErrorCallback.invoke(exception.toString());
+
+                    if (mErrorCallback != null) {
+                        mErrorCallback.invoke(exception.toString());
+                    }
+
                 }
             });
         }
