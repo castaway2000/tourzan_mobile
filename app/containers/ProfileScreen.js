@@ -22,10 +22,9 @@ import {
 
 import { NavigationActions } from "react-navigation";
 import Checkbox from "react-native-custom-checkbox";
-import Rating from "react-native-ratings";
+import { Rating, AirbnbRating } from 'react-native-ratings';
 import ReadMore from "@expo/react-native-read-more-text";
 import Button from "react-native-button";
-import { Colors } from "../constants";
 import ApplyButton from "../components/ApplyButton";
 import NavigationBar from "../components/NavigationBar";
 import { profile } from "../actions";
@@ -44,6 +43,7 @@ import { updateuser } from "../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 var { width, height } = Dimensions.get("window");
 
@@ -617,7 +617,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 20,
@@ -660,7 +661,8 @@ const styles = StyleSheet.create({
   },
   name_text: {
     fontSize: 17,
-    color: "black"
+    color: "black",
+    fontFamily: DefaultFont.textFont
   },
   location_view: {
     marginTop: 10,
@@ -676,10 +678,12 @@ const styles = StyleSheet.create({
   },
   overview_title_text: {
     fontSize: 15,
-    color: "black"
+    color: "black",
+    fontFamily: DefaultFont.textFont
   },
   overview_content_text: {
-    marginTop: 8
+    marginTop: 8,
+    fontFamily: DefaultFont.textFont
   },
   downarrow_view: {
     marginTop: 5,
@@ -697,7 +701,8 @@ const styles = StyleSheet.create({
   interesting_title_text: {
     marginTop: 5,
     fontSize: 15,
-    color: "black"
+    color: "black",
+    fontFamily: DefaultFont.textFont
   },
   btn_group_view: {
     marginTop: 5,
@@ -721,7 +726,8 @@ const styles = StyleSheet.create({
   interesting_btn: {
     fontSize: 12,
     color: Colors.tintColor,
-    fontWeight: "normal"
+    fontWeight: "normal",
+    fontFamily: DefaultFont.textFont
   },
   listview_view: {
     width: width,
@@ -736,7 +742,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#f7f7f7"
   },
   listview_title_text: {
-    color: "black"
+    color: "black",
+    fontFamily: DefaultFont.textFont
   },
   listview_title_ratingbar: {
     backgroundColor: "#f7f7f7"
@@ -796,26 +803,30 @@ const styles = StyleSheet.create({
   },
   list_info_time_text: {
     fontSize: 12,
-    color: Colors.color999
+    color: Colors.color999,
+    fontFamily: DefaultFont.textFont
   },
   list_info_name_text: {
     fontSize: 15,
     color: "#000",
     textAlign: "left",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   location_text: {
     marginLeft: 5,
     fontSize: 12,
     color: Colors.color999,
     textAlign: "left",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   description_text: {
     marginTop: 5,
     fontSize: 12,
     color: Colors.color999,
-    textAlign: "left"
+    textAlign: "left",
+    fontFamily: DefaultFont.textFont
   },
   loadingView: {
     position: "absolute",

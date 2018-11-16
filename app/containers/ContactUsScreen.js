@@ -20,7 +20,7 @@ import {
 
 import { NavigationActions } from "react-navigation";
 import Checkbox from "react-native-custom-checkbox";
-import { Colors } from "../constants";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 import NavigationBar from "../components/NavigationBar";
 import { isIphoneX } from "../global/Utilities";
 
@@ -143,7 +143,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 20,

@@ -2,6 +2,7 @@ import React from "react";
 import { View, Image, TouchableOpacity, Animated, Easing } from "react-native";
 import CustomPulse from "../components/CustomPulse";
 import PropTypes from "prop-types";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 export default class CustomPulseLoader extends React.Component {
   constructor(props) {

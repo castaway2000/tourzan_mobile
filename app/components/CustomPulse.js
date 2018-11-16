@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Animated, Easing, Dimensions } from "react-native";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 const { height, width } = Dimensions.get("window");
 

@@ -376,6 +376,7 @@ function getnearbyguides(params) {
   });
 }
 
+
 module.exports = {
   getTourList,
   updateClockInOutStatus,

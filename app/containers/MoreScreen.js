@@ -19,7 +19,6 @@ import {
 
 import { NavigationActions } from "react-navigation";
 import Checkbox from "react-native-custom-checkbox";
-import { Colors } from "../constants";
 import NavigationBar from "../components/NavigationBar";
 
 //Store
@@ -32,6 +31,7 @@ import { updateuser } from "../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 //Webservice
 import {
@@ -280,7 +280,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 20,
@@ -322,11 +323,13 @@ const styles = StyleSheet.create({
   },
   row_lb: {
     color: "black",
-    fontSize: 17
+    fontSize: 17,
+    fontFamily: DefaultFont.textFont,
   },
   row_logout_lb: {
     color: "red",
-    fontSize: 17
+    fontSize: 17,
+    fontFamily: DefaultFont.textFont
   },
   row_icon: {
     height: 15,

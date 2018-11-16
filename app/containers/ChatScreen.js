@@ -19,10 +19,9 @@ import {
   FlatList
 } from "react-native";
 
-import Rating from "react-native-ratings";
+import { Rating, AirbnbRating } from 'react-native-ratings';
 import { NavigationActions } from "react-navigation";
 import IconBadge from "react-native-icon-badge";
-import { Colors } from "../constants";
 import NavigationBar from "../components/NavigationBar";
 import moment from "moment";
 
@@ -36,6 +35,13 @@ import { updateuser } from "../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 //Webservice
 import {
@@ -48,7 +54,9 @@ import {
   acceptTrip,
   updateTrip,
   extendTime,
-  usermixins
+  usermixins,
+  getChatListGuideRepresentation,
+  getChatListRepresentation
 } from "../actions";
 
 var SearchBar = require("react-native-search-bar");
@@ -96,42 +104,81 @@ class ChatScreen extends React.Component {
   }
 
   loadChatList = () => {
-    getChatList()
-      .then(data => {
-        this.setState({
-          isLoading: false
-        });
-        console.log("getChatList data-->", data);
-
-        if (data.length && data.length > 0) {
+    if (this.props.userdata.user.isLoggedInAsGuide) {
+      getChatListGuideRepresentation()
+        .then(data => {
           this.setState({
-            ds: data.reverse()
+            isLoading: false
           });
+          console.log("getChatListGuideRepresentation data-->", data);
 
-          //To add default profile picture
-          for (let i = 0; i < data.length; i++) {
-            data[i].pic = require("../assets/images/defaultavatar.png");
+          if (data.length && data.length > 0) {
+            this.setState({
+              ds: data.reverse()
+            });
 
-            //To remove HTML From message
-            for (let index = 0; index < data[i].messages.length; index++) {
-              const element = data[i].messages[index];
-              const regex = /(<([^>]+)>)/gi;
-              data[i].messages[index].message = element.message.replace(
-                regex,
-                ""
-              );
+            //To add default profile picture
+            for (let i = 0; i < data.length; i++) {
+              data[i].pic = require("../assets/images/defaultavatar.png");
+
+              //To remove HTML From message
+              for (let index = 0; index < data[i].messages.length; index++) {
+                const element = data[i].messages[index];
+                const regex = /(<([^>]+)>)/gi;
+                data[i].messages[index].message = element.message.replace(
+                  regex,
+                  ""
+                );
+              }
+
+              this.loadUserNameProfilePics(data, i);
             }
-
-            this.loadUserNameProfilePics(data, i);
           }
-        }
-      })
-      .catch(err => {
-        this.setState({
-          isLoading: false
+        })
+        .catch(err => {
+          this.setState({
+            isLoading: false
+          });
+          alert(err);
         });
-        alert(err);
-      });
+    } else {
+      getChatListRepresentation()
+        .then(data => {
+          this.setState({
+            isLoading: false
+          });
+          console.log("getChatListRepresentation data-->", data);
+
+          if (data.length && data.length > 0) {
+            this.setState({
+              ds: data.reverse()
+            });
+
+            //To add default profile picture
+            for (let i = 0; i < data.length; i++) {
+              data[i].pic = require("../assets/images/defaultavatar.png");
+
+              //To remove HTML From message
+              for (let index = 0; index < data[i].messages.length; index++) {
+                const element = data[i].messages[index];
+                const regex = /(<([^>]+)>)/gi;
+                data[i].messages[index].message = element.message.replace(
+                  regex,
+                  ""
+                );
+              }
+
+              this.loadUserNameProfilePics(data, i);
+            }
+          }
+        })
+        .catch(err => {
+          this.setState({
+            isLoading: false
+          });
+          alert(err);
+        });
+    }
   };
 
   loadUserNameProfilePics = (profiles, index) => {
@@ -154,24 +201,6 @@ class ChatScreen extends React.Component {
       .then(data => {
         var newArray = profiles.slice();
 
-        if (!newArray[index].topic) {
-          if (data.username) {
-            newArray[index].topic = data.username;
-          }
-
-          if (data.first_name && data.last_name) {
-            newArray[index].topic = data.first_name + " " + data.last_name;
-          }
-
-          newArray[index].topic =
-            "Chat with " +
-            (newArray[index].topic
-              ? newArray[index].topic
-              : newArray[index].username
-                ? newArray[index].username
-                : "User");
-        }
-
         if (data.pic) {
           newArray[index].pic = { uri: data.pic };
           newArray[index].picurl = data.pic;
@@ -182,6 +211,11 @@ class ChatScreen extends React.Component {
 
         newArray[index].opfirstname = data.first_name;
         newArray[index].oplastname = data.last_name;
+
+        newArray[index].topic =
+          (data.first_name ? data.first_name : "") +
+          " " +
+          (data.last_name ? data.last_name : "");
 
         this.setState({
           ds: newArray
@@ -296,7 +330,13 @@ class ChatScreen extends React.Component {
                     }}
                   />
                 }
-                BadgeElement={<Text style={{ color: "#fff" }}>{0}</Text>}
+                BadgeElement={
+                  <Text
+                    style={{ color: "#fff", fontFamily: DefaultFont.textFont }}
+                  >
+                    {0}
+                  </Text>
+                }
                 IconBadgeStyle={{
                   position: "relative",
                   width: 20,
@@ -386,6 +426,7 @@ const styles = StyleSheet.create({
     height: 20
   },
   backButton: {
+    marginRight: 20,
     height: 20,
     width: 20
   },
@@ -394,12 +435,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 20,
-    height: 35,
-    width: 35
+    height: 20,
+    width: 20
   },
   list_view_container: {
     marginTop: 1,
@@ -441,7 +483,8 @@ const styles = StyleSheet.create({
     height: 30,
     width: width - 100,
     color: "white",
-    fontSize: 12
+    fontSize: 12,
+    fontFamily: DefaultFont.textFont
   },
   row_view: {
     paddingHorizontal: 20,
@@ -486,7 +529,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#000",
     textAlign: "left",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   location_text: {
     marginLeft: 5,
@@ -499,7 +543,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 12,
     color: Colors.color999,
-    textAlign: "left"
+    textAlign: "left",
+    fontFamily: DefaultFont.textFont
   },
   row_right_view: {
     width: 60,
@@ -507,7 +552,8 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   right_text: {
-    fontSize: 10
+    fontSize: 10,
+    fontFamily: DefaultFont.textFont
   },
   badge_icon: {
     height: 10,

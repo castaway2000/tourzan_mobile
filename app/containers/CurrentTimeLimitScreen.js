@@ -22,11 +22,18 @@ import { NavigationActions } from "react-navigation";
 import KeyEvent from "react-native-keyevent";
 import PercentageCircle from "react-native-percentage-circle";
 import ApplyButton from "../components/ApplyButton";
-import { Colors } from "../constants";
 var TimerMixin = require("react-timer-mixin");
+import { Rating, AirbnbRating } from 'react-native-ratings';
 
 //Utilities
 import { isIphoneX, isNumber, Storage } from "../global/Utilities";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 //Store
 import { connect } from "react-redux";
@@ -196,7 +203,8 @@ class CurrentTimeLimitScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.navigationbar}>
-          <TouchableOpacity style={styles.backButtomContainer}
+          <TouchableOpacity
+            style={styles.backButtomContainer}
             onPress={() => {
               this.props.navigation.dispatch(backAction);
             }}
@@ -354,7 +362,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between"
   },
-  backButtomContainer:{
+  backButtomContainer: {
     width: 44,
     height: 44,
     alignItems: "center",
@@ -370,7 +378,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 20,
@@ -403,7 +412,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "white",
     textAlign: "center",
-    marginLeft: 5
+    marginLeft: 5,
+    fontFamily: DefaultFont.textFont
   },
   time_icon: {
     width: 10,
@@ -420,7 +430,8 @@ const styles = StyleSheet.create({
   },
   circle_progress_text: {
     fontSize: 40,
-    color: "white"
+    color: "white",
+    fontFamily: DefaultFont.textFont
   },
 
   // --- main bottom view -- //

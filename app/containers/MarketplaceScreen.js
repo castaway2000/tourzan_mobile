@@ -17,9 +17,8 @@ import {
   Platform
 } from "react-native";
 
-import Rating from "react-native-ratings";
+import { Rating, AirbnbRating } from 'react-native-ratings';
 import { NavigationActions } from "react-navigation";
-import { Colors } from "../constants";
 import NavigationBar from "../components/NavigationBar";
 
 //Store
@@ -32,6 +31,7 @@ import { updateuser } from "../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 var SearchBar = require("react-native-search-bar");
 var { width, height } = Dimensions.get("window");
@@ -271,7 +271,8 @@ const styles = StyleSheet.create({
     fontSize: 17,
     width: width - 160,
     fontWeight: "bold",
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 20,
@@ -314,7 +315,8 @@ const styles = StyleSheet.create({
     height: 30,
     width: width - 100,
     color: "white",
-    fontSize: 12
+    fontSize: 12,
+    fontFamily: DefaultFont.textFont
   },
   row_view: {
     marginTop: 10,
@@ -357,7 +359,8 @@ const styles = StyleSheet.create({
   rating_text: {
     marginLeft: 5,
     fontSize: 8,
-    color: Colors.color999
+    color: Colors.color999,
+    fontFamily: DefaultFont.textFont
   },
   info_view: {
     width: (width * 50) / 100,
@@ -380,7 +383,8 @@ const styles = StyleSheet.create({
     color: "#000",
     textAlign: "left",
     fontWeight: "bold",
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
+    fontFamily: DefaultFont.textFont
   },
   location_text: {
     marginLeft: 5,
@@ -395,7 +399,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.color999,
     textAlign: "left",
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
+    fontFamily: DefaultFont.textFont
   },
   right_view: {
     alignItems: "center",
@@ -404,7 +409,8 @@ const styles = StyleSheet.create({
   },
   right_text: {
     margin: 10,
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
+    fontFamily: DefaultFont.textFont
   }
 });
 

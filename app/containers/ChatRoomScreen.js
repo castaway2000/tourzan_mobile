@@ -18,9 +18,7 @@ import {
 
 import { NavigationActions } from "react-navigation";
 import { GiftedChat } from "react-native-gifted-chat";
-import { Colors } from "../constants";
-import { API } from "../constants";
-import moment from 'moment'
+import moment from "moment";
 
 //Store
 import { connect } from "react-redux";
@@ -35,10 +33,13 @@ import { sendChatMessage } from "../actions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 var { width, height } = Dimensions.get("window");
 
 var lastid = 0;
+
+var lastMessageBySender = "";
 
 const backAction = NavigationActions.back({});
 
@@ -62,7 +63,6 @@ class ChatRoomScreen extends React.Component {
       messages: [],
       messageText: ""
     };
-
   }
 
   // gifted chat
@@ -71,7 +71,7 @@ class ChatRoomScreen extends React.Component {
 
     console.log("params.chatData", params.chatData);
 
-    lastid = params.chatData.messages[0].id
+    lastid = params.chatData.messages[0].id;
 
     for (let index = 0; index < params.chatData.messages.length; index++) {
       const element = params.chatData.messages[index];
@@ -96,25 +96,38 @@ class ChatRoomScreen extends React.Component {
   }
 
   componentDidMount() {
-
     var { params } = this.props.navigation.state;
 
-    this.socket = new WebSocket(API.CHAT_URL + params.chatData.uuid + "/?token=" + this.props.userdata.token);
+    this.socket = new WebSocket(
+      API.CHAT_URL +
+        params.chatData.uuid +
+        "/?token=" +
+        this.props.userdata.token
+    );
 
     // this.socket.binaryType = "blob";
 
     this.socket.onopen = () => {
-      console.log("Socket connected...!",API.CHAT_URL + params.chatData.uuid + "/?token=" + this.props.userdata.token);
+      console.log(
+        "Socket connected...!",
+        API.CHAT_URL +
+          params.chatData.uuid +
+          "/?token=" +
+          this.props.userdata.token
+      );
     };
 
     this.socket.onmessage = e => {
-      
       console.log("A message was received.", e.data);
+
+      if (lastMessageBySender == JSON.parse(e.data).message) {
+        return;
+      }
 
       var { params } = this.props.navigation.state;
 
       lastid = lastid + 1;
-      
+
       let cm = {
         text: JSON.parse(e.data).message,
         _id: lastid,
@@ -143,20 +156,21 @@ class ChatRoomScreen extends React.Component {
   }
 
   onSend(messages = []) {
-
     var { params } = this.props.navigation.state;
 
     console.log("sending message....,");
-    
+
+    lastMessageBySender = this.state.messageText;
+
     let message1 = {
       message: this.state.messageText,
-      chat_uuid: params.chatData.uuid,
+      chat_uuid: params.chatData.uuid
     };
 
     let messagestringfy = JSON.stringify(message1);
 
     this.socket.send(messagestringfy);
-    
+
     // this.sendChatMessageWS();
 
     this.setState(previousState => ({
@@ -293,7 +307,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 20,

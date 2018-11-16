@@ -18,14 +18,14 @@ import {
 
 import { NavigationActions } from "react-navigation";
 import Checkbox from "react-native-custom-checkbox";
-import Rating from "react-native-ratings";
+import { Rating, AirbnbRating } from 'react-native-ratings';
 import ReadMore from "@expo/react-native-read-more-text";
 import Button from "react-native-button";
 import moment from "moment";
 
 import ApplyButton from "../../components/ApplyButton";
 import NavigationBar from "../../components/NavigationBar";
-import { Colors } from "../../constants/index";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../../constants";
 
 var { width, height } = Dimensions.get("window");
 
@@ -238,7 +238,8 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 17,
-    width: width - 160
+    width: width - 160,
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 20,
@@ -260,7 +261,8 @@ const styles = StyleSheet.create({
   amount_txt: {
     fontSize: 30,
     color: "black",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
 
   // --- info view --- //
@@ -319,7 +321,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#5e6265",
     marginLeft: 5,
-    fontSize: 12
+    fontSize: 12,
+    fontFamily: DefaultFont.textFont
   },
   small_info_icon: {
     width: 15,
@@ -389,20 +392,23 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#000",
     textAlign: "left",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   location_text: {
     marginLeft: 5,
     fontSize: 12,
     color: Colors.color999,
     textAlign: "left",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   description_text: {
     marginTop: 5,
     fontSize: 12,
     color: Colors.color999,
-    textAlign: "left"
+    textAlign: "left",
+    fontFamily: DefaultFont.textFont
   }
 });
 

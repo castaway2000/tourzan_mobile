@@ -17,9 +17,8 @@ import {
 } from "react-native";
 
 import { NavigationActions } from "react-navigation";
-import Rating from "react-native-ratings";
+import { Rating, AirbnbRating } from 'react-native-ratings';
 import ApplyButton from "../components/ApplyButton";
-import { Colors } from "../constants";
 
 //Store
 import { connect } from "react-redux";
@@ -31,6 +30,7 @@ import { updateuser } from "../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 var { width, height } = Dimensions.get("window");
 
@@ -191,7 +191,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 20,
@@ -211,14 +212,16 @@ const styles = StyleSheet.create({
     width: width - 2 * 40,
     textAlign: "center",
     color: "#979797",
-    fontSize: 15
+    fontSize: 15,
+    fontFamily: DefaultFont.textFont
   },
   offer_text: {
     width: 100,
     textAlign: "center",
     color: "black",
     fontWeight: "bold",
-    fontSize: 25
+    fontSize: 25,
+    fontFamily: DefaultFont.textFont
   },
   /// ------- main view -------///
   main_view: {
@@ -276,7 +279,8 @@ const styles = StyleSheet.create({
   rating_text: {
     marginLeft: 5,
     fontSize: 8,
-    color: Colors.color999
+    color: Colors.color999,
+    fontFamily: DefaultFont.textFont
   },
   info_view: {
     width: (width * 50) / 100,
@@ -298,20 +302,23 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#000",
     textAlign: "left",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   location_text: {
     marginLeft: 5,
     fontSize: 12,
     color: Colors.color999,
     textAlign: "left",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   description_text: {
     marginTop: 5,
     fontSize: 12,
     color: Colors.color999,
-    textAlign: "left"
+    textAlign: "left",
+    fontFamily: DefaultFont.textFont
   },
   chat_view: {
     width: (width * 10) / 100,
@@ -346,7 +353,8 @@ const styles = StyleSheet.create({
     width: 15
   },
   row_text: {
-    marginLeft: 15
+    marginLeft: 15,
+    fontFamily: DefaultFont.textFont
   },
   main_bottom_view: {
     width: width,
@@ -366,7 +374,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textDecorationLine: "underline",
     textDecorationStyle: "solid",
-    textDecorationColor: "#000"
+    textDecorationColor: "#000",
+    fontFamily: DefaultFont.textFont
   }
 });
 

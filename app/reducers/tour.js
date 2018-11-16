@@ -8,7 +8,8 @@ const initialState = {
     timeLimit: 0, //second //5 hour
     bookedTime: moment().format("YYYY-MM-DD H:mm:ss"), //yyyy-MM-dd HH:mm:ss
     remainingTime: 0, //second
-    tripid: 0
+    tripid: 0,
+    duration: 0 // it is coming from server
   }
 };
 

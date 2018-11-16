@@ -13,7 +13,7 @@ import {
   TouchableWithoutFeedback
 } from "react-native";
 
-import { Colors } from "../../constants";
+
 import GuidesScreen from "./GuidesScreen";
 import TransactionsScreen from "./TransactionsScreen";
 import TripsScreen from "./TripsScreen";
@@ -28,6 +28,7 @@ import { updateuser } from "../../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../../global/Utilities";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../../constants";
 
 var { width, height } = Dimensions.get("window");
 
@@ -199,7 +200,8 @@ const styles = StyleSheet.create({
     fontSize: 17,
     width: width - 160,
     fontWeight: "bold",
-    color: "white"
+    color: "white",
+    fontFamily: DefaultFont.textFont
   },
   mainView: {
     width: width,
@@ -226,7 +228,8 @@ const styles = StyleSheet.create({
   tabtxt: {
     fontSize: 9,
     color: Colors.tintColor,
-    marginTop: 5
+    marginTop: 5,
+    fontFamily: DefaultFont.textFont
   },
   personImg: {
     height: 36,

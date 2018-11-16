@@ -18,10 +18,7 @@ import {
 import { TabNavigator } from "react-navigation";
 import { NavigationActions } from "react-navigation";
 import { StackNavigator } from "react-navigation";
-import { Colors } from "../constants";
-
 import NavigationBar from "../components/NavigationBar";
-
 import TripsScreen from "./DashboardTabs/TripsScreen";
 import GuidesScreen from "./DashboardTabs/GuidesScreen";
 import TransactionsScreen from "./DashboardTabs/TransactionsScreen";
@@ -41,6 +38,7 @@ import { updateuser } from "../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 var { width, height } = Dimensions.get("window");
 

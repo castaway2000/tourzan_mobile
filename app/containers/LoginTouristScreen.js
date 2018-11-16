@@ -20,7 +20,13 @@ import {
 import { NavigationActions } from "react-navigation";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Checkbox from "react-native-custom-checkbox";
-import { Colors } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 import ApplyButton from "../components/ApplyButton";
 import NavigationBar from "../components/NavigationBar";
 import { emailLogin } from "../actions";
@@ -60,8 +66,8 @@ class LoginTouristScreen extends React.Component {
     super(props);
     this.state = {
       isChecked: true,
-      username: "tourist201", 
-      password: "Test@123", //
+      username: "", //test1001
+      password: "", //Test@123
       isLoading: false
     };
     this.navigate = this.props.navigation;
@@ -238,14 +244,43 @@ class LoginTouristScreen extends React.Component {
               <Text style={styles.button_signup}> SIGN UP </Text>
             </TouchableOpacity>
 
-                          
-                          <View style={styles.termsView}>
-              <Text style={{ color: "gray", fontSize: 13 }}> By clicking "<Text style={{ color: Colors.main }}>Sign Up</Text>" I agree to the </Text>
-              <TouchableOpacity onPress={() => {this.navigate.navigate("TermsofUseScreen")}}>
-                <Text style={{ fontSize: 13, marginTop: 4 }}> Terms of Service </Text>
+            <View style={styles.termsView}>
+              <Text
+                style={{
+                  color: "gray",
+                  fontSize: 13,
+                  fontFamily: DefaultFont.textFont
+                }}
+              >
+                {" "}
+                By clicking "
+                <Text
+                  style={{
+                    color: Colors.main,
+                    fontFamily: DefaultFont.textFont
+                  }}
+                >
+                  Sign Up
+                </Text>
+                " I agree to the{" "}
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  this.navigate.navigate("TermsofUseScreen");
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 13,
+                    marginTop: 4,
+                    fontFamily: DefaultFont.textFont
+                  }}
+                >
+                  {" "}
+                  Terms of Service{" "}
+                </Text>
               </TouchableOpacity>
-             </View>
-
+            </View>
           </View>
         </KeyboardAwareScrollView>
         {this.showLoading()}
@@ -287,13 +322,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     color: "white",
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
+    fontFamily: DefaultFont.textFont
   },
   txt_bottom: {
     fontSize: 17,
     textAlign: "center",
     color: Colors.textBottomColor,
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
+    fontFamily: DefaultFont.textFont
   },
   bottom_container: {
     width: width,
@@ -303,14 +340,17 @@ const styles = StyleSheet.create({
   inputText: {
     width: width - 60,
     marginTop: 30,
-    height: 40
+    height: 40,
+    fontFamily: DefaultFont.textFont
   },
   txt_checkbox: {
     marginLeft: 10,
-    fontSize: 12
+    fontSize: 12,
+    fontFamily: DefaultFont.textFont
   },
   txt_forgot: {
-    fontSize: 12
+    fontSize: 12,
+    fontFamily: DefaultFont.textFont
   },
   view_remember: {
     width: width - 60,
@@ -334,7 +374,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textDecorationLine: "underline",
     textDecorationStyle: "solid",
-    textDecorationColor: "#000"
+    textDecorationColor: "#000",
+    fontFamily: DefaultFont.textFont
   },
   line: {
     height: 1,
@@ -355,7 +396,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginBottom: 80,
     alignItems: "center"
-  },
+  }
 });
 
 const mapStateToProps = store => {

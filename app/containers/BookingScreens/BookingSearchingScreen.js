@@ -27,6 +27,7 @@ import { store } from "../../store/index";
 
 //Utilities
 import { isIphoneX, isNumber, Storage } from "../../global/Utilities";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../../constants";
 
 //Actions
 import { updatebooking } from "../../actions/bookingActions";
@@ -193,7 +194,8 @@ const styles = StyleSheet.create({
   },
   logo_text: {
     fontSize: 20,
-    color: "white"
+    color: "white",
+    fontFamily: DefaultFont.textFont
   },
   circle: {
     width: width,

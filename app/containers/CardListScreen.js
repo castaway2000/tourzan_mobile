@@ -20,7 +20,6 @@ import {
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Colors } from "../constants";
 import { NavigationActions } from "react-navigation";
 import MapView from "react-native-maps";
 
@@ -57,6 +56,13 @@ import {
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 //FCM
 import FCM, { NotificationActionType } from "react-native-fcm";
@@ -251,7 +257,8 @@ class CardListScreen extends React.Component {
                           position: "absolute",
                           bottom: 10,
                           left: 4,
-                          color: "red"
+                          color: "red",
+                          fontFamily: DefaultFont.textFont
                         }}
                       >
                         Disabled
@@ -269,7 +276,13 @@ class CardListScreen extends React.Component {
             <View
               style={{ flex: 1, flexDirection: "row", alignItems: "center" }}
             >
-              <Text style={{ width: "100%", textAlign: "center" }}>
+              <Text
+                style={{
+                  width: "100%",
+                  textAlign: "center",
+                  fontFamily: DefaultFont.textFont
+                }}
+              >
                 {this.state.message}
               </Text>
             </View>
@@ -485,7 +498,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 12
@@ -518,7 +532,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 30,
     fontWeight: "bold",
-    paddingLeft: 4
+    paddingLeft: 4,
+    fontFamily: DefaultFont.textFont
   },
 
   // --- Loading --- //

@@ -18,10 +18,10 @@ import {
 
 import { NavigationActions } from "react-navigation";
 import IconBadge from "react-native-icon-badge";
-import { Colors } from "../constants";
 import ApplyButton from "../components/ApplyButton";
 import NavigationBar from "../components/NavigationBar";
 import { isIphoneX } from "../global/Utilities";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 var { width, height } = Dimensions.get("window");
 
@@ -319,7 +319,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 20,
@@ -351,7 +352,8 @@ const styles = StyleSheet.create({
   },
   selecting_title_text: {
     fontSize: 13,
-    color: Colors.tintColor
+    color: Colors.tintColor,
+    fontFamily: DefaultFont.textFont
   },
   card_list_view: {
     flexDirection: "row",
@@ -387,7 +389,8 @@ const styles = StyleSheet.create({
     width: width - 60,
     marginTop: 20,
     height: 40,
-    borderColor: "gray"
+    borderColor: "gray",
+    fontFamily: DefaultFont.textFont
   },
   card_number_view: {
     flexDirection: "row",
@@ -399,7 +402,8 @@ const styles = StyleSheet.create({
     width: width - 90,
     marginTop: 20,
     height: 40,
-    borderColor: "gray"
+    borderColor: "gray",
+    fontFamily: DefaultFont.textFont
   },
   card_number_icon: {
     marginTop: 10,
@@ -410,13 +414,15 @@ const styles = StyleSheet.create({
     width: 150,
     marginTop: 20,
     height: 40,
-    borderColor: "gray"
+    borderColor: "gray",
+    fontFamily: DefaultFont.textFont
   },
   inputText_cvv: {
     width: 100,
     marginTop: 20,
     height: 40,
-    borderColor: "gray"
+    borderColor: "gray",
+    fontFamily: DefaultFont.textFont
   },
   encrypt_view: {
     marginTop: 30,
@@ -432,7 +438,8 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: 12,
     color: Colors.color999,
-    textAlign: "left"
+    textAlign: "left",
+    fontFamily: DefaultFont.textFont
   },
   continue_view: {
     marginTop: 30,

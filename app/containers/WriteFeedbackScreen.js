@@ -21,10 +21,9 @@ import {
 
 import { NavigationActions } from "react-navigation";
 import Checkbox from "react-native-custom-checkbox";
-import Rating from "react-native-ratings";
+import { Rating, AirbnbRating } from "react-native-ratings";
 import ReadMore from "@expo/react-native-read-more-text";
 import Button from "react-native-button";
-import { Colors } from "../constants";
 import ApplyButton from "../components/ApplyButton";
 import NavigationBar from "../components/NavigationBar";
 import { profile } from "../actions";
@@ -43,6 +42,13 @@ import { updateuser } from "../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 //Webservice
 import { addReview } from "../actions";
@@ -82,8 +88,9 @@ class WriteFeedbackScreen extends React.Component {
 
     this.state = {
       // for ratingview
-      starCount: 3.5,
+      starCount: 0,
       feedbacktext: "",
+      titleText: "",
       height: 0
     };
   }
@@ -215,6 +222,16 @@ class WriteFeedbackScreen extends React.Component {
   }
 
   onAddRating() {
+    if (this.state.titleText.length < 0) {
+      Alert.alert("Tourzan", "Please add review title.");
+      return;
+    }
+
+    if (this.state.feedbacktext.length < 0) {
+      Alert.alert("Tourzan", "Please add review.");
+      return;
+    }
+
     this.addReviewWS();
   }
 
@@ -254,14 +271,14 @@ class WriteFeedbackScreen extends React.Component {
                 {this._showFullname()}
                 {this._showRatingViewMain()}
               </View>
-              <View style={styles.location_view}>
+              {/* <View style={styles.location_view}>
                 <Image
                   resizeMode="contain"
                   source={require("../assets/images/location_maps.png")}
                   style={styles.location_icon}
                 />
                 <Text style={styles.location_text}>Not Avaible</Text>
-              </View>
+              </View> */}
               <View style={styles.overview_view}>
                 <Text style={styles.overview_title_text}>
                   Let us know how it went
@@ -271,6 +288,16 @@ class WriteFeedbackScreen extends React.Component {
             <View style={styles.line} />
           </View>
 
+          <TextInput
+            placeholder={"Title"}
+            onChangeText={text => {
+              this.setState({ titleText: text });
+            }}
+            style={styles.text_input}
+            value={this.state.titleText}
+            underlineColorAndroid="transparent"
+          />
+          <View style={styles.line} />
           <TextInput
             multiline={true}
             placeholder={"Write here..."}
@@ -306,6 +333,8 @@ tourist_id: 118
 tourist_trip_fees: 231
 trip_id: 57}*/
 
+    // this.props.userdata.user.isLoggedInAsGuide ? this.props.bookingdata.touristid : this.props.bookingdata.guideid,
+
     let profileData = this.props.navigation.state.params.profileData;
     let tripData = this.props.navigation.state.params.tripData;
     let ratings = this.props.navigation.state.params.ratings;
@@ -317,12 +346,24 @@ trip_id: 57}*/
     var { dispatch } = this.props;
 
     var params = {
-      userid: this.props.userdata.user.userid,
-      orderid: tripData.order_id,
-      rating: ratings,
-      feedback: this.state.feedbacktext,
-      title: ""
+      order: tripData.order_id,
+      is_tourist_feedback: !this.props.userdata.user.isLoggedInAsGuide
+        ? "True"
+        : "False",
+      is_guide_feedback: this.props.userdata.user.isLoggedInAsGuide
+        ? "True"
+        : "False"
     };
+
+    if (this.props.userdata.user.isLoggedInAsGuide) {
+      params.tourist_feedback_name = this.state.titleText;
+      params.tourist_feedback_text = this.state.feedbacktext;
+      params.tourist_rating = this.state.starCount;
+    } else {
+      params.guide_feedback_name = this.state.titleText;
+      params.guide_feedback_text = this.state.feedbacktext;
+      params.guide_rating = this.state.starCount;
+    }
 
     addReview(params)
       .then(data => {
@@ -396,7 +437,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 8,
@@ -404,7 +446,8 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 14,
-    textAlign: "center"
+    textAlign: "center",
+    fontFamily: DefaultFont.textFont
   },
   scrollview_container: {
     // flex:1,
@@ -438,7 +481,8 @@ const styles = StyleSheet.create({
   },
   name_text: {
     fontSize: 17,
-    color: "black"
+    color: "black",
+    fontFamily: DefaultFont.textFont
   },
   location_view: {
     marginTop: 10,
@@ -454,14 +498,16 @@ const styles = StyleSheet.create({
   },
   overview_title_text: {
     fontSize: 17,
-    color: "black"
+    color: "black",
+    fontFamily: DefaultFont.textFont
   },
   location_text: {
     marginLeft: 5,
     fontSize: 12,
     color: Colors.color999,
     textAlign: "left",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   loadingView: {
     position: "absolute",
@@ -489,7 +535,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 30,
     marginRight: 30,
-    maxHeight: 80
+    maxHeight: 80,
+    fontFamily: DefaultFont.textFont,
+    fontFamily: DefaultFont.textFont
   }
 });
 

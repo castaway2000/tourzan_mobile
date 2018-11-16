@@ -20,7 +20,6 @@ import {
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Colors } from "../constants";
 import { NavigationActions } from "react-navigation";
 import MapView from "react-native-maps";
 
@@ -31,6 +30,7 @@ import flagImg from "../assets/images/guide-dot.png";
 import moment from "moment";
 import MapViewDirections from "react-native-maps-directions";
 var TimerMixin = require("react-timer-mixin");
+import { Rating, AirbnbRating } from 'react-native-ratings';
 
 //Store
 import { store } from "../store/index";
@@ -56,6 +56,13 @@ import {
 
 //Utilities
 import { isIphoneX, Storage } from "../global/Utilities";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 //Geo coder
 import Geocoder from "../global/Geocoder";
@@ -125,8 +132,14 @@ class MapsScreen extends React.Component {
   async componentDidMount() {
     this.handelNotifications();
 
+    console.log("componentDidMount");
+
+    console.log("navigator.geolocation", navigator.geolocation);
+
     this.watchID = navigator.geolocation.watchPosition(
       position => {
+        console.log("navigator.geolocation");
+
         // Create the object to update this.state.mapRegion through the onRegionChange function
         this.addressFromCoordnate(
           position.coords.latitude,
@@ -163,33 +176,29 @@ class MapsScreen extends React.Component {
     );
 
     //Get nearby guides
-    if (!this.props.userdata.user.isLoggedInAsGuide) {
-      //Get nearby guides
-
-      if (!this.timer) {
-        this.timer = TimerMixin.setInterval(() => {
-          if (this.props.userdata.user.isLoggedInAsGuide) {
-            //Clear nearby guides on map
-            if (this.state.nearByGuides && this.state.nearByGuides.length > 1) {
-              this.setState({ nearByGuides: [] });
-            }
-          } else {
-            //Get nearby guides
-            this.onGetNearbyGuide();
+    if (!this.timer) {
+      this.timer = TimerMixin.setInterval(() => {
+        if (this.props.userdata.user.isLoggedInAsGuide) {
+          //Clear nearby guides on map
+          if (this.state.nearByGuides && this.state.nearByGuides.length > 1) {
+            this.setState({ nearByGuides: [] });
           }
+        } else {
+          //Get nearby guides
+          this.onGetNearbyGuide();
+        }
 
-          //Add delay to give some time to redux to update state
-          setTimeout(() => {
-            //Update location and device token
-            this.loginAndUpdateTripWS();
+        //Add delay to give some time to redux to update state
+        setTimeout(() => {
+          //Update location and device token
+          this.loginAndUpdateTripWS();
 
-            //Update trip
-            if (this.props.bookingdata.isTripInProgress) {
-              this.updateTripWS();
-            }
-          }, 1000);
-        }, 10000);
-      }
+          //Update trip
+          if (this.props.bookingdata.isTripInProgress) {
+            this.updateTripWS();
+          }
+        }, 1000);
+      }, 10000);
     }
 
     //Check Token Exipred or not
@@ -202,6 +211,8 @@ class MapsScreen extends React.Component {
     if (this.watchID) {
       navigator.geolocation.clearWatch(this.watchID);
     }
+
+    navigator.geolocation.stopObserving();
 
     if (this.timer) {
       clearTimeout(this.timer);
@@ -317,6 +328,15 @@ class MapsScreen extends React.Component {
   };
 
   onMyLocation = () => {
+    console.log(
+      "this.props.bookingdata.guideid",
+      this.props.bookingdata.guideid
+    );
+    console.log(
+      "this.props.bookingdata.touristid",
+      this.props.bookingdata.touristid
+    );
+
     if (this.props.currentlocation.lat && this.props.currentlocation.long) {
       //Update map
       let region = {
@@ -537,9 +557,8 @@ class MapsScreen extends React.Component {
               <Text style={styles.row_text}>{this.state.address}</Text>
             </View>
 
-             <View style={styles.devide_line} />
-             
-          </View> 
+            <View style={styles.devide_line} />
+          </View>
 
           {this.showBottomBookButton()}
 
@@ -684,6 +703,19 @@ class MapsScreen extends React.Component {
     updateTrip(params)
       .then(data => {
         console.log("updateTrip-->", data);
+
+        if (data.trip_status && data.trip_status.length > 0) {
+          let tripStatus = data.trip_status[0];
+
+          let storestate = store.getState();
+          storestate.tour.bookingdata.touristid = tripStatus.user_id;
+          storestate.tour.bookingdata.guideid = tripStatus.guide_id;
+          storestate.tour.bookingdata.duration = tripStatus.duration;
+
+          store.dispatch(updatebooking(storestate.tour.bookingdata));
+
+          console.log("store state:", store.getState());
+        }
       })
       .catch(err => {});
   }
@@ -719,13 +751,13 @@ class MapsScreen extends React.Component {
         ) {
           console.log("Previous trip found. Trip id is", data.trip_id);
 
-          this.gettripstatus(data.trip_id);
+          this.gettripstatusWS(data.trip_id);
         }
       })
       .catch(err => {});
   }
 
-  gettripstatus(tripid) {
+  gettripstatusWS(tripid) {
     var { dispatch } = this.props;
 
     var params = {
@@ -734,7 +766,7 @@ class MapsScreen extends React.Component {
 
     gettripstatus(params)
       .then(data => {
-        console.log("get trips tatus-->", data);
+        console.log("get trips Status-->", data);
 
         //
         let storestate = store.getState();
@@ -768,6 +800,8 @@ class MapsScreen extends React.Component {
         }
 
         store.dispatch(updatebooking(storestate.tour.bookingdata));
+
+        this.updateTripWS()
       })
       .catch(err => {});
   }
@@ -1054,7 +1088,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 20,
@@ -1140,7 +1175,8 @@ const styles = StyleSheet.create({
     width: 15
   },
   row_text: {
-    marginLeft: 15
+    marginLeft: 15,
+    fontFamily: DefaultFont.textFont
   },
   edit_time: {
     height: 15,

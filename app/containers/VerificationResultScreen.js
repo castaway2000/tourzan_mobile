@@ -20,7 +20,6 @@ import {
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Colors } from "../constants";
 import { NavigationActions } from "react-navigation";
 import MapView from "react-native-maps";
 
@@ -52,7 +51,7 @@ import {
 
 //Utilities
 import { isIphoneX } from "../global/Utilities";
-import { API } from "../constants";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 //FCM
 import FCM, { NotificationActionType } from "react-native-fcm";
@@ -123,7 +122,7 @@ class VerificationResultScreen extends React.Component {
           Please reach out to us at{" "}
           <Text
             onPress={() => Linking.openURL(API.CONTACT_US_EMAIL)}
-            style={{ color: "blue" }}
+            style={{ color: "blue", fontFamily: DefaultFont.textFont}}
           >
             {API.CONTACT_US_EMAIL}
           </Text>{" "}
@@ -236,7 +235,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 20,
@@ -258,7 +258,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     //textAlign: 'center',
     color: "#34495e",
-    justifyContent: "center"
+    justifyContent: "center",
+    fontFamily: DefaultFont.textFont
   },
 
   // --- Activity --- //
