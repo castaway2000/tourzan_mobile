@@ -19,14 +19,12 @@ import {
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Colors } from "../constants";
+
 import { NavigationActions } from "react-navigation";
 import MapView from "react-native-maps";
 import ApplyButton from "../components/ApplyButton";
-
 import Switch from "../components/Switch";
 import NavigationBar from "../components/NavigationBar";
-
 import flagImg from "../assets/images/guide-dot.png";
 import moment from "moment";
 import MapViewDirections from "react-native-maps-directions";
@@ -58,6 +56,7 @@ import {
 
 //Utilities
 import { isIphoneX } from "../global/Utilities";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 //Braintree Dropin
 import BraintreeDropIn from "react-native-braintree-payments-drop-in";
@@ -298,7 +297,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 20,

@@ -17,7 +17,6 @@ import {
 } from "react-native";
 
 import ApplyButton from "../components/ApplyButton";
-import { Colors } from "../constants";
 import { NavigationActions } from "react-navigation";
 import SplashScreen from "react-native-splash-screen";
 
@@ -31,6 +30,7 @@ import { updateuser } from "../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 var { width, height } = Dimensions.get("window");
 //const onButtonPress = () => { Alert.alert('Button has been pressed!'); };
@@ -135,7 +135,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     color: "white",
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
+    fontFamily: DefaultFont.textFont
   },
   line: {
     marginTop: 7,
@@ -148,7 +149,8 @@ const styles = StyleSheet.create({
     fontSize: 17,
     textAlign: "center",
     color: Colors.textBottomColor,
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
+    fontFamily: DefaultFont.textFont
   },
 
   bottom_container: {
@@ -168,7 +170,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 5,
     borderColor: Colors.tintColor,
-    overflow: "hidden"
+    overflow: "hidden",
+    fontFamily: DefaultFont.textFont
   }
 });
 

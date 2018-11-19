@@ -21,7 +21,6 @@ import {
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Colors } from "../constants";
 import { NavigationActions } from "react-navigation";
 import MapView from "react-native-maps";
 
@@ -50,7 +49,7 @@ import { isIphoneX } from "../global/Utilities";
 var { width, height } = Dimensions.get("window");
 
 //API
-import { API, Paymentrails } from "../constants";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 const backAction = NavigationActions.back({});
 
@@ -256,7 +255,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 20,
@@ -266,7 +266,8 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 17,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
 
   // --- Activity --- //

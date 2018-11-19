@@ -315,28 +315,27 @@ function searchInterest(params) {
 function addReview(params) {
   let storeState = store.getState();
 
-  var formData = new FormData();
-  formData.append("user_id", params.userid);
-  formData.append("order_id", params.orderid);
-  formData.append("rating", params.rating);
-  formData.append("feedback", params.feedback);
-  formData.append("title", params.title);
+  var url = API.SERVER + API.VERSION + "/reviews/create_review/?";
 
-  let url = API.SERVER + API.VERSION + "/mobile/review/";
+  let esc = encodeURIComponent;
+  let query = Object.keys(params)
+    .map(k => esc(k) + "=" + esc(params[k]))
+    .join("&");
+
+  url = url + query;
 
   console.log("Add Review API URL-->", url);
-  console.log("Add Review API PARAMS-->", formData);
+
 
   return new Promise((resolve, reject) => {
     fetch(url, {
-      method: "POST",
+      method: "GET",
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
         pragma: "no-cache",
         "Cache-Control": "no-cache",
         Authorization: "JWT " + storeState.user.userdata.token
       },
-      body: formData
     })
       .then(res => res.json())
       .then(data => {
@@ -454,6 +453,36 @@ function uploadProfilePicture(param) {
   });
 }
 
+function getOrdersTouristRepresentation() {
+  let storeState = store.getState();
+
+  let url = API.SERVER + API.VERSION + "/orders/get_tourist_representation/";
+
+  // console.log("Get Orders Tourist Representation API URL-->", url);
+  // console.log("Get Orders Tourist Representation API PARAMS-->", formData);
+
+  return new Promise((resolve, reject) => {
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        pragma: "no-cache",
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        // console.log("Get Orders Tourist Representation API Success", data);
+        resolve(data);
+      })
+      .catch(err => {
+        console.log("Get Orders Tourist Representation API Error", err);
+        reject(err);
+      });
+  });
+}
+
 module.exports = {
   emailLogin,
   emailSignup,
@@ -467,5 +496,6 @@ module.exports = {
   addReview,
   languageSearch,
   verifyToken,
-  uploadProfilePicture
+  uploadProfilePicture,
+  getOrdersTouristRepresentation
 };

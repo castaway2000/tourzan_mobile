@@ -18,9 +18,8 @@ import {
   Platform
 } from "react-native";
 
-import Rating from "react-native-ratings";
+import { Rating, AirbnbRating } from 'react-native-ratings';
 import { NavigationActions } from "react-navigation";
-import { Colors } from "../../constants";
 import NavigationBar from "../../components/NavigationBar";
 import moment from "moment";
 
@@ -34,9 +33,20 @@ import { updateuser } from "../../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../../global/Utilities";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../../constants";
 
 //Webservice
-import { previousGuideList } from "../../actions";
+import {
+  previousGuideList,
+  getOrdersGuideRepresentation,
+  getOrdersTouristRepresentation
+} from "../../actions";
 
 var { width, height } = Dimensions.get("window");
 
@@ -119,7 +129,7 @@ class TransactionsScreen extends React.Component {
                 style={styles.location_icon}
               />
               <Text style={styles.location_text}>
-                Price before fee: ${item.total_price_before_fees}
+                Base Charge: ${item.total_price_before_fees}
               </Text>
             </View>
             <View style={styles.info_row_view}>
@@ -129,7 +139,33 @@ class TransactionsScreen extends React.Component {
                 style={styles.location_icon}
               />
               <Text style={styles.location_text}>
-                Service fee: ${item.additional_services_price}
+                Discount: ${item.discount}
+              </Text>
+            </View>
+            <View style={styles.info_row_view}>
+              <Image
+                resizeMode="contain"
+                source={require("../../assets/images/cash_icon.png")}
+                style={styles.location_icon}
+              />
+              <Text style={styles.location_text}>
+                Service fee: $
+                {this.props.userdata.user.isLoggedInAsGuide
+                  ? item.fees_guide
+                  : item.fees_tourist}
+              </Text>
+            </View>
+            <View style={styles.info_row_view}>
+              <Image
+                resizeMode="contain"
+                source={require("../../assets/images/cash_icon.png")}
+                style={styles.location_icon}
+              />
+              <Text style={styles.location_text}>
+                Total: $
+                {this.props.userdata.user.isLoggedInAsGuide
+                  ? item.guide_payment
+                  : item.total_price}
               </Text>
             </View>
             <View style={styles.info_row_view}>
@@ -172,7 +208,13 @@ class TransactionsScreen extends React.Component {
               width: "100%"
             }}
           >
-            <Text style={{ width: "100%", textAlign: "center" }}>
+            <Text
+              style={{
+                width: "100%",
+                textAlign: "center",
+                fontFamily: DefaultFont.textFont
+              }}
+            >
               {this.state.message}
             </Text>
           </View>
@@ -194,29 +236,67 @@ class TransactionsScreen extends React.Component {
   }
 
   previousGuideListWS() {
-    previousGuideList()
-      .then(data => {
-        if (data && data.length > 0) {
-          data.sort(function(a, b) {
-            // Turn your strings into dates, and then subtract them
-            // to get a value that is either negative, positive, or zero.
-            return new Date(b.date_booked_for) - new Date(a.date_booked_for);
-          });
+    if (this.props.userdata.user.isLoggedInAsGuide) {
+      getOrdersGuideRepresentation()
+        .then(data => {
+          console.log("getOrdersGuideRepresentation", data);
 
-          this.setState({
-            dataSource: data,
-            message: ""
-          });
-        } else {
-          this.setState({
-            dataSource: [],
-            message: "No data found."
-          });
-        }
-      })
-      .catch(err => {
-        alert(err);
-      });
+          if (data && data.length > 0) {
+            data.sort(function(a, b) {
+              return new Date(b.date_booked_for) - new Date(a.date_booked_for);
+            });
+
+            this.setState({ dataSource: data, message: "" });
+          } else {
+            this.setState({ dataSource: [], message: "No data found." });
+          }
+        })
+        .catch(err => {
+          alert(err);
+        });
+    } else {
+      getOrdersTouristRepresentation()
+        .then(data => {
+          console.log("getOrdersTouristRepresentation", data);
+
+          if (data && data.length > 0) {
+            data.sort(function(a, b) {
+              return new Date(b.date_booked_for) - new Date(a.date_booked_for);
+            });
+
+            this.setState({ dataSource: data, message: "" });
+          } else {
+            this.setState({ dataSource: [], message: "No data found." });
+          }
+        })
+        .catch(err => {
+          alert(err);
+        });
+    }
+
+    // previousGuideList()
+    //   .then(data => {
+    //     if (data && data.length > 0) {
+    //       data.sort(function(a, b) {
+    //         // Turn your strings into dates, and then subtract them
+    //         // to get a value that is either negative, positive, or zero.
+    //         return new Date(b.date_booked_for) - new Date(a.date_booked_for);
+    //       });
+
+    //       this.setState({
+    //         dataSource: data,
+    //         message: ""
+    //       });
+    //     } else {
+    //       this.setState({
+    //         dataSource: [],
+    //         message: "No data found."
+    //       });
+    //     }
+    //   })
+    //   .catch(err => {
+    //     alert(err);
+    //   });
   }
 }
 
@@ -252,11 +332,13 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: "center",
     borderRightWidth: 0.5,
-    borderColor: "white"
+    borderColor: "white",
+    width: 70
   },
   amount_text: {
-    fontSize: 15,
-    color: Colors.color999
+    fontSize: 12,
+    color: Colors.color999,
+    fontFamily: DefaultFont.textFont
   },
   info_view: {
     width: (width * 45) / 100,
@@ -279,14 +361,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#000",
     textAlign: "left",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   time_text: {
     marginLeft: 5,
     fontSize: 12,
     color: Colors.tintColor,
     textAlign: "left",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   row_right_view: {
     marginRight: 5,
@@ -295,7 +379,8 @@ const styles = StyleSheet.create({
     alignItems: "flex-end"
   },
   right_text: {
-    fontSize: 10
+    fontSize: 10,
+    fontFamily: DefaultFont.textFont
   },
   arrow_view: {
     marginTop: 5

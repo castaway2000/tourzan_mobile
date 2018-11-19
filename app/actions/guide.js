@@ -98,8 +98,39 @@ function previousGuideList() {
   });
 }
 
+function getOrdersGuideRepresentation() {
+  let storeState = store.getState();
+
+  let url = API.SERVER + API.VERSION + "/orders/get_guide_representation/";
+
+  // console.log("Get Orders Guide Representation API URL-->", url);
+  // console.log("Get Orders Guide Representation API PARAMS-->", formData);
+
+  return new Promise((resolve, reject) => {
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        pragma: "no-cache",
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        // console.log("Get Orders Guide Representation API Success", data);
+        resolve(data);
+      })
+      .catch(err => {
+        console.log("Get Orders Guide Representation API Error", err);
+        reject(err);
+      });
+  });
+}
+
 module.exports = {
   getGuideList,
   bookGuide,
-  previousGuideList
+  previousGuideList,
+  getOrdersGuideRepresentation
 };

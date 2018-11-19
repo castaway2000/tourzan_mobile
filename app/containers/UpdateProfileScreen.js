@@ -20,7 +20,6 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Colors } from "../constants";
 import { NavigationActions } from "react-navigation";
 import MapView from "react-native-maps";
 
@@ -51,6 +50,7 @@ import {
 
 //Utilities
 import { isIphoneX } from "../global/Utilities";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 var { width, height } = Dimensions.get("window");
 
@@ -848,7 +848,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 8,
@@ -858,7 +859,8 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 17,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   out_container: {
     flex: 1
@@ -915,7 +917,8 @@ const styles = StyleSheet.create({
     color: "#6e7478",
     fontSize: 15,
     marginTop: 10,
-    flex: 1
+    flex: 1,
+    fontFamily: DefaultFont.textFont
   },
   row_icon: {
     height: 15,

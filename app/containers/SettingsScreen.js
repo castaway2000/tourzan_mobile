@@ -20,8 +20,8 @@ import {
 
 import { NavigationActions } from "react-navigation";
 import Checkbox from "react-native-custom-checkbox";
-import { Colors } from "../constants";
 import NavigationBar from "../components/NavigationBar";
+import ImagePicker from "react-native-image-picker";
 
 //Store
 import { connect } from "react-redux";
@@ -33,7 +33,7 @@ import { updateuser } from "../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
-import ImagePicker from "react-native-image-picker";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 //Webservice
 import {
@@ -184,11 +184,12 @@ class SettingsScreen extends React.Component {
                 }}
               >
                 <Text
-                  style={{ color: "black", fontWeight: "800", fontSize: 15 }}
+                  style={{ color: "black", fontWeight: "800", fontSize: 15, fontFamily: DefaultFont.textFont }}
                 >
-                  Edit
+                  {" "}
+                  Edit{" "}
                 </Text>
-                />
+
                 <View
                   style={{
                     position: "absolute",
@@ -199,22 +200,24 @@ class SettingsScreen extends React.Component {
                   }}
                 >
                   <Text
-                    style={{ color: "white", fontWeight: "800", fontSize: 14 }}
+                    style={{ color: "white", fontWeight: "800", fontSize: 14 , fontFamily: DefaultFont.textFont}}
                   >
-                    Edit
+                    {" "}
+                    Edit{" "}
                   </Text>
-                  />
                 </View>
               </View>
             </TouchableOpacity>
 
             <Text style={styles.profile_name_text}>{this._fullname()}</Text>
+
             <Text style={styles.profile_email_text}>
               {this.props.userdata.user.email
                 ? this.props.userdata.user.email
                 : "-"}
             </Text>
           </View>
+
           <View style={styles.main_info_view}>
             <TouchableOpacity
               style={styles.row_view}
@@ -635,7 +638,8 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 17,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 20,
@@ -674,12 +678,14 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontSize: 17,
     color: "black",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   profile_email_text: {
     marginTop: 8,
     fontSize: 13,
-    color: "#31dd73"
+    color: "#31dd73",
+    fontFamily: DefaultFont.textFont
   },
 
   // -- main info view -- //
@@ -713,7 +719,8 @@ const styles = StyleSheet.create({
   },
   row_lb: {
     color: "#6e7478",
-    fontSize: 13
+    fontSize: 13,
+    fontFamily: DefaultFont.textFont
   },
   blank_row_view: {
     width: width,
@@ -737,7 +744,8 @@ const styles = StyleSheet.create({
     color: "#6e7478",
     fontSize: 13,
     width: width - 100,
-    marginTop: 5
+    marginTop: 5,
+    fontFamily: DefaultFont.textFont
   },
   row_icon: {
     height: 15,

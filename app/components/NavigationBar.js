@@ -10,6 +10,7 @@ import {
 } from "react-native";
 
 import { isIphoneX } from "../global/Utilities";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 var { width, height } = Dimensions.get("window");
 class NavigationBar extends React.Component {
@@ -58,7 +59,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     textAlign: "center",
     fontSize: 17,
-    width: width - 100
+    width: width - 100,
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     height: 44,

@@ -1,6 +1,12 @@
 import React, { PropTypes } from "react";
 import { Text, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
-import { Colors } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 var { width, height } = Dimensions.get("window");
 class ApplyButton extends React.Component {
@@ -25,7 +31,8 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     backgroundColor: Colors.main,
     borderRadius: 5,
-    borderColor: Colors.tintColor
+    borderColor: Colors.tintColor,
+    fontFamily: DefaultFont.textFont
   }
 });
 

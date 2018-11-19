@@ -19,7 +19,7 @@ import {
 
 import { NavigationActions } from "react-navigation";
 import Checkbox from "react-native-custom-checkbox";
-import { Colors } from "../constants";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 import ApplyButton from "../components/ApplyButton";
 import NavigationBar from "../components/NavigationBar";
 import { resetPassword } from "../actions";
@@ -235,13 +235,15 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "bold",
     textAlign: "center",
-    color: "#000"
+    color: "#000",
+    fontFamily: DefaultFont.textFont
   },
   txt_bottom: {
     width: width - 60,
     fontSize: 15,
     textAlign: "center",
-    color: Colors.color999
+    color: Colors.color999,
+    fontFamily: DefaultFont.textFont
   },
   bottom_container: {
     width: width,
@@ -252,7 +254,8 @@ const styles = StyleSheet.create({
     width: width - 60,
     marginTop: 50,
     height: 40,
-    borderColor: "gray"
+    borderColor: "gray",
+    fontFamily: DefaultFont.textFont
   },
   line: {
     height: 1,
@@ -270,7 +273,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textDecorationLine: "underline",
     textDecorationStyle: "solid",
-    textDecorationColor: "#000"
+    textDecorationColor: "#000",
+    fontFamily: DefaultFont.textFont
   },
   loadingView: {
     position: "absolute",

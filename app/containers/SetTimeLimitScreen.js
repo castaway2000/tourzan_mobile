@@ -20,12 +20,12 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { NavigationActions } from "react-navigation";
 import KeyEvent from "react-native-keyevent";
-import { Colors } from "../constants";
 import ApplyButton from "../components/ApplyButton";
 import moment from "moment";
 
 //Utilities
 import { isIphoneX, isNumber, Storage } from "../global/Utilities";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 //Store
 import { store } from "../store/index";
@@ -214,7 +214,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 20,
@@ -253,13 +254,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#979797",
     borderRadius: 5,
-    textAlign: "center"
+    textAlign: "center",
+    fontFamily: DefaultFont.textFont
   },
   hour_lb: {
     textAlign: "center",
     marginTop: 10,
     fontSize: 20,
-    color: "#9fa0a2"
+    color: "#9fa0a2",
+    fontFamily: DefaultFont.textFont
   },
   double_dut_view: {
     marginBottom: 50,
@@ -269,7 +272,8 @@ const styles = StyleSheet.create({
   double_dut_symbol: {
     fontSize: 45,
     fontWeight: "bold",
-    color: "black"
+    color: "black",
+    fontFamily: DefaultFont.textFont
   },
   minute_view: {
     flexDirection: "column",
@@ -293,7 +297,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "black",
     width: 200,
-    textAlign: "center"
+    textAlign: "center",
+    fontFamily: DefaultFont.textFont
   }
 });
 

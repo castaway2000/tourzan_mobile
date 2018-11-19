@@ -15,6 +15,7 @@ buildscript {
     }
 }
 
+
 subprojects {
     project.configurations.all {
         resolutionStrategy.eachDependency { details ->

@@ -21,7 +21,6 @@ import moment from "moment";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Colors } from "../../constants";
 import { NavigationActions, StackActions } from "react-navigation";
 import Stars from "react-native-stars";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -31,6 +30,7 @@ import ApplyButton from "../../components/ApplyButton";
 
 //Utils
 import { Storage, isIphoneX } from "../../global/Utilities";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../../constants";
 
 //Webservice
 import { bookGuide, acceptTrip, brainTreeToken } from "../../actions";
@@ -276,8 +276,6 @@ class BookingGuideSettingScreen extends React.Component {
       return "";
     }
 
-    let isGuide = guide.is_guide;
-
     let fullname = "";
 
     if (guide.first_name) {
@@ -289,7 +287,7 @@ class BookingGuideSettingScreen extends React.Component {
     }
 
     if (!fullname) {
-      fullname = isGuide ? "Guide" : "Tourist";
+      fullname = "Guide" ;
     }
 
     return fullname;
@@ -580,7 +578,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   nav_right_view: {
     marginRight: 20,
@@ -627,7 +626,8 @@ const styles = StyleSheet.create({
     marginTop: 30,
     fontSize: 15,
     color: "#000",
-    textAlign: "left"
+    textAlign: "left",
+    fontFamily: DefaultFont.textFont
   },
   top_location_view: {
     marginTop: 5,
@@ -645,7 +645,8 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: 12,
     color: Colors.color999,
-    textAlign: "left"
+    textAlign: "left",
+    fontFamily: DefaultFont.textFont
   },
 
   //--- setting container ---//
@@ -669,7 +670,8 @@ const styles = StyleSheet.create({
   },
   setting_text: {
     fontSize: 13,
-    color: Colors.tintColor
+    color: Colors.tintColor,
+    fontFamily: DefaultFont.textFont
   },
   row_setting_btn_view: {
     width: width,
@@ -693,7 +695,8 @@ const styles = StyleSheet.create({
   row_setting_btn_text: {
     marginLeft: 10,
     fontSize: 15,
-    color: "black"
+    color: "black",
+    fontFamily: DefaultFont.textFont
   },
   row_setting_btn_time_text: {
     fontSize: 15,

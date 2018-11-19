@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 import Spinner from "react-native-loading-spinner-overlay";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 class PLoading extends Component {
   constructor(props) {

@@ -20,7 +20,6 @@ import {
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Colors } from "../constants";
 import { NavigationActions } from "react-navigation";
 import MapView from "react-native-maps";
 
@@ -45,6 +44,7 @@ import { autocompleteCity } from "../actions";
 
 //Utilities
 import { isIphoneX } from "../global/Utilities";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 var { width, height } = Dimensions.get("window");
 
@@ -166,7 +166,7 @@ class SelectCityScreen extends React.Component {
               <View
                 style={{ flex: 1, flexDirection: "row", alignItems: "center" }}
               >
-                <Text style={{ width: "100%", textAlign: "center" }}>
+                <Text style={{ width: "100%", textAlign: "center", fontFamily: DefaultFont.textFont }}>
                   {this.state.message}
                 </Text>
               </View>
@@ -244,7 +244,8 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 17,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 8,
@@ -274,7 +275,8 @@ const styles = StyleSheet.create({
   searchBar: {
     paddingLeft: 10,
     fontSize: 14,
-    flex: 1
+    flex: 1,
+    fontFamily: DefaultFont.textFont
   },
 
   // --- Activity --- //
@@ -303,7 +305,8 @@ const styles = StyleSheet.create({
     color: "#5c5c5c",
     fontSize: 16,
     marginTop: 12,
-    paddingLeft: 4
+    paddingLeft: 4,
+    fontFamily: DefaultFont.textFont
   }
 });
 

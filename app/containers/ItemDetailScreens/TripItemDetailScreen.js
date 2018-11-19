@@ -17,9 +17,9 @@ import {
 
 import { NavigationActions } from "react-navigation";
 import Checkbox from "react-native-custom-checkbox";
-import Rating from "react-native-ratings";
+import { Rating, AirbnbRating } from 'react-native-ratings';
 import ReadMore from "@expo/react-native-read-more-text";
-import { Colors } from "../../constants/index";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../../constants";
 import NavigationBar from "../../components/NavigationBar";
 import moment from "moment";
 import ParallaxScrollView from "react-native-parallax-scroll-view";
@@ -257,7 +257,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "white",
     marginLeft: 5,
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
+    fontFamily: DefaultFont.textFont
   },
 
   // --- bottom container --- //
@@ -298,14 +299,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#000",
     textAlign: "left",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   location_text: {
     marginLeft: 5,
     fontSize: 12,
     color: Colors.color999,
     textAlign: "left",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rate_view: {
     marginTop: 5,
@@ -335,7 +338,8 @@ const styles = StyleSheet.create({
   info_icon_row_lb: {
     fontSize: 15,
     color: "#5e6265",
-    marginLeft: 5
+    marginLeft: 5,
+    fontFamily: DefaultFont.textFont
   },
   map_view: {
     height: 120,
@@ -356,13 +360,15 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 20,
     fontSize: 17,
-    color: "black"
+    color: "black",
+    fontFamily: DefaultFont.textFont
   },
   overview_content_txt: {
     marginTop: 10,
     width: width - 40,
     fontSize: 15,
-    color: Colors.color999
+    color: Colors.color999,
+    fontFamily: DefaultFont.textFont
   },
   downarrow_view: {
     marginTop: 5,
@@ -404,7 +410,8 @@ const styles = StyleSheet.create({
   stickySectionText: {
     color: "white",
     fontSize: 20,
-    marginLeft: 5
+    marginLeft: 5,
+    fontFamily: DefaultFont.textFont
   },
   fixedSection: {
     position: "absolute",

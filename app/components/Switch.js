@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback
 } from "react-native";
 import { ViewPropTypes } from "react-native";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 export default class Switch extends Component {
   static propTypes = {
@@ -213,7 +214,8 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 7,
     color: "white",
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
+    fontFamily: DefaultFont.textFont
   },
   paddingRight: {
     paddingRight: 2

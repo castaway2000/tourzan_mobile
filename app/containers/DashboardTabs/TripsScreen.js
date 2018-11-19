@@ -20,8 +20,7 @@ import {
 } from "react-native";
 
 import { bindActionCreators } from "redux";
-import { Colors } from "../../constants";
-import Rating from "react-native-ratings";
+import { Rating, AirbnbRating } from 'react-native-ratings';
 import { NavigationActions } from "react-navigation";
 
 import NavigationBar from "../../components/NavigationBar";
@@ -37,6 +36,7 @@ import { updateuser } from "../../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../../global/Utilities";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../../constants";
 
 var { width, height } = Dimensions.get("window");
 
@@ -225,13 +225,15 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#000",
     textAlign: "left",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   description_text: {
     marginTop: 5,
     fontSize: 12,
     color: Colors.color999,
-    textAlign: "left"
+    textAlign: "left",
+    fontFamily: DefaultFont.textFont
   },
   rate_view: {
     marginTop: 5,
@@ -246,7 +248,8 @@ const styles = StyleSheet.create({
   rating_text: {
     marginLeft: 5,
     fontSize: 8,
-    color: Colors.color999
+    color: Colors.color999,
+    fontFamily: DefaultFont.textFont
   },
   arrow_view: {
     width: 30,

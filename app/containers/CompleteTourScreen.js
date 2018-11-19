@@ -16,15 +16,22 @@ import {
 } from "react-native";
 
 import ActionSheet from "react-native-actionsheet";
-import Rating from "react-native-ratings";
+import { Rating, AirbnbRating } from "react-native-ratings";
 import { NavigationActions } from "react-navigation";
 import KeyEvent from "react-native-keyevent";
 import PercentageCircle from "react-native-percentage-circle";
 import ApplyButton from "../components/ApplyButton";
-import { Colors } from "../constants";
+import moment from "moment";
 
 //Utilities
 import { isIphoneX, isNumber, Storage } from "../global/Utilities";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 //Store
 import { connect } from "react-redux";
@@ -88,9 +95,9 @@ class CompleteTourScreen extends React.Component {
     let tripData = this.props.navigation.state.params.tripData;
 
     if (this.props.userdata.user.isLoggedInAsGuide) {
-      this.onGetProfile(tripData.tourist_id);
+      this.onGetProfile(this.props.bookingdata.touristid);
     } else {
-      this.onGetProfile(tripData.guide_id);
+      this.onGetProfile(this.props.bookingdata.guideid);
     }
   }
 
@@ -157,14 +164,12 @@ class CompleteTourScreen extends React.Component {
       );
     }
 
-    let isGuide = this.state.profileData.guide_data.is_guide;
-
     let profilepicture = "";
 
-    if (isGuide) {
-      profilepicture = this.state.profileData.guide_data.profile_image;
-    } else {
+    if (this.props.userdata.user.isLoggedInAsGuide) {
       profilepicture = this.state.profileData.profile_picture;
+    } else {
+      profilepicture = this.state.profileData.guide_data.profile_image;
     }
 
     if (profilepicture) {
@@ -186,13 +191,42 @@ class CompleteTourScreen extends React.Component {
     }
   };
 
+  getHoursMinutes() {
+    var formatted = "0 Hours 0 Minutes";
+
+    var seconds = this.props.bookingdata.duration;
+
+    if (seconds < 60) {
+      formatted = moment.utc(seconds * 1000).format("ss") + " Second";
+    } else {
+      formatted =
+        moment.utc(seconds * 1000).format("HH") +
+        " Hours " +
+        moment.utc(seconds * 1000).format("mm") +
+        " Minutes";
+    }
+
+    return formatted;
+  }
+
   render() {
     let tripData = this.props.navigation.state.params.tripData;
 
     return (
       <View style={styles.container}>
         <View style={styles.navigationbar}>
-          <View style={styles.backButton} />
+          <TouchableOpacity
+            style={styles.backButtomContainer}
+            onPress={() => {
+              this.props.navigation.dispatch(resetRootAction);
+            }}
+          >
+            <Image
+              resizeMode="cover"
+              source={require("../assets/images/back.png")}
+              style={styles.backButton}
+            />
+          </TouchableOpacity>
           <Text style={styles.centerText}>Complete Tour</Text>
           <View style={styles.rightView} />
         </View>
@@ -206,7 +240,7 @@ class CompleteTourScreen extends React.Component {
                 </View>
                 <View style={styles.info_view}>
                   {this._showFullname()}
-                  <View style={styles.location_view}>
+                  {/* <View style={styles.location_view}>
                     <Image
                       resizeMode="contain"
                       source={require("../assets/images/location_maps.png")}
@@ -215,7 +249,7 @@ class CompleteTourScreen extends React.Component {
                     <Text style={styles.location_text}>
                       440 Curtola, CA (Pending)
                     </Text>
-                  </View>
+                  </View> */}
                 </View>
                 <View style={styles.guide_info_right_view}>
                   <Text style={styles.guide_info_right_text}>
@@ -229,7 +263,9 @@ class CompleteTourScreen extends React.Component {
                 </Text>
                 <View style={styles.rating_view}>
                   <Rating
+                    type="star"
                     style={styles.list_info_ratingbar}
+                    startingValue={Math.floor(this.state.ratings)}
                     ratingCount={5}
                     imageSize={35}
                     onFinishRating={this.ratingCompleted}
@@ -242,7 +278,7 @@ class CompleteTourScreen extends React.Component {
               <View style={styles.tour_detail_title_view}>
                 <Text style={styles.tour_detail_title_text}>Tour Details</Text>
               </View>
-              <View style={styles.row_setting_btn_view}>
+              {/* <View style={styles.row_setting_btn_view}>
                 <Image
                   resizeMode="contain"
                   source={require("../assets/images/trip_item_location_icon.png")}
@@ -251,7 +287,7 @@ class CompleteTourScreen extends React.Component {
                 <Text style={styles.row_setting_btn_text}>
                   053 Maggio Road Apt. 016(Pending)
                 </Text>
-              </View>
+              </View> */}
               <View style={styles.row_setting_btn_view}>
                 <Image
                   resizeMode="contain"
@@ -259,7 +295,7 @@ class CompleteTourScreen extends React.Component {
                   style={styles.row_setting_btn_icon}
                 />
                 <Text style={styles.row_setting_btn_text}>
-                  06 Hours 20 Minutes(Pending)
+                  {this.getHoursMinutes()}
                 </Text>
               </View>
               <View style={styles.row_setting_btn_view}>
@@ -282,11 +318,11 @@ class CompleteTourScreen extends React.Component {
               >
                 <Text style={styles.write_review_btn}>Write Review </Text>
               </TouchableOpacity>
-              <ApplyButton
+              {/* <ApplyButton
                 onPress={() => this.onAddFeedbackBtnClick()}
                 name={"Add Feedback"}
                 style={styles.add_feedback_btn}
-              />
+              /> */}
             </View>
           </View>
         </ScrollView>
@@ -332,6 +368,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between"
   },
+  backButtomContainer: {
+    width: 44,
+    height: 44,
+    alignItems: "center",
+    justifyContent: "center"
+  },
   backButton: {
     height: 15,
     width: 10
@@ -341,7 +383,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 20,
@@ -352,14 +395,14 @@ const styles = StyleSheet.create({
   /// ------- main view -------///
   scroll_view: {
     // height : 500,
+    backgroundColor: "white",
   },
   scroll_content_view: {
     flexDirection: "column",
     alignItems: "center",
     width: width,
-    height: 700,
     backgroundColor: "white",
-    justifyContent: "flex-start"
+    flex: 1
   },
 
   guide_info_view: {
@@ -411,14 +454,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#000",
     textAlign: "left",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   location_text: {
     marginLeft: 5,
     fontSize: 12,
     color: Colors.color999,
     textAlign: "left",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   guide_info_right_view: {
     width: 60,
@@ -427,7 +472,8 @@ const styles = StyleSheet.create({
     borderColor: "#ddd"
   },
   guide_info_right_text: {
-    margin: 10
+    margin: 10,
+    fontFamily: DefaultFont.textFont
   },
   guide_rating_view: {
     alignItems: "center",
@@ -437,7 +483,8 @@ const styles = StyleSheet.create({
   rating_title_text: {
     marginTop: 20,
     fontSize: 15,
-    color: Colors.color999
+    color: Colors.color999,
+    fontFamily: DefaultFont.textFont
   },
   rating_view: {
     marginTop: 20,
@@ -446,8 +493,8 @@ const styles = StyleSheet.create({
 
   tour_detail_view: {
     width: width,
-    height: 250,
-    marginTop: 30,
+    height: 150,
+    marginTop: 10,
     backgroundColor: "white",
     flexDirection: "column",
     justifyContent: "flex-start"
@@ -463,7 +510,8 @@ const styles = StyleSheet.create({
   },
   tour_detail_title_text: {
     fontSize: 13,
-    color: Colors.tintColor
+    color: Colors.tintColor,
+    fontFamily: DefaultFont.textFont
   },
   row_setting_btn_view: {
     width: width,
@@ -482,7 +530,8 @@ const styles = StyleSheet.create({
   row_setting_btn_text: {
     marginLeft: 10,
     fontSize: 15,
-    color: "black"
+    color: "black",
+    fontFamily: DefaultFont.textFont
   },
 
   // --- main bottom view -- //
@@ -516,7 +565,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderWidth: 1,
     borderRadius: 5,
-    borderColor: "#ddd"
+    borderColor: "#ddd",
+    fontFamily: DefaultFont.textFont
   }
 });
 

@@ -20,7 +20,6 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { NavigationActions } from "react-navigation";
 import Checkbox from "react-native-custom-checkbox";
-import { Colors } from "../constants";
 import ApplyButton from "../components/ApplyButton";
 import NavigationBar from "../components/NavigationBar";
 import { emailSignup } from "../actions/";
@@ -36,6 +35,7 @@ import { updateuser } from "../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 var { width, height } = Dimensions.get("window");
 let nextInput1;
@@ -453,9 +453,9 @@ class RegisterGuideScreen extends React.Component {
             </View>
             <View style={styles.line1} />
             <View style={styles.termsView}>
-              <Text style={{ color: "gray", fontSize: 13 }}>By clicking "<Text style={{ color: Colors.main }}>Sign Up</Text>" I agree to the</Text>
+              <Text style={{ color: "gray", fontSize: 13 ,fontFamily: DefaultFont.textFont}}>By clicking "<Text style={{ color: Colors.main, fontFamily: DefaultFont.textFont }}>Sign Up</Text>" I agree to the</Text>
               <TouchableOpacity onPress={() => {this.navigate.navigate("TermsofUseScreen")}} >
-                <Text style={{ fontSize: 13, marginTop: 4 }}> Terms of Service </Text>
+                <Text style={{ fontSize: 13, marginTop: 4, fontFamily: DefaultFont.textFont }}> Terms of Service </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -491,13 +491,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     color: "#ffffff",
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
+    fontFamily: DefaultFont.textFont
   },
   txt_bottom: {
     fontSize: 17,
     textAlign: "center",
     color: Colors.textBottomColor,
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
+    fontFamily: DefaultFont.textFont
   },
   scrollview_container: {
     flex: 1,
@@ -512,7 +514,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
     height: 40,
     borderColor: "gray",
-    fontSize: 15
+    fontSize: 15,
+    fontFamily: DefaultFont.textFont
   },
   interest_text: {
     width: width - 60,
@@ -549,7 +552,8 @@ const styles = StyleSheet.create({
     fontSize: 17,
     textDecorationLine: "underline",
     textDecorationStyle: "solid",
-    textDecorationColor: "#000"
+    textDecorationColor: "#000",
+    fontFamily: DefaultFont.textFont
   },
   line: {
     height: 1,
@@ -573,7 +577,8 @@ const styles = StyleSheet.create({
   },
   label1: {
     color: "darkgray",
-    fontSize: 17
+    fontSize: 17,
+    fontFamily: DefaultFont.textFont
   },
   intestsView: {
     flexDirection: "row",

@@ -32,7 +32,6 @@
 		35280485213589B500120A44 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 352804602135899200120A44 /* libRCTLinking.a */; };
 		35627C7820EB772300EC9DA7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 35627C7720EB772300EC9DA7 /* GoogleService-Info.plist */; };
 		35627CC820EB7CF700EC9DA7 /* libRNFIRMessaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 35627CC420EB7C0C00EC9DA7 /* libRNFIRMessaging.a */; };
-		358B8D3D20CE971E004B3C1D /* libRCTBackgroundGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 358B8D1A20CE9709004B3C1D /* libRCTBackgroundGeolocation.a */; };
 		3F8D55C03EE54AB8A80CC6B3 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F18212E25F6348CAB9EFFE54 /* Zocial.ttf */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
@@ -244,13 +243,6 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RNFIRMessaging;
 		};
-		358B8D1920CE9709004B3C1D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 358B8D1120CE9709004B3C1D /* RCTBackgroundGeolocation.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 418F75461D02DC3D0045FEA0;
-			remoteInfo = RCTBackgroundGeolocation;
-		};
 		3DAD3E831DF850E9000B6D8A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 00C302BB1ABCB91800DB3ED1 /* RCTImage.xcodeproj */;
@@ -425,7 +417,6 @@
 		35627C7720EB772300EC9DA7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		35627C9920EB7C0B00EC9DA7 /* RNFIRMessaging.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFIRMessaging.xcodeproj; path = "../node_modules/react-native-fcm/ios/RNFIRMessaging.xcodeproj"; sourceTree = "<group>"; };
 		35627D0420EB8FAD00EC9DA7 /* Tourzan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Tourzan.entitlements; path = Tourzan/Tourzan.entitlements; sourceTree = "<group>"; };
-		358B8D1120CE9709004B3C1D /* RCTBackgroundGeolocation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBackgroundGeolocation.xcodeproj; path = "../node_modules/react-native-mauron85-background-geolocation/ios/RCTBackgroundGeolocation.xcodeproj"; sourceTree = "<group>"; };
 		3DB74AD0D639461EAD9D63EA /* libRNBraintreeDropIn.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNBraintreeDropIn.a; sourceTree = "<group>"; };
 		5772DC9FB37A500DF63E1921 /* libPods-Tourzan.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tourzan.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
@@ -468,7 +459,6 @@
 				35627CC820EB7CF700EC9DA7 /* libRNFIRMessaging.a in Frameworks */,
 				350C1DAE20E3CE87008E1D53 /* libSplashScreen.a in Frameworks */,
 				350AF1BC20DB86C000A6D40B /* libSMXCrashlytics.a in Frameworks */,
-				358B8D3D20CE971E004B3C1D /* libRCTBackgroundGeolocation.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
@@ -703,14 +693,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		358B8D1220CE9709004B3C1D /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				358B8D1A20CE9709004B3C1D /* libRCTBackgroundGeolocation.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		5E91572E1DD0AC6500FF2AA8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -736,7 +718,6 @@
 				35627C9920EB7C0B00EC9DA7 /* RNFIRMessaging.xcodeproj */,
 				350C1D8020E3CE78008E1D53 /* SplashScreen.xcodeproj */,
 				350AF1B320DB6DAB00A6D40B /* SMXCrashlytics.xcodeproj */,
-				358B8D1120CE9709004B3C1D /* RCTBackgroundGeolocation.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -893,10 +874,6 @@
 				{
 					ProductGroup = 5E91572E1DD0AC6500FF2AA8 /* Products */;
 					ProjectRef = 5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */;
-				},
-				{
-					ProductGroup = 358B8D1220CE9709004B3C1D /* Products */;
-					ProjectRef = 358B8D1120CE9709004B3C1D /* RCTBackgroundGeolocation.xcodeproj */;
 				},
 				{
 					ProductGroup = ADBDB9201DFEBF0600ED6528 /* Products */;
@@ -1147,13 +1124,6 @@
 			fileType = archive.ar;
 			path = libRNFIRMessaging.a;
 			remoteRef = 35627CC320EB7C0C00EC9DA7 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		358B8D1A20CE9709004B3C1D /* libRCTBackgroundGeolocation.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTBackgroundGeolocation.a;
-			remoteRef = 358B8D1920CE9709004B3C1D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		3DAD3E841DF850E9000B6D8A /* libRCTImage-tvOS.a */ = {

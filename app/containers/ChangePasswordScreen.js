@@ -19,10 +19,10 @@ import {
 
 import { NavigationActions } from "react-navigation";
 import Checkbox from "react-native-custom-checkbox";
-import { Colors } from "../constants";
 import NavigationBar from "../components/NavigationBar";
 import { changePassword } from "../actions/";
 import { isIphoneX } from "../global/Utilities";
+import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
 var { width, height } = Dimensions.get("window");
 
@@ -289,12 +289,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
   },
   rightView: {
     marginRight: 20,
     color: "white",
-    fontSize: 17
+    fontSize: 17,
+    fontFamily: DefaultFont.textFont
   },
 
   // --- main view --- //
@@ -325,7 +327,8 @@ const styles = StyleSheet.create({
     color: "#6e7478",
     fontSize: 13,
     width: width - 100,
-    marginTop: 10
+    marginTop: 10,
+    fontFamily: DefaultFont.textFont
   },
   row_icon: {
     height: 15,
