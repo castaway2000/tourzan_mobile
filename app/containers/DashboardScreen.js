@@ -27,6 +27,7 @@ import GuideItemDetailScreen from "./ItemDetailScreens/GuideItemDetailScreen";
 import TransactionItemDetailScreen from "./ItemDetailScreens/TransactionItemDetailScreen";
 import DashboardTapNavigator from "./DashboardTabs/DashboardTapNavigator";
 import ProfileScreen from "./ProfileScreen";
+import ProfileUserScreen from "./ProfileUserScreen";
 
 //Store
 import { connect } from "react-redux";
@@ -63,7 +64,8 @@ const DashboardStackNavigator = StackNavigator(
     TripItemDetail: { screen: TripItemDetailScreen },
     GuideItemDetail: { screen: GuideItemDetailScreen },
     TransactionItemDetail: { screen: TransactionItemDetailScreen },
-    Profile: { screen: ProfileScreen }
+    Profile: { screen: ProfileScreen },
+    ProfileUser: { screen: ProfileUserScreen },
   },
   {
     headerMode: "screen",

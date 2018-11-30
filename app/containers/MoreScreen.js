@@ -27,11 +27,17 @@ import { store } from "../store/index";
 
 //Actions
 import { updatebooking } from "../actions/bookingActions";
-import { updateuser } from "../actions/userActions";
+import { updateuser, updateOrder } from "../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 //Webservice
 import {
@@ -83,20 +89,28 @@ class MoreScreen extends React.Component {
         {
           text: "OK",
           onPress: () => {
+            if (this.props.userdata.user.isLoggedInAsGuide) {
+              this.updateClockOutStatusWS(
+                this.props.userdata.user.userid,
+                this.props.currentlocation.lat,
+                this.props.currentlocation.long
+              );
+            }
+
             //Reset Trip
             let storestate = store.getState();
             storestate.tour.bookingdata.isTripInProgress = false;
             storestate.tour.bookingdata.tripid = 0;
             storestate.tour.bookingdata.isAutomatic = true;
-
             store.dispatch(updatebooking(storestate.tour.bookingdata));
 
-            if (this.props.userdata.user.isLoggedInAsGuide) {
-              this.updateClockOutStatusWS();
-            } else {
-            }
+            //Reste order
+            store.dispatch(updateOrder([]));
 
+            //Remove User data
             Storage.removeItem("currentuser");
+
+            store.dispatch(updateuser({}));
 
             this.props.navigation.dispatch(resetRootAction);
           }
@@ -110,8 +124,7 @@ class MoreScreen extends React.Component {
     );
   }
 
-  //
-  updateClockOutStatusWS() {
+  updateClockOutStatusWS(user_id, lat, long) {
     this.setState({
       isLoading: true
     });
@@ -130,8 +143,6 @@ class MoreScreen extends React.Component {
         this.setState({
           isLoading: false
         });
-
-        store.dispatch(updateuser(this.props.userdata));
 
         Alert.alert("Tourzan", "You are successfully clocked out");
       })
@@ -284,9 +295,8 @@ const styles = StyleSheet.create({
     fontFamily: DefaultFont.textFont
   },
   rightView: {
-    marginRight: 20,
-    height: 20,
-    width: 20
+    height: 15,
+    width: 10
   },
 
   // --- main view --- //
@@ -324,7 +334,7 @@ const styles = StyleSheet.create({
   row_lb: {
     color: "black",
     fontSize: 17,
-    fontFamily: DefaultFont.textFont,
+    fontFamily: DefaultFont.textFont
   },
   row_logout_lb: {
     color: "red",

@@ -27,6 +27,7 @@ import {
   Braintree,
   DefaultFont
 } from "../constants";
+
 import ApplyButton from "../components/ApplyButton";
 import NavigationBar from "../components/NavigationBar";
 import { emailLogin } from "../actions";
@@ -47,6 +48,7 @@ var { width, height } = Dimensions.get("window");
 const onButtonPress = () => {
   Alert.alert("Button has been pressed!");
 };
+
 const backAction = NavigationActions.back({
   // key: 'WelcomeScreen'
 });
@@ -63,8 +65,8 @@ class LoginGuideScreen extends React.Component {
     super(props);
     this.state = {
       isChecked: true,
-      username: "", //test1002
-      password: "", //Cred@123
+      username: "", //test1002 tester2 test1004
+      password: "", //Cred@123 test1234 Cred@123
       isLoading: false
     };
     this.navigate = this.props.navigation;

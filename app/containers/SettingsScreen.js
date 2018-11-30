@@ -33,7 +33,13 @@ import { updateuser } from "../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 //Webservice
 import {
@@ -141,6 +147,10 @@ class SettingsScreen extends React.Component {
     });
   }
 
+  validateVerification() {
+    this.getProfileDataForBankValidation();
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -184,7 +194,12 @@ class SettingsScreen extends React.Component {
                 }}
               >
                 <Text
-                  style={{ color: "black", fontWeight: "800", fontSize: 15, fontFamily: DefaultFont.textFont }}
+                  style={{
+                    color: "black",
+                    fontWeight: "800",
+                    fontSize: 15,
+                    fontFamily: DefaultFont.textFont
+                  }}
                 >
                   {" "}
                   Edit{" "}
@@ -200,7 +215,12 @@ class SettingsScreen extends React.Component {
                   }}
                 >
                   <Text
-                    style={{ color: "white", fontWeight: "800", fontSize: 14 , fontFamily: DefaultFont.textFont}}
+                    style={{
+                      color: "white",
+                      fontWeight: "800",
+                      fontSize: 14,
+                      fontFamily: DefaultFont.textFont
+                    }}
                   >
                     {" "}
                     Edit{" "}
@@ -289,7 +309,7 @@ class SettingsScreen extends React.Component {
             {this.props.userdata.user.isLoggedInAsGuide && (
               <TouchableOpacity
                 style={styles.row_credit_view}
-                onPress={() => this.navigate.navigate("PaymentrailDetail")}
+                onPress={() => this.validateVerification()}
               >
                 <View style={styles.row_icon_small_view}>
                   <Image
@@ -449,7 +469,7 @@ class SettingsScreen extends React.Component {
     this.setState({
       isLoading: true
     });
-
+    
     var params = {
       firstname: data.first_name,
       lastname: data.last_name
@@ -488,12 +508,14 @@ class SettingsScreen extends React.Component {
         applicationId,
         applicationId => {
           Alert.alert("Tourzan", "Verification complete");
+          this.isVerified = true;
         },
         errorCause => {
           this.setState({
             isLoading: false
           });
           Alert.alert("Tourzan", "Verification not finished please try again.");
+          this.isVerified = false;
         }
       );
     } else {
@@ -501,9 +523,11 @@ class SettingsScreen extends React.Component {
         applicationId,
         applicantId => {
           Alert.alert("Tourzan", "Verification complete");
+          this.isVerified = true;
         },
         errorCause => {
           Alert.alert("Tourzan", "Verification not finished please try again.");
+          this.isVerified = false;
         }
       );
     }
@@ -582,6 +606,40 @@ class SettingsScreen extends React.Component {
           }
 
           Storage.setItem("currentuser", this.props.userdata);
+        }
+      })
+      .catch(err => {
+        this.setState({
+          isLoading: false
+        });
+        alert(err);
+      });
+  }
+
+  //API Call get user profile
+  getProfileDataForBankValidation() {
+    this.setState({
+      isLoading: true
+    });
+
+    var params = {
+      userid: this.props.userdata.user.userid
+    };
+
+    profile(params)
+      .then(data => {
+        this.setState({
+          isLoading: false
+        });
+        if (data) {
+          if (data.is_verified == true || this.isVerified == true) {
+            this.navigate.navigate("PaymentrailDetail");
+          } else {
+            Alert.alert(
+              "Tourzan",
+              "In order to add bank info you must verify you identity."
+            );
+          }
         }
       })
       .catch(err => {

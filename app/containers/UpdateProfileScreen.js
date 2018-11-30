@@ -180,6 +180,7 @@ class UpdateProfileScreen extends React.Component {
   }
 
   onUpdateProfile() {
+
     const { params } = this.props.navigation.state;
 
     let isGuide = params

@@ -20,11 +20,23 @@ import {
 
 import { NavigationActions } from "react-navigation";
 import Checkbox from "react-native-custom-checkbox";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 import NavigationBar from "../components/NavigationBar";
 import { isIphoneX } from "../global/Utilities";
 
-const contactUsHtml = require("../assets/resources/contactus.html");
+const contactUsHtml = `<script type="text/javascript" src="https://s3.amazonaws.com/assets.freshdesk.com/widget/freshwidget.js"></script>
+<style type="text/css" media="screen, projection">
+	@import url(https://s3.amazonaws.com/assets.freshdesk.com/widget/freshwidget.css);
+</style>
+<iframe title="Feedback Form" class="freshwidget-embedded-form" id="freshwidget-embedded-form" src="https://tourzan.freshdesk.com/widgets/feedback_widget/new?&widgetType=embedded&formTitle=Contact+Us&submitTitle=Send&submitThanks=Thank+you+for+your+feedback.+&screenshot=No&captcha=yes"
+ scrolling="yes" height="500px" width="100%" frameborder="0">
+</iframe>`
 
 var { width, height } = Dimensions.get("window");
 const backAction = NavigationActions.back({});
@@ -44,12 +56,12 @@ class ContactUsScreen extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { visible: true };
+    // this.state = { visible: true };
     this.navigate = this.props.navigation;
   }
 
   hideSpinner() {
-    this.setState({ visible: false });
+    // this.setState({ visible: false });
   }
 
   showLoading() {
@@ -89,15 +101,18 @@ class ContactUsScreen extends Component {
         <View style={styles.webviewContainer}>
           <WebView
             onLoad={() => this.hideSpinner()}
-            source={contactUsHtml}
+            originWhitelist={['*']}
+            source={{ html: contactUsHtml ,  baseUrl: ''}}
             scalesPageToFit={false}
+            startInLoadingState={true}
+            injectedJavaScript={`const meta = document.createElement('meta'); meta.setAttribute('content', 'width=width, initial-scale=1, maximum-scale=1, user-scalable=2.0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); `}
             // source={{
             //     uri:
             //         'https://api.tourzan.com/en/tos/'
             // }}
           />
         </View>
-        {this.showLoading()}
+        {/* {this.showLoading()} */}
       </View>
     );
   }
@@ -106,7 +121,7 @@ class ContactUsScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "transparent"
+    backgroundColor: "#ffffff"
   },
   statusbar: {
     width: width,
@@ -155,7 +170,9 @@ const styles = StyleSheet.create({
   // --- webview --- //
   webviewContainer: {
     flex: 1,
-    backgroundColor: "#000000"
+    backgroundColor: "#ffffff",
+    width:'100%',
+    height:'100%'
   },
   loadingView: {
     position: "absolute",

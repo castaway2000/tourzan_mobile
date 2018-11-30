@@ -18,7 +18,7 @@ import {
   Platform
 } from "react-native";
 
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import { Rating, AirbnbRating } from "react-native-ratings";
 import { NavigationActions } from "react-navigation";
 import NavigationBar from "../../components/NavigationBar";
 import moment from "moment";
@@ -60,10 +60,18 @@ class TransactionsScreen extends React.Component {
 
     this.state = {
       dataSource: [],
-      message: ""
+      message: "",
+      isFetching: false
     };
 
     this.navigate = this.props.navigation;
+  }
+
+  onRefresh() {
+    console.log("Refreshing.....");
+
+    this.setState({ isFetching: true });
+    this.previousGuideListWS();
   }
 
   // function for ratingview
@@ -72,7 +80,14 @@ class TransactionsScreen extends React.Component {
   }
 
   componentWillMount() {
-    this.previousGuideListWS();
+    let orderdata = store.getState().user.orderList
+    console.log("store.getState().user.orderList is: " + orderdata);
+    
+    if ( store.getState().user.orderList.length < 1) {
+      this.previousGuideListWS();
+    } else {
+      this.setState({ dataSource: store.getState().user.orderList });
+    }
   }
 
   pressRow(rowData) {
@@ -110,14 +125,20 @@ class TransactionsScreen extends React.Component {
 
   renderRow = ({ item, index }) => {
     return (
-      <TouchableHighlight
-        style={styles.row_view}
-        onPress={() => this.pressRow(item)}
-        underlayColor="#ddd"
-      >
+      // <TouchableHighlight
+      //   style={styles.row_view}
+      //   onPress={() => this.pressRow(item)}
+      //   underlayColor="transparent"
+      // >
+      <View style={styles.row_view}>
         <View style={styles.row}>
           <View style={styles.amount_view}>
-            <Text style={styles.amount_text}>${item.total_price}</Text>
+            <Text style={styles.amount_text}>
+              $
+              {this.props.userdata.user.isLoggedInAsGuide
+                ? item.guide_payment
+                : item.total_price}
+            </Text>
           </View>
           <View style={styles.verticle_line} />
 
@@ -184,15 +205,16 @@ class TransactionsScreen extends React.Component {
               {this.getDateString(item.date_booked_for)}
             </Text>
             <TouchableOpacity style={styles.arrow_view}>
-              <Image
+              {/* <Image
                 resizeMode="contain"
                 source={require("../../assets/images/item_arrow.png")}
                 style={styles.arrow_btn}
-              />
+              /> */}
             </TouchableOpacity>
           </View>
         </View>
-      </TouchableHighlight>
+        {/* </TouchableHighlight> */}
+      </View>
     );
   };
 
@@ -229,6 +251,8 @@ class TransactionsScreen extends React.Component {
             )}
             extraData={this.state}
             showsVerticalScrollIndicator={true}
+            onRefresh={() => this.onRefresh()}
+            refreshing={this.state.isFetching}
           />
         )}
       </View>
@@ -250,8 +274,12 @@ class TransactionsScreen extends React.Component {
           } else {
             this.setState({ dataSource: [], message: "No data found." });
           }
+
+          this.setState({ isFetching: false });
+
         })
         .catch(err => {
+          this.setState({ isFetching: false });
           alert(err);
         });
     } else {
@@ -268,8 +296,10 @@ class TransactionsScreen extends React.Component {
           } else {
             this.setState({ dataSource: [], message: "No data found." });
           }
+          this.setState({ isFetching: false });
         })
         .catch(err => {
+          this.setState({ isFetching: false });
           alert(err);
         });
     }
@@ -391,7 +421,7 @@ const styles = StyleSheet.create({
   },
   verticle_line: {
     width: 0.5,
-    height: 40,
+    height: 60,
     backgroundColor: "#dddddd"
   }
 });

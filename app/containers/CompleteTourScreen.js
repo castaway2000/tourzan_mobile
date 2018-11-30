@@ -42,7 +42,7 @@ import { store } from "../store/index";
 import { updatebooking } from "../actions/bookingActions";
 
 //Webservice
-import { profile } from "../actions";
+import { profile, usermixins } from "../actions";
 
 var { width, height } = Dimensions.get("window");
 
@@ -92,8 +92,6 @@ class CompleteTourScreen extends React.Component {
         tourist_trip_fees: 231
         trip_id: 57}*/
 
-    let tripData = this.props.navigation.state.params.tripData;
-
     if (this.props.userdata.user.isLoggedInAsGuide) {
       this.onGetProfile(this.props.bookingdata.touristid);
     } else {
@@ -133,8 +131,6 @@ class CompleteTourScreen extends React.Component {
       return <Text style={styles.name_text} />;
     }
 
-    let isGuide = this.state.profileData.guide_data.is_guide;
-
     let fullname = "";
 
     if (this.state.profileData.first_name) {
@@ -143,10 +139,6 @@ class CompleteTourScreen extends React.Component {
 
     if (this.state.profileData.last_name) {
       fullname = fullname + " " + this.state.profileData.last_name;
-    }
-
-    if (!fullname && isGuide) {
-      fullname = isGuide ? "Guide" : "Tourist";
     }
 
     return <Text style={styles.name_text}>{fullname}</Text>;
@@ -163,14 +155,10 @@ class CompleteTourScreen extends React.Component {
         />
       );
     }
-
+    
     let profilepicture = "";
-
-    if (this.props.userdata.user.isLoggedInAsGuide) {
-      profilepicture = this.state.profileData.profile_picture;
-    } else {
-      profilepicture = this.state.profileData.guide_data.profile_image;
-    }
+    
+    profilepicture = this.state.profileData.pic;
 
     if (profilepicture) {
       return (
@@ -218,7 +206,7 @@ class CompleteTourScreen extends React.Component {
           <TouchableOpacity
             style={styles.backButtomContainer}
             onPress={() => {
-              this.props.navigation.dispatch(resetRootAction);
+              this.props.navigation.dispatch(backAction);
             }}
           >
             <Image
@@ -253,7 +241,7 @@ class CompleteTourScreen extends React.Component {
                 </View>
                 <View style={styles.guide_info_right_view}>
                   <Text style={styles.guide_info_right_text}>
-                    ${tripData.guide_pay}
+                    ${tripData.guide_payment}
                   </Text>
                 </View>
               </View>
@@ -305,14 +293,13 @@ class CompleteTourScreen extends React.Component {
                   style={styles.row_setting_btn_icon}
                 />
                 <Text style={styles.row_setting_btn_text}>
-                  Total: ${tripData.price}
+                  Total: ${tripData.total_price}
                 </Text>
               </View>
             </View>
 
             <View style={styles.main_bottom_view}>
               <TouchableOpacity
-                style={styles.write_review_view}
                 onPress={() => this.onWriteReviewBtnClick()}
                 title="Extend Time"
               >
@@ -334,10 +321,11 @@ class CompleteTourScreen extends React.Component {
     var { dispatch } = this.props;
 
     var params = {
-      userid: userid
+      id: userid,
+      usertype: "tourist"
     };
 
-    profile(params)
+    usermixins(params)
       .then(data => {
         if (data) {
           this.setState({ profileData: data });
@@ -395,13 +383,12 @@ const styles = StyleSheet.create({
   /// ------- main view -------///
   scroll_view: {
     // height : 500,
-    backgroundColor: "white",
+    backgroundColor: "white"
   },
   scroll_content_view: {
     flexDirection: "column",
     alignItems: "center",
     width: width,
-    backgroundColor: "white",
     flex: 1
   },
 
@@ -466,7 +453,7 @@ const styles = StyleSheet.create({
     fontFamily: DefaultFont.textFont
   },
   guide_info_right_view: {
-    width: 60,
+    width: 100,
     alignItems: "center",
     borderLeftWidth: 1,
     borderColor: "#ddd"
@@ -493,7 +480,6 @@ const styles = StyleSheet.create({
 
   tour_detail_view: {
     width: width,
-    height: 150,
     marginTop: 10,
     backgroundColor: "white",
     flexDirection: "column",
@@ -521,7 +507,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     borderBottomWidth: 1,
     borderColor: "#ddd",
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   row_setting_btn_icon: {
     height: 15,
@@ -539,7 +525,8 @@ const styles = StyleSheet.create({
     width: width,
     flexDirection: "column",
     alignItems: "center",
-    backgroundColor: "white"
+    justifyContent: 'center',
+    marginTop: 20
   },
   add_feedback_btn: {
     marginTop: 20,
@@ -551,9 +538,6 @@ const styles = StyleSheet.create({
     color: "black",
     width: 200,
     textAlign: "center"
-  },
-  write_review_view: {
-    marginTop: 20
   },
   write_review_btn: {
     color: "black",

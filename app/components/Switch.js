@@ -193,8 +193,8 @@ const styles = StyleSheet.create({
     width: 71,
     height: 30,
     borderRadius: 30,
-    backgroundColor: "black"
-    // overflow: 'hidden'
+    backgroundColor: "black",
+    overflow: 'hidden'
   },
   animatedContainer: {
     flex: 1,
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     fontFamily: DefaultFont.textFont
   },
   paddingRight: {
-    paddingRight: 2
+    paddingRight: 0
   },
   paddingLeft: {
     paddingLeft: 2

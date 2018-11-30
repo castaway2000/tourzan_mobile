@@ -112,15 +112,9 @@ class WriteFeedbackScreen extends React.Component {
       );
     }
 
-    let isGuide = profileData.guide_data.is_guide;
-
     let profilepicture = "";
 
-    if (isGuide) {
-      profilepicture = profileData.guide_data.profile_image;
-    } else {
-      profilepicture = profileData.profile_picture;
-    }
+    profilepicture = profileData.pic;
 
     if (profilepicture) {
       return (
@@ -149,8 +143,6 @@ class WriteFeedbackScreen extends React.Component {
       return <Text style={styles.name_text} />;
     }
 
-    let isGuide = profileData.guide_data.is_guide;
-
     let fullname = "";
 
     if (profileData.first_name) {
@@ -161,49 +153,22 @@ class WriteFeedbackScreen extends React.Component {
       fullname = fullname + " " + profileData.last_name;
     }
 
-    if (!fullname) {
-      fullname = isGuide ? "Guide" : "Tourist";
-    }
-
     return <Text style={styles.name_text}>{fullname}</Text>;
   };
 
   //Calculate average star from review
   _showRatingViewMain = () => {
     let profileData = this.props.navigation.state.params.profileData;
-
-    if (!profileData) {
-      return (
-        <Rating
-          ratingCount={5}
-          startingValue={0}
-          readonly
-          imageSize={15}
-          onFinishRating={this.ratingCompleted}
-        />
-      );
-    }
-
-    let isGuide = profileData.guide_data.is_guide;
-
-    let rating = isGuide
-      ? profileData.guide_data.guide_rating
-      : profileData.tourist_rating;
+    let tripData = this.props.navigation.state.params.tripData;
+    let ratings = this.props.navigation.state.params.ratings;
 
     return (
-      <Stars
-        rating={rating}
-        count={5}
-        half={true}
-        spacing={0}
-        fullStar={<Icon name={"star"} style={[styles.starStyle]} />}
-        emptyStar={
-          <Icon
-            name={"star-outline"}
-            style={[styles.starStyle, styles.emptyStarStyle]}
-          />
-        }
-        halfStar={<Icon name={"star-half"} style={[styles.starStyle]} />}
+      <Rating
+        ratingCount={5}
+        startingValue={ratings}
+        readonly
+        imageSize={15}
+        onFinishRating={this.ratingCompleted}
       />
     );
   };
@@ -222,12 +187,12 @@ class WriteFeedbackScreen extends React.Component {
   }
 
   onAddRating() {
-    if (this.state.titleText.length < 0) {
+    if (this.state.titleText.length < 1) {
       Alert.alert("Tourzan", "Please add review title.");
       return;
     }
 
-    if (this.state.feedbacktext.length < 0) {
+    if (this.state.feedbacktext.length < 1) {
       Alert.alert("Tourzan", "Please add review.");
       return;
     }
@@ -346,16 +311,16 @@ trip_id: 57}*/
     var { dispatch } = this.props;
 
     var params = {
-      order: tripData.order_id,
-      is_tourist_feedback: !this.props.userdata.user.isLoggedInAsGuide
+      order: this.props.bookingdata.orderid,
+      is_tourist_feedback: this.props.userdata.user.isLoggedInAsGuide
         ? "True"
         : "False",
-      is_guide_feedback: this.props.userdata.user.isLoggedInAsGuide
+      is_guide_feedback: !this.props.userdata.user.isLoggedInAsGuide
         ? "True"
         : "False"
     };
 
-    if (this.props.userdata.user.isLoggedInAsGuide) {
+    if (!this.props.userdata.user.isLoggedInAsGuide) {
       params.tourist_feedback_name = this.state.titleText;
       params.tourist_feedback_text = this.state.feedbacktext;
       params.tourist_rating = this.state.starCount;
@@ -379,7 +344,8 @@ trip_id: 57}*/
               {
                 text: "OK",
                 onPress: () => {
-                  this.props.navigation.dispatch(resetRootAction);
+                  this.props.navigation.pop();
+                  this.props.navigation.pop();
                 }
               }
             ],

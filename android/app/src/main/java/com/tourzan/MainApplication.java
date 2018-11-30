@@ -34,7 +34,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-            new ImagePickerPackage(),
+                    new ImagePickerPackage(),
                     new RNBraintreeDropInPackage(),
                     new SplashScreenReactPackage(),
                     new MapsPackage(),
@@ -58,8 +58,8 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
     @Override
     public void onCreate() {
         super.onCreate();
-        FLog.setLoggingDelegate(ReactNativeFabricLogger.getInstance());
         Fabric.with(this, new Crashlytics());
+        FLog.setLoggingDelegate(ReactNativeFabricLogger.getInstance());
         SoLoader.init(this, /* native exopackage */ false);
     }
 }

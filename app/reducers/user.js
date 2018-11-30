@@ -1,4 +1,8 @@
-import { UPDATE_USER } from "../actions/actionTypes";
+import {
+  UPDATE_USER,
+  UPDATE_ORDER_LIST,
+  UPDATE_CHAT
+} from "../actions/actionTypes";
 
 const initialState = {
   userdata: {
@@ -10,7 +14,7 @@ const initialState = {
       guide_id: null,
       guide_profile_image: null,
       tourist_profile_image: null,
-      isClockedIn: null,
+      isClockedIn: false,
       general_profile: {
         phone: null,
         phone_is_validated: null,
@@ -35,10 +39,16 @@ const initialState = {
         }
       ]
     }
-  }
+  },
+  orderList: [],
+  chats: []
 };
 
 const getProfilePictureUrl = userdata => {
+  if (!userdata.user || !userdata.user.isLoggedInAsGuide) {
+    return require("../assets/images/defaultavatar.png");
+  }
+
   let url = "";
   if (userdata.user.isLoggedInAsGuide === true) {
     url = userdata.user.guide_profile_image;
@@ -69,8 +79,12 @@ const getUserId = userdata => {
   }
 };
 
-const update = (state, action) => {
+const updateUser = (state, action) => {
   let ud = action.userdata;
+
+  if (!ud || !ud.user) {
+    return state;
+  }
 
   ud.user.profilepicture = getProfilePictureUrl(ud);
 
@@ -81,10 +95,24 @@ const update = (state, action) => {
   return { ...state, userdata: Object.assign({}, ud) };
 };
 
+const updateOrder = (state, action) => {
+  let ud = action.orderdata;
+  return { ...state, orderList: ud };
+};
+
+const updateChat = (state, action) => {
+  let ud = action.chats;
+  return { ...state, chats:  Object.assign([], ud) };
+};
+
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_USER:
-      return update(state, action);
+      return updateUser(state, action);
+    case UPDATE_CHAT:
+      return updateChat(state, action);
+    case UPDATE_ORDER_LIST:
+      return updateOrder(state, action);
     default:
       return state;
   }
