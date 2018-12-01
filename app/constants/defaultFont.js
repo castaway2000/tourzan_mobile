@@ -8,6 +8,5 @@ import {
 } from "react-native";
 
 export const DefaultFont = {
-  textFont: Platform.OS === 'ios' ? null  : "sans-serif" 
-  
+  textFont: Platform.OS === 'ios' ? null  : "Roboto-Regular" 
 };

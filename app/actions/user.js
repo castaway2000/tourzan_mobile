@@ -113,8 +113,8 @@ function usermixins(params) {
 
   let url = API.SERVER + API.VERSION + "/user_mixins/";
 
-  console.log("Usermixins API URL-->", url);
-  console.log("Usermixins API PARAMS-->", formData);
+  // console.log("Usermixins API URL-->", url);
+  // console.log("Usermixins API PARAMS-->", formData);
 
   return new Promise((resolve, reject) => {
     fetch(url, {
@@ -128,7 +128,7 @@ function usermixins(params) {
     })
       .then(res => res.json())
       .then(data => {
-        console.log("Usermixins API Success->", data);
+        // console.log("Usermixins API Success->", data);
         resolve(data);
       })
       .catch(err => {
@@ -326,7 +326,6 @@ function addReview(params) {
 
   console.log("Add Review API URL-->", url);
 
-
   return new Promise((resolve, reject) => {
     fetch(url, {
       method: "GET",
@@ -335,7 +334,7 @@ function addReview(params) {
         pragma: "no-cache",
         "Cache-Control": "no-cache",
         Authorization: "JWT " + storeState.user.userdata.token
-      },
+      }
     })
       .then(res => res.json())
       .then(data => {
@@ -458,7 +457,7 @@ function getOrdersTouristRepresentation() {
 
   let url = API.SERVER + API.VERSION + "/orders/get_tourist_representation/";
 
-  // console.log("Get Orders Tourist Representation API URL-->", url);
+  console.log("Get Orders Tourist Representation API URL-->", url);
   // console.log("Get Orders Tourist Representation API PARAMS-->", formData);
 
   return new Promise((resolve, reject) => {
@@ -483,6 +482,66 @@ function getOrdersTouristRepresentation() {
   });
 }
 
+function getOrderbyid(orderid) {
+  let storeState = store.getState();
+
+  //https://testing.tourzan.com/api/v1/orders/483
+  let url = API.SERVER + API.VERSION + "/orders/" + orderid;
+
+  console.log("Get Orders By ID API URL-->", url);
+
+  return new Promise((resolve, reject) => {
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        pragma: "no-cache",
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        // console.log("Get Orders By ID API Success", data);
+        resolve(data);
+      })
+      .catch(err => {
+        console.log("Get Orders By ID API Error", err);
+        reject(err);
+      });
+  });
+}
+
+function getReviewTouristRepresentation() {
+  let storeState = store.getState();
+
+  let url = API.SERVER + API.VERSION + "/reviews/get_tourist_representation/";
+
+  console.log("Get Review Tourist Representation API URL-->", url);
+  // console.log("Get Review Tourist Representation API PARAMS-->", formData);
+
+  return new Promise((resolve, reject) => {
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        pragma: "no-cache",
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        // console.log("Get Review Tourist Representation API Success", data);
+        resolve(data);
+      })
+      .catch(err => {
+        console.log("Get Review Tourist Representation API Error", err);
+        reject(err);
+      });
+  });
+}
+
 module.exports = {
   emailLogin,
   emailSignup,
@@ -497,5 +556,7 @@ module.exports = {
   languageSearch,
   verifyToken,
   uploadProfilePicture,
-  getOrdersTouristRepresentation
+  getOrdersTouristRepresentation,
+  getOrderbyid,
+  getReviewTouristRepresentation
 };

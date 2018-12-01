@@ -15,10 +15,11 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   Platform,
-  FlatList
+  FlatList,
+  RefreshControl
 } from "react-native";
 
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import { Rating, AirbnbRating } from "react-native-ratings";
 import { NavigationActions } from "react-navigation";
 import NavigationBar from "../../components/NavigationBar";
 import { getGuideList } from "../../actions";
@@ -37,7 +38,7 @@ import { store } from "../../store/index";
 
 //Actions
 import { updatebooking } from "../../actions/bookingActions";
-import { updateuser } from "../../actions/userActions";
+import { updateuser, updateOrder } from "../../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../../global/Utilities";
@@ -74,14 +75,30 @@ class GuideScreen extends React.Component {
     super(props);
     this.state = {
       guideList: [],
-      starCount: 3.5,
-      message: ""
+      starCount: 0.0,
+      message: "",
+      isFetching: false
     };
 
     this.navigate = this.props.navigation;
   }
-  componentDidMount() {
+
+  onRefresh() {
+    console.log("Refreshing.....");
+
+    this.setState({ isFetching: true });
     this.previousGuideListWS();
+  }
+
+  componentDidMount() {
+    let orderdata = store.getState().user.orderList;
+    console.log("store.getState().user.orderList is: " + orderdata);
+
+    if (store.getState().user.orderList.length < 1) {
+      this.previousGuideListWS();
+    } else {
+      this.setState({ guideList: store.getState().user.orderList });
+    }
   }
 
   previousGuideListWS() {
@@ -100,11 +117,13 @@ class GuideScreen extends React.Component {
             for (let i = 0; i < data.length; i++) {
               this.loadUserNameProfilePics(i);
             }
+            this.setState({ isFetching: false });
           } else {
             this.setState({ guideList: [], message: "No data found." });
           }
         })
         .catch(err => {
+          this.setState({ isFetching: false });
           alert(err);
         });
     } else {
@@ -122,11 +141,13 @@ class GuideScreen extends React.Component {
             for (let i = 0; i < data.length; i++) {
               this.loadUserNameProfilePics(i);
             }
+            this.setState({ isFetching: false });
           } else {
             this.setState({ guideList: [], message: "No data found." });
           }
         })
         .catch(err => {
+          this.setState({ isFetching: false });
           alert(err);
         });
     }
@@ -137,10 +158,10 @@ class GuideScreen extends React.Component {
     let usertype = "";
 
     if (!this.props.userdata.user.isLoggedInAsGuide) {
-      opponmentid = this.state.guideList[index].guide;
+      opponmentid = this.state.guideList[index].guide_generalprofile_id;
       usertype = "guide";
     } else {
-      opponmentid = this.state.guideList[index].tourist;
+      opponmentid = this.state.guideList[index].tourist_generalprofile_id;
       usertype = "tourist";
     }
 
@@ -151,8 +172,6 @@ class GuideScreen extends React.Component {
 
     usermixins(params)
       .then(data => {
-        console.log("usermixins:", data);
-
         let name = "";
 
         if (data.first_name) {
@@ -169,7 +188,20 @@ class GuideScreen extends React.Component {
 
         this.state.guideList[index].username = name;
 
-        this.setState({ guideList: this.state.guideList });
+        this.state.guideList[index].pic = data.pic;
+
+        store.dispatch(updateOrder(this.state.guideList));
+
+        //Timer to reduce cpu load
+        //Because this method calls many times
+        if (this.setArrayDelay) {
+          clearTimeout(this.setArrayDelay);
+        }
+
+        this.setArrayDelay = setTimeout(() => {
+          this.setArrayDelay = null;
+          this.setState({ guideList: this.state.guideList });
+        }, 1000);
       })
       .catch(err => {
         this.setState({
@@ -185,12 +217,15 @@ class GuideScreen extends React.Component {
   }
 
   pressRow(rowData) {
-    // this.navigate.navigate('GuideItemDetail');
-    // this.props.navigation.navigate('GuideItemDetail', { guideData: rowData });
-
     const { navigate } = this.props.navigation;
 
-    navigate("Profile", { userid: rowData.pk });
+    if (this.props.userdata.user.isLoggedInAsGuide) {
+      console.log("User is:", rowData.tourist_generalprofile_id);
+      navigate("ProfileUser", { userid: rowData.tourist_generalprofile_id });
+    } else {
+      console.log("User is:", rowData.guide_generalprofile_id);
+      navigate("ProfileUser", { userid: rowData.guide_generalprofile_id });
+    }
   }
 
   renderRow = ({ item, index }) => {
@@ -206,8 +241,8 @@ class GuideScreen extends React.Component {
             <Image
               resizeMode="cover"
               source={
-                item.guide_profile_image
-                  ? { uri: item.guide_profile_image }
+                item.pic
+                  ? { uri: item.pic }
                   : require("../../assets/images/defaultavatar.png")
               }
               style={styles.avatar_img}
@@ -215,20 +250,23 @@ class GuideScreen extends React.Component {
             />
             <View style={styles.rate_view} pointerEvents="none">
               <Text style={styles.rating_text}>
-                Rating: {item.rating_guide}
+                Rating:{" "}
+                {this.props.userdata.user.isLoggedInAsGuide
+                  ? item.rating_tourist
+                  : item.rating_guide}
               </Text>
             </View>
           </View>
           <View style={styles.info_view}>
             <Text style={styles.name_text}>{item.username}</Text>
-            <View style={styles.location_view}>
-              {/* <Image resizeMode='contain' source={require("../../assets/images/banknote.png")} style={styles.location_icon} /> */}
-              {/* <Text style={styles.location_text}>Amount: </Text> */}
+            {/* <View style={styles.location_view}>
+              <Image resizeMode='contain' source={require("../../assets/images/banknote.png")} style={styles.location_icon} />
+              <Text style={styles.location_text}>Amount: </Text>
               <Text style={styles.location_text}>${item.fees_total}</Text>
-            </View>
-            <Text style={styles.description_text} numberOfLines={3}>
+            </View> */}
+            {/* <Text style={styles.description_text} numberOfLines={3}>
               {item.guide_feedback_text}
-            </Text>
+            </Text> */}
           </View>
           <TouchableOpacity style={styles.arrow_view}>
             <Image
@@ -271,7 +309,7 @@ class GuideScreen extends React.Component {
         )}
 
         {this.state.guideList.length > 0 && (
-          <ScrollView style={styles.mTableView}>
+          <View style={styles.mTableView}>
             {/* {this.showGuideList()} */}
 
             {this.state.guideList.length < 1 && (
@@ -304,9 +342,11 @@ class GuideScreen extends React.Component {
                 )}
                 extraData={this.state}
                 showsVerticalScrollIndicator={true}
+                onRefresh={() => this.onRefresh()}
+                refreshing={this.state.isFetching}
               />
             )}
-          </ScrollView>
+          </View>
         )}
       </View>
     );
@@ -324,7 +364,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   mTableView: {
-    width: width - 50
+    width: '100%'
   },
   sortImg: {
     marginTop: 25,

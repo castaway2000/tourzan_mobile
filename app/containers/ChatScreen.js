@@ -19,7 +19,7 @@ import {
   FlatList
 } from "react-native";
 
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import { Rating, AirbnbRating } from "react-native-ratings";
 import { NavigationActions } from "react-navigation";
 import IconBadge from "react-native-icon-badge";
 import NavigationBar from "../components/NavigationBar";
@@ -31,7 +31,7 @@ import { store } from "../store/index";
 
 //Actions
 import { updatebooking } from "../actions/bookingActions";
-import { updateuser } from "../actions/userActions";
+import { updateuser, updateChat } from "../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
@@ -79,15 +79,20 @@ class ChatScreen extends React.Component {
     this.setState({ results });
   }
 
+  onRefresh() {
+    console.log("Refreshing.....");
+
+    this.setState({ isFetching: true });
+    this.loadChatList();
+  }
+
   constructor(props) {
     super(props);
 
     this.state = {
-      // for listview
-      ds: [],
-
       // for ratingview
-      starCount: 3.5
+      starCount: 0.0,
+      isFetching: false
     };
 
     this.chatArrayHolder = [];
@@ -113,9 +118,7 @@ class ChatScreen extends React.Component {
           console.log("getChatListGuideRepresentation data-->", data);
 
           if (data.length && data.length > 0) {
-            this.setState({
-              ds: data.reverse()
-            });
+            store.dispatch(updateChat(data.reverse()));
 
             //To add default profile picture
             for (let i = 0; i < data.length; i++) {
@@ -134,10 +137,12 @@ class ChatScreen extends React.Component {
               this.loadUserNameProfilePics(data, i);
             }
           }
+          this.setState({ isFetching: false });
         })
         .catch(err => {
           this.setState({
-            isLoading: false
+            isLoading: false,
+            isFetching: false
           });
           alert(err);
         });
@@ -150,9 +155,7 @@ class ChatScreen extends React.Component {
           console.log("getChatListRepresentation data-->", data);
 
           if (data.length && data.length > 0) {
-            this.setState({
-              ds: data.reverse()
-            });
+            store.dispatch(updateChat(data.reverse()));
 
             //To add default profile picture
             for (let i = 0; i < data.length; i++) {
@@ -171,10 +174,12 @@ class ChatScreen extends React.Component {
               this.loadUserNameProfilePics(data, i);
             }
           }
+          this.setState({ isFetching: false });
         })
         .catch(err => {
           this.setState({
-            isLoading: false
+            isLoading: false,
+            isFetching: false
           });
           alert(err);
         });
@@ -185,16 +190,19 @@ class ChatScreen extends React.Component {
     //let params = {id: this.props.userdata.isGuide ? profiles[index].guide : profiles[index].tourist , usertype: this.props.userdata.isGuide ? 'guide' : 'tourist'}
 
     let opponmentid = 0;
+    var user = "";
 
-    if (this.props.userdata.user.userid == profiles[index].tourist) {
-      opponmentid = profiles[index].guide;
-    } else {
+    if (this.props.userdata.user.isLoggedInAsGuide) {
       opponmentid = profiles[index].tourist;
+      user = "tourist";
+    } else {
+      opponmentid = profiles[index].guide;
+      user = "guide";
     }
 
     let params = {
       id: opponmentid,
-      usertype: "tourist"
+      usertype: user
     };
 
     usermixins(params)
@@ -217,9 +225,16 @@ class ChatScreen extends React.Component {
           " " +
           (data.last_name ? data.last_name : "");
 
-        this.setState({
-          ds: newArray
-        });
+        //Timer to reduce cpu load
+        //Because this method calls many times
+        if (this.setArrayDelay) {
+          clearTimeout(this.setArrayDelay);
+        }
+
+        this.setArrayDelay = setTimeout(() => {
+          this.setArrayDelay = null;
+          store.dispatch(updateChat(newArray));
+        }, 2000);
 
         this.chatArrayHolder = newArray.slice(0);
       })
@@ -237,9 +252,8 @@ class ChatScreen extends React.Component {
     this.setState({ searchText });
 
     let filteredData = this.filterNotes(searchText, this.chatArrayHolder);
-    this.setState({
-      ds: filteredData
-    });
+
+    store.dispatch(updateChat(filteredData));
   }
 
   filterNotes(searchText, notes) {
@@ -255,14 +269,7 @@ class ChatScreen extends React.Component {
   pressRow(rowData, index) {
     const { navigate } = this.props.navigation;
 
-    /*
-        var newDs = [];
-        newDs = this.state.ds.slice();
-        this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(newDs)
-        });*/
-
-    navigate("ChatRoom", { chatData: this.state.ds[index] });
+    navigate("ChatRoom", { index: index });
   }
 
   getChatDate = rowData => {
@@ -282,6 +289,7 @@ class ChatScreen extends React.Component {
   };
 
   getMessagesText = rowData => {
+
     if (rowData.messages && rowData.messages.length > 0) {
       return rowData.messages[0].message;
     }
@@ -381,13 +389,15 @@ class ChatScreen extends React.Component {
           </View>
           <View style={Platform.OS === "ios" ? { flex: 1 } : null}>
             <FlatList
-              data={this.state.ds}
+              data={this.props.chats}
               removeClippedSubviews={false}
               extraData={this.state}
               renderItem={this.renderItem.bind(this)}
               ItemSeparatorComponent={(sectionId, rowId) => (
                 <View key={rowId} style={styles.separator} />
               )}
+              onRefresh={() => this.onRefresh()}
+              refreshing={this.state.isFetching}
               //renderHeader={() => <SearchListHeader />}
             />
           </View>
@@ -565,7 +575,8 @@ const mapStateToProps = store => {
   return {
     bookingdata: store.tour.bookingdata,
     userdata: store.user.userdata,
-    currentlocation: store.location.currentlocation
+    currentlocation: store.location.currentlocation,
+    chats: store.user.chats
   };
 };
 

@@ -34,7 +34,7 @@ import { store } from "../store/index";
 
 //Actions
 import { updatebooking } from "../actions/bookingActions";
-import { updateuser } from "../actions/userActions";
+import { updateuser, updateChat } from "../actions/userActions";
 import { updatelocation } from "../actions/locationActions";
 import * as Actions from "../actions";
 
@@ -140,12 +140,13 @@ class CardListScreen extends React.Component {
     })
       .then(result => {
         console.log("BraintreeDropIn result:", result);
+
         /* Result
-                                            description: "ending in 31"
-                                            isDefault: false
-                                            nonce: "tokencc_bf_hkmznk_95253c_nzgzkq_q6f6mz_m9z"
-                                            type: "AMEX"
-                                            */
+        description: "ending in 31"
+        isDefault: false
+        nonce: "tokencc_bf_hkmznk_95253c_nzgzkq_q6f6mz_m9z"
+        type: "AMEX"
+        */
 
         this.saveNonceToServer(result);
       })
@@ -559,7 +560,8 @@ const mapStateToProps = store => {
   return {
     bookingdata: store.tour.bookingdata,
     userdata: store.user.userdata,
-    currentlocation: store.location.currentlocation
+    currentlocation: store.location.currentlocation,
+    chats: store.user.chats
   };
 };
 

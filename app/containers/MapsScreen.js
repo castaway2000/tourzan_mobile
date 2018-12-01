@@ -27,10 +27,12 @@ import Switch from "../components/Switch";
 import NavigationBar from "../components/NavigationBar";
 
 import flagImg from "../assets/images/guide-dot.png";
+import touristorguideImg from "../assets/images/destinationpin.png";
+
 import moment from "moment";
 import MapViewDirections from "react-native-maps-directions";
 var TimerMixin = require("react-timer-mixin");
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import { Rating, AirbnbRating } from "react-native-ratings";
 
 //Store
 import { store } from "../store/index";
@@ -51,7 +53,9 @@ import {
   loginAndUpdateTrip,
   getnearbyguides,
   gettripstatus,
-  verifyToken
+  verifyToken,
+  getOrderbyid,
+  allPayments
 } from "../actions";
 
 //Utilities
@@ -119,12 +123,14 @@ class MapsScreen extends React.Component {
       isLoading: false,
       nearByGuides: [],
       isRouteHidden: true,
-      originCoordinate: { latitude: 0.0, longitude: 0.0 },
-      destCoordinate: { latitude: 0.0, longitude: 0.0 },
-      shouldZoomToCurrentLocation: true
+      originCoordinate: { latitude: null, longitude: null },
+      destCoordinate: { latitude: null, longitude: null },
+      shouldZoomToCurrentLocation: true,
+      cardList: []
     };
 
     this.onRegionChange = this.onRegionChange.bind(this);
+    this.iscardAdded = "unknown";
   }
 
   //#endregion
@@ -135,6 +141,46 @@ class MapsScreen extends React.Component {
     console.log("componentDidMount");
 
     console.log("navigator.geolocation", navigator.geolocation);
+
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        // Create the object to update this.state.mapRegion through the onRegionChange function
+        this.addressFromCoordnate(
+          position.coords.latitude,
+          position.coords.longitude
+        );
+
+        //Update location store
+        store.dispatch(
+          updatelocation({
+            lat: position.coords.latitude,
+            long: position.coords.longitude
+          })
+        );
+
+        //Update map
+        let region = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          latitudeDelta: 0.00922 * 150,
+          longitudeDelta: 0.00421 * 150
+        };
+
+        if (this.state.shouldZoomToCurrentLocation) {
+          this.onRegionChange(
+            region,
+            position.coords.latitude,
+            position.coords.longitude
+          );
+          this.setState({ shouldZoomToCurrentLocation: false });
+        }
+      },
+      error => {},
+      {
+        enableHighAccuracy: false,
+        maximumAge: 1000
+      }
+    );
 
     this.watchID = navigator.geolocation.watchPosition(
       position => {
@@ -198,7 +244,7 @@ class MapsScreen extends React.Component {
             this.updateTripWS();
           }
         }, 1000);
-      }, 10000);
+      }, 5000);
     }
 
     //Check Token Exipred or not
@@ -221,7 +267,7 @@ class MapsScreen extends React.Component {
 
   //#region GEO RELATED
   onRegionChange(region, lastLat, lastLong) {
-    this.addressFromCoordnate(region.latitude, region.longitude);
+    // this.addressFromCoordnate(region.latitude, region.longitude);
 
     this.setState({
       mapRegion: region
@@ -319,10 +365,40 @@ class MapsScreen extends React.Component {
   onBookingPressed = () => {
     const { navigate } = this.props.navigation;
 
+    if (this.iscardAdded === "unknown") {
+      this.getAllPaymentsDetail();
+      return;
+    }
+
+    if (this.iscardAdded === "false") {
+      Alert.alert(
+        "Tourzan",
+        "Please add your payment method from setting.",
+        [
+          {
+            text: "Add Payment Method",
+            onPress: () => {
+              this.iscardAdded = "unknown";
+              navigate("CardList");
+            }
+          },
+          {
+            text: "Cancel",
+            onPress: () => console.log("Add Payment Method"),
+            style: "cancel"
+          }
+        ],
+        { cancelable: false }
+      );
+      return;
+    }
+
     if (!this.props.currentlocation.lat || !this.props.currentlocation.long) {
       Alert.alert("Tourzan", "Your current location not found.");
       return;
     }
+
+    this.iscardAdded = "unknown";
 
     navigate("BookingSearching");
   };
@@ -364,7 +440,7 @@ class MapsScreen extends React.Component {
 
   //#endregion
   onClockInOutPressed = () => {
-    this.updateClockInOutStatusWS();
+    this.updateClockInOutStatusWS(!this.props.userdata.user.isClockedIn);
   };
 
   showClockinSwitch() {
@@ -377,7 +453,7 @@ class MapsScreen extends React.Component {
           }}
           disabled={false}
           activeText={"  IN  "}
-          inActiveText={"OUT"}
+          inActiveText={" OUT "}
           backgroundActive={"#31dd73"}
           backgroundInactive={"#c2c3c9"}
           circleActiveColor={"white"}
@@ -496,6 +572,7 @@ class MapsScreen extends React.Component {
               onRegionChange={this.onRegionChange}
             >
               {this.state.nearByGuides &&
+                !this.props.bookingdata.isTripInProgress &&
                 this.state.nearByGuides.map((element, index) => {
                   //Update map
                   let region = {
@@ -516,35 +593,57 @@ class MapsScreen extends React.Component {
                   );
                 })}
 
-              {!this.state.isRouteHidden && (
-                <MapViewDirections
-                  origin={this.state.originCoordinate}
-                  destination={this.state.destCoordinate}
-                  strokeWidth={4}
-                  strokeColor="hotpink"
-                  apikey={"AIzaSyDvAVjQNstV2ENih9MtQDi9DmbrJjhUcDk"}
-                  onStart={params => {
-                    console.log(
-                      `Started routing between "${params.origin}" and "${
-                        params.destination
-                      }"`
-                    );
-                  }}
-                  onReady={result => {
-                    // this.mapView.fitToCoordinates(result.coordinates, {
-                    //     edgePadding: {
-                    //         right: (width / 20),
-                    //         bottom: (height / 20),
-                    //         left: (width / 20),
-                    //         top: (height / 20),
-                    //     }
-                    // });
-                  }}
-                  onError={errorMessage => {
-                    console.log("GOT AN ERROR", errorMessage);
-                  }}
-                />
-              )}
+              {this.props.bookingdata.isTripInProgress &&
+                this.state.destCoordinate.latitude &&
+                this.state.destCoordinate.longitude && (
+                  <MapView.Marker
+                    coordinate={{
+                      latitude: this.state.destCoordinate.latitude,
+                      longitude: this.state.destCoordinate.longitude,
+                      latitudeDelta: 0.00922 * 1.5,
+                      longitudeDelta: 0.00421 * 1.5
+                    }}
+                    centerOffset={{ x: 0, y: -10 }}
+                    anchor={{ x: 1, y: 1 }}
+                    image={touristorguideImg}
+                    key={"index"}
+                  />
+                )}
+
+              {!this.state.isRouteHidden &&
+                this.state.originCoordinate.latitude &&
+                this.state.originCoordinate.longitude &&
+                this.state.originCoordinate.latitude &&
+                this.state.originCoordinate.longitude && (
+                  <MapViewDirections
+                    origin={this.state.originCoordinate}
+                    destination={this.state.destCoordinate}
+                    strokeWidth={4}
+                    mode="walking"
+                    strokeColor="hotpink"
+                    apikey={"AIzaSyDvAVjQNstV2ENih9MtQDi9DmbrJjhUcDk"}
+                    onStart={params => {
+                      console.log(
+                        `Started routing between "${params.origin}" and "${
+                          params.destination
+                        }"`
+                      );
+                    }}
+                    onReady={result => {
+                      // this.mapView.fitToCoordinates(result.coordinates, {
+                      //     edgePadding: {
+                      //         right: (width / 20),
+                      //         bottom: (height / 20),
+                      //         left: (width / 20),
+                      //         top: (height / 20),
+                      //     }
+                      // });
+                    }}
+                    onError={errorMessage => {
+                      console.log("GOT AN ERROR", errorMessage);
+                    }}
+                  />
+                )}
             </MapView>
           }
           <View style={styles.locationInfo_view}>
@@ -580,12 +679,12 @@ class MapsScreen extends React.Component {
   }
 
   //
-  updateClockInOutStatusWS() {
+  updateClockInOutStatusWS(isClockedIn) {
     if (!this.props.currentlocation.lat || !this.props.currentlocation.long) {
       Alert.alert(
         "Tourzan",
         "Your current location is unavailable. Unable to clock " +
-          (this.props.userdata.user.isClockedIn ? "in" : "out")
+          (isClockedIn ? "in" : "out")
       );
       return;
     }
@@ -598,7 +697,7 @@ class MapsScreen extends React.Component {
 
     var params = {
       userid: this.props.userdata.user.userid,
-      status: this.props.userdata.user.isClockedIn ? "clockout" : "clockin",
+      status: isClockedIn ? "clockin" : "clockout",
       latitude: this.props.currentlocation.lat,
       longitude: this.props.currentlocation.long
     };
@@ -609,8 +708,7 @@ class MapsScreen extends React.Component {
           isLoading: false
         });
 
-        this.props.userdata.user.isClockedIn = !this.props.userdata.user
-          .isClockedIn;
+        this.props.userdata.user.isClockedIn = isClockedIn;
 
         store.dispatch(updateuser(this.props.userdata));
 
@@ -713,8 +811,15 @@ class MapsScreen extends React.Component {
           storestate.tour.bookingdata.duration = tripStatus.duration;
 
           store.dispatch(updatebooking(storestate.tour.bookingdata));
+        } else {
+          //End trip in case of error
+          let storestate = store.getState();
+          storestate.tour.bookingdata.isTripInProgress = false;
+          storestate.tour.bookingdata.tripid = 0;
+          storestate.tour.bookingdata.isAutomatic = true;
+          store.dispatch(updatebooking(storestate.tour.bookingdata));
 
-          console.log("store state:", store.getState());
+          this.setState({ isRouteHidden: true });
         }
       })
       .catch(err => {});
@@ -772,6 +877,7 @@ class MapsScreen extends React.Component {
         let storestate = store.getState();
         storestate.tour.bookingdata.isTripInProgress = true;
         storestate.tour.bookingdata.tripid = tripid;
+        storestate.tour.bookingdata.orderid = data.order_id;
         storestate.tour.bookingdata.isAutomatic =
           data.flag == "automatic" ? true : false;
 
@@ -801,7 +907,14 @@ class MapsScreen extends React.Component {
 
         store.dispatch(updatebooking(storestate.tour.bookingdata));
 
-        this.updateTripWS()
+        if (
+          !this.props.userdata.user.isClockedIn &&
+          this.props.userdata.user.isLoggedInAsGuide
+        ) {
+          this.updateClockInOutStatusWS(true);
+        }
+
+        this.updateTripWS();
       })
       .catch(err => {});
   }
@@ -882,6 +995,55 @@ class MapsScreen extends React.Component {
       });
   }
 
+  getOrderbyidWS(orderid) {
+    var { dispatch } = this.props;
+
+    getOrderbyid(orderid)
+      .then(data => {
+        console.log("Get Order by ID", data);
+
+        this.props.navigation.navigate("CompleteTour", {
+          tripData: data
+        });
+      })
+      .catch(err => {
+        alert(err);
+      });
+  }
+
+  getAllPaymentsDetail() {
+    this.setState({
+      isLoading: true
+    });
+
+    allPayments()
+      .then(data => {
+        this.setState({
+          isLoading: false
+        });
+
+        if (data && data.length > 0) {
+          //Three status: 'true', 'false' and ''unknown'
+          this.iscardAdded = "false";
+
+          for (let i = 0; i < data.length; i++) {
+            if (this.iscardAdded === "false") {
+              const card = data[i];
+
+              if (card.is_active == true && card.is_default == true) {
+                this.iscardAdded = "true";
+              }
+            }
+          }
+
+          this.onBookingPressed();
+        }
+      })
+      .catch(err => {
+        alert(err);
+      });
+  }
+
   //Notifications
   async handelNotifications() {
     FCM.createNotificationChannel({
@@ -951,28 +1113,36 @@ class MapsScreen extends React.Component {
 
         //Booking offer received
         if (extradata.type == 1) {
-          Alert.alert(
-            "Debug",
-            JSON.stringify(extradata),
-            [
-              {
-                text: "Cancel",
-                onPress: () => {}
-              },
-              {
-                text: "Reject",
-                onPress: () => {},
-                style: "cancel"
-              },
-              {
-                text: "Accept",
-                onPress: () => {
-                  this.acceptTripWS(extradata.user_id, extradata.time_limit);
+          if (this.confirmAlertDelay) {
+            clearTimeout(this.confirmAlertDelay);
+          }
+
+          this.confirmAlertDelay = setTimeout(() => {
+            this.confirmAlertDelay = null;
+
+            Alert.alert(
+              "Debug",
+              JSON.stringify(extradata),
+              [
+                {
+                  text: "Reject",
+                  onPress: () => {},
+                  style: "cancel"
+                },
+                {
+                  text: "Accept",
+                  onPress: () => {
+                    this.acceptTripWS(extradata.user_id, extradata.time_limit);
+                  }
+                },
+                {
+                  text: "Cancel",
+                  onPress: () => {}
                 }
-              }
-            ],
-            { cancelable: false }
-          );
+              ],
+              { cancelable: false }
+            );
+          }, 2000);
 
           //Tour Accepted by Tourist
         } else if (extradata.type == 2) {
@@ -987,7 +1157,42 @@ class MapsScreen extends React.Component {
           storestate.tour.bookingdata.tripid = 0;
           storestate.tour.bookingdata.isAutomatic = true;
 
+          storestate.tour.bookingdata.touristid =
+            extradata.tourist_general_profile_id;
+          storestate.tour.bookingdata.guideid =
+            extradata.guide_generalprofile_id;
+          storestate.tour.bookingdata.orderid = extradata.order_id;
+
           store.dispatch(updatebooking(storestate.tour.bookingdata));
+
+          FCM.removeAllDeliveredNotifications();
+
+          //Get Order by id WS Webservice
+          if (this.getOrderbyidWSDelay) {
+            clearTimeout(this.getOrderbyidWSDelay);
+          }
+
+          this.getOrderbyidWSDelay = setTimeout(() => {
+            this.getOrderbyidWSDelay = null;
+
+            Alert.alert(
+              "Tourzan",
+              "Your trip ended successfully. Would you like to give review?.",
+              [
+                {
+                  text: "Yes",
+                  onPress: () => {
+                    this.getOrderbyidWS(this.props.bookingdata.orderid);
+                  }
+                },
+                {
+                  text: "No",
+                  onPress: () => {}
+                }
+              ],
+              { cancelable: false }
+            );
+          }, 4000);
         }
       }
     } else {
@@ -1004,31 +1209,39 @@ class MapsScreen extends React.Component {
 
         //Booking offer received
         if (extradata.type == 1) {
-          Alert.alert(
-            "Debug",
-            JSON.stringify(extradata),
-            [
-              {
-                text: "Cancel",
-                onPress: () => {
-                  //notif.extradata.time_limit)
-                  //
+          if (this.confirmAlertDelay) {
+            clearTimeout(this.confirmAlertDelay);
+          }
+
+          this.confirmAlertDelay = setTimeout(() => {
+            this.confirmAlertDelay = null;
+
+            console.log("Still calls two times!");
+
+            Alert.alert(
+              "Debug",
+              JSON.stringify(extradata),
+              [
+                {
+                  text: "Reject",
+                  onPress: () => {},
+                  style: "cancel"
+                },
+                {
+                  text: "Accept",
+                  onPress: () => {
+                    this.acceptTripWS(extradata.user_id, extradata.time_limit);
+                  }
+                },
+                {
+                  text: "Cancel",
+                  onPress: () => {}
                 }
-              },
-              {
-                text: "Reject",
-                onPress: () => {},
-                style: "cancel"
-              },
-              {
-                text: "Accept",
-                onPress: () => {
-                  this.acceptTripWS(extradata.user_id, extradata.time_limit);
-                }
-              }
-            ],
-            { cancelable: false }
-          );
+              ],
+              { cancelable: false }
+            );
+          }, 2000);
+
           //Tour Accepted by Tourist
         } else if (extradata.type == 2) {
           //Update location and device token
@@ -1041,8 +1254,42 @@ class MapsScreen extends React.Component {
           storestate.tour.bookingdata.isTripInProgress = false;
           storestate.tour.bookingdata.tripid = 0;
           storestate.tour.bookingdata.isAutomatic = true;
+          storestate.tour.bookingdata.touristid =
+            extradata.tourist_general_profile_id;
+          storestate.tour.bookingdata.guideid =
+            extradata.guide_generalprofile_id;
+          storestate.tour.bookingdata.orderid = extradata.order_id;
 
           store.dispatch(updatebooking(storestate.tour.bookingdata));
+
+          FCM.removeAllDeliveredNotifications();
+
+          //Get Order by id WS Webservice
+          if (this.getOrderbyidWSDelay) {
+            clearTimeout(this.getOrderbyidWSDelay);
+          }
+
+          this.getOrderbyidWSDelay = setTimeout(() => {
+            this.getOrderbyidWSDelay = null;
+
+            Alert.alert(
+              "Tourzan",
+              "Your trip ended successfully. Would you like to give review?.",
+              [
+                {
+                  text: "Yes",
+                  onPress: () => {
+                    this.getOrderbyidWS(this.props.bookingdata.orderid);
+                  }
+                },
+                {
+                  text: "No",
+                  onPress: () => {}
+                }
+              ],
+              { cancelable: false }
+            );
+          }, 4000);
         }
       }
     }
@@ -1123,7 +1370,8 @@ const styles = StyleSheet.create({
       height: 0
     },
     shadowRadius: 10,
-    shadowOpacity: 0.2
+    shadowOpacity: 0.2,
+    elevation: 2
   },
   location_address_view: {
     padding: 8,
@@ -1292,8 +1540,8 @@ const styles = StyleSheet.create({
   directionButton: {
     backgroundColor: "transparent",
     position: "absolute",
-    left: 10,
-    bottom: 10
+    right: 10,
+    bottom: 60
   },
   myLocationButtonIcon: {
     width: 40,

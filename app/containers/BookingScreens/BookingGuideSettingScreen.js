@@ -93,36 +93,8 @@ class BookingGuideSettingScreen extends React.Component {
   }
 
   onPaymentSetting() {
-    //this.navigate.navigate('PaymentMethod');
+    this.navigate.navigate('CardList');
 
-    BraintreeDropIn.show({
-      clientToken: ""
-    })
-      .then(result => console.log(result))
-      .catch(error => {
-        if (error.code === "USER_CANCELLATION") {
-          // update your UI to handle cancellation
-        } else {
-          // update your UI to handle other errors
-        }
-      });
-
-    /*
-        BraintreeDropIn.show({
-            clientToken: 'token',
-            threeDSecure: {
-                amount: 1000.0,
-            },
-        })
-            .then(result => console.log(result))
-            .catch((error) => {
-                if (error.code === 'USER_CANCELLATION') {
-                    // update your UI to handle cancellation
-                } else {
-                    // update your UI to handle other errors
-                    // for 3D secure, there are two other specific error codes: 3DSECURE_NOT_ABLE_TO_SHIFT_LIABILITY and 3DSECURE_LIABILITY_NOT_SHIFTED
-                }
-            });*/
   }
 
   onTimeLimitSetting() {
@@ -361,7 +333,7 @@ class BookingGuideSettingScreen extends React.Component {
             />
           </TouchableOpacity>
           <Text style={styles.nav_center_text} />
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => {
               navigate("ProfileCharRoomFromBooking");
             }}
@@ -371,7 +343,7 @@ class BookingGuideSettingScreen extends React.Component {
               source={require("../../assets/images/profile_chat_icon.png")}
               style={styles.nav_right_view}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         {/*<ScrollView style={styles.scrollview}>*/}
         <View style={styles.content_view}>
@@ -612,7 +584,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ddd",
     marginTop: 10,
-    backgroundColor: "lightgray"
+    backgroundColor: "transparent"
   },
   top_info_view: {
     backgroundColor: "white",

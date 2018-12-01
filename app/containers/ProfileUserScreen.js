@@ -27,18 +27,11 @@ import ReadMore from "@expo/react-native-read-more-text";
 import Button from "react-native-button";
 import ApplyButton from "../components/ApplyButton";
 import NavigationBar from "../components/NavigationBar";
-
+import { profile } from "../actions";
 import { Marker } from "react-native-maps/lib/components/MapView";
 import moment from "moment";
 import Stars from "react-native-stars";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-
-//Webservice
-import {
-  profile,
-  getReviewTouristRepresentation,
-  getReviewGuideRepresentation
-} from "../actions";
 
 //Store
 import { connect } from "react-redux";
@@ -67,7 +60,7 @@ const backAction = NavigationActions.back({
   // key: 'WelcomeScreen'
 });
 
-class ProfileScreen extends React.Component {
+class ProfileUserScreen extends React.Component {
   static navigationOptions = {
     title: "Maps",
     header: null,
@@ -93,7 +86,8 @@ class ProfileScreen extends React.Component {
 
     this.state = {
       // for listview
-      reviewsArray: [],
+
+      dataSource: [],
 
       // for ratingview
       starCount: 0.0,
@@ -109,24 +103,35 @@ class ProfileScreen extends React.Component {
 
   //API Call get user profile
   onLoadProfileData() {
+    let isGuide = this.props.userdata.user.isLoggedInAsGuide;
+
     this.setState({
       isLoading: true
     });
 
     var params = {
-      userid: this.props.userdata.user.userid
+      userid: this.getUserID()
     };
 
     profile(params)
       .then(data => {
         if (data) {
+          var ds = isGuide ? data.tourist_reviews : data.guide_data.reviews;
+
+          ds = ds.filter(obj => {
+            return isGuide
+              ? obj.fields.guide_review_created
+              : obj.fields.tourist_review_created;
+          });
+        
           this.setState({
             profileData: data,
-            isLoading: false
+            isLoading: false,
+            dataSource: ds
           });
-
-          this.getReviewWS();
         }
+
+        console.log("dataSource", data.tourist_reviews);
       })
       .catch(err => {
         this.setState({
@@ -136,53 +141,18 @@ class ProfileScreen extends React.Component {
       });
   }
 
-  //API Call get user profile
-  getReviewWS() {
-    if (this.props.userdata.user.isLoggedInAsGuide) {
-      getReviewGuideRepresentation()
-        .then(data => {
-          if (data) {
-            var result = data.filter(obj => {
-              return obj.tourist_review_created;
-            });
-
-            this.setState({
-              reviewsArray: result,
-              isLoading: false
-            });
-          }
-        })
-        .catch(err => {
-          this.setState({
-            isLoading: false
-          });
-          alert(err);
-        });
-    } else {
-      getReviewTouristRepresentation()
-        .then(data => {
-          if (data) {
-            var result = data.filter(obj => {
-              return obj.guide_review_created;
-            });
-
-            this.setState({
-              reviewsArray: result,
-              isLoading: false
-            });
-          }
-        })
-        .catch(err => {
-          this.setState({
-            isLoading: false
-          });
-          alert(err);
-        });
-    }
-  }
-
   pressRow(rowData) {
     const { navigate } = this.props.navigation;
+
+    // var newDs = [];
+    // newDs = this.state.ds.slice();
+    // this.setState({
+    //     dataSource: this.state.dataSource.cloneWithRows(newDs)
+    // })
+  }
+
+  onIntestExtention() {
+    isIntestExtend = !isIntestExtend;
   }
 
   // Read More funtions
@@ -216,6 +186,8 @@ class ProfileScreen extends React.Component {
 
   _handleTextReady = () => {
     // ...
+
+    this.setState({ listViewHeight: this.state.contentHeight });
   };
 
   // interesting button functions
@@ -223,6 +195,14 @@ class ProfileScreen extends React.Component {
     console.log("Pressed!");
   }
 
+  //#region Helper Func
+  getUserID = () => {
+    var { params } = this.props.navigation.state;
+
+    return params.userid;
+  };
+
+  //#endregion
   getDateString = date => {
     let chatdate = moment(date);
 
@@ -259,9 +239,29 @@ class ProfileScreen extends React.Component {
     this.setState({ listViewHeight: contentHeight });
   }
 
+  //source={require("../assets/images/defaultavatar.png")}
+
+  showProfilePic(item) {
+    if (!item.fields || !item.fields.reviewers_picture) {
+      return (
+        <Image
+          resizeMode="cover"
+          source={require("../assets/images/defaultavatar.png")}
+          style={styles.avatar_img}
+        />
+      );
+    }
+    return (
+      <Image
+        resizeMode="cover"
+        source={{ uri: item.fields.reviewers_picture }}
+        style={styles.avatar_img}
+      />
+    );
+  }
+
   renderRow = ({ item, index }) => {
     let isGuide = this.props.userdata.user.isLoggedInAsGuide;
-
     return (
       <TouchableHighlight
         style={styles.row_view}
@@ -269,41 +269,40 @@ class ProfileScreen extends React.Component {
         underlayColor="transparent"
       >
         <View style={styles.row}>
-          <View style={styles.avatar_view}>
-          <Image
-              resizeMode="cover"
-              source={{
-                uri: isGuide
-                  ? item.user_tourist[0].tourist_profile_image : item.user_tourist[0].guide_profile_image
-                  
-              }}
-              style={styles.avatar_img}
-            />
-          </View>
+          <View style={styles.avatar_view}>{this.showProfilePic(item)}</View>
           <View style={styles.info_view}>
             <View style={styles.list_info_location_view}>
               <Text style={styles.list_info_name_text}>
-                {isGuide
-                  ? item.user_tourist[0].username
-                  : item.user_guide.username}
+                {item.fields.reviewers_name}
               </Text>
+
               <Text style={styles.list_info_time_text}>
                 {this.getDateString(
                   isGuide
-                    ? item.tourist_review_created : item.guide_review_created
-                    
+                    ? item.fields.guide_review_created
+                    : item.fields.tourist_review_created
                 )}
               </Text>
             </View>
-            <Text style={styles.description_name}>
-              {isGuide ? item.tourist_feedback_name : item.guide_feedback_name }
+
+            <Text style={styles.description_text_bold}>
+              {isGuide
+                ? item.fields.guide_feedback_name
+                : item.fields.tourist_feedback_name}
             </Text>
+
             <Text style={styles.description_text}>
-              {isGuide ? item.tourist_feedback_text : item.guide_feedback_text }
+              {isGuide
+                ? item.fields.guide_feedback_text
+                : item.fields.tourist_feedback_text}
             </Text>
             <View style={styles.rate_view} pointerEvents="none">
               {this._showRatingViewList(
-                parseFloat(isGuide ? item.tourist_rating : item.guide_rating )
+                parseFloat(
+                  isGuide
+                    ? item.fields.guide_rating
+                    : item.fields.tourist_rating
+                )
               )}
             </View>
           </View>
@@ -329,9 +328,9 @@ class ProfileScreen extends React.Component {
     let profilepicture = "";
 
     if (isGuide) {
-      profilepicture = this.state.profileData.guide_data.profile_image;
-    } else {
       profilepicture = this.state.profileData.profile_picture;
+    } else {
+      profilepicture = this.state.profileData.guide_data.profile_image;
     }
 
     if (profilepicture) {
@@ -396,9 +395,9 @@ class ProfileScreen extends React.Component {
     let overviewText = "";
 
     if (isGuide) {
-      overviewText = this.state.profileData.guide_data.guide_overview;
-    } else {
       overviewText = this.state.profileData.about_tourist;
+    } else {
+      overviewText = this.state.profileData.guide_data.guide_overview;
     }
 
     return (
@@ -437,31 +436,41 @@ class ProfileScreen extends React.Component {
         </View>
       );
     } else {
-      return <Text style={styles.name_text} />;
+      return <Text style={styles.name_text}>-</Text>;
     }
   };
 
-  ratingCompleted(rating) {}
-
   //Calculate average star from review
   _showRatingViewMain = () => {
+    if (!this.state.profileData) {
+      return (
+        <Rating
+          ratingCount={5}
+          startingValue={0}
+          readonly
+          imageSize={15}
+          onFinishRating={this.ratingCompleted}
+        />
+      );
+    }
+
+    if (!this.state.profileData.guide_data) {
+      return (
+        <Rating
+          ratingCount={5}
+          startingValue={0}
+          readonly
+          imageSize={15}
+          onFinishRating={this.ratingCompleted}
+        />
+      );
+    }
+
     let isGuide = this.props.userdata.user.isLoggedInAsGuide;
 
-    var totalRatings = 0.0;
-
-    for (let i = 0; i < this.state.reviewsArray.length; i++) {
-      const review = this.state.reviewsArray[i];
-
-      totalRatings =
-        totalRatings +
-        (isGuide
-          ? parseFloat(review.tourist_rating) : parseFloat(review.guide_rating));
-    }
-
-    var rating = 0;
-    if (this.state.reviewsArray.length > 0) {
-      rating = totalRatings / this.state.reviewsArray.length;
-    }
+    let rating = isGuide
+      ? this.state.profileData.tourist_rating
+      : this.state.profileData.guide_data.guide_rating;
 
     return (
       <Rating
@@ -474,6 +483,8 @@ class ProfileScreen extends React.Component {
     );
   };
 
+  ratingCompleted() {}
+
   //Show load more.
   showLoading() {
     if (this.state.isLoading) {
@@ -485,6 +496,25 @@ class ProfileScreen extends React.Component {
         />
       );
     }
+  }
+
+  showTotalRating() {
+    if (!this.state.profileData) {
+      return <Text style={styles.listview_title_text}> 0 Review </Text>;
+    }
+
+    let totalRating = 0;
+    let isGuide = this.props.userdata.user.isLoggedInAsGuide;
+
+    if (isGuide) {
+      totalRating = this.state.dataSource.length;
+    } else {
+      totalRating = this.state.dataSource.length;
+    }
+
+    return (
+      <Text style={styles.listview_title_text}> {totalRating} Reviews </Text>
+    );
   }
 
   render() {
@@ -569,9 +599,7 @@ class ProfileScreen extends React.Component {
             </View>
             <View style={styles.listview_view}>
               <View style={styles.listview_title_view} pointerEvents="none">
-                <Text style={styles.listview_title_text}>
-                  {this.state.reviewsArray.length} Reviews
-                </Text>
+                {this.showTotalRating()}
                 {this._showRatingViewMain()}
               </View>
               <FlatList
@@ -582,7 +610,7 @@ class ProfileScreen extends React.Component {
                 }}
                 ref={ref => (this.listView = ref)}
                 onContentSizeChange={this.onContentSize}
-                data={this.state.reviewsArray}
+                data={this.state.dataSource}
                 renderItem={this.renderRow}
               />
             </View>
@@ -846,7 +874,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontFamily: DefaultFont.textFont
   },
-  description_name: {
+  description_text_bold: {
     marginTop: 5,
     fontSize: 14,
     color: Colors.colorBlack,
@@ -886,4 +914,4 @@ const mapStateToProps = store => {
   };
 };
 
-export default connect(mapStateToProps)(ProfileScreen);
+export default connect(mapStateToProps)(ProfileUserScreen);

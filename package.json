@@ -27,6 +27,7 @@
     "react-native-icon-checkbox": "^1.2.0",
     "react-native-image-picker": "^0.27.1",
     "react-native-keyboard-aware-scroll-view": "^0.4.1",
+    "react-native-keyboard-spacer": "^0.4.1",
     "react-native-keyevent": "0.0.5",
     "react-native-loading-spinner-overlay": "^0.5.2",
     "react-native-maps": "^0.15.3",

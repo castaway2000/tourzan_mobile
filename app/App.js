@@ -71,6 +71,7 @@ import SelectLanguageProficiencyScreen from "./containers/SelectLanguageProficie
 import AddPaymentMethodScreen from "./containers/AddPaymentMethodScreen";
 import IdentityVerificationScreen from "./containers/IdentityVerificationScreen";
 import PaymentrailDetailScreen from "./containers/PaymentrailDetailScreen";
+import ProfileUserScreen from "./containers/ProfileUserScreen";
 
 var { width, height } = Dimensions.get("window");
 
@@ -101,7 +102,8 @@ const DashboardStackNavigator = StackNavigator(
     Dashboard: { screen: DashboardScreen },
     Maps: { screen: MapsScreen },
     Profile: { screen: ProfileScreen },
-    ProfileCharRoom: { screen: ChatRoomScreen }
+    ProfileCharRoom: { screen: ChatRoomScreen },
+    ProfileUser: { screen: ProfileUserScreen },
   },
   {
     navigationOptions: {
@@ -202,7 +204,8 @@ const App = StackNavigator(
     SelectLanguageProficiency: { screen: SelectLanguageProficiencyScreen },
     AddPaymentMethod: { screen: AddPaymentMethodScreen },
     IdentityVerification: { screen: IdentityVerificationScreen },
-    PaymentrailDetail: { screen: PaymentrailDetailScreen }
+    PaymentrailDetail: { screen: PaymentrailDetailScreen },
+    ProfileUser: { screen: ProfileUserScreen }
   },
   {
     headerMode: "screen"

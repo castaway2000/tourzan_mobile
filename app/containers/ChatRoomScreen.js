@@ -26,14 +26,22 @@ import { store } from "../store/index";
 
 //Actions
 import { updatebooking } from "../actions/bookingActions";
-import { updateuser } from "../actions/userActions";
+import { updateuser, updateChat } from "../actions/userActions";
 
 //Webservice
 import { sendChatMessage } from "../actions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
+
+import KeyboardSpacer from "react-native-keyboard-spacer";
 
 var { width, height } = Dimensions.get("window");
 
@@ -69,12 +77,16 @@ class ChatRoomScreen extends React.Component {
   componentWillMount() {
     var { params } = this.props.navigation.state;
 
-    console.log("params.chatData", params.chatData);
+    let index = params.index;
+    let chatData = this.props.chats[index];
 
-    lastid = params.chatData.messages[0].id;
+    console.log("params.chatData", chatData);
+    console.log("params.Index", index);
 
-    for (let index = 0; index < params.chatData.messages.length; index++) {
-      const element = params.chatData.messages[index];
+    lastid = chatData.messages[0].id;
+
+    for (let i = 0; i < chatData.messages.length; i++) {
+      const element = chatData.messages[i];
 
       let data = {
         _id: element.id,
@@ -83,7 +95,7 @@ class ChatRoomScreen extends React.Component {
         user: {
           _id: element.user,
           name: "",
-          avatar: params.chatData.picurl ? params.chatData.picurl : ""
+          avatar: chatData.picurl ? chatData.picurl : ""
         }
       };
 
@@ -98,11 +110,11 @@ class ChatRoomScreen extends React.Component {
   componentDidMount() {
     var { params } = this.props.navigation.state;
 
+    let index = params.index;
+    let chatData = this.props.chats[index];
+
     this.socket = new WebSocket(
-      API.CHAT_URL +
-        params.chatData.uuid +
-        "/?token=" +
-        this.props.userdata.token
+      API.CHAT_URL + chatData.uuid + "/?token=" + this.props.userdata.token
     );
 
     // this.socket.binaryType = "blob";
@@ -110,32 +122,45 @@ class ChatRoomScreen extends React.Component {
     this.socket.onopen = () => {
       console.log(
         "Socket connected...!",
-        API.CHAT_URL +
-          params.chatData.uuid +
-          "/?token=" +
-          this.props.userdata.token
+        API.CHAT_URL + chatData.uuid + "/?token=" + this.props.userdata.token
       );
     };
 
     this.socket.onmessage = e => {
       console.log("A message was received.", e.data);
 
-      if (lastMessageBySender == JSON.parse(e.data).message) {
-        return;
-      }
+      lastid = lastid + 1;
 
+      //Append to redux array
       var { params } = this.props.navigation.state;
 
-      lastid = lastid + 1;
+      let index = params.index;
+
+      this.props.chats[index].messages.unshift({
+        chat: 577,
+        created: new Date().toISOString(),
+        id: lastid,
+        message: JSON.parse(e.data).message,
+        updated: new Date().toISOString(),
+        user: JSON.parse(e.data).user_id,
+        uuid: this.guid()
+      });
+
+      store.dispatch(updateChat(this.props.chats));
+
+      //Append op message
+      if (this.props.userdata.user.userid == JSON.parse(e.data).user_id) {
+        return;
+      }
 
       let cm = {
         text: JSON.parse(e.data).message,
         _id: lastid,
         createdAt: new Date(),
         user: {
-          _id: this.props.userdata.user.userid,
+          _id: JSON.parse(e.data).user_id,
           name: "",
-          avatar: params.chatData.picurl ? params.chatData.picurl : ""
+          avatar: chatData.picurl ? chatData.picurl : ""
         }
       };
 
@@ -155,8 +180,33 @@ class ChatRoomScreen extends React.Component {
     };
   }
 
+  guid() {
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return (
+      s4() +
+      s4() +
+      "-" +
+      s4() +
+      "-" +
+      s4() +
+      "-" +
+      s4() +
+      "-" +
+      s4() +
+      s4() +
+      s4()
+    );
+  }
+
   onSend(messages = []) {
     var { params } = this.props.navigation.state;
+
+    let index = params.index;
+    let chatData = this.props.chats[index];
 
     console.log("sending message....,");
 
@@ -164,7 +214,7 @@ class ChatRoomScreen extends React.Component {
 
     let message1 = {
       message: this.state.messageText,
-      chat_uuid: params.chatData.uuid
+      chat_uuid: chatData.uuid
     };
 
     let messagestringfy = JSON.stringify(message1);
@@ -188,6 +238,9 @@ class ChatRoomScreen extends React.Component {
     const { navigate } = this.props.navigation;
     var { params } = this.props.navigation.state;
 
+    let index = params.index;
+    let chatData = this.props.chats[index];
+
     return (
       <View style={styles.container}>
         <View style={styles.statusbar} />
@@ -204,15 +257,15 @@ class ChatRoomScreen extends React.Component {
               style={styles.backButton}
             />
           </TouchableOpacity>
-          <Text style={styles.centerText}>{params.chatData.topic}</Text>
+          <Text style={styles.centerText}>{chatData.topic}</Text>
           <TouchableOpacity
             onPress={() => {
-              navigate("Profile", { userid: this.getOpponmentUserID() });
+              navigate("ProfileUser", { userid: this.getOpponmentUserID() });
             }}
           >
             <Image
               resizeMode="cover"
-              source={params.chatData.pic}
+              source={chatData.pic}
               style={styles.rightView}
             />
           </TouchableOpacity>
@@ -226,6 +279,7 @@ class ChatRoomScreen extends React.Component {
               _id: this.props.userdata.user.userid
             }}
           />
+          {Platform.OS === "android" ? <KeyboardSpacer /> : null}
         </View>
       </View>
     );
@@ -237,9 +291,12 @@ class ChatRoomScreen extends React.Component {
     var { dispatch } = this.props;
     var { params } = this.props.navigation.state;
 
+    let index = params.index;
+    let chatData = this.props.chats[index];
+
     var params = {
-      chat_id: params.chatData.id,
-      chat_uuid: params.chatData.uuid,
+      chat_id: chatData.id,
+      chat_uuid: chatData.uuid,
       message: this.state.messageText
     };
 
@@ -253,12 +310,15 @@ class ChatRoomScreen extends React.Component {
   getOpponmentUserID = () => {
     var { params } = this.props.navigation.state;
 
+    let index = params.index;
+    let chatData = this.props.chats[index];
+
     var isguide = this.props.userdata.user.isLoggedInAsGuide;
 
     if (isguide) {
-      return params.chatData.tourist;
+      return chatData.tourist;
     } else {
-      return params.chatData.guide;
+      return chatData.guide;
     }
   };
 
@@ -329,7 +389,8 @@ const mapStateToProps = store => {
   return {
     bookingdata: store.tour.bookingdata,
     userdata: store.user.userdata,
-    currentlocation: store.location.currentlocation
+    currentlocation: store.location.currentlocation,
+    chats: store.user.chats
   };
 };
 

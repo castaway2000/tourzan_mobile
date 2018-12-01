@@ -103,7 +103,7 @@ function getOrdersGuideRepresentation() {
 
   let url = API.SERVER + API.VERSION + "/orders/get_guide_representation/";
 
-  // console.log("Get Orders Guide Representation API URL-->", url);
+  console.log("Get Orders Guide Representation API URL-->", url);
   // console.log("Get Orders Guide Representation API PARAMS-->", formData);
 
   return new Promise((resolve, reject) => {
@@ -128,9 +128,40 @@ function getOrdersGuideRepresentation() {
   });
 }
 
+function getReviewGuideRepresentation() {
+  let storeState = store.getState();
+
+  let url = API.SERVER + API.VERSION + "/reviews/get_guide_representation/";
+
+  console.log("Get Review Guide Representation API URL-->", url);
+  // console.log("Get Review Guide Representation API PARAMS-->", formData);
+
+  return new Promise((resolve, reject) => {
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        pragma: "no-cache",
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        // console.log("Get Review Guide Representation API Success", data);
+        resolve(data);
+      })
+      .catch(err => {
+        console.log("Get Review Guide Representation API Error", err);
+        reject(err);
+      });
+  });
+}
+
 module.exports = {
   getGuideList,
   bookGuide,
   previousGuideList,
-  getOrdersGuideRepresentation
+  getOrdersGuideRepresentation,
+  getReviewGuideRepresentation
 };

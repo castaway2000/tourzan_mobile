@@ -23,7 +23,7 @@ import KeyEvent from "react-native-keyevent";
 import PercentageCircle from "react-native-percentage-circle";
 import ApplyButton from "../components/ApplyButton";
 var TimerMixin = require("react-timer-mixin");
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import { Rating, AirbnbRating } from "react-native-ratings";
 
 //Utilities
 import { isIphoneX, isNumber, Storage } from "../global/Utilities";
@@ -316,21 +316,24 @@ class CurrentTimeLimitScreen extends React.Component {
 
           store.dispatch(updatebooking(storestate.tour.bookingdata));
 
-          Alert.alert(
-            "Tourzan",
-            "Your trip has successfully ended.",
-            [
-              {
-                text: "OK",
-                onPress: () => {
-                  this.props.navigation.navigate("CompleteTour", {
-                    tripData: data
-                  });
-                }
-              }
-            ],
-            { cancelable: false }
-          );
+          this.props.navigation.pop();
+
+          // Alert.alert(
+          //   "Tourzan",
+          //   "Your trip has successfully ended.",
+          //   [
+          //     {
+          //       text: "OK",
+          //       onPress: () => {
+
+          //         // this.props.navigation.navigate("CompleteTour", {
+          //         //   tripData: data
+          //         // });
+          //       }
+          //     }
+          //   ],
+          //   { cancelable: false }
+          // );
         }
 
         console.log("endTripWS-->", data);
@@ -378,7 +381,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     width: width - 160,
-    fontWeight: "bold",
     fontFamily: DefaultFont.textFont
   },
   rightView: {
