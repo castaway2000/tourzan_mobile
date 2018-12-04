@@ -42,7 +42,7 @@ import { updatelocation } from "../actions/locationActions";
 import * as Actions from "../actions";
 
 //Webservice
-import { createApplicantBraintree, profile } from "../actions";
+import { createApplicantOnfido, profile } from "../actions";
 
 //Utilities
 import { isIphoneX } from "../global/Utilities";

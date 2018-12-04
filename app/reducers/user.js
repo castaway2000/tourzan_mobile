@@ -45,7 +45,7 @@ const initialState = {
 };
 
 const getProfilePictureUrl = userdata => {
-  if (!userdata.user || !userdata.user.isLoggedInAsGuide) {
+  if (!userdata.user) {
     return require("../assets/images/defaultavatar.png");
   }
 

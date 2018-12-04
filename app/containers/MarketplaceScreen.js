@@ -33,7 +33,6 @@ import { updateuser } from "../actions/userActions";
 import { Storage, isIphoneX } from "../global/Utilities";
 import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
 
-var SearchBar = require("react-native-search-bar");
 var { width, height } = Dimensions.get("window");
 
 class MarketplaceScreen extends React.Component {

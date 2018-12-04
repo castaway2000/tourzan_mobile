@@ -40,13 +40,8 @@ target 'Tourzan' do
     
     # Add new pods below this line
     pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
-
     #pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
-    
     pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
-    
-    pod 'ReactNativeSearchBar', :path => '../node_modules/react-native-search-bar'
-    
     pod 'Firebase/Core'
     pod 'Firebase/Messaging'
     pod 'Fabric'

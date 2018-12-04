@@ -65,12 +65,13 @@ import {
   API,
   Paymentrails,
   Braintree,
-  DefaultFont
+  DefaultFont,
+  GoogleAPIKey
 } from "../constants";
 
 //Geo coder
 import Geocoder from "../global/Geocoder";
-Geocoder.init("AIzaSyDvAVjQNstV2ENih9MtQDi9DmbrJjhUcDk"); // use a valid API key
+Geocoder.init(GoogleAPIKey.geoCoder); // use a valid API key
 
 //FCM
 import FCM, { NotificationActionType } from "react-native-fcm";
@@ -621,7 +622,7 @@ class MapsScreen extends React.Component {
                     strokeWidth={4}
                     mode="walking"
                     strokeColor="hotpink"
-                    apikey={"AIzaSyDvAVjQNstV2ENih9MtQDi9DmbrJjhUcDk"}
+                    apikey={GoogleAPIKey.direction}
                     onStart={params => {
                       console.log(
                         `Started routing between "${params.origin}" and "${

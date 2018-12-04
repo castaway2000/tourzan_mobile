@@ -23,7 +23,6 @@ import Checkbox from "react-native-custom-checkbox";
 import ApplyButton from "../components/ApplyButton";
 import NavigationBar from "../components/NavigationBar";
 import { emailSignup } from "../actions/";
-import PLoading from "../components/Loading";
 
 //Store
 import { connect } from "react-redux";

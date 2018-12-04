@@ -1,4 +1,4 @@
-import { API, Paymentrails } from "../constants";
+import { API, Paymentrails, OnfidoAPIKey} from "../constants";
 var CryptoJS = require("crypto-js");
 
 //Store
@@ -164,7 +164,7 @@ function deactiveteCard(params) {
   });
 }
 
-function createApplicantBraintree(params) {
+function createApplicantOnfido(params) {
   let storeState = store.getState();
 
   var formData = new FormData();
@@ -172,8 +172,8 @@ function createApplicantBraintree(params) {
   formData.append("last_name", params.lastname);
 
   let url = API.ONFIDO_CREATE_APPLICANTS;
-  console.log("Braintree Create Applicant API URL-->", url);
-  console.log("Braintree Create Applicant API PARAMS-->", formData);
+  console.log("Onfido Create Applicant API URL-->", url);
+  console.log("Onfido Create Applicant API PARAMS-->", formData);
 
   return new Promise((resolve, reject) => {
     fetch(url, {
@@ -182,17 +182,17 @@ function createApplicantBraintree(params) {
         "Content-Type": "multipart/form-data",
         pragma: "no-cache",
         "Cache-Control": "no-cache",
-        Authorization: "Token token=test_tLlvRsGwFHHBHZr_mw02f372SkQwFAb3"
+        Authorization: "Token token=" + OnfidoAPIKey.key
       },
       body: formData
     })
       .then(res => res.json())
       .then(data => {
-        console.log("Braintree Create Applicant API Success->", data);
+        console.log("Onfido Create Applicant API Success->", data);
         resolve(data);
       })
       .catch(err => {
-        console.log("Braintree Create Applicant API Error->", err);
+        console.log("Onfido Create Applicant API Error->", err);
         reject(err);
       });
   });
@@ -299,7 +299,7 @@ module.exports = {
   allPayments,
   setDefaultCard,
   deactiveteCard,
-  createApplicantBraintree,
+  createApplicantOnfido,
   createRecipientsPaymentrails,
   paymentMethodTypes
 };

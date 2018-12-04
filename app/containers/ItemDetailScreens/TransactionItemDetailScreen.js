@@ -20,7 +20,6 @@ import { NavigationActions } from "react-navigation";
 import Checkbox from "react-native-custom-checkbox";
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import ReadMore from "@expo/react-native-read-more-text";
-import Button from "react-native-button";
 import moment from "moment";
 
 import ApplyButton from "../../components/ApplyButton";

@@ -59,7 +59,6 @@ import {
   getChatListRepresentation
 } from "../actions";
 
-var SearchBar = require("react-native-search-bar");
 var { width, height } = Dimensions.get("window");
 
 class ChatScreen extends React.Component {

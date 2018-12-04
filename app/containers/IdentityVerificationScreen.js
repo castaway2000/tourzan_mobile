@@ -42,7 +42,7 @@ import { updatelocation } from "../actions/locationActions";
 import * as Actions from "../actions";
 
 //Webservice
-import { createApplicantBraintree, profile } from "../actions";
+import { createApplicantOnfido, profile } from "../actions";
 
 //Utilities
 import { isIphoneX } from "../global/Utilities";
@@ -166,7 +166,7 @@ class IdentityVerificationScreen extends React.Component {
       lastname: data.last_name
     };
 
-    createApplicantBraintree(params)
+    createApplicantOnfido(params)
       .then(data => {
         console.log("GenerateOnfidoApplicantID data-->", data);
 
