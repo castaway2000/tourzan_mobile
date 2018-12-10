@@ -20,13 +20,19 @@ public class MainActivity extends ReactActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SplashScreen.show(this);  // here
+
         super.onCreate(savedInstanceState);
+        SplashScreen.show(this);  // here
     }
 
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
+    }
+    @Override
+    protected void onPause() {
+        SplashScreen.hide(this);
+        super.onPause();
     }
 }

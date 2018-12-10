@@ -23,7 +23,6 @@ import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants
 import ApplyButton from "../components/ApplyButton";
 import NavigationBar from "../components/NavigationBar";
 import { emailSignup } from "../actions/";
-import PLoading from "../components/Loading";
 
 //Store
 import { connect } from "react-redux";

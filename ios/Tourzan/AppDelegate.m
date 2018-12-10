@@ -10,7 +10,7 @@
 #import <React/RCTRootView.h>
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
-#import "SplashScreen.h"
+
 
 //Add the following lines 
 #import <asl.h>
@@ -19,6 +19,7 @@
 
 #import "BraintreeCore.h"
 #import "RCTLinkingManager.h"
+
 
 @import Firebase;
 
@@ -51,8 +52,7 @@
   self.window.rootViewController = rootViewController;
   
   [self.window makeKeyAndVisible];
-  
-  [SplashScreen show];  // here
+
   
   [FIRApp configure];
   

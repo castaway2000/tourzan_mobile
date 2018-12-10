@@ -5,6 +5,7 @@ buildscript {
         jcenter()
         google()
     }
+
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.2'
         classpath 'com.google.gms:google-services:3.0.0'
@@ -15,6 +16,17 @@ buildscript {
     }
 }
 
+//Adding this to the root build.gradle solved my problem, thanks @Yalamber
+subprojects {
+    afterEvaluate { project ->
+        if (project.hasProperty("android")) {
+            android {
+                compileSdkVersion 26
+                buildToolsVersion '27.0.3'
+            }
+        }
+    }
+}
 
 subprojects {
     project.configurations.all {

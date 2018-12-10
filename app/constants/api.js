@@ -15,4 +15,6 @@ export const API = {
 
   PAYMENTRAILS_RECIPIENT: "https://api.sandbox.paymentrails.com/v1/recipients",
   PAYMENTRAILS_WIDGET: "https://widget.paymentrails.com?",
+
+  IS_SANDBOX: true
 };

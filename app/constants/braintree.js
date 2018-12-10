@@ -1,10 +1,10 @@
-const isSandbox = true;
+import { API } from './api'
 
 export const Braintree = {
-  environment: isSandbox ? "braintree.Environment.Sandbox" : "braintree.Environment.Production",
-  merchantId: isSandbox ? "m66dhkzh66jhcw6x" : "jdp26m7mh8vbt7cr",
-  publicKey: isSandbox ? "gg65yby3954fpxgk" : "yshpvpkqfmvxyyh8",
-  privateKey: isSandbox ? "f7e5cdc42eb7f230d80f94fe7db3cc0e" : "1d284ba230be32083c8503eee2d23f08"
+  environment: API.IS_SANDBOX ? "braintree.Environment.Sandbox" : "braintree.Environment.Production",
+  merchantId: API.IS_SANDBOX  ? "m66dhkzh66jhcw6x" : "jdp26m7mh8vbt7cr",
+  publicKey: API.IS_SANDBOX  ? "gg65yby3954fpxgk" : "yshpvpkqfmvxyyh8",
+  privateKey: API.IS_SANDBOX  ? "f7e5cdc42eb7f230d80f94fe7db3cc0e" : "1d284ba230be32083c8503eee2d23f08"
 };
 
 // Production Enviorment :

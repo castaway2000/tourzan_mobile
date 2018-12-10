@@ -44,7 +44,7 @@ import {
 //Webservice
 import {
   profile,
-  createApplicantBraintree,
+  createApplicantOnfido,
   paymentMethodTypes,
   uploadProfilePicture
 } from "../actions";
@@ -475,7 +475,7 @@ class SettingsScreen extends React.Component {
       lastname: data.last_name
     };
 
-    createApplicantBraintree(params)
+    createApplicantOnfido(params)
       .then(data => {
         console.log("GenerateOnfidoApplicantID data-->", data);
 

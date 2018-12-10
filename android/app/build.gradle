@@ -172,10 +172,6 @@ dependencies {
 
     implementation project(':react-native-fabric')
 
-    implementation "com.google.android.gms:play-services-base:12.+"
-    implementation 'com.google.android.gms:play-services-location:12.+'
-    implementation 'com.google.android.gms:play-services-maps:12.+'
-
 
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
         transitive = true;
