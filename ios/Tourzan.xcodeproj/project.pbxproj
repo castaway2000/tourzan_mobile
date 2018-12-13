@@ -25,7 +25,6 @@
 		1CE0815B215A41DB00112091 /* OnfidoSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE08159215A41DB00112091 /* OnfidoSDK.swift */; };
 		1CE0815E215A4B7900112091 /* Onfido.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CE08091215A306400112091 /* Onfido.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		1CE0815F215A4B7900112091 /* Onfido.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1CE08091215A306400112091 /* Onfido.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		350AF1BC20DB86C000A6D40B /* libSMXCrashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 350AF1B920DB6DAB00A6D40B /* libSMXCrashlytics.a */; };
 		350C1DAE20E3CE87008E1D53 /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 350C1DAD20E3CE79008E1D53 /* libSplashScreen.a */; };
 		35280485213589B500120A44 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 352804602135899200120A44 /* libRCTLinking.a */; };
 		35627C7820EB772300EC9DA7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 35627C7720EB772300EC9DA7 /* GoogleService-Info.plist */; };
@@ -190,20 +189,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 9936F32F1F5F2E5B0010BF04;
 			remoteInfo = "privatedata-tvOS";
-		};
-		350AF1B820DB6DAB00A6D40B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 350AF1B320DB6DAB00A6D40B /* SMXCrashlytics.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D8D9DB831C6D03DB009FBC0E;
-			remoteInfo = SMXCrashlytics;
-		};
-		350AF1BA20DB6DAB00A6D40B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 350AF1B320DB6DAB00A6D40B /* SMXCrashlytics.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 6463C84C1EBA12A60095B8CD;
-			remoteInfo = "SMXCrashlytics-tvOS";
 		};
 		350C1DAC20E3CE79008E1D53 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -408,7 +393,6 @@
 		2CF0693FAAF4488ABED2DCE4 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F6D8AD29FEA40E89CFDEE7D /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
-		350AF1B320DB6DAB00A6D40B /* SMXCrashlytics.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SMXCrashlytics.xcodeproj; path = "../node_modules/react-native-fabric/ios/SMXCrashlytics.xcodeproj"; sourceTree = "<group>"; };
 		350C1D8020E3CE78008E1D53 /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SplashScreen.xcodeproj; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; };
 		352804512135899200120A44 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		35627C7720EB772300EC9DA7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -452,7 +436,6 @@
 				35280485213589B500120A44 /* libRCTLinking.a in Frameworks */,
 				35627CC820EB7CF700EC9DA7 /* libRNFIRMessaging.a in Frameworks */,
 				350C1DAE20E3CE87008E1D53 /* libSplashScreen.a in Frameworks */,
-				350AF1BC20DB86C000A6D40B /* libSMXCrashlytics.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
@@ -632,15 +615,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		350AF1B420DB6DAB00A6D40B /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				350AF1B920DB6DAB00A6D40B /* libSMXCrashlytics.a */,
-				350AF1BB20DB6DAB00A6D40B /* libSMXCrashlytics.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		350C1D8120E3CE78008E1D53 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -705,7 +679,6 @@
 				352804512135899200120A44 /* RCTLinking.xcodeproj */,
 				35627C9920EB7C0B00EC9DA7 /* RNFIRMessaging.xcodeproj */,
 				350C1D8020E3CE78008E1D53 /* SplashScreen.xcodeproj */,
-				350AF1B320DB6DAB00A6D40B /* SMXCrashlytics.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -916,10 +889,6 @@
 					ProjectRef = 35627C9920EB7C0B00EC9DA7 /* RNFIRMessaging.xcodeproj */;
 				},
 				{
-					ProductGroup = 350AF1B420DB6DAB00A6D40B /* Products */;
-					ProjectRef = 350AF1B320DB6DAB00A6D40B /* SMXCrashlytics.xcodeproj */;
-				},
-				{
 					ProductGroup = 350C1D8120E3CE78008E1D53 /* Products */;
 					ProjectRef = 350C1D8020E3CE78008E1D53 /* SplashScreen.xcodeproj */;
 				},
@@ -1063,20 +1032,6 @@
 			fileType = archive.ar;
 			path = "libprivatedata-tvOS.a";
 			remoteRef = 2DF0FFEC2056DD460020B375 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		350AF1B920DB6DAB00A6D40B /* libSMXCrashlytics.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libSMXCrashlytics.a;
-			remoteRef = 350AF1B820DB6DAB00A6D40B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		350AF1BB20DB6DAB00A6D40B /* libSMXCrashlytics.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libSMXCrashlytics.a;
-			remoteRef = 350AF1BA20DB6DAB00A6D40B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		350C1DAD20E3CE79008E1D53 /* libSplashScreen.a */ = {

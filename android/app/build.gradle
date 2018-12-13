@@ -170,9 +170,6 @@ dependencies {
 
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
-    implementation project(':react-native-fabric')
-
-
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
         transitive = true;
     }

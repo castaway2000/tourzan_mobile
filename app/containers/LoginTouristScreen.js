@@ -53,9 +53,6 @@ const backAction = NavigationActions.back({
 
 let nextInput;
 
-var Fabric = require("react-native-fabric");
-var { Crashlytics } = Fabric;
-
 class LoginTouristScreen extends React.Component {
   static navigationOptions = {
     title: "Login Tourist",

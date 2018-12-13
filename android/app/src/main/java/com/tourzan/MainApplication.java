@@ -12,7 +12,6 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.smixx.fabric.FabricPackage;
 
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 
@@ -38,7 +37,6 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
                     new RNBraintreeDropInPackage(),
                     new SplashScreenReactPackage(),
                     new MapsPackage(),
-                    new FabricPackage(),
                     new FIRMessagingPackage(),
                     new AppPackage()
             );
