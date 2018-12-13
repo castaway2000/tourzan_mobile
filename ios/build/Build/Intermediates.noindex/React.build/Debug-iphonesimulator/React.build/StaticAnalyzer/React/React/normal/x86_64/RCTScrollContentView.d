@@ -1,0 +1,22 @@
+dependencies: \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Views/ScrollView/RCTScrollContentView.m \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Views/ScrollView/RCTScrollContentView.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Views/RCTView.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Views/RCTBorderStyle.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Views/RCTComponent.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Views/RCTPointerEvents.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTAssert.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTDefines.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Views/UIView+React.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGEnums.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGMacros.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Views/ScrollView/RCTScrollView.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Views/RCTAutoInsetsProtocol.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTEventDispatcher.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTBridge.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTBridgeDelegate.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTJavaScriptLoader.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTBridgeModule.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTFrameUpdate.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTInvalidating.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Views/ScrollView/RCTScrollableProtocol.h

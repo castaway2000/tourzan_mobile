@@ -1,0 +1,33 @@
+dependencies: \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native-fcm/ios/RNFIRMessaging.m \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native-fcm/ios/RNFIRMessaging.h \
+  ../../../ios/Pods/Headers/Public/FirebaseCore/FirebaseCore.h \
+  ../../../ios/Pods/Headers/Public/FirebaseCore/FIRAnalyticsConfiguration.h \
+  ../../../ios/Pods/Headers/Public/FirebaseCore/FIRApp.h \
+  ../../../ios/Pods/Headers/Public/FirebaseCore/FIRConfiguration.h \
+  ../../../ios/Pods/Headers/Public/FirebaseCore/FIRLoggerLevel.h \
+  ../../../ios/Pods/Headers/Public/FirebaseCore/FIROptions.h \
+  ../../../ios/Pods/Headers/Public/FirebaseMessaging/FirebaseMessaging.h \
+  ../../../ios/Pods/Headers/Public/FirebaseMessaging/FIRMessaging.h \
+  ../../../ios/Pods/Headers/Public/FirebaseInstanceID/FirebaseInstanceID/FirebaseInstanceID.h \
+  ../../../ios/Pods/Headers/Public/FirebaseInstanceID/FirebaseInstanceID/FIRInstanceID.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTEventEmitter.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridge.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeDelegate.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTJavaScriptLoader.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTDefines.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeModule.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTFrameUpdate.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTInvalidating.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native-fcm/ios/../../../ios/Pods/Firebase/CoreOnly/Sources/module.modulemap \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTConvert.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTAnimationType.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBorderStyle.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTLog.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTAssert.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTUtils.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTPointerEvents.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTTextDecorationLineType.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/Yoga.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGEnums.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGMacros.h

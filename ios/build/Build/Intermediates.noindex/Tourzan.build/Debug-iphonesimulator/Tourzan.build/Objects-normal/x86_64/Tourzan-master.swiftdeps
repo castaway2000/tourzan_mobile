@@ -1,0 +1,5 @@
+version: "Apple Swift version 4.2.1 (swiftlang-1000.11.42 clang-1000.11.45.1)"
+options: "0cccda5c927d1ad66382dd31a5301a12"
+build_time: [1544688497, 291855000]
+inputs:
+  "/Users/xwing/Downloads/tourzan_mobile-master/ios/OnfidoRNBridge/OnfidoSDK.swift": [1544680550, 0]

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>logFormatVersion</key>
+	<integer>9</integer>
+	<key>logs</key>
+	<dict>
+		<key>3BFB43D1-8DFD-4E00-B9C9-61D77073EBF5</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>3BFB43D1-8DFD-4E00-B9C9-61D77073EBF5.xcactivitylog</string>
+			<key>highLevelStatus</key>
+			<string>W</string>
+			<key>schemeIdentifier-containerName</key>
+			<string>Tourzan project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>Tourzan</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building workspace Tourzan with scheme Tourzan and configuration Debug</string>
+			<key>timeStartedRecording</key>
+			<real>566380893.49343801</real>
+			<key>timeStoppedRecording</key>
+			<real>566381331.49990201</real>
+			<key>title</key>
+			<string>Building workspace Tourzan with scheme Tourzan and configuration Debug</string>
+			<key>uniqueIdentifier</key>
+			<string>3BFB43D1-8DFD-4E00-B9C9-61D77073EBF5</string>
+		</dict>
+		<key>8D965184-41EA-4595-9381-6C0402290CE1</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>8D965184-41EA-4595-9381-6C0402290CE1.xcactivitylog</string>
+			<key>highLevelStatus</key>
+			<string>E</string>
+			<key>schemeIdentifier-containerName</key>
+			<string>Tourzan project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>Tourzan</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building workspace Tourzan with scheme Tourzan and configuration Debug</string>
+			<key>timeStartedRecording</key>
+			<real>566384580.52888799</real>
+			<key>timeStoppedRecording</key>
+			<real>566384707.31052601</real>
+			<key>title</key>
+			<string>Building workspace Tourzan with scheme Tourzan and configuration Debug</string>
+			<key>uniqueIdentifier</key>
+			<string>8D965184-41EA-4595-9381-6C0402290CE1</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

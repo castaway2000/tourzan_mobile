@@ -1,0 +1,37 @@
+dependencies: \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreePayPal/BTPayPalDriver.m \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Target\ Support\ Files/Braintree/Braintree-prefix.pch \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreePayPal/BTPayPalDriver_Internal.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreePayPal/Public/BTPayPalDriver.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BraintreeCore.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTAPIClient.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTClientMetadata.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTConfiguration.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTJSON.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTAppSwitch.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTBinData.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTClientToken.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTEnums.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTErrors.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTHTTPErrors.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTLogger.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTPostalAddress.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTPaymentMethodNonce.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTPaymentMethodNonceParser.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTTokenizationService.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTViewControllerPresentingDelegate.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreePayPal/Public/BTPayPalAccountNonce.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreePayPal/Public/BTPayPalCreditFinancing.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreePayPal/Public/BTPayPalRequest.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreePayPal/BTPayPalRequestFactory.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreePayPal/PayPalOneTouch/Public/PPOTRequest.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreePayPal/PayPalOneTouch/Public/PPOTResult.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreePayPal/PayPalOneTouch/Public/PPOTCore.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/BTAPIClient_Internal.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/BTAnalyticsService.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/BTHTTP.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/BTAPIHTTP.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/BTGraphQLHTTP.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreePayPal/BTPayPalAccountNonce_Internal.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/BTLogger_Internal.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreePayPal/Public/BTConfiguration+PayPal.h

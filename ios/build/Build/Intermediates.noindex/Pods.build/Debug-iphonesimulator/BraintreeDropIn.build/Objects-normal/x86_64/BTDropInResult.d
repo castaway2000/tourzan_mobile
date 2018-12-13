@@ -1,0 +1,47 @@
+dependencies: \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeDropIn/Models/BTDropInResult.m \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Target\ Support\ Files/BraintreeDropIn/BraintreeDropIn-prefix.pch \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeDropIn/Public/BTDropInResult.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKPaymentOptionType.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeDropIn/BTAPIClient_Internal_Category.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BraintreeCore.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTAPIClient.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTClientMetadata.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTConfiguration.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTJSON.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTAppSwitch.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTBinData.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTClientToken.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTEnums.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTErrors.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTHTTPErrors.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTLogger.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTPostalAddress.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTPaymentMethodNonce.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTPaymentMethodNonceParser.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTTokenizationService.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTViewControllerPresentingDelegate.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BraintreeUIKit.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKFormField.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKTextField.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKExpiryInputView.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKCardNumberFormField.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKCardType.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKLocalizedString.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/UIColor+BTUIK.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKViewUtil.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKVisualAssetType.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKVectorArtView.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKUtil.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKInputAccessoryToolbar.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKCardholderNameFormField.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKSecurityCodeFormField.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKPostalCodeFormField.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKMobileCountryCodeFormField.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKMobileNumberFormField.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKExpiryFormField.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKAppearance.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKCardListLabel.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKPaymentOptionCardView.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKCardExpirationValidator.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/BraintreeDropIn/BraintreeUIKit/Public/BTUIKCardExpiryFormat.h
