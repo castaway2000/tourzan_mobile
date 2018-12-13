@@ -1,0 +1,29 @@
+dependencies: \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeApplePay/BTApplePayClient.m \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Target\ Support\ Files/Braintree/Braintree-prefix.pch \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/BTAPIClient_Internal.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/BTAnalyticsService.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTAPIClient.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTClientMetadata.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTConfiguration.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTJSON.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTClientToken.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/BTHTTP.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTHTTPErrors.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/BTAPIHTTP.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/BTGraphQLHTTP.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTPaymentMethodNonce.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeApplePay/BTApplePayClient_Internal.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeApplePay/Public/BTApplePayClient.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BraintreeCore.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTAppSwitch.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTBinData.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTEnums.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTErrors.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTLogger.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTPostalAddress.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTPaymentMethodNonceParser.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTTokenizationService.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCore/Public/BTViewControllerPresentingDelegate.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeApplePay/Public/BTApplePayCardNonce.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeApplePay/Public/BTConfiguration+ApplePay.h

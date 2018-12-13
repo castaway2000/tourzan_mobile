@@ -1,0 +1,5 @@
+dependencies: \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCard/BTCardRequest.m \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Target\ Support\ Files/Braintree/Braintree-prefix.pch \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCard/Public/BTCardRequest.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Braintree/BraintreeCard/Public/BTCard.h

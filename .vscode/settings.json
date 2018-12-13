@@ -1,5 +1,0 @@
-{
-    "files.autoSaveDelay": 5000,
-    "files.autoSave": "afterDelay",
-    "python.linting.pylintEnabled": false
-}

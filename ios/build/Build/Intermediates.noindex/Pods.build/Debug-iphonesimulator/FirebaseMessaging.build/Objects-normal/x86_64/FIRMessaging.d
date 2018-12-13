@@ -1,0 +1,34 @@
+dependencies: \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/FirebaseMessaging/Firebase/Messaging/FIRMessaging.m \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/FirebaseMessaging/Firebase/Messaging/Public/FIRMessaging.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/FirebaseMessaging/Firebase/Messaging/FIRMessaging_Private.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/FirebaseMessaging/Firebase/Messaging/FIRMessagingAnalytics.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Headers/Private/FirebaseAnalyticsInterop/FIRAnalyticsInterop.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/FirebaseMessaging/Firebase/Messaging/FIRMessagingClient.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/FirebaseMessaging/Firebase/Messaging/FIRMessagingConstants.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/FirebaseMessaging/Firebase/Messaging/FIRMessagingContextManagerService.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/FirebaseMessaging/Firebase/Messaging/FIRMessagingDataMessageManager.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/FirebaseMessaging/Firebase/Messaging/FIRMessagingDefines.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/FirebaseMessaging/Firebase/Messaging/FIRMessagingLogger.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/FirebaseMessaging/Firebase/Messaging/FIRMMessageCode.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/FirebaseMessaging/Firebase/Messaging/FIRMessagingPubSub.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/FirebaseMessaging/Firebase/Messaging/FIRMessagingReceiver.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/FirebaseMessaging/Firebase/Messaging/FIRMessagingRemoteNotificationsProxy.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/FirebaseMessaging/Firebase/Messaging/FIRMessagingRmqManager.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/FirebaseMessaging/Firebase/Messaging/FIRMessagingSyncMessageManager.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/FirebaseMessaging/Firebase/Messaging/FIRMessagingUtilities.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/FirebaseMessaging/Firebase/Messaging/FIRMessagingVersionUtilities.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Headers/Private/FirebaseCore/FIRAppInternal.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Headers/Private/FirebaseCore/FIRApp.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Headers/Private/FirebaseCore/FIRErrors.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Headers/Private/FirebaseCore/FIRErrorCode.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Headers/Private/FirebaseCore/FIRComponent.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Headers/Private/FirebaseCore/FIRComponentContainer.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Headers/Private/FirebaseCore/FIRComponentType.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Headers/Private/FirebaseCore/FIRComponentRegistrant.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Headers/Private/FirebaseCore/FIRCoreConfigurable.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Headers/Private/FirebaseCore/FIRDependency.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Headers/Public/FirebaseInstanceID/FirebaseInstanceID/FirebaseInstanceID.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Headers/Public/FirebaseInstanceID/FirebaseInstanceID/FIRInstanceID.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/Headers/Private/GoogleUtilities/GULReachabilityChecker.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/Pods/FirebaseMessaging/Firebase/Messaging/NSError+FIRMessaging.h

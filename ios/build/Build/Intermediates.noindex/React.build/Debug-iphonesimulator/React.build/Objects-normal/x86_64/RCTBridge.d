@@ -1,0 +1,28 @@
+dependencies: \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTBridge.m \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTBridge.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTBridgeDelegate.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTJavaScriptLoader.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTDefines.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTBridgeModule.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTFrameUpdate.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTInvalidating.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTBridge+Private.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTConvert.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Views/RCTAnimationType.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Views/RCTBorderStyle.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTLog.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTAssert.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTUtils.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Views/RCTPointerEvents.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Views/RCTTextDecorationLineType.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/Yoga.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGEnums.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGMacros.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTEventDispatcher.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/DevSupport/RCTInspectorDevServerHelper.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Inspector/RCTInspectorPackagerConnection.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTModuleData.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTPerformanceLogger.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Profiler/RCTProfile.h \
+  /Users/xwing/Downloads/tourzan_mobile-master/node_modules/react-native/React/Base/RCTReloadCommand.h

@@ -1,0 +1,3 @@
+#!/bin/sh
+"${PODS_ROOT}/Fabric/run" 1f11ec565cc2843e1713131ec35545e9f48aaa52 5808fb8c819ecba74c6ea84d1c39aee85bf3d7f0065df4127701a04066dbf490
+
