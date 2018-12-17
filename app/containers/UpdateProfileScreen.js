@@ -45,12 +45,19 @@ import {
   updateGuideProfile,
   updateTouristProfile,
   autocompleteCity,
-  createRecipientsPaymentrails
+  createRecipientsPaymentrails,
+  getUserProfileAllData
 } from "../actions";
 
 //Utilities
 import { isIphoneX } from "../global/Utilities";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 var { width, height } = Dimensions.get("window");
 
@@ -80,13 +87,15 @@ class UpdateProfileScreen extends React.Component {
       selectedInterests: [],
       firstLanguage: { order: 1 },
       secondLanguage: { order: 2 },
-      thirdLanguage: { order: 3 }
+      thirdLanguage: { order: 3 },
+      profile: {}
     };
   }
 
   //#endregion
   componentDidMount() {
     //profileData: data, isGuide: false, isFromRegistration: true
+    this.getProfileWS();
   }
 
   componentWillUnmount() {}
@@ -180,7 +189,6 @@ class UpdateProfileScreen extends React.Component {
   }
 
   onUpdateProfile() {
-
     const { params } = this.props.navigation.state;
 
     let isGuide = params
@@ -521,7 +529,7 @@ class UpdateProfileScreen extends React.Component {
                     style={styles.row_icon_lb}
                     secureTextEntry={false}
                     keyboardType="numeric"
-                    value={this.state.rate}
+                    value={this.state.rate + " Hourly rate, USD/hour"}
                     onChangeText={text => this.setRate(text)}
                   />
                 </View>
@@ -596,11 +604,97 @@ class UpdateProfileScreen extends React.Component {
             onConfirm={this._handleDatePicked}
             onCancel={this._hideDateTimePicker}
             maximumDate={new Date()}
+            date={this.state.dobDate}
           />
         </View>
         {this.showLoading()}
       </View>
     );
+  }
+
+  updateUI(data) {
+    //First name
+    if (data.general_profile.first_name) {
+      this.setState({ firstname: data.general_profile.first_name });
+    }
+
+    //Last name
+    if (data.general_profile.last_name) {
+      this.setState({ lastname: data.general_profile.last_name });
+    }
+
+    //Date of birth
+    if (data.general_profile.date_of_birth) {
+      var date = moment(
+        data.general_profile.date_of_birth,
+        "YYYY-MM-DD"
+      ).toDate();
+
+      if (date) {
+        this.setState({
+          dobDate: date,
+          dob: moment(date).format("MM/DD/YYYY")
+        });
+      }
+    }
+
+    //Profession
+    if (data.general_profile.profession) {
+      this.setState({ profession: data.general_profile.profession });
+    }
+
+    //Selected Interests
+    if (data.general_profile.interests) {
+      this.setState({ selectedInterests: data.general_profile.interests });
+
+      if (data.guide_profile.overview) {
+        this.setState({ overview: data.guide_profile.overview });
+      }
+    }
+
+    //
+    if (this.props.userdata.user.isLoggedInAsGuide) {
+      if (data.guide_profile.rate) {
+        this.setState({ rate: data.guide_profile.rate });
+      }
+    } else {
+      if (data.tourist_profile.about) {
+        this.setState({ overview: data.tourist_profile.about });
+      }
+    }
+  }
+
+  //getUserProfileAllData
+  getProfileWS() {
+    const { navigate } = this.props.navigation;
+
+    this.setState({
+      isLoading: true
+    });
+
+    var { dispatch } = this.props;
+
+    var params = {};
+
+    getUserProfileAllData(params)
+      .then(data => {
+        this.setState({
+          isLoading: false
+        });
+
+        console.log("getUserProfileAllData", data);
+
+        this.state.profile = data;
+        this.setState({ profile: data });
+
+        this.updateUI(data);
+      })
+      .catch(err => {
+        this.setState({
+          isLoading: false
+        });
+        alert(err);
+      });
   }
 
   //

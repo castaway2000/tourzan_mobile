@@ -4,6 +4,8 @@ import { API } from "../constants";
 import { store } from "../store/index";
 
 function getTourList() {
+  let storeState = store.getState();
+  
   let url = API.SERVER + API.VERSION + "/tours/";
 
   console.log("Get Tour List API URL-->", url);
@@ -14,7 +16,8 @@ function getTourList() {
       headers: {
         "Content-Type": "application/json",
         pragma: "no-cache",
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token,
       }
     })
       .then(res => res.json())
@@ -30,6 +33,8 @@ function getTourList() {
 }
 
 function updateClockInOutStatus(params) {
+  let storeState = store.getState();
+
   var formData = new FormData();
 
   formData.append("user_id", params.userid);
@@ -48,7 +53,8 @@ function updateClockInOutStatus(params) {
       headers: {
         "Content-Type": "multipart/form-data",
         pragma: "no-cache",
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token,
       },
       body: formData
     })
@@ -65,6 +71,8 @@ function updateClockInOutStatus(params) {
 }
 
 function endTrip(params) {
+  let storeState = store.getState();
+
   var formData = new FormData();
 
   formData.append("trip_id", params.tripid); //'guide'
@@ -81,7 +89,8 @@ function endTrip(params) {
       headers: {
         "Content-Type": "multipart/form-data",
         pragma: "no-cache",
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token,
       },
       body: formData
     })
@@ -98,6 +107,8 @@ function endTrip(params) {
 }
 
 function cancelTrip(params) {
+  let storeState = store.getState();
+
   var formData = new FormData();
 
   formData.append("user_id", params.userid);
@@ -116,7 +127,8 @@ function cancelTrip(params) {
       headers: {
         "Content-Type": "multipart/form-data",
         pragma: "no-cache",
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token,
       },
       body: formData
     })
@@ -133,6 +145,8 @@ function cancelTrip(params) {
 }
 
 function declineTrip(params) {
+  let storeState = store.getState();
+
   var formData = new FormData();
 
   formData.append("type", params.type); //'guide'
@@ -151,7 +165,8 @@ function declineTrip(params) {
       headers: {
         "Content-Type": "multipart/form-data",
         pragma: "no-cache",
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token,
       },
       body: formData
     })
@@ -168,6 +183,8 @@ function declineTrip(params) {
 }
 
 function acceptTrip(params) {
+  let storeState = store.getState();
+
   var formData = new FormData();
 
   formData.append("status", params.status); //isAccepted
@@ -187,7 +204,8 @@ function acceptTrip(params) {
       headers: {
         "Content-Type": "multipart/form-data",
         pragma: "no-cache",
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token,
       },
       body: formData
     })
@@ -204,6 +222,8 @@ function acceptTrip(params) {
 }
 
 function updateTrip(params) {
+  let storeState = store.getState();
+
   var formData = new FormData();
 
   formData.append("status", params.status); //update_trip
@@ -222,7 +242,8 @@ function updateTrip(params) {
       headers: {
         "Content-Type": "multipart/form-data",
         pragma: "no-cache",
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token,
       },
       body: formData
     })
@@ -239,6 +260,8 @@ function updateTrip(params) {
 }
 
 function loginAndUpdateTrip(params) {
+  let storeState = store.getState();
+
   var formData = new FormData();
 
   formData.append("status", params.status); //login
@@ -258,7 +281,8 @@ function loginAndUpdateTrip(params) {
       headers: {
         "Content-Type": "multipart/form-data",
         pragma: "no-cache",
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token,
       },
       body: formData
     })
@@ -275,6 +299,8 @@ function loginAndUpdateTrip(params) {
 }
 
 function extendTime(params) {
+  let storeState = store.getState();
+
   var formData = new FormData();
 
   formData.append("trip_id", params.tripid); //''
@@ -292,7 +318,8 @@ function extendTime(params) {
       headers: {
         "Content-Type": "multipart/form-data",
         pragma: "no-cache",
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token,
       },
       body: formData
     })
@@ -309,6 +336,8 @@ function extendTime(params) {
 }
 
 function gettripstatus(params) {
+  let storeState = store.getState();
+
   var formData = new FormData();
 
   formData.append("trip_id", params.tripid);
@@ -324,7 +353,8 @@ function gettripstatus(params) {
       headers: {
         "Content-Type": "multipart/form-data",
         pragma: "no-cache",
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token,
       },
       body: formData
     })
@@ -341,6 +371,8 @@ function gettripstatus(params) {
 }
 
 function getnearbyguides(params) {
+  let storeState = store.getState();
+
   var formData = new FormData();
 
   formData.append("user_id", params.userid);
@@ -360,7 +392,8 @@ function getnearbyguides(params) {
       headers: {
         "Content-Type": "multipart/form-data",
         pragma: "no-cache",
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token,
       },
       body: formData
     })

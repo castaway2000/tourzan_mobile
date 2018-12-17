@@ -1,26 +1,24 @@
 PODS:
   - boost-for-react-native (1.63.0)
-  - Braintree/Apple-Pay (4.20.2):
+  - Braintree/Card (4.21.0):
     - Braintree/Core
-  - Braintree/Card (4.20.2):
-    - Braintree/Core
-  - Braintree/Core (4.20.2)
-  - Braintree/PaymentFlow (4.20.2):
+  - Braintree/Core (4.21.0)
+  - Braintree/PaymentFlow (4.21.0):
     - Braintree/Card
     - Braintree/Core
     - Braintree/PayPalOneTouch
-  - Braintree/PayPal (4.20.2):
+  - Braintree/PayPal (4.21.0):
     - Braintree/Core
     - Braintree/PayPalOneTouch
-  - Braintree/PayPalDataCollector (4.20.2):
+  - Braintree/PayPalDataCollector (4.21.0):
     - Braintree/Core
     - Braintree/PayPalUtils
-  - Braintree/PayPalOneTouch (4.20.2):
+  - Braintree/PayPalOneTouch (4.21.0):
     - Braintree/Core
     - Braintree/PayPalDataCollector
     - Braintree/PayPalUtils
-  - Braintree/PayPalUtils (4.20.2)
-  - Braintree/UnionPay (4.20.2):
+  - Braintree/PayPalUtils (4.21.0)
+  - Braintree/UnionPay (4.21.0):
     - Braintree/Card
     - Braintree/Core
   - BraintreeDropIn (6.5.0):
@@ -183,9 +181,8 @@ PODS:
   - yoga (0.55.4.React)
 
 DEPENDENCIES:
-  - Braintree/Apple-Pay
   - Braintree/PayPal
-  - BraintreeDropIn (~> 6.0)
+  - BraintreeDropIn
   - CardIO
   - Crashlytics
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
@@ -258,7 +255,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  Braintree: 49cd0ea2ee8a87649fbc0b1e959963bc77464bf8
+  Braintree: 1659b7e4f28a667eb65427f211933776ec5ea212
   BraintreeDropIn: e141f6c1b49f0e3dd68ca00ccf6bb3031cc5e164
   CardIO: 56983b39b62f495fc6dae9ad7cf875143df06443
   Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
@@ -285,6 +282,6 @@ SPEC CHECKSUMS:
   RNVectorIcons: c0dbfbf6068fefa240c37b0f71bd03b45dddac44
   yoga: a23273df0088bf7f2bb7e5d7b00044ea57a2a54a
 
-PODFILE CHECKSUM: fbfa71a3aad0fa0bd4054ec6588b7d6367b2af23
+PODFILE CHECKSUM: 3f2d76ad4be35cee4ef9ef2901abfe3ba98e0c57
 
 COCOAPODS: 1.5.3

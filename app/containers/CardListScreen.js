@@ -133,7 +133,6 @@ class CardListScreen extends React.Component {
   }
 
   // card-checked.png
-  // card-checked.png
   onAddPaymentMethod() {
     BraintreeDropIn.show({
       clientToken: this.state.braintreeClientToken
