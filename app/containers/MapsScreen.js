@@ -572,7 +572,7 @@ class MapsScreen extends React.Component {
               region={this.state.mapRegion}
               onRegionChange={this.onRegionChange}
             >
-              {this.state.nearByGuides &&
+              {this.state.nearByGuides && (this.state.nearByGuides.length > 0) &&
                 !this.props.bookingdata.isTripInProgress &&
                 this.state.nearByGuides.map((element, index) => {
                   //Update map
