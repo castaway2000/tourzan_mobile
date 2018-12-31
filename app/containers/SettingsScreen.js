@@ -242,7 +242,7 @@ class SettingsScreen extends React.Component {
             <TouchableOpacity
               style={styles.row_view}
               onPress={() => {
-                this.navigate.navigate("UpdateProfile");
+                this.navigate.navigate("UpdateProfile",{isFromRegistration: false});
               }}
             >
               <Text style={styles.row_lb}>Update Profile</Text>

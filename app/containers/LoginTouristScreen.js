@@ -63,8 +63,8 @@ class LoginTouristScreen extends React.Component {
     super(props);
     this.state = {
       isChecked: true,
-      username: "", // tester1 test1003
-      password: "", // test1234 Cred@123
+      username: "test1001", // tester1 test1003
+      password: "Test@123", // test1234 Cred@123
       isLoading: false
     };
     this.navigate = this.props.navigation;

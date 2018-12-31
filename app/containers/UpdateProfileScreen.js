@@ -94,8 +94,13 @@ class UpdateProfileScreen extends React.Component {
 
   //#endregion
   componentDidMount() {
-    //profileData: data, isGuide: false, isFromRegistration: true
-    this.getProfileWS();
+    const { params } = this.props.navigation.state;
+
+    console.log("paramsparamsparamsparamsparamsparamsparamsparams",this.props.navigation.state)
+
+    if (params && !params.isFromRegistration) {
+      this.getProfileWS();
+    }
   }
 
   componentWillUnmount() {}
@@ -209,6 +214,7 @@ class UpdateProfileScreen extends React.Component {
   }
 
   validateTouristData() {
+    /*
     if (this.state.firstname == "" || this.state.firstname.trim() == "") {
       Alert.alert("Tourzan", "Please enter your firstname.");
       return false;
@@ -242,11 +248,12 @@ class UpdateProfileScreen extends React.Component {
       Alert.alert("Tourzan", "Please enter your overview.");
       return false;
     }
-
+*/
     return true;
   }
 
   validateGuidetData() {
+    /*
     if (this.state.firstname == "" || this.state.firstname.trim() == "") {
       Alert.alert("Tourzan", "Please enter your firstname.");
       return false;
@@ -273,9 +280,6 @@ class UpdateProfileScreen extends React.Component {
     }
 
     //Language Validations
-
-    //
-
     if (this.state.selectedInterests.length < 1) {
       Alert.alert("Tourzan", "Please enter interests.");
       return false;
@@ -285,15 +289,16 @@ class UpdateProfileScreen extends React.Component {
       Alert.alert("Tourzan", "Please enter your overview.");
       return false;
     }
-
+*/
     return true;
   }
 
   firstLanguageText() {
-    let text = this.state.firstLanguage.text;
+    let text = this.state.firstLanguage["text"];
 
-    if (this.state.firstLanguage.proficiency) {
-      text = text + " (" + this.state.firstLanguage.proficiency.type + ")";
+    if (this.state.firstLanguage["proficiency"]) {
+      text =
+        text + " (" + this.state.firstLanguage["proficiency"]["type"] + ")";
     }
     return text;
   }
@@ -359,7 +364,7 @@ class UpdateProfileScreen extends React.Component {
                 {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
                 <TextInput
                   underlineColorAndroid="transparent"
-                  placeholder="Firstname"
+                  placeholder="First Name"
                   style={styles.row_icon_lb}
                   secureTextEntry={false}
                   value={this.state.firstname}
@@ -371,7 +376,7 @@ class UpdateProfileScreen extends React.Component {
                 {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
                 <TextInput
                   underlineColorAndroid="transparent"
-                  placeholder="Lastname"
+                  placeholder="Last Name"
                   style={styles.row_icon_lb}
                   secureTextEntry={false}
                   value={this.state.lastname}
@@ -421,7 +426,7 @@ class UpdateProfileScreen extends React.Component {
                   {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
                   <TextInput
                     underlineColorAndroid="transparent"
-                    placeholder="Native Language*"
+                    placeholder="Native Language"
                     style={styles.row_icon_lb}
                     secureTextEntry={false}
                     value={this.firstLanguageText()}
@@ -525,11 +530,11 @@ class UpdateProfileScreen extends React.Component {
                   {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
                   <TextInput
                     underlineColorAndroid="transparent"
-                    placeholder="Rate"
+                    placeholder="Hourly rate, USD/hour"
                     style={styles.row_icon_lb}
                     secureTextEntry={false}
                     keyboardType="numeric"
-                    value={this.state.rate + " Hourly rate, USD/hour"}
+                    value={this.state.rate}
                     onChangeText={text => this.setRate(text)}
                   />
                 </View>
@@ -613,6 +618,7 @@ class UpdateProfileScreen extends React.Component {
   }
 
   updateUI(data) {
+
     //First name
     if (data.general_profile.first_name) {
       this.setState({ firstname: data.general_profile.first_name });
@@ -643,6 +649,39 @@ class UpdateProfileScreen extends React.Component {
       this.setState({ profession: data.general_profile.profession });
     }
 
+    //First Languages
+    if (data.general_profile.languages.Native) {
+      let langDict = {
+        order: 1,
+        text: data.general_profile.languages.Native,
+        proficiency: { type: "Native" }
+      };
+
+      this.setState({ firstLanguage: langDict });
+    }
+
+    //Second Languages
+    if (data.general_profile.languages.Intermediate) {
+      let langDict = {
+        order: 1,
+        text: data.general_profile.languages.Intermediate,
+        proficiency: { type: "Intermediate" }
+      };
+
+      this.setState({ secondLanguage: langDict });
+    }
+
+    //Third Languages
+    if (data.general_profile.languages.Advanced) {
+      let langDict = {
+        order: 1,
+        text: data.general_profile.languages.Advanced,
+        proficiency: { type: "Advanced" }
+      };
+
+      this.setState({ thirdLanguage: langDict });
+    }
+
     //Selected Interests
     if (data.general_profile.interests) {
       this.setState({ selectedInterests: data.general_profile.interests });
@@ -652,14 +691,25 @@ class UpdateProfileScreen extends React.Component {
       }
     }
 
-    //
+    // Rating
     if (this.props.userdata.user.isLoggedInAsGuide) {
       if (data.guide_profile.rate) {
-        this.setState({ rate: data.guide_profile.rate });
+        this.setState({ rate: data.guide_profile.rate.toString() });
       }
     } else {
       if (data.tourist_profile.about) {
         this.setState({ overview: data.tourist_profile.about });
+      }
+    }
+
+    //City
+    if (this.props.userdata.user.isLoggedInAsGuide) {
+      if (data.guide_profile.city) {
+        let city = {}
+        city.city = data.guide_profile.city ;
+        city.place_id = data.guide_profile.city_id;
+
+        this.setState({ city: city});
       }
     }
   }
@@ -707,31 +757,72 @@ class UpdateProfileScreen extends React.Component {
 
     var { dispatch } = this.props;
 
-    let terms = this.state.city.terms;
+    var terms = "";
+    if (this.state.city) {
+      terms = this.state.city.terms;
+    }
+
     let country = "";
     if (terms.length > 0) {
       country = terms[terms.length - 1].value;
     }
 
-    var params = {
-      dob: this.state.dob,
-      first_name: this.state.firstname,
-      last_name: this.state.lastname,
-      city: this.state.city.description.split(",")[0],
-      place_id: this.state.city.place_id,
-      country: country,
-      rate: this.state.rate,
-      overview: this.state.overview,
-      languages: "",
-      interests: JSON.stringify(this.state.selectedInterests)
-    };
+    var params = {};
+
+    if (this.state.dob) {
+      params.dob = this.state.dob;
+    }
+
+    params.first_name = this.state.firstname;
+    params.last_name = this.state.lastname;
+
+    if (this.state.city) {
+      params.city = this.state.city.description.split(",")[0];
+      params.place_id = this.state.city.place_id;
+      params.country = this.state.country;
+    } else {
+      params.city = "";
+      params.place_id = "";
+    }
+
+    if (this.state.rate) {
+      params.rate = this.state.rate;
+    } else {
+      params.rate = '0.00'
+    }
+    
+    params.overview = this.state.overview;
+
+    //Languages
+    let languages = [];
+    if (this.state.firstLanguage.text) {
+      languages.push({ name: this.state.firstLanguage.text, level: 1 });
+    }
+
+    if (this.state.secondLanguage.text) {
+      languages.push({ name: this.state.secondLanguage.text, level: 2 });
+    }
+
+    if (this.state.thirdLanguage.text) {
+      languages.push({ name: this.state.thirdLanguage.text, level: 3 });
+    }
+
+    if (languages) {
+      params.languages = JSON.stringify(languages);
+    }
+
+    //Interests
+    let interests = JSON.stringify(this.state.selectedInterests);
+    if (interests) {
+      params.interests = interests;
+    }
 
     updateGuideProfile(params)
       .then(data => {
         if (data.error) {
           Alert.alert("Tourzan", data.detail);
         } else {
-          //Nav passdata
+          //Nav pass data
           const { params } = this.props.navigation.state;
 
           if (params ? params.isFromRegistration : false) {
@@ -823,16 +914,55 @@ class UpdateProfileScreen extends React.Component {
 
     let age = moment().diff(this.state.dobDate, "years", false);
 
-    var params = {
-      about: this.state.overview,
-      first_name: this.state.firstname,
-      last_name: this.state.lastname,
-      age: age,
-      dob: this.state.dob,
-      profession: this.state.profession,
-      languages: "",
-      interests: JSON.stringify(this.state.selectedInterests)
+    var params = {};
+
+    params.about = this.state.overview;
+    params.first_name = this.state.firstname;
+    params.last_name = this.state.lastname;
+
+    if (this.state.age) {
+      params.age = this.state.age;
+    }
+
+    if (this.state.dob) {
+      params.dob = this.state.dob;
+    }
+
+    params.profession = this.state.profession;
+
+    let interests = JSON.stringify(this.state.selectedInterests);
+    if (interests) {
+      params.interests = interests;
+    }
+
+    /*
+    firstLanguage: { order: 1 },
+    secondLanguage: { order: 2 },
+    thirdLanguage: { order: 3 },
+    
+    let langDict = {
+      order: 1,
+      text: data.general_profile.languages.Native,
+      proficiency: { type: "Native" }
     };
+    */
+
+    let languages = [];
+    if (this.state.firstLanguage.text) {
+      languages.push({ name: this.state.firstLanguage.text, level: 1 });
+    }
+
+    if (this.state.secondLanguage.text) {
+      languages.push({ name: this.state.secondLanguage.text, level: 2 });
+    }
+
+    if (this.state.thirdLanguage.text) {
+      languages.push({ name: this.state.thirdLanguage.text, level: 3 });
+    }
+
+    if (languages) {
+      params.languages = JSON.stringify(languages);
+    }
 
     updateTouristProfile(params)
       .then(data => {
