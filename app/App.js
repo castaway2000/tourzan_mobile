@@ -159,9 +159,9 @@ const MainTapNavigator = TabNavigator(
     swipeEnabled: false,
     animationEnabled: false,
     tabBarOptions: {
-      activeTintColor: "#31dd73",
-      inactiveTintColor: "#999",
-      labelStyle: { fontSize: 9, width: width / 5 - 5 },
+      activeTintColor: "#00943B",
+      inactiveTintColor: "#444444",
+      labelStyle: { fontSize: 10, width: width / 5 - 5 },
       showIcon: "true",
       style: { backgroundColor: "white" },
       indicatorStyle: { opacity: 1 }

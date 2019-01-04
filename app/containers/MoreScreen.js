@@ -27,7 +27,7 @@ import { store } from "../store/index";
 
 //Actions
 import { updatebooking } from "../actions/bookingActions";
-import { updateuser, updateOrder } from "../actions/userActions";
+import { updateuser, updateOrder, updateChat } from "../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
@@ -104,13 +104,17 @@ class MoreScreen extends React.Component {
             storestate.tour.bookingdata.isAutomatic = true;
             store.dispatch(updatebooking(storestate.tour.bookingdata));
 
-            //Reste order
+            //Reste order state
             store.dispatch(updateOrder([]));
 
-            //Remove User data
+            //Remove user storage
             Storage.removeItem("currentuser");
 
+            //Reset user state
             store.dispatch(updateuser({}));
+
+            //Reset chat state
+            store.dispatch(updateChat([]));
 
             this.props.navigation.dispatch(resetRootAction);
           }

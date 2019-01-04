@@ -49,13 +49,19 @@ import { isIphoneX } from "../global/Utilities";
 var { width, height } = Dimensions.get("window");
 
 //API
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 const backAction = NavigationActions.back({});
 
 const resetRootAction = NavigationActions.reset({
   index: 0,
-  actions: [NavigationActions.navigate({ routeName: "Welcome" })],
+  actions: [NavigationActions.navigate({ routeName: "Home" })],
   key: null
 });
 
@@ -130,15 +136,20 @@ class PaymentrailDetailScreen extends React.Component {
           </TouchableOpacity>
           <Text style={styles.centerText}>Bank Information</Text>
 
-          <View style={styles.rightView}>
-            {(params ? params.isFromRegistration : false) && (
-              <TouchableOpacity onPress={() => this.onFinish()}>
-                <Text style={styles.rightViewtext}>FINISH</Text>
-              </TouchableOpacity>
-            )}
-          </View>
+          <View style={styles.rightView} />
         </View>
-        <View style={styles.main_view}>
+        <View
+          style={[
+            styles.main_view,
+            {
+              marginBottom: (params
+              ? params.isFromRegistration
+              : false)
+                ? 44
+                : 0
+            }
+          ]}
+        >
           <View style={styles.webviewContainer}>
             <WebView
               ref={ref => {
@@ -155,6 +166,17 @@ class PaymentrailDetailScreen extends React.Component {
           </View>
         </View>
         {this.showLoading()}
+
+        {(params ? params.isFromRegistration : false) && (
+          <View style={styles.skipView}>
+            <TouchableOpacity
+              style={styles.skipButtonView}
+              onPress={() => this.onFinish()}
+            >
+              <Text style={styles.skipButton}>Finish</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     );
   }
@@ -286,6 +308,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#000000",
     width: "100%"
+  },
+  // --- Skip --- //
+  skipView: {
+    position: "absolute",
+    left: 0,
+    bottom: 0,
+    right: 0,
+    height: 44,
+    flexDirection: "row"
+  },
+  skipButton: {
+    fontSize: 16,
+    color: "#ffffff",
+    fontWeight: "800"
+  },
+  skipButtonView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.main,
+    marginRight: 1
   }
 });
 

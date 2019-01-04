@@ -96,7 +96,10 @@ class UpdateProfileScreen extends React.Component {
   componentDidMount() {
     const { params } = this.props.navigation.state;
 
-    console.log("paramsparamsparamsparamsparamsparamsparamsparams",this.props.navigation.state)
+    console.log(
+      "paramsparamsparamsparamsparamsparamsparamsparams",
+      this.props.navigation.state
+    );
 
     if (params && !params.isFromRegistration) {
       this.getProfileWS();
@@ -214,7 +217,6 @@ class UpdateProfileScreen extends React.Component {
   }
 
   validateTouristData() {
-    /*
     if (this.state.firstname == "" || this.state.firstname.trim() == "") {
       Alert.alert("Tourzan", "Please enter your firstname.");
       return false;
@@ -225,6 +227,7 @@ class UpdateProfileScreen extends React.Component {
       return false;
     }
 
+    /*
     if (this.state.dob == "" || this.state.dob.trim() == "") {
       Alert.alert("Tourzan", "Please enter your birthdate.");
       return false;
@@ -253,7 +256,6 @@ class UpdateProfileScreen extends React.Component {
   }
 
   validateGuidetData() {
-    /*
     if (this.state.firstname == "" || this.state.firstname.trim() == "") {
       Alert.alert("Tourzan", "Please enter your firstname.");
       return false;
@@ -264,6 +266,7 @@ class UpdateProfileScreen extends React.Component {
       return false;
     }
 
+    /*
     if (this.state.dob == "" || this.state.dob.trim() == "") {
       Alert.alert("Tourzan", "Please enter your birthdate.");
       return false;
@@ -294,31 +297,62 @@ class UpdateProfileScreen extends React.Component {
   }
 
   firstLanguageText() {
-    let text = this.state.firstLanguage["text"];
+    let text = "";
 
-    if (this.state.firstLanguage["proficiency"]) {
-      text =
-        text + " (" + this.state.firstLanguage["proficiency"]["type"] + ")";
+    if (this.state.firstLanguage.id) {
+      text = this.state.firstLanguage["text"];
+
+      if (this.state.firstLanguage["proficiency"]) {
+        text =
+          text + " (" + this.state.firstLanguage["proficiency"]["type"] + ")";
+      }
     }
+
     return text;
   }
 
   secondLanguageText() {
-    let text = this.state.secondLanguage.text;
+    let text = "";
 
-    if (this.state.secondLanguage.proficiency) {
-      text = text + " (" + this.state.secondLanguage.proficiency.type + ")";
+    if (this.state.secondLanguage.id) {
+      text = this.state.secondLanguage["text"];
+
+      if (this.state.secondLanguage["proficiency"]) {
+        text =
+          text + " (" + this.state.secondLanguage["proficiency"]["type"] + ")";
+      }
     }
+
     return text;
   }
 
   thirdLanguageText() {
-    let text = this.state.thirdLanguage.text;
+    let text = "";
 
-    if (this.state.thirdLanguage.proficiency) {
-      text = text + " (" + this.state.thirdLanguage.proficiency.type + ")";
+    if (this.state.thirdLanguage.id) {
+      text = this.state.thirdLanguage["text"];
+
+      if (this.state.thirdLanguage["proficiency"]) {
+        text =
+          text + " (" + this.state.thirdLanguage["proficiency"]["type"] + ")";
+      }
     }
+
     return text;
+  }
+
+  getCity() {
+    let city = "";
+
+    if (
+      this.state.city &&
+      this.state.city.description &&
+      this.state.city.description.length > 0
+    ) {
+      city = this.state.city.description.split(",")[0];
+    }
+
+    return city;
   }
 
   render() {
@@ -351,7 +385,7 @@ class UpdateProfileScreen extends React.Component {
           <Text style={styles.centerText}>Update Profile</Text>
           <View style={styles.rightView}>
             <TouchableOpacity onPress={() => this.onUpdateProfile()}>
-              <Text style={styles.rightViewtext}>UPDATE</Text>
+              <Text style={styles.rightViewtext} />
             </TouchableOpacity>
           </View>
         </View>
@@ -364,7 +398,7 @@ class UpdateProfileScreen extends React.Component {
                 {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
                 <TextInput
                   underlineColorAndroid="transparent"
-                  placeholder="First Name"
+                  placeholder="First Name*"
                   style={styles.row_icon_lb}
                   secureTextEntry={false}
                   value={this.state.firstname}
@@ -376,7 +410,7 @@ class UpdateProfileScreen extends React.Component {
                 {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
                 <TextInput
                   underlineColorAndroid="transparent"
-                  placeholder="Last Name"
+                  placeholder="Last Name*"
                   style={styles.row_icon_lb}
                   secureTextEntry={false}
                   value={this.state.lastname}
@@ -509,11 +543,7 @@ class UpdateProfileScreen extends React.Component {
                       placeholder="City"
                       style={styles.row_icon_lb}
                       secureTextEntry={false}
-                      value={
-                        this.state.city
-                          ? this.state.city.description.split(",")[0]
-                          : ""
-                      }
+                      value={this.getCity()}
                       onChangeText={text => this.setCity(text)}
                     />
                     <Image
@@ -613,12 +643,51 @@ class UpdateProfileScreen extends React.Component {
           />
         </View>
         {this.showLoading()}
+
+        <View style={styles.skipView}>
+          {(params ? params.isFromRegistration : false) && (
+            <TouchableOpacity
+              style={styles.skipButtonView}
+              onPress={() => this.onSkip()}
+            >
+              <Text style={styles.skipButton}>Skip</Text>
+            </TouchableOpacity>
+          )}
+
+          <TouchableOpacity
+            style={styles.skipButtonView}
+            onPress={() => this.onUpdateProfile()}
+          >
+            <Text style={styles.skipButton}>Update</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
 
-  updateUI(data) {
+  onSkip() {
+    const { params } = this.props.navigation.state;
+    const { navigate } = this.props.navigation;
 
+    let isGuide = params
+      ? params.isGuideRegistration
+        ? params.isGuideRegistration
+        : this.props.userdata.user.isLoggedInAsGuide
+      : this.props.userdata.user.isLoggedInAsGuide;
+
+    if (isGuide) {
+      //Identity verification
+      navigate("IdentityVerification", {
+        isFromRegistration: params ? params.isFromRegistration : false
+      });
+    } else {
+      navigate("AddPaymentMethod", {
+        isFromRegistration: params ? params.isFromRegistration : false
+      });
+    }
+  }
+
+  updateUI(data) {
     //First name
     if (data.general_profile.first_name) {
       this.setState({ firstname: data.general_profile.first_name });
@@ -652,6 +721,7 @@ class UpdateProfileScreen extends React.Component {
     //First Languages
     if (data.general_profile.languages.Native) {
       let langDict = {
+        id: data.general_profile.languages.Native_language_id,
         order: 1,
         text: data.general_profile.languages.Native,
         proficiency: { type: "Native" }
@@ -663,6 +733,7 @@ class UpdateProfileScreen extends React.Component {
     //Second Languages
     if (data.general_profile.languages.Intermediate) {
       let langDict = {
+        id: data.general_profile.languages.Intermediate_language_id,
         order: 1,
         text: data.general_profile.languages.Intermediate,
         proficiency: { type: "Intermediate" }
@@ -674,6 +745,7 @@ class UpdateProfileScreen extends React.Component {
     //Third Languages
     if (data.general_profile.languages.Advanced) {
       let langDict = {
+        id: data.general_profile.languages.Advanced_language_id,
         order: 1,
         text: data.general_profile.languages.Advanced,
         proficiency: { type: "Advanced" }
@@ -705,11 +777,11 @@ class UpdateProfileScreen extends React.Component {
     //City
     if (this.props.userdata.user.isLoggedInAsGuide) {
       if (data.guide_profile.city) {
-        let city = {}
-        city.city = data.guide_profile.city ;
+        let city = {};
+        city.city = data.guide_profile.city;
         city.place_id = data.guide_profile.city_id;
 
-        this.setState({ city: city});
+        this.setState({ city: city });
       }
     }
   }
@@ -732,12 +804,15 @@ class UpdateProfileScreen extends React.Component {
           isLoading: false
         });
 
+        if (data && data.status === 400) {
+          Alert.alert("Tourzan", data.detail);
+        } else {
+          this.state.profile = data;
+          this.setState({ profile: data });
+          this.updateUI(data);
+        }
+
         console.log("getUserProfileAllData", data);
-
-        this.state.profile = data;
-        this.setState({ profile: data });
-
-        this.updateUI(data);
       })
       .catch(err => {
         this.setState({
@@ -757,16 +832,6 @@ class UpdateProfileScreen extends React.Component {
 
     var { dispatch } = this.props;
 
-    var terms = "";
-    if (this.state.city) {
-      terms = this.state.city.terms;
-    }
-
-    let country = "";
-    if (terms.length > 0) {
-      country = terms[terms.length - 1].value;
-    }
-
     var params = {};
 
     if (this.state.dob) {
@@ -776,10 +841,16 @@ class UpdateProfileScreen extends React.Component {
     params.first_name = this.state.firstname;
     params.last_name = this.state.lastname;
 
+    //City Logic
+    var terms = "";
     if (this.state.city) {
+      terms = this.state.city.terms;
+      if (terms.length > 0) {
+        params.country = terms[terms.length - 1].value;
+      }
+
       params.city = this.state.city.description.split(",")[0];
       params.place_id = this.state.city.place_id;
-      params.country = this.state.country;
     } else {
       params.city = "";
       params.place_id = "";
@@ -788,9 +859,9 @@ class UpdateProfileScreen extends React.Component {
     if (this.state.rate) {
       params.rate = this.state.rate;
     } else {
-      params.rate = '0.00'
+      params.rate = "0.00";
     }
-    
+
     params.overview = this.state.overview;
 
     //Languages
@@ -820,7 +891,7 @@ class UpdateProfileScreen extends React.Component {
     updateGuideProfile(params)
       .then(data => {
         if (data.error) {
-          Alert.alert("Tourzan", data.detail);
+          Alert.alert("Tourzan", data.error);
         } else {
           //Nav pass data
           const { params } = this.props.navigation.state;
@@ -829,6 +900,13 @@ class UpdateProfileScreen extends React.Component {
             //Create Paymentrails Recipient
             this.createRecipientsPaymentrailsWS();
           } else {
+            //Nav pass data
+            const { params } = this.props.navigation.state;
+
+            if (params && params.ProfileUpdated) {
+              params.ProfileUpdated();
+            }
+
             Alert.alert(
               "Tourzan",
               "Profile updated successfully.",
@@ -836,9 +914,6 @@ class UpdateProfileScreen extends React.Component {
                 {
                   text: "OK",
                   onPress: () => {
-                    //Nav passdata
-                    const { params } = this.props.navigation.state;
-
                     this.props.navigation.dispatch(backAction);
                   }
                 }
@@ -971,8 +1046,15 @@ class UpdateProfileScreen extends React.Component {
         });
 
         if (data.error) {
-          Alert.alert("Tourzan", data.message);
+          Alert.alert("Tourzan", data.detail);
         } else {
+          //Nav pass data
+          const { params } = this.props.navigation.state;
+
+          if (params && params.ProfileUpdated) {
+            params.ProfileUpdated();
+          }
+
           Alert.alert(
             "Tourzan",
             "Profile updated successfully.",
@@ -1011,15 +1093,11 @@ class UpdateProfileScreen extends React.Component {
 
   //Select city callback
   interestsDidSelected = interests => {
-    console.log("interestsDidSelected", interests);
-
     this.setState({ selectedInterests: interests });
   };
 
   //Select city callback
   languageDidSelected = language => {
-    console.log("languageDidSelected", language);
-
     if (language.order == 1) {
       this.setState({ firstLanguage: language });
     } else if (language.order == 2) {
@@ -1027,7 +1105,6 @@ class UpdateProfileScreen extends React.Component {
     } else if (language.order == 3) {
       this.setState({ thirdLanguage: language });
     }
-    // this.setState({ selectedInterests: interests })
   };
 }
 
@@ -1078,7 +1155,8 @@ const styles = StyleSheet.create({
   },
   rightView: {
     marginRight: 8,
-    height: 20
+    height: 20,
+    width: 40
   },
   rightViewtext: {
     color: "white",
@@ -1108,7 +1186,8 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     backgroundColor: "#f9fbfe",
-    flex: 1
+    flex: 1,
+    marginBottom: 44
   },
   blank_row_view: {
     width: width,
@@ -1172,6 +1251,29 @@ const styles = StyleSheet.create({
   },
   labelSelected: {
     color: "#FFF"
+  },
+
+  // --- Skip --- //
+  skipView: {
+    position: "absolute",
+    left: 0,
+    bottom: 0,
+    right: 0,
+    height: 44,
+
+    flexDirection: "row"
+  },
+  skipButton: {
+    fontSize: 16,
+    color: "#ffffff",
+    fontWeight: "800"
+  },
+  skipButtonView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.main,
+    marginRight: 1
   }
 });
 

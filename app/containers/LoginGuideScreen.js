@@ -248,17 +248,7 @@ class LoginGuideScreen extends React.Component {
                     fontFamily: DefaultFont.textFont
                   }}
                 >
-                  {" "}
-                  By clicking "
-                  <Text
-                    style={{
-                      color: Colors.main,
-                      fontFamily: DefaultFont.textFont
-                    }}
-                  >
-                    Sign Up
-                  </Text>
-                  " I agree to the{" "}
+                  By clicking Sign Up I agree to the{" "}
                 </Text>
                 <TouchableOpacity
                   onPress={() => {
@@ -269,7 +259,8 @@ class LoginGuideScreen extends React.Component {
                     style={{
                       fontSize: 13,
                       marginTop: 4,
-                      fontFamily: DefaultFont.textFont
+                      fontFamily: DefaultFont.textFont,
+                      color:'#000000'
                     }}
                   >
                     {" "}
@@ -330,7 +321,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     width: width - 60,
-    marginTop: 20,
+    marginTop: 10,
     height: 40,
     borderColor: "gray",
     fontFamily: DefaultFont.textFont

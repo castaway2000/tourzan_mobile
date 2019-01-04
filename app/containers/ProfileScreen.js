@@ -99,6 +99,8 @@ class ProfileScreen extends React.Component {
 
       listViewHeight: 0
     };
+
+    this.navigate = this.props.navigation;
   }
 
   // functions for listview
@@ -269,12 +271,12 @@ class ProfileScreen extends React.Component {
       >
         <View style={styles.row}>
           <View style={styles.avatar_view}>
-          <Image
+            <Image
               resizeMode="cover"
               source={{
                 uri: isGuide
-                  ? item.user_tourist[0].tourist_profile_image : item.user_tourist[0].guide_profile_image
-                  
+                  ? item.user_tourist[0].tourist_profile_image
+                  : item.user_tourist[0].guide_profile_image
               }}
               style={styles.avatar_img}
             />
@@ -289,20 +291,20 @@ class ProfileScreen extends React.Component {
               <Text style={styles.list_info_time_text}>
                 {this.getDateString(
                   isGuide
-                    ? item.tourist_review_created : item.guide_review_created
-                    
+                    ? item.tourist_review_created
+                    : item.guide_review_created
                 )}
               </Text>
             </View>
             <Text style={styles.description_name}>
-              {isGuide ? item.tourist_feedback_name : item.guide_feedback_name }
+              {isGuide ? item.tourist_feedback_name : item.guide_feedback_name}
             </Text>
             <Text style={styles.description_text}>
-              {isGuide ? item.tourist_feedback_text : item.guide_feedback_text }
+              {isGuide ? item.tourist_feedback_text : item.guide_feedback_text}
             </Text>
             <View style={styles.rate_view} pointerEvents="none">
               {this._showRatingViewList(
-                parseFloat(isGuide ? item.tourist_rating : item.guide_rating )
+                parseFloat(isGuide ? item.tourist_rating : item.guide_rating)
               )}
             </View>
           </View>
@@ -423,10 +425,8 @@ class ProfileScreen extends React.Component {
       return (
         <View style={styles.tags}>
           {interests.map((i, k) => (
-            // console.log("I",i)
-            // <Button containerStyle={styles.interesting_container_btn} style={styles.interesting_btn} onPress={() => this._interestingBtnHandlePress()} >Attractions</Button>
-
             <TouchableOpacity
+              key={i}
               style={styles.interesting_container_btn}
               onPress={() => this._interestingBtnHandlePress()}
             >
@@ -440,7 +440,9 @@ class ProfileScreen extends React.Component {
     }
   };
 
-  ratingCompleted(rating) {}
+  ratingCompleted(rating) {
+
+  }
 
   //Calculate average star from review
   _showRatingViewMain = () => {
@@ -454,7 +456,8 @@ class ProfileScreen extends React.Component {
       totalRatings =
         totalRatings +
         (isGuide
-          ? parseFloat(review.tourist_rating) : parseFloat(review.guide_rating));
+          ? parseFloat(review.tourist_rating)
+          : parseFloat(review.guide_rating));
     }
 
     var rating = 0;
@@ -486,62 +489,60 @@ class ProfileScreen extends React.Component {
     }
   }
 
+  //Callback from edit profile
+  profileUpdated = () => {
+    
+  };
+
+  _keyExtractor = (item, index) => item.id.toString();
+
   render() {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-        <ImageBackground
-          resizeMode="cover"
-          source={require("../assets/images/profile_bg.png")}
-          style={styles.top_container}
-        >
-          <View style={styles.navigationbar}>
-            <TouchableOpacity
-              style={styles.backButtomContainer}
-              onPress={() => {
-                this.props.navigation.dispatch(backAction);
-              }}
-            >
-              <Image
-                resizeMode="cover"
-                source={require("../assets/images/back.png")}
-                style={styles.backButton}
-              />
-            </TouchableOpacity>
-            <Text style={styles.centerText} />
-            {/* <TouchableOpacity
-              onPress={() => {
-                navigate("WriteFeedback", {
-                  profileData: this.state.profileData
-                });
-              }}
-            >
-              <Image
-                resizeMode="cover"
-                source={require("../assets/images/profile_chat_icon.png")}
-                style={styles.rightView}
-              />
-            </TouchableOpacity> */}
-          </View>
-        </ImageBackground>
+        <View style={styles.statusbar} />
+        <View style={styles.navigationbar}>
+          <TouchableOpacity
+            style={styles.backButtomContainer}
+            onPress={() => {
+              this.props.navigation.dispatch(backAction);
+            }}
+          >
+            <Image
+              resizeMode="cover"
+              source={require("../assets/images/back.png")}
+              style={styles.backButton}
+            />
+          </TouchableOpacity>
+          <Text style={styles.centerText} />
+
+          <TouchableOpacity
+            style={styles.backButtomContainer}
+            onPress={() => {
+              this.navigate.navigate("UpdateProfile", {
+                isFromRegistration: false,
+                ProfileUpdated: this.profileUpdated
+              });
+            }}
+          >
+            <Image
+              resizeMode="cover"
+              source={require("../assets/images/edit-icon.png")}
+              style={styles.rightButton}
+            />
+          </TouchableOpacity>
+        </View>
         <ScrollView
           nestedScrollEnabled={true}
           style={styles.scrollview_container}
         >
           <View style={styles.content_container}>
             <View style={styles.main_container}>
-              <View pointerEvents="none" style={styles.name_view}>
+              <View style={styles.name_view}>
+                {this._showProfilePicture()}
                 {this._showFullname()}
                 {this._showRatingViewMain()}
               </View>
-              {/* <View style={styles.location_view}>
-                <Image
-                  resizeMode="contain"
-                  source={require("../assets/images/location_maps.png")}
-                  style={styles.location_icon}
-                />
-                <Text style={styles.location_text}>Not Avaible</Text>
-              </View> */}
               <View style={styles.overview_view}>
                 <Text style={styles.overview_title_text}>Overview</Text>
                 {this._showOverview()}
@@ -552,17 +553,6 @@ class ProfileScreen extends React.Component {
 
                 <Text style={styles.interesting_title_text}>Interest</Text>
                 {this._showTagsView()}
-                {/* <View style={styles.btn_group_view}>
-                                    <Button containerStyle={styles.interesting_container_btn} style={styles.interesting_btn} onPress={() => this._interestingBtnHandlePress()} >Attractions</Button>
-                                    <Button containerStyle={styles.interesting_container_btn} style={styles.interesting_btn} onPress={() => this._interestingBtnHandlePress()} > Boating</Button>
-                                    <Button containerStyle={styles.interesting_container_btn} style={styles.interesting_btn} onPress={() => this._interestingBtnHandlePress()} >Traveling</Button>
-                                </View>
-                                <View style={styles.btn_group_view}>
-                                    <Button containerStyle={styles.interesting_container_btn} style={styles.interesting_btn} onPress={() => this._interestingBtnHandlePress()} >Hiking</Button>
-                                    <Button containerStyle={styles.interesting_container_btn} style={styles.interesting_btn} onPress={() => this._interestingBtnHandlePress()} >Swimming</Button>
-                                    <Button containerStyle={styles.interesting_container_btn} style={styles.interesting_btn} onPress={() => this._interestingBtnHandlePress()} >Reading</Button>
-                                </View> */}
-
                 <View style={styles.devide_view} />
               </View>
             </View>
@@ -583,11 +573,12 @@ class ProfileScreen extends React.Component {
                 onContentSizeChange={this.onContentSize}
                 data={this.state.reviewsArray}
                 renderItem={this.renderRow}
+                keyExtractor={this._keyExtractor}
               />
             </View>
           </View>
         </ScrollView>
-        {this._showProfilePicture()}
+
         {this.showLoading()}
       </View>
     );
@@ -604,19 +595,25 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     flex: 1
   },
-  top_container: {
-    width: width,
-    height: 180
-  },
   navigationbar: {
-    paddingTop:
-      Platform.OS == "ios" ? (isIphoneX() ? 44 : 20) : StatusBar.currentHeight,
-    height: 64,
-    backgroundColor: "transparent",
+    height: 44,
+    backgroundColor: "rgba(256, 256, 256, 0.8)",
     width: width,
     alignItems: "center",
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    position: "absolute",
+    zIndex: 1,
+    marginTop:
+      Platform.OS == "ios" ? (isIphoneX() ? 44 : 20) : StatusBar.currentHeight
+  },
+  statusbar: {
+    width: width,
+    height:
+      Platform.OS == "ios" ? (isIphoneX() ? 44 : 20) : StatusBar.currentHeight,
+    backgroundColor: "rgba(256, 256, 256, 0.8)",
+    position: "absolute",
+    zIndex: 2
   },
   backButtomContainer: {
     width: 44,
@@ -626,7 +623,13 @@ const styles = StyleSheet.create({
   },
   backButton: {
     height: 15,
-    width: 10
+    width: 10,
+    tintColor: "black"
+  },
+  rightButton: {
+    height: 15,
+    width: 15,
+    tintColor: "black"
   },
   centerText: {
     color: "#000",
@@ -642,24 +645,20 @@ const styles = StyleSheet.create({
     width: 20
   },
   scrollview_container: {
-    paddingTop: 20,
     backgroundColor: "transparent"
   },
   avatar_icon: {
-    position: "absolute",
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    borderWidth: 1,
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    borderWidth: 4,
     borderColor: "#ddd",
-    marginTop: 140,
-    marginLeft: 30,
-    backgroundColor: "white",
     backgroundColor: "transparent"
   },
   content_container: {
-    marginTop: 20,
-    width: width
+    marginBottom: 4,
+    width: width,
+    marginTop: (Platform.OS == "ios" ? (isIphoneX() ? 44 : 20) : 0) + 44
   },
   main_container: {
     paddingHorizontal: 30,
@@ -671,11 +670,12 @@ const styles = StyleSheet.create({
     flexDirection: "column"
   },
   name_view: {
-    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "center"
   },
   name_text: {
+    marginTop: 8,
+    marginBottom: 8,
     fontSize: 17,
     color: "black",
     fontFamily: DefaultFont.textFont
@@ -711,7 +711,7 @@ const styles = StyleSheet.create({
     height: 15
   },
   devide_view: {
-    marginTop: 15,
+    marginTop: 8,
     height: 1,
     backgroundColor: "#ddd"
   },
@@ -728,10 +728,10 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   interesting_container_btn: {
-    paddingHorizontal: 15,
-    paddingVertical: 5,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
     paddingTop: 5,
-    marginRight: 20,
+    marginRight: 8,
     borderRadius: 15,
     height: 30,
     backgroundColor: "#f4f5f8",

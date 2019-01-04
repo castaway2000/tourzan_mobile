@@ -73,15 +73,8 @@ class SettingsScreen extends React.Component {
     this.navigate = this.props.navigation;
   }
 
-  async componentDidMount() {
-    let paymentMethodTypes = await Storage.getItem("paymentMethodTypes");
+  componentDidMount() {
 
-    console.log("cached payment data", paymentMethodTypes);
-
-    //Get cached payment data if available
-    if (!paymentMethodTypes) {
-      this.paymentMethodTypesWS();
-    }
   }
 
   //Show full name
@@ -533,18 +526,6 @@ class SettingsScreen extends React.Component {
     }
   }
 
-  paymentMethodTypesWS() {
-    paymentMethodTypes()
-      .then(data => {
-        if (data) {
-          Storage.setItem("paymentMethodTypes", data);
-        }
-      })
-      .catch(err => {
-        alert(err);
-      });
-  }
-
   uploadProfileWS(imageData) {
     this.setState({
       isLoading: true
@@ -618,6 +599,7 @@ class SettingsScreen extends React.Component {
 
   //API Call get user profile
   getProfileDataForBankValidation() {
+  
     this.setState({
       isLoading: true
     });

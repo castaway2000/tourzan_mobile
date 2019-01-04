@@ -238,29 +238,11 @@ class LoginTouristScreen extends React.Component {
               style={styles.button_login}
             />
             <TouchableOpacity onPress={() => this.onSignup()} title="SING UP">
-              <Text style={styles.button_signup}> SIGN UP </Text>
+              <Text style={styles.button_signup}>SIGN UP</Text>
             </TouchableOpacity>
 
             <View style={styles.termsView}>
-              <Text
-                style={{
-                  color: "gray",
-                  fontSize: 13,
-                  fontFamily: DefaultFont.textFont
-                }}
-              >
-                {" "}
-                By clicking "
-                <Text
-                  style={{
-                    color: Colors.main,
-                    fontFamily: DefaultFont.textFont
-                  }}
-                >
-                  Sign Up
-                </Text>
-                " I agree to the{" "}
-              </Text>
+              <Text style={{ color: "gray", fontSize: 13, fontFamily: DefaultFont.textFont }} >By clicking Sign Up I agree to the</Text>
               <TouchableOpacity
                 onPress={() => {
                   this.navigate.navigate("TermsofUseScreen");
@@ -270,7 +252,8 @@ class LoginTouristScreen extends React.Component {
                   style={{
                     fontSize: 13,
                     marginTop: 4,
-                    fontFamily: DefaultFont.textFont
+                    fontFamily: DefaultFont.textFont,
+                    color:'#000000'
                   }}
                 >
                   {" "}
@@ -336,7 +319,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     width: width - 60,
-    marginTop: 30,
+    marginTop: 10,
     height: 40,
     fontFamily: DefaultFont.textFont
   },

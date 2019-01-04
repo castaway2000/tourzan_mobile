@@ -19,7 +19,13 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { NavigationActions } from "react-navigation";
 import Checkbox from "react-native-custom-checkbox";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 import ApplyButton from "../components/ApplyButton";
 import NavigationBar from "../components/NavigationBar";
 import { emailSignup } from "../actions/";
@@ -365,7 +371,7 @@ class RegisterTouristScreen extends React.Component {
               style={styles.button_login}
             />
             <View
-              style={{ flexDirection: "row", marginTop: 30, marginBottom: 20 }}
+              style={{ flexDirection: "row", marginTop: 10, marginBottom: 10 }}
             >
               <Text style={styles.label1}>Already have an account</Text>
               <TouchableOpacity
@@ -379,9 +385,32 @@ class RegisterTouristScreen extends React.Component {
             </View>
             <View style={styles.line1} />
             <View style={styles.termsView}>
-              <Text style={{ color: "gray", fontSize: 13, fontFamily: DefaultFont.textFont }}> By clicking "<Text style={{ color: Colors.main }}>Sign Up</Text>" I agree to the </Text>
-              <TouchableOpacity onPress={() => {this.navigate.navigate("TermsofUseScreen")}}>
-                <Text style={{ fontSize: 13, marginTop: 4, fontFamily: DefaultFont.textFont }}> Terms of Service </Text>
+              <Text
+                style={{
+                  color: "gray",
+                  fontSize: 13,
+                  fontFamily: DefaultFont.textFont
+                }}
+              >
+                {" "}
+                By clicking Sign Up I agree to the{" "}
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  this.navigate.navigate("TermsofUseScreen");
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 13,
+                    marginTop: 4,
+                    fontFamily: DefaultFont.textFont,
+                    color: "#000000"
+                  }}
+                >
+                  {" "}
+                  Terms of Service{" "}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -437,7 +466,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     width: width - 60,
-    marginTop: 20,
+    marginTop: 10,
     height: 40,
     borderColor: "gray",
     fontSize: 15,
@@ -490,7 +519,7 @@ const styles = StyleSheet.create({
     height: 1,
     width: width,
     backgroundColor: Colors.lineColor,
-    marginTop: 15
+    marginTop: 10
   },
   arrowIcon: {
     width: 15,

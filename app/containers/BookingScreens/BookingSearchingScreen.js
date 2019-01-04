@@ -115,7 +115,8 @@ class BookingSearchingScreen extends React.Component {
       .then(data => {
         console.log("Get onGetNearbyGuide-->", data);
 
-        Alert.alert("Get Nearby Guide Responce", JSON.stringify(data));
+        //Alert.alert("Get Nearby Guide Responce", JSON.stringify(data));
+
         if (data) {
           if (data.length < 1) {
             // Alert.alert('Tourzan', 'No nearby guide available. Please try again later.')

@@ -60,8 +60,8 @@ class TransactionsScreen extends React.Component {
 
     this.state = {
       dataSource: [],
-      message: "",
-      isFetching: false
+      isFetching: false,
+      shouldShowEmptyState: false
     };
 
     this.navigate = this.props.navigation;
@@ -80,10 +80,10 @@ class TransactionsScreen extends React.Component {
   }
 
   componentWillMount() {
-    let orderdata = store.getState().user.orderList
+    let orderdata = store.getState().user.orderList;
     console.log("store.getState().user.orderList is: " + orderdata);
-    
-    if ( store.getState().user.orderList.length < 1) {
+
+    if (store.getState().user.orderList.length < 1) {
       this.previousGuideListWS();
     } else {
       this.setState({ dataSource: store.getState().user.orderList });
@@ -218,29 +218,32 @@ class TransactionsScreen extends React.Component {
     );
   };
 
+  showEmptyState() {
+    return (
+      <View style={styles.emptyStateContainer}>
+        <Image
+          resizeMode="contain"
+          source={require("../../assets/images/transaction_icon.png")}
+          style={styles.emptyStateImage}
+        />
+        <Text style={styles.emptyStateBoldText}>
+          {"No previous transaction found."}
+        </Text>
+        <Text style={styles.emptyStateNormalText}>
+          {this.props.userdata.user.isLoggedInAsGuide
+            ? "Your previously booked tourist displayed here."
+            : "You can book a guide from Maps screen. \n Your previous transaction displayed here."}
+        </Text>
+      </View>
+    );
+  }
+
   render() {
     return (
       <View style={{ flex: 1, width: "100%" }}>
-        {this.state.dataSource.length < 1 && (
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              alignItems: "center",
-              width: "100%"
-            }}
-          >
-            <Text
-              style={{
-                width: "100%",
-                textAlign: "center",
-                fontFamily: DefaultFont.textFont
-              }}
-            >
-              {this.state.message}
-            </Text>
-          </View>
-        )}
+        {this.state.dataSource.length < 1 &&
+          this.state.shouldShowEmptyState &&
+          this.showEmptyState()}
 
         {this.state.dataSource.length > 0 && (
           <FlatList
@@ -270,13 +273,12 @@ class TransactionsScreen extends React.Component {
               return new Date(b.date_booked_for) - new Date(a.date_booked_for);
             });
 
-            this.setState({ dataSource: data, message: "" });
+            this.setState({ dataSource: data, shouldShowEmptyState: false });
           } else {
-            this.setState({ dataSource: [], message: "No data found." });
+            this.setState({ dataSource: [], shouldShowEmptyState: true });
           }
 
           this.setState({ isFetching: false });
-
         })
         .catch(err => {
           this.setState({ isFetching: false });
@@ -292,9 +294,9 @@ class TransactionsScreen extends React.Component {
               return new Date(b.date_booked_for) - new Date(a.date_booked_for);
             });
 
-            this.setState({ dataSource: data, message: "" });
+            this.setState({ dataSource: data, shouldShowEmptyState: false });
           } else {
-            this.setState({ dataSource: [], message: "No data found." });
+            this.setState({ dataSource: [], shouldShowEmptyState: true });
           }
           this.setState({ isFetching: false });
         })
@@ -303,30 +305,6 @@ class TransactionsScreen extends React.Component {
           alert(err);
         });
     }
-
-    // previousGuideList()
-    //   .then(data => {
-    //     if (data && data.length > 0) {
-    //       data.sort(function(a, b) {
-    //         // Turn your strings into dates, and then subtract them
-    //         // to get a value that is either negative, positive, or zero.
-    //         return new Date(b.date_booked_for) - new Date(a.date_booked_for);
-    //       });
-
-    //       this.setState({
-    //         dataSource: data,
-    //         message: ""
-    //       });
-    //     } else {
-    //       this.setState({
-    //         dataSource: [],
-    //         message: "No data found."
-    //       });
-    //     }
-    //   })
-    //   .catch(err => {
-    //     alert(err);
-    //   });
   }
 }
 
@@ -423,6 +401,34 @@ const styles = StyleSheet.create({
     width: 0.5,
     height: 60,
     backgroundColor: "#dddddd"
+  },
+
+  //Empty state
+  emptyStateContainer: {
+    flex: 1,
+    alignItems: "center",
+    width: "100%",
+    justifyContent: "center"
+  },
+  emptyStateImage: {
+    width: 80,
+    height: 80,
+    opacity: 0.1
+  },
+  emptyStateBoldText: {
+    width: "100%",
+    marginTop: 12,
+    textAlign: "center",
+    color: "#bbbbbb",
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
+  },
+  emptyStateNormalText: {
+    width: "100%",
+    marginTop: 12,
+    textAlign: "center",
+    color: "#bbbbbb",
+    fontFamily: DefaultFont.textFont
   }
 });
 

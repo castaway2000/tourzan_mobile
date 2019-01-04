@@ -86,6 +86,7 @@ const checkedCard = require("./../assets/images/card-checked.png");
 const unCheckedCard = require("./../assets/images/card-unchecked.png");
 const removeCard = require("./../assets/images/card-remove.png");
 
+
 class CardListScreen extends React.Component {
   //#region Constractors
   static navigationOptions = {
@@ -98,7 +99,7 @@ class CardListScreen extends React.Component {
       cards: [],
       braintreeClientToken: "",
       isLoading: false,
-      message: ""
+      shouldShowEmptyState: false
     };
   }
 
@@ -159,6 +160,24 @@ class CardListScreen extends React.Component {
       });
   }
 
+  showEmptyState() {
+    return (
+      <View style={styles.emptyStateContainer}>
+        <Image
+          resizeMode="contain"
+          source={require("../assets/images/payment-method-icon.png")}
+          style={styles.emptyStateImage}
+        />
+        <Text style={styles.emptyStateBoldText}>
+          {"No payment method added."}
+        </Text>
+        <Text style={styles.emptyStateNormalText}>
+          {"You can add payment method, \n clicking top right icon."}
+        </Text>
+      </View>
+    );
+  }
+
   render() {
     const { navigate } = this.props.navigation;
 
@@ -195,98 +214,100 @@ class CardListScreen extends React.Component {
             )}
           </View>
         </View>
+
         <View style={styles.listview}>
-          {this.state.cards.length > 0 && (
-            <FlatList
-              data={this.state.cards}
-              renderItem={({ item, index }) => (
-                <View style={styles.itemContainer}>
-                  <View style={styles.item}>
-                    <Text style={styles.itemcarddigit}>
-                      {item.is_paypal ? item.paypal_email : item.card_number}
-                    </Text>
-
-                    {item.logo && (
-                      <Image
-                        source={{ uri: item.logo }}
-                        style={{
-                          width: 50,
-                          height: 30,
-                          position: "absolute",
-                          bottom: 10,
-                          right: 10
-                        }}
-                      />
-                    )}
-
-                    {item.is_active == true && (
-                      <TouchableOpacity
-                        onPress={() => this.setDefaultCardWS(item)}
-                        style={{
-                          width: 50,
-                          height: 30,
-                          position: "absolute",
-                          bottom: 10,
-                          left: 10
-                        }}
-                      >
-                        <Image
-                          source={item.is_default ? checkedCard : unCheckedCard}
-                        />
-                      </TouchableOpacity>
-                    )}
-
-                    {item.is_active == true && (
-                      <TouchableOpacity
-                        onPress={() => this.removeCardWS(item)}
-                        style={{
-                          width: 50,
-                          height: 30,
-                          position: "absolute",
-                          bottom: 10,
-                          left: 50
-                        }}
-                      >
-                        <Image source={removeCard} />
-                      </TouchableOpacity>
-                    )}
-
-                    {item.is_active == false && (
-                      <Text
-                        style={{
-                          position: "absolute",
-                          bottom: 10,
-                          left: 4,
-                          color: "red",
-                          fontFamily: DefaultFont.textFont
-                        }}
-                      >
-                        Disabled
+          <View style={styles.container}>
+            {this.state.cards.length > 0 && (
+              <FlatList
+                data={this.state.cards}
+                renderItem={({ item, index }) => (
+                  <View style={styles.itemContainer}>
+                    <View style={styles.item}>
+                      <Text style={styles.itemcarddigit}>
+                        {item.is_paypal ? item.paypal_email : item.card_number}
                       </Text>
-                    )}
-                  </View>
-                </View>
-              )}
-              keyExtractor={item => item.id}
-              numColumns={numColumns}
-            />
-          )}
 
-          {this.state.cards.length < 1 && (
-            <View
-              style={{ flex: 1, flexDirection: "row", alignItems: "center" }}
-            >
-              <Text
-                style={{
-                  width: "100%",
-                  textAlign: "center",
-                  fontFamily: DefaultFont.textFont
-                }}
-              >
-                {this.state.message}
-              </Text>
-            </View>
-          )}
+                      {item.logo && (
+                        <Image
+                          source={{ uri: item.logo }}
+                          style={{
+                            width: 50,
+                            height: 30,
+                            position: "absolute",
+                            bottom: 10,
+                            right: 10
+                          }}
+                        />
+                      )}
+
+                      {item.is_active == true && (
+                        <TouchableOpacity
+                          onPress={() => this.setDefaultCardWS(item)}
+                          style={{
+                            width: 50,
+                            height: 30,
+                            position: "absolute",
+                            bottom: 10,
+                            left: 10
+                          }}
+                        >
+                          <Image
+                            style={{
+                              width: 30,
+                              height: 30
+                            }}
+                            source={
+                              item.is_default ? checkedCard : unCheckedCard
+                            }
+                          />
+                        </TouchableOpacity>
+                      )}
+
+                      {item.is_active == true && (
+                        <TouchableOpacity
+                          onPress={() => this.removeCardWS(item)}
+                          style={{
+                            width: 50,
+                            height: 30,
+                            position: "absolute",
+                            bottom: 10,
+                            left: 50
+                          }}
+                        >
+                          <Image
+                            source={removeCard}
+                            style={{
+                              width: 30,
+                              height: 30
+                            }}
+                          />
+                        </TouchableOpacity>
+                      )}
+
+                      {item.is_active == false && (
+                        <Text
+                          style={{
+                            position: "absolute",
+                            bottom: 10,
+                            left: 4,
+                            color: "red",
+                            fontFamily: DefaultFont.textFont
+                          }}
+                        >
+                          Disabled
+                        </Text>
+                      )}
+                    </View>
+                  </View>
+                )}
+                keyExtractor={item => item.id}
+                numColumns={numColumns}
+              />
+            )}
+            {this.state.cards.length < 1 &&
+              this.state.shouldShowEmptyState &&
+              this.showEmptyState()}
+          </View>
         </View>
 
         {this.showLoading()}
@@ -390,9 +411,9 @@ class CardListScreen extends React.Component {
             }
           }
 
-          this.setState({ cards: data, message: "" });
+          this.setState({ cards: data, shouldShowEmptyState: false });
         } else {
-          this.setState({ message: "There are no Payment method added." });
+          this.setState({ shouldShowEmptyState: true });
         }
 
         console.log("cards", this.state.cards);
@@ -419,6 +440,14 @@ class CardListScreen extends React.Component {
           isLoading: false
         });
 
+        //Callback to Booking Guide Setting Screen
+        if (
+          this.props.navigation.state.params &&
+          this.props.navigation.state.params.CardChanged
+        ) {
+          this.props.navigation.state.params.CardChanged();
+        }
+
         this.getAllPaymentsDetail();
       })
       .catch(err => {
@@ -443,6 +472,14 @@ class CardListScreen extends React.Component {
         this.setState({
           isLoading: false
         });
+
+        //Callback to Booking Guide Setting Screen
+        if (
+          this.props.navigation.state.params &&
+          this.props.navigation.state.params.cardChanged
+        ) {
+          this.props.navigation.state.params.CardChanged();
+        }
 
         this.getAllPaymentsDetail();
       })
@@ -546,6 +583,34 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "transparent"
+  },
+
+  //Empty state
+  emptyStateContainer: {
+    flex: 1,
+    alignItems: "center",
+    width: "100%",
+    justifyContent: "center"
+  },
+  emptyStateImage: {
+    width: 80,
+    height: 80,
+    opacity: 0.1
+  },
+  emptyStateBoldText: {
+    width: "100%",
+    marginTop: 12,
+    textAlign: "center",
+    color: "#bbbbbb",
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
+  },
+  emptyStateNormalText: {
+    width: "100%",
+    marginTop: 12,
+    textAlign: "center",
+    color: "#bbbbbb",
+    fontFamily: DefaultFont.textFont
   }
 });
 

@@ -55,7 +55,8 @@ import {
   gettripstatus,
   verifyToken,
   getOrderbyid,
-  allPayments
+  allPayments,
+  paymentMethodTypes
 } from "../actions";
 
 //Utilities
@@ -127,7 +128,8 @@ class MapsScreen extends React.Component {
       originCoordinate: { latitude: null, longitude: null },
       destCoordinate: { latitude: null, longitude: null },
       shouldZoomToCurrentLocation: true,
-      cardList: []
+      cardList: [],
+      switchOn: false
     };
 
     this.onRegionChange = this.onRegionChange.bind(this);
@@ -142,6 +144,8 @@ class MapsScreen extends React.Component {
     console.log("componentDidMount");
 
     console.log("navigator.geolocation", navigator.geolocation);
+
+    this.paymentMethodTypesWS();
 
     navigator.geolocation.getCurrentPosition(
       position => {
@@ -441,6 +445,11 @@ class MapsScreen extends React.Component {
 
   //#endregion
   onClockInOutPressed = () => {
+    //this.updateClockInOutStatusWS(!this.props.userdata.user.isClockedIn);
+  };
+
+  onPress = () => {
+    this.setState({ switchOn: !this.state.switchOn });
     this.updateClockInOutStatusWS(!this.props.userdata.user.isClockedIn);
   };
 
@@ -448,17 +457,39 @@ class MapsScreen extends React.Component {
     if (this.props.userdata.user.isLoggedInAsGuide) {
       return (
         <Switch
-          value={this.props.userdata.user.isClockedIn}
-          onValueChange={val => {
-            this.onClockInOutPressed();
+          containerStyle={{
+            width: 70,
+            height: 34,
+            borderRadius: 25,
+            backgroundColor: "#ccc",
+            padding: 1
           }}
-          disabled={false}
-          activeText={"  IN  "}
-          inActiveText={" OUT "}
-          backgroundActive={"#31dd73"}
-          backgroundInactive={"#c2c3c9"}
-          circleActiveColor={"white"}
-          circleInActiveColor={"white"}
+          circleStyle={{
+            width: 38,
+            height: 30,
+            borderRadius: 19,
+            backgroundColor: "white" // rgb(102,134,205),
+          }}
+          buttonText={this.state.switchOn ? "GO\nOFFLINE" : "GO\nONLINE"}
+          switchOn={this.state.switchOn}
+          onPress={this.onPress}
+          type={1}
+          buttonStyle={{
+            alignItems: "center",
+            justifyContent: "center",
+            position: "absolute"
+          }}
+          buttonTextStyle={{
+            fontSize: 7,
+            color: "#666666",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center"
+          }}
+          circleColorOff="#FFFFFF"
+          circleColorOn="#FFFFFF"
+          backgroundColorOn="#31dd73"
+          backgroundColorOff="#dddddd"
         />
       );
     } else {
@@ -572,7 +603,8 @@ class MapsScreen extends React.Component {
               region={this.state.mapRegion}
               onRegionChange={this.onRegionChange}
             >
-              {this.state.nearByGuides && (this.state.nearByGuides.length > 0) &&
+              {this.state.nearByGuides &&
+                this.state.nearByGuides.length > 0 &&
                 !this.props.bookingdata.isTripInProgress &&
                 this.state.nearByGuides.map((element, index) => {
                   //Update map
@@ -982,6 +1014,7 @@ class MapsScreen extends React.Component {
                   store.dispatch(updatebooking(storestate.tour.bookingdata));
 
                   Storage.removeItem("currentuser");
+                  Storage.removeItem("paymentMethodTypes");
 
                   this.props.navigation.dispatch(resetRootAction);
                 }
@@ -1038,6 +1071,18 @@ class MapsScreen extends React.Component {
           }
 
           this.onBookingPressed();
+        }
+      })
+      .catch(err => {
+        alert(err);
+      });
+  }
+
+  paymentMethodTypesWS() {
+    paymentMethodTypes()
+      .then(data => {
+        if (data) {
+          Storage.setItem("paymentMethodTypes", data);
         }
       })
       .catch(err => {

@@ -80,6 +80,7 @@ class SelectLanguageProficiencyScreen extends React.Component {
   proficiencyDidSelected(proficiency) {
     this.props.navigation.state.params.selectedLanguage.proficiency = proficiency;
 
+    ////Callback to UpdateProfileScreen.js
     this.props.navigation.state.params.languageDidSelected(
       this.props.navigation.state.params.selectedLanguage
     );

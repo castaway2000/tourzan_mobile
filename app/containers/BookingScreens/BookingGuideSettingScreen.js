@@ -30,10 +30,21 @@ import ApplyButton from "../../components/ApplyButton";
 
 //Utils
 import { Storage, isIphoneX } from "../../global/Utilities";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../../constants";
 
 //Webservice
-import { bookGuide, acceptTrip, brainTreeToken } from "../../actions";
+import {
+  bookGuide,
+  acceptTrip,
+  brainTreeToken,
+  allPayments
+} from "../../actions";
 
 //Store
 import { store } from "../../store/index";
@@ -77,13 +88,25 @@ class BookingGuideSettingScreen extends React.Component {
       isCheckHoulryOrManual: false,
       isLoading: false,
       address: "",
-      braintreeClientToken: ""
+      braintreeClientToken: "",
+      defaultCard: null //Object
     };
     this.navigate = this.props.navigation;
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    let paymentMethodTypes = await Storage.getItem("paymentMethodTypes");
+
+    //Get cached payment data if available
+    if (paymentMethodTypes) {
+      this.paymentMethodTypes = paymentMethodTypes;
+    }
+
+    //Get address from lat and lng
     this.showAddress();
+
+    //Get card detail
+    this.getAllPaymentsDetail();
   }
 
   onConfirm() {
@@ -92,9 +115,13 @@ class BookingGuideSettingScreen extends React.Component {
     //this.navigate.navigate('Offer');
   }
 
-  onPaymentSetting() {
-    this.navigate.navigate('CardList');
+  //Callback from CardListScreen.js
+  cardChanged = () => {
+    this.getAllPaymentsDetail();
+  };
 
+  onPaymentSetting() {
+    this.navigate.navigate("CardList", { CardChanged: this.cardChanged });
   }
 
   onTimeLimitSetting() {
@@ -173,6 +200,8 @@ class BookingGuideSettingScreen extends React.Component {
         : "manual"
     };
 
+    //JSON.stringify(data)
+
     bookGuide(params)
       .then(data => {
         this.setState({
@@ -180,8 +209,8 @@ class BookingGuideSettingScreen extends React.Component {
         });
 
         Alert.alert(
-          "Book Guide Responce",
-          JSON.stringify(data),
+          "Tourzan",
+          'Thanks for booking guide. Guide will respond shortly.',
           [
             {
               text: "OK",
@@ -259,7 +288,7 @@ class BookingGuideSettingScreen extends React.Component {
     }
 
     if (!fullname) {
-      fullname = "Guide" ;
+      fullname = "Guide";
     }
 
     return fullname;
@@ -392,11 +421,17 @@ class BookingGuideSettingScreen extends React.Component {
                 <View style={styles.row_setting_btn_left_view}>
                   <Image
                     resizeMode="contain"
-                    source={require("../../assets/images/cash_icon.png")}
+                    source={
+                      this.state.defaultCard
+                        ? { uri: this.state.defaultCard.logo }
+                        : require("../../assets/images/cash_icon.png")
+                    }
                     style={styles.row_setting_btn_icon}
                   />
                   <Text style={styles.row_setting_btn_text}>
-                    Set Credit Card
+                    {this.state.defaultCard
+                      ? this.state.defaultCard.card_number
+                      : "Set Credit Card"}
                   </Text>
                 </View>
                 <Image
@@ -520,6 +555,38 @@ class BookingGuideSettingScreen extends React.Component {
         {this.showLoading()}
       </View>
     );
+  }
+
+  getAllPaymentsDetail() {
+    allPayments()
+      .then(data => {
+        if (data && data.length > 0) {
+          //Three status: 'true', 'false' and ''unknown'
+
+          for (let i = 0; i < data.length; i++) {
+            const card = data[i];
+
+            if (card.is_active == true && card.is_default == true) {
+              if (this.paymentMethodTypes) {
+                for (let i = 0; i < data.length; i++) {
+                  for (let j = 0; j < this.paymentMethodTypes.length; j++) {
+                    const cardtype = this.paymentMethodTypes[j];
+
+                    if (data[i].type == cardtype.id) {
+                      data[i].name = cardtype.name;
+                      data[i].logo = cardtype.logo;
+                    }
+                  }
+                }
+              }
+              this.setState({ defaultCard: card });
+            }
+          }
+        }
+      })
+      .catch(err => {
+        alert(err);
+      });
   }
 }
 
@@ -649,7 +716,7 @@ const styles = StyleSheet.create({
     width: width,
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 15,
+    paddingVertical: 4,
     borderBottomWidth: 1,
     borderColor: "#ddd",
     justifyContent: "space-between",
@@ -661,8 +728,8 @@ const styles = StyleSheet.create({
     marginLeft: 30
   },
   row_setting_btn_icon: {
-    height: 20,
-    width: 20
+    height: 40,
+    width: 40
   },
   row_setting_btn_text: {
     marginLeft: 10,

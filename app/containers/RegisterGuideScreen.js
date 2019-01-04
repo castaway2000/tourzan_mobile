@@ -34,7 +34,13 @@ import { updateuser } from "../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 var { width, height } = Dimensions.get("window");
 let nextInput1;
@@ -302,7 +308,7 @@ class RegisterGuideScreen extends React.Component {
             }}
           />
           <View style={styles.view_title}>
-          <Text style={styles.txt_bottom}>REGISTER</Text>
+            <Text style={styles.txt_bottom}>REGISTER</Text>
             <Text style={styles.txt_welcome}>Create A Guide Account</Text>
           </View>
         </ImageBackground>
@@ -438,7 +444,7 @@ class RegisterGuideScreen extends React.Component {
               style={styles.button_login}
             />
             <View
-              style={{ flexDirection: "row", marginTop: 30, marginBottom: 20 }}
+              style={{ flexDirection: "row", marginTop: 10, marginBottom: 10 }}
             >
               <Text style={styles.label1}>Already have an account</Text>
               <TouchableOpacity
@@ -452,9 +458,31 @@ class RegisterGuideScreen extends React.Component {
             </View>
             <View style={styles.line1} />
             <View style={styles.termsView}>
-              <Text style={{ color: "gray", fontSize: 13 ,fontFamily: DefaultFont.textFont}}>By clicking "<Text style={{ color: Colors.main, fontFamily: DefaultFont.textFont }}>Sign Up</Text>" I agree to the</Text>
-              <TouchableOpacity onPress={() => {this.navigate.navigate("TermsofUseScreen")}} >
-                <Text style={{ fontSize: 13, marginTop: 4, fontFamily: DefaultFont.textFont }}> Terms of Service </Text>
+              <Text
+                style={{
+                  color: "gray",
+                  fontSize: 13,
+                  fontFamily: DefaultFont.textFont
+                }}
+              >
+                By clicking Sign Up I agree to the
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  this.navigate.navigate("TermsofUseScreen");
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 13,
+                    marginTop: 4,
+                    fontFamily: DefaultFont.textFont,
+                    color:'#000000'
+                  }}
+                >
+                  {" "}
+                  Terms of Service{" "}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -510,7 +538,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     width: width - 60,
-    marginTop: 20,
+    marginTop: 10,
     height: 40,
     borderColor: "gray",
     fontSize: 15,
@@ -563,7 +591,7 @@ const styles = StyleSheet.create({
     height: 1,
     width: width,
     backgroundColor: Colors.lineColor,
-    marginTop: 15
+    marginTop: 10
   },
   arrowIcon: {
     width: 15,
