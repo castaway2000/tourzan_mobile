@@ -26,7 +26,6 @@ import { Rating, AirbnbRating } from "react-native-ratings";
 import ReadMore from "@expo/react-native-read-more-text";
 import ApplyButton from "../components/ApplyButton";
 import NavigationBar from "../components/NavigationBar";
-import { profile } from "../actions";
 import { Marker } from "react-native-maps/lib/components/MapView";
 import moment from "moment";
 import Stars from "react-native-stars";
@@ -40,6 +39,9 @@ import { store } from "../store/index";
 import { updatebooking } from "../actions/bookingActions";
 import { updateuser } from "../actions/userActions";
 
+//Webservice
+import { bookGuide, profile } from "../actions";
+
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
 import {
@@ -52,9 +54,6 @@ import {
 
 var { width, height } = Dimensions.get("window");
 
-const onButtonPress = () => {
-  Alert.alert("Button has been pressed!");
-};
 const backAction = NavigationActions.back({
   // key: 'WelcomeScreen'
 });
@@ -259,6 +258,24 @@ class ProfileUserScreen extends React.Component {
     );
   }
 
+  _showBookingButton = () => {
+    var { params } = this.props.navigation.state;
+
+    return (
+      params &&
+      params.shouldShowBookButtoon && (
+        <TouchableOpacity
+          onPress={() => this._onBooking()}
+          style={styles.bookButtonView}
+        >
+          <Text style={styles.bookButtonText}>BOOK</Text>
+        </TouchableOpacity>
+      )
+    );
+  };
+
+  _onBooking = () => {};
+
   renderRow = ({ item, index }) => {
     let isGuide = this.props.userdata.user.isLoggedInAsGuide;
     return (
@@ -417,8 +434,7 @@ class ProfileUserScreen extends React.Component {
     }
 
     if (this.state.profileData.interests) {
-      
-      let interests = this.state.profileData.interests
+      let interests = this.state.profileData.interests;
 
       return (
         <View style={styles.tags}>
@@ -553,10 +569,11 @@ class ProfileUserScreen extends React.Component {
         >
           <View style={styles.content_container}>
             <View style={styles.main_container}>
-              <View pointerEvents="none" style={styles.name_view}>
+              <View style={styles.name_view}>
                 {this._showProfilePicture()}
                 {this._showFullname()}
                 {this._showRatingViewMain()}
+                {this._showBookingButton()}
               </View>
 
               <View style={styles.overview_view}>
@@ -595,6 +612,62 @@ class ProfileUserScreen extends React.Component {
         {this.showLoading()}
       </View>
     );
+  }
+
+  bookGuideWS() {
+    var { params } = this.props.navigation.state;
+
+    var guide = params.guide;
+
+    this.setState({
+      isLoading: true
+    });
+
+    var { dispatch } = this.props;
+
+    //Get store data
+    let storestate = store.getState();
+
+    var params = {
+      token: this.props.userdata.token,
+      userid: this.props.userdata.user.userid,
+      guides: "[" + parseInt(guide.id) + "]",
+      latitude: this.props.currentlocation.lat,
+      longitude: this.props.currentlocation.long,
+      timelimit: storestate.tour.bookingdata.timeLimit,
+      bookingtype: storestate.tour.bookingdata.isAutomatic
+        ? "automatic"
+        : "manual"
+    };
+
+    bookGuide(params)
+      .then(data => {
+        this.setState({
+          isLoading: false
+        });
+
+        Alert.alert(
+          "Tourzan",
+          "Thanks for booking guide. Guide will respond shortly.",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                this.props.navigation.dispatch(popToTopAction);
+              }
+            }
+          ],
+          { cancelable: false }
+        );
+
+        console.log("bookGuideWS-->", data);
+      })
+      .catch(err => {
+        this.setState({
+          isLoading: false
+        });
+        alert(err);
+      });
   }
 }
 
@@ -671,7 +744,12 @@ const styles = StyleSheet.create({
   content_container: {
     marginBottom: 4,
     width: width,
-    marginTop: (Platform.OS == "ios" ? (isIphoneX() ? 44 : 20) : 0) + 44
+    marginTop:
+      Platform.OS == "ios"
+        ? isIphoneX()
+          ? 88
+          : 64
+        : StatusBar.currentHeight + 44
   },
   main_container: {
     paddingHorizontal: 30,
@@ -691,7 +769,8 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontSize: 17,
     color: "black",
-    fontFamily: DefaultFont.textFont
+    fontFamily: DefaultFont.textFont,
+    fontWeight: "600"
   },
   location_view: {
     marginTop: 10,
@@ -709,11 +788,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "black",
     fontFamily: DefaultFont.textFont,
-    marginBottom: 8
+    marginBottom: 8,
+    fontWeight: "600"
   },
   overview_content_text: {
     marginTop: 12,
-    fontFamily: DefaultFont.textFont
+    fontFamily: DefaultFont.textFont,
+    fontWeight: "100",
+    fontSize: 12
   },
   downarrow_view: {
     marginTop: 5,
@@ -732,7 +814,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 15,
     color: "black",
-    fontFamily: DefaultFont.textFont
+    fontFamily: DefaultFont.textFont,
+    fontWeight: "600"
   },
   btn_group_view: {
     marginTop: 5,
@@ -876,9 +959,9 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent"
   },
   tags: {
+    marginTop: 4,
     flexDirection: "row",
-    alignSelf: "stretch",
-    margin: 5,
+    alignSelf: "auto",
     flexWrap: "wrap"
   },
   starStyle: {
@@ -887,6 +970,19 @@ const styles = StyleSheet.create({
   },
   emptyStarStyle: {
     color: "#f3bc17"
+  },
+  bookButtonView: {
+    width: 100,
+    height: 36,
+    backgroundColor: Colors.main,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 8,
+    marginTop: 8
+  },
+  bookButtonText: {
+    color: "#ffffff",
+    fontFamily: DefaultFont.textFont
   }
 });
 

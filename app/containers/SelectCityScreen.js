@@ -266,11 +266,11 @@ const styles = StyleSheet.create({
   // --- search --- //
   searchBarbg: {
     fontSize: 14,
-    height: 44,
+    height: 50,
     borderWidth: 4,
     borderColor: "#E4E4E4",
     backgroundColor: "white",
-    borderRadius: 14
+    borderRadius: 14,
   },
   searchBar: {
     paddingLeft: 10,

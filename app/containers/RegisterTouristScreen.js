@@ -127,6 +127,7 @@ class RegisterTouristScreen extends React.Component {
 
           if (data.token) {
             //save profile data
+            data.user.isLoggedInAsGuide = false;
             store.dispatch(updateuser(data));
 
             Alert.alert(

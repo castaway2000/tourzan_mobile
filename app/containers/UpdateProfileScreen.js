@@ -688,6 +688,7 @@ class UpdateProfileScreen extends React.Component {
   }
 
   updateUI(data) {
+
     //First name
     if (data.general_profile.first_name) {
       this.setState({ firstname: data.general_profile.first_name });
@@ -763,7 +764,7 @@ class UpdateProfileScreen extends React.Component {
       }
     }
 
-    // Rating
+    //Rating
     if (this.props.userdata.user.isLoggedInAsGuide) {
       if (data.guide_profile.rate) {
         this.setState({ rate: data.guide_profile.rate.toString() });
@@ -778,8 +779,17 @@ class UpdateProfileScreen extends React.Component {
     if (this.props.userdata.user.isLoggedInAsGuide) {
       if (data.guide_profile.city) {
         let city = {};
-        city.city = data.guide_profile.city;
-        city.place_id = data.guide_profile.city_id;
+        city.description = data.guide_profile.city + ",";
+
+        if (data.guide_profile.city_id) {
+          city.place_id = data.guide_profile.city_id;
+        }
+
+        if (data.general_profile.registration_country) {
+          city.terms = [{ value: data.general_profile.registration_country }];
+        }
+
+        console.log('city object',city)
 
         this.setState({ city: city });
       }
@@ -836,6 +846,8 @@ class UpdateProfileScreen extends React.Component {
 
     if (this.state.dob) {
       params.dob = this.state.dob;
+    } else {
+      params.dob = "0";
     }
 
     params.first_name = this.state.firstname;
@@ -844,9 +856,12 @@ class UpdateProfileScreen extends React.Component {
     //City Logic
     var terms = "";
     if (this.state.city) {
-      terms = this.state.city.terms;
-      if (terms.length > 0) {
-        params.country = terms[terms.length - 1].value;
+
+      if (this.state.city.terms) {
+        terms = this.state.city.terms;
+        if (terms.length > 0) {
+          params.country = terms[terms.length - 1].value;
+        }
       }
 
       params.city = this.state.city.description.split(",")[0];
@@ -1001,6 +1016,8 @@ class UpdateProfileScreen extends React.Component {
 
     if (this.state.dob) {
       params.dob = this.state.dob;
+    } else {
+      params.dob = 0;
     }
 
     params.profession = this.state.profession;
@@ -1260,13 +1277,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     height: 44,
-
     flexDirection: "row"
   },
   skipButton: {
     fontSize: 16,
     color: "#ffffff",
-    fontWeight: "800"
+    fontWeight: "800",
+    fontFamily: DefaultFont.textFont
   },
   skipButtonView: {
     flex: 1,

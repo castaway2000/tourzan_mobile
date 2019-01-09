@@ -185,7 +185,7 @@ class SelectLanguageScreen extends React.Component {
 
       this.props.navigation.state.params.selectedLanguage.id = null;
       this.props.navigation.state.params.selectedLanguage.text = "";
-      this.props.navigation.state.params.selectedLanguage.proficiency.type = "";
+      //this.props.navigation.state.params.selectedLanguage.proficiency.type = "";
 
       //Callback to UpdateProfileScreen.js
       this.props.navigation.state.params.languageDidSelected(
@@ -407,7 +407,7 @@ const styles = StyleSheet.create({
 
   // --- search --- //
   searchBarbg: {
-    height: 44,
+    height: 50,
     borderWidth: 4,
     borderColor: "#E4E4E4",
     backgroundColor: "white",

@@ -321,7 +321,8 @@ const styles = StyleSheet.create({
   skipButton: {
     fontSize: 16,
     color: "#ffffff",
-    fontWeight: "800"
+    fontWeight: "800",
+    fontFamily: DefaultFont.textFont
   },
   skipButtonView: {
     flex: 1,

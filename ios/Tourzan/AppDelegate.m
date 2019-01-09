@@ -11,15 +11,13 @@
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 
-
 //Add the following lines 
 #import <asl.h>
 #import <React/RCTLog.h>
-#import "RNFIRMessaging.h"
 
+#import "RNFIRMessaging.h"
 #import "BraintreeCore.h"
 #import "RCTLinkingManager.h"
-
 
 @import Firebase;
 
@@ -52,7 +50,6 @@
   self.window.rootViewController = rootViewController;
   
   [self.window makeKeyAndVisible];
-
   
   [FIRApp configure];
   

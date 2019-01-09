@@ -63,8 +63,8 @@ class LoginTouristScreen extends React.Component {
     super(props);
     this.state = {
       isChecked: true,
-      username: "test1001", // tester1 test1003
-      password: "Test@123", // test1234 Cred@123
+      username: "test2001", // tester1 test1003 test2001
+      password: "Cred@123", // test1234 Cred@123 Cred@123
       isLoading: false
     };
     this.navigate = this.props.navigation;
@@ -242,7 +242,15 @@ class LoginTouristScreen extends React.Component {
             </TouchableOpacity>
 
             <View style={styles.termsView}>
-              <Text style={{ color: "gray", fontSize: 13, fontFamily: DefaultFont.textFont }} >By clicking Sign Up I agree to the</Text>
+              <Text
+                style={{
+                  color: "gray",
+                  fontSize: 13,
+                  fontFamily: DefaultFont.textFont
+                }}
+              >
+                By clicking Sign Up I agree to the
+              </Text>
               <TouchableOpacity
                 onPress={() => {
                   this.navigate.navigate("TermsofUseScreen");
@@ -253,7 +261,7 @@ class LoginTouristScreen extends React.Component {
                     fontSize: 13,
                     marginTop: 4,
                     fontFamily: DefaultFont.textFont,
-                    color:'#000000'
+                    color: "#000000"
                   }}
                 >
                   {" "}

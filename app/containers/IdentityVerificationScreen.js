@@ -347,13 +347,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     height: 44,
-
     flexDirection: "row"
   },
   skipButton: {
     fontSize: 16,
     color: "#ffffff",
-    fontWeight: "800"
+    fontWeight: "800",
+    fontFamily: DefaultFont.textFont
   },
   skipButtonView: {
     flex: 1,

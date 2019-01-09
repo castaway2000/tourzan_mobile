@@ -440,9 +440,7 @@ class ProfileScreen extends React.Component {
     }
   };
 
-  ratingCompleted(rating) {
-
-  }
+  ratingCompleted(rating) {}
 
   //Calculate average star from review
   _showRatingViewMain = () => {
@@ -490,9 +488,7 @@ class ProfileScreen extends React.Component {
   }
 
   //Callback from edit profile
-  profileUpdated = () => {
-    
-  };
+  profileUpdated = () => {};
 
   _keyExtractor = (item, index) => item.id.toString();
 
@@ -658,7 +654,12 @@ const styles = StyleSheet.create({
   content_container: {
     marginBottom: 4,
     width: width,
-    marginTop: (Platform.OS == "ios" ? (isIphoneX() ? 44 : 20) : 0) + 44
+    marginTop:
+      Platform.OS == "ios"
+        ? isIphoneX()
+          ? 88
+          : 64
+        : StatusBar.currentHeight + 44
   },
   main_container: {
     paddingHorizontal: 30,
@@ -678,7 +679,8 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontSize: 17,
     color: "black",
-    fontFamily: DefaultFont.textFont
+    fontFamily: DefaultFont.textFont,
+    fontWeight: "600"
   },
   location_view: {
     marginTop: 10,
@@ -696,11 +698,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "black",
     fontFamily: DefaultFont.textFont,
-    marginBottom: 8
+    marginBottom: 8,
+    fontWeight: "600"
   },
   overview_content_text: {
     marginTop: 12,
-    fontFamily: DefaultFont.textFont
+    fontFamily: DefaultFont.textFont,
+    fontWeight: "100",
+    fontSize: 12
   },
   downarrow_view: {
     marginTop: 5,
@@ -711,7 +716,7 @@ const styles = StyleSheet.create({
     height: 15
   },
   devide_view: {
-    marginTop: 8,
+    marginTop: 15,
     height: 1,
     backgroundColor: "#ddd"
   },
@@ -719,7 +724,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 15,
     color: "black",
-    fontFamily: DefaultFont.textFont
+    fontFamily: DefaultFont.textFont,
+    fontWeight: "600"
   },
   btn_group_view: {
     marginTop: 5,
@@ -863,9 +869,9 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent"
   },
   tags: {
+    marginTop: 4,
     flexDirection: "row",
-    alignSelf: "stretch",
-    margin: 5,
+    alignSelf: "auto",
     flexWrap: "wrap"
   },
   starStyle: {

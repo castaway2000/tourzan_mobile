@@ -133,7 +133,6 @@ class MapsScreen extends React.Component {
     };
 
     this.onRegionChange = this.onRegionChange.bind(this);
-    this.iscardAdded = "unknown";
   }
 
   //#endregion
@@ -370,42 +369,48 @@ class MapsScreen extends React.Component {
   onBookingPressed = () => {
     const { navigate } = this.props.navigation;
 
-    if (this.iscardAdded === "unknown") {
-      this.getAllPaymentsDetail();
-      return;
-    }
-
-    if (this.iscardAdded === "false") {
-      Alert.alert(
-        "Tourzan",
-        "Please add your payment method from setting.",
-        [
-          {
-            text: "Add Payment Method",
-            onPress: () => {
-              this.iscardAdded = "unknown";
-              navigate("CardList");
-            }
-          },
-          {
-            text: "Cancel",
-            onPress: () => console.log("Add Payment Method"),
-            style: "cancel"
+    this.getAllPaymentsDetail()
+      .then(data => {
+        console.log("data", data);
+        if (data === false) {
+          this.showAlertToAddCard();
+        } else {
+          if (
+            !this.props.currentlocation.lat ||
+            !this.props.currentlocation.long
+          ) {
+            Alert.alert("Tourzan", "Your current location not found.");
+            return;
           }
-        ],
-        { cancelable: false }
-      );
-      return;
-    }
 
-    if (!this.props.currentlocation.lat || !this.props.currentlocation.long) {
-      Alert.alert("Tourzan", "Your current location not found.");
-      return;
-    }
+          navigate("BookingSearching");
+        }
+      })
+      .catch(err => {
+        console.log("err", err);
+      });
+  };
 
-    this.iscardAdded = "unknown";
-
-    navigate("BookingSearching");
+  showAlertToAddCard = () => {
+    const { navigate } = this.props.navigation;
+    Alert.alert(
+      "Tourzan",
+      "In order to book a guide please add your payment method from setting.",
+      [
+        {
+          text: "Add Payment Method",
+          onPress: () => {
+            navigate("CardList");
+          }
+        },
+        {
+          text: "Cancel",
+          onPress: () => console.log("Add Payment Method"),
+          style: "cancel"
+        }
+      ],
+      { cancelable: false }
+    );
   };
 
   onMyLocation = () => {
@@ -444,9 +449,6 @@ class MapsScreen extends React.Component {
   };
 
   //#endregion
-  onClockInOutPressed = () => {
-    //this.updateClockInOutStatusWS(!this.props.userdata.user.isClockedIn);
-  };
 
   onPress = () => {
     this.setState({ switchOn: !this.state.switchOn });
@@ -572,6 +574,27 @@ class MapsScreen extends React.Component {
     ) : null;
   }
 
+  markerClick(marker) {
+    console.log(marker.nativeEvent);
+
+    const { navigate } = this.props.navigation;
+
+    if (marker.nativeEvent.id) {
+      const index = parseInt(marker.nativeEvent.id);
+
+      if (this.state.nearByGuides.length >= index) {
+        const guide = this.state.nearByGuides[index];
+
+        navigate("ProfileUser", {
+          userid: guide.user,
+          shouldShowBookButtoon: true
+        });
+
+        console.log("guide", guide);
+      }
+    }
+  }
+
   render() {
     const { navigate } = this.props.navigation;
 
@@ -617,11 +640,14 @@ class MapsScreen extends React.Component {
 
                   return (
                     <MapView.Marker
+                      identifier={index.toString()}
+                      onPress={marker => this.markerClick(marker)}
                       coordinate={region}
                       centerOffset={{ x: 0, y: -10 }}
                       anchor={{ x: 1, y: 1 }}
                       image={flagImg}
                       key={index}
+                      id={index}
                     />
                   );
                 })}
@@ -942,7 +968,8 @@ class MapsScreen extends React.Component {
 
         if (
           !this.props.userdata.user.isClockedIn &&
-          this.props.userdata.user.isLoggedInAsGuide
+          this.props.userdata.user.isLoggedInAsGuide &&
+          !this.props.bookingdata.isTripInProgress
         ) {
           this.updateClockInOutStatusWS(true);
         }
@@ -966,6 +993,8 @@ class MapsScreen extends React.Component {
       units: "km",
       range: "100"
     };
+
+    console.log("Get onGetNearbyGuide Params-->", params);
 
     getnearbyguides(params)
       .then(data => {
@@ -1050,32 +1079,40 @@ class MapsScreen extends React.Component {
       isLoading: true
     });
 
-    allPayments()
-      .then(data => {
-        this.setState({
-          isLoading: false
-        });
+    //Promise
+    return new Promise((resolve, reject) => {
+      var iscardAdded = false;
 
-        if (data && data.length > 0) {
-          //Three status: 'true', 'false' and ''unknown'
-          this.iscardAdded = "false";
+      allPayments()
+        .then(data => {
+          this.setState({
+            isLoading: false
+          });
 
-          for (let i = 0; i < data.length; i++) {
-            if (this.iscardAdded === "false") {
-              const card = data[i];
+          if (data && data.length > 0) {
+            //Three status: 'true', 'false' and ''unknown'
+            iscardAdded = false;
 
-              if (card.is_active == true && card.is_default == true) {
-                this.iscardAdded = "true";
+            for (let i = 0; i < data.length; i++) {
+              if (iscardAdded === false) {
+                const card = data[i];
+
+                if (card.is_active == true && card.is_default == true) {
+                  iscardAdded = true;
+                }
               }
             }
-          }
 
-          this.onBookingPressed();
-        }
-      })
-      .catch(err => {
-        alert(err);
-      });
+            resolve(iscardAdded);
+          } else {
+            resolve(false);
+          }
+        })
+        .catch(err => {
+          reject(error);
+          alert(err);
+        });
+    });
   }
 
   paymentMethodTypesWS() {

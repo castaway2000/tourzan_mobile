@@ -257,16 +257,16 @@ class ChatScreen extends React.Component {
     console.log("debug", searchText);
     this.setState({ searchText });
 
-    let filteredData = this.filterNotes(searchText, this.chatArrayHolder);
+    let filteredData = this.filterChats(searchText, this.chatArrayHolder);
 
     store.dispatch(updateChat(filteredData));
   }
 
-  filterNotes(searchText, notes) {
+  filterChats(searchText, notes) {
     let text = searchText.toLowerCase();
 
     let filteredData = notes.filter(note => {
-      return (note.topic.toLowerCase().indexOf(text) != -1) || (note.messages);
+      return (note.topic.toLowerCase().indexOf(text) != -1);
     });
 
     return filteredData;

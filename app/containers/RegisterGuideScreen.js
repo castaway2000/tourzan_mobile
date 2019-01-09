@@ -129,6 +129,7 @@ class RegisterGuideScreen extends React.Component {
           console.log("donwload email sing up-->", data);
           if (data.token) {
             //save profile data
+            data.user.isLoggedInAsGuide = true;
             store.dispatch(updateuser(data));
 
             Alert.alert(
@@ -477,7 +478,7 @@ class RegisterGuideScreen extends React.Component {
                     fontSize: 13,
                     marginTop: 4,
                     fontFamily: DefaultFont.textFont,
-                    color:'#000000'
+                    color: "#000000"
                   }}
                 >
                   {" "}

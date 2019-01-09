@@ -11,7 +11,8 @@ import {
   Text,
   View,
   Alert,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from "react-native";
 
 import { StackNavigator } from "react-navigation";
@@ -84,7 +85,8 @@ const MapChatStackNavigator = StackNavigator(
   {
     Maps: { screen: MapsScreen },
     Profile: { screen: ProfileScreen },
-    ProfileCharRoom: { screen: ChatRoomScreen }
+    ProfileCharRoom: { screen: ChatRoomScreen },
+    UpdateProfile: { screen: UpdateProfileScreen },
   },
   {
     navigationOptions: {
@@ -104,6 +106,7 @@ const DashboardStackNavigator = StackNavigator(
     Profile: { screen: ProfileScreen },
     ProfileCharRoom: { screen: ChatRoomScreen },
     ProfileUser: { screen: ProfileUserScreen },
+    UpdateProfile: { screen: UpdateProfileScreen },
   },
   {
     navigationOptions: {
@@ -118,8 +121,11 @@ const DashboardStackNavigator = StackNavigator(
  */
 const ChatStackNavigator = StackNavigator(
   {
-    Chats: { screen: ChatScreen }
-    // ChatRoom : {screen: ChatRoomScreen},
+    Chats: { screen: ChatScreen },
+    Profile: { screen: ProfileScreen },
+    ProfileCharRoom: { screen: ChatRoomScreen },
+    ProfileUser: { screen: ProfileUserScreen },
+    UpdateProfile: { screen: UpdateProfileScreen },
   },
   {
     headerMode: "screen",
@@ -134,7 +140,11 @@ const MoreStackNavigator = StackNavigator(
   {
     More: { screen: MoreScreen },
     Settings: { screen: SettingsScreen },
-    ChangePassword: { screen: ChangePasswordScreen }
+    ChangePassword: { screen: ChangePasswordScreen },
+    Profile: { screen: ProfileScreen },
+    ProfileCharRoom: { screen: ChatRoomScreen },
+    ProfileUser: { screen: ProfileUserScreen },
+    UpdateProfile: { screen: UpdateProfileScreen },
   },
   {
     headerMode: "screen",
@@ -159,11 +169,15 @@ const MainTapNavigator = TabNavigator(
     swipeEnabled: false,
     animationEnabled: false,
     tabBarOptions: {
+      renderIndicator: () => null,
       activeTintColor: "#00943B",
       inactiveTintColor: "#444444",
       labelStyle: { fontSize: 10, width: width / 5 - 5 },
       showIcon: "true",
-      style: { backgroundColor: "white" },
+      style: {
+        backgroundColor: "white",
+        height: Platform.OS === "ios" ? 48 : 60
+      },
       indicatorStyle: { opacity: 1 }
     }
   }
@@ -190,7 +204,6 @@ const App = StackNavigator(
     TermsofUseScreen: { screen: TermsofUseScreen },
     ContactUs: { screen: ContactUsScreen },
     Offer: { screen: OfferScreen },
-    Profile: { screen: ProfileScreen },
     ProfileCharRoom: { screen: ChatRoomScreen },
     ExtendTime: { screen: ExtendTimeScreen },
     CompleteTour: { screen: CompleteTourScreen },
@@ -205,7 +218,8 @@ const App = StackNavigator(
     AddPaymentMethod: { screen: AddPaymentMethodScreen },
     IdentityVerification: { screen: IdentityVerificationScreen },
     PaymentrailDetail: { screen: PaymentrailDetailScreen },
-    ProfileUser: { screen: ProfileUserScreen }
+    ProfileUser: { screen: ProfileUserScreen },
+    Profile: { screen: ProfileScreen },
   },
   {
     headerMode: "screen"

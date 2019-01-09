@@ -89,7 +89,7 @@ class BookingGuideSettingScreen extends React.Component {
       isLoading: false,
       address: "",
       braintreeClientToken: "",
-      defaultCard: null //Object
+      defaultCard: null //{Object}
     };
     this.navigate = this.props.navigation;
   }
@@ -110,9 +110,12 @@ class BookingGuideSettingScreen extends React.Component {
   }
 
   onConfirm() {
-    this.bookGuideWS();
-
-    //this.navigate.navigate('Offer');
+    //Check if any default card is available or not
+    if (this.state.defaultCard) {
+      this.bookGuideWS();
+    } else {
+      Alert.alert("Tourzan", "Please add payment method to continue booking.");
+    }
   }
 
   //Callback from CardListScreen.js
@@ -210,7 +213,7 @@ class BookingGuideSettingScreen extends React.Component {
 
         Alert.alert(
           "Tourzan",
-          'Thanks for booking guide. Guide will respond shortly.',
+          "Thanks for booking guide. Guide will respond shortly.",
           [
             {
               text: "OK",
@@ -563,10 +566,13 @@ class BookingGuideSettingScreen extends React.Component {
         if (data && data.length > 0) {
           //Three status: 'true', 'false' and ''unknown'
 
+          var isActiveCardFound = false;
+
           for (let i = 0; i < data.length; i++) {
             const card = data[i];
 
             if (card.is_active == true && card.is_default == true) {
+              isActiveCardFound = true;
               if (this.paymentMethodTypes) {
                 for (let i = 0; i < data.length; i++) {
                   for (let j = 0; j < this.paymentMethodTypes.length; j++) {
@@ -579,8 +585,13 @@ class BookingGuideSettingScreen extends React.Component {
                   }
                 }
               }
+
               this.setState({ defaultCard: card });
             }
+          }
+
+          if (!isActiveCardFound) {
+            this.setState({ defaultCard: null });
           }
         }
       })
@@ -645,13 +656,15 @@ const styles = StyleSheet.create({
   },
   top_avatar_icon: {
     position: "absolute",
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     borderWidth: 1,
     borderColor: "#ddd",
     marginTop: 10,
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
+    borderColor: "#ffffff",
+    borderWidth: 4
   },
   top_info_view: {
     backgroundColor: "white",
@@ -662,7 +675,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   top_name_text: {
-    marginTop: 30,
+    marginTop: 40,
     fontSize: 15,
     color: "#000",
     textAlign: "left",
@@ -685,7 +698,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.color999,
     textAlign: "left",
-    fontFamily: DefaultFont.textFont
+    fontFamily: DefaultFont.textFont,
+    width: "50%",
+    alignSelf: "center"
   },
 
   //--- setting container ---//

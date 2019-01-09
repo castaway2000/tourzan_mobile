@@ -86,7 +86,6 @@ const checkedCard = require("./../assets/images/card-checked.png");
 const unCheckedCard = require("./../assets/images/card-unchecked.png");
 const removeCard = require("./../assets/images/card-remove.png");
 
-
 class CardListScreen extends React.Component {
   //#region Constractors
   static navigationOptions = {
@@ -192,7 +191,7 @@ class CardListScreen extends React.Component {
             }}
           >
             <Image
-              resizeMode="cover"
+              resizeMode='cover'
               source={require("../assets/images/back.png")}
               style={styles.backButton}
             />
@@ -206,7 +205,7 @@ class CardListScreen extends React.Component {
                 }}
               >
                 <Image
-                  resizeMode="cover"
+                  resizeMode="contain"
                   source={require("../assets/images/add-card-payment.png")}
                   style={styles.addPayment}
                 />
@@ -229,6 +228,7 @@ class CardListScreen extends React.Component {
 
                       {item.logo && (
                         <Image
+                          resizeMode="contain"
                           source={{ uri: item.logo }}
                           style={{
                             width: 50,
@@ -252,6 +252,7 @@ class CardListScreen extends React.Component {
                           }}
                         >
                           <Image
+                            resizeMode="contain"
                             style={{
                               width: 30,
                               height: 30
@@ -275,6 +276,7 @@ class CardListScreen extends React.Component {
                           }}
                         >
                           <Image
+                            resizeMode="contain"
                             source={removeCard}
                             style={{
                               width: 30,
@@ -476,7 +478,7 @@ class CardListScreen extends React.Component {
         //Callback to Booking Guide Setting Screen
         if (
           this.props.navigation.state.params &&
-          this.props.navigation.state.params.cardChanged
+          this.props.navigation.state.params.CardChanged
         ) {
           this.props.navigation.state.params.CardChanged();
         }
@@ -528,7 +530,9 @@ const styles = StyleSheet.create({
     width: 10
   },
   addPayment: {
-    marginLeft: 20
+    marginLeft: 20,
+    height: 30,
+    width: 44
   },
   centerText: {
     color: "white",

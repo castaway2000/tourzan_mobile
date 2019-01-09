@@ -28,6 +28,7 @@ import TransactionItemDetailScreen from "./ItemDetailScreens/TransactionItemDeta
 import DashboardTapNavigator from "./DashboardTabs/DashboardTapNavigator";
 import ProfileScreen from "./ProfileScreen";
 import ProfileUserScreen from "./ProfileUserScreen";
+import UpdateProfileScreen from "../containers/UpdateProfileScreen";
 
 //Store
 import { connect } from "react-redux";
@@ -66,6 +67,7 @@ const DashboardStackNavigator = StackNavigator(
     TransactionItemDetail: { screen: TransactionItemDetailScreen },
     Profile: { screen: ProfileScreen },
     ProfileUser: { screen: ProfileUserScreen },
+    UpdateProfile: { screen: UpdateProfileScreen },
   },
   {
     headerMode: "screen",
