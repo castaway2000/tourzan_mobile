@@ -227,11 +227,11 @@ class TransactionsScreen extends React.Component {
           style={styles.emptyStateImage}
         />
         <Text style={styles.emptyStateBoldText}>
-          {"No previous transaction found."}
+          {"No previous transactions were found. "}
         </Text>
         <Text style={styles.emptyStateNormalText}>
           {this.props.userdata.user.isLoggedInAsGuide
-            ? "Your previously booked tourist displayed here."
+            ? "Your previous orders are displayed here. \n No previous transactions were found."
             : "You can book a guide from Maps screen. \n Your previous transaction displayed here."}
         </Text>
       </View>

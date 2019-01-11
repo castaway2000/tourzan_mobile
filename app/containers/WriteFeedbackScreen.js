@@ -51,6 +51,7 @@ import {
 
 //Webservice
 import { addReview } from "../actions";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 var { width, height } = Dimensions.get("window");
 
@@ -95,10 +96,13 @@ class WriteFeedbackScreen extends React.Component {
   }
 
   // functions for listview
-  componentDidMount() {}
+  componentDidMount() {
+    
+  }
 
   //Show full name
   _showProfilePicture = () => {
+    
     let profileData = this.props.navigation.state.params.profileData;
 
     if (!profileData) {
@@ -135,7 +139,9 @@ class WriteFeedbackScreen extends React.Component {
   };
 
   //Show full name
+  
   _showFullname = () => {
+
     let profileData = this.props.navigation.state.params.profileData;
 
     if (!profileData) {
@@ -157,6 +163,7 @@ class WriteFeedbackScreen extends React.Component {
 
   //Calculate average star from review
   _showRatingViewMain = () => {
+
     let profileData = this.props.navigation.state.params.profileData;
     let tripData = this.props.navigation.state.params.tripData;
     let ratings = this.props.navigation.state.params.ratings;
@@ -202,7 +209,7 @@ class WriteFeedbackScreen extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <View style={styles.container}>
+      <KeyboardAwareScrollView style={styles.container}>
         <View resizeMode="cover" style={styles.top_container}>
           <View style={styles.navigationbar}>
             <TouchableOpacity
@@ -220,7 +227,7 @@ class WriteFeedbackScreen extends React.Component {
             <Text style={styles.centerText} />
             <View style={styles.rightView}>
               <TouchableOpacity onPress={() => this.onAddRating()}>
-                <Text style={styles.rightView}>DONE</Text>
+                <Text style={styles.rightView}>POST</Text>
               </TouchableOpacity>
             </View>
             {/* <TouchableOpacity onPress={() => { navigate('ProfileCharRoom') }}>
@@ -228,7 +235,7 @@ class WriteFeedbackScreen extends React.Component {
                         </TouchableOpacity> */}
           </View>
         </View>
-        <ScrollView style={styles.scrollview_container}>
+        <View style={styles.scrollview_container}>
           <View style={styles.content_container}>
             <View style={styles.main_container}>
               <View pointerEvents="none" style={styles.name_view}>
@@ -278,10 +285,10 @@ class WriteFeedbackScreen extends React.Component {
             value={this.state.text}
             underlineColorAndroid="transparent"
           />
-        </ScrollView>
+        </View>
         {this._showProfilePicture()}
         {this.showLoading()}
-      </View>
+      </KeyboardAwareScrollView>
     );
   }
 
@@ -338,7 +345,7 @@ trip_id: 57}*/
         if (data.detail) {
           Alert.alert(
             "Tourzan",
-            data.detail,
+            "Review has been successfully added.",
             [
               {
                 text: "OK",
@@ -375,7 +382,7 @@ const styles = StyleSheet.create({
   top_container: {
     width: width,
     height: 100,
-    backgroundColor: Colors.main
+    backgroundColor: Colors.main,
   },
   navigationbar: {
     paddingTop:
@@ -415,7 +422,6 @@ const styles = StyleSheet.create({
     fontFamily: DefaultFont.textFont
   },
   scrollview_container: {
-    // flex:1,
     paddingTop: 20,
     height: height - 100
   },
@@ -497,10 +503,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1
   },
   text_input: {
-    marginTop: 10,
+    marginTop: 2,
     marginLeft: 30,
     marginRight: 30,
-    maxHeight: 80,
+    maxHeight: 60,
     fontFamily: DefaultFont.textFont,
     fontFamily: DefaultFont.textFont
   }

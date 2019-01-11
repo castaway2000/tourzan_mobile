@@ -18,13 +18,19 @@ import {
 
 import { NavigationActions } from "react-navigation";
 import Checkbox from "react-native-custom-checkbox";
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import { Rating, AirbnbRating } from "react-native-ratings";
 import ReadMore from "@expo/react-native-read-more-text";
 import moment from "moment";
 
 import ApplyButton from "../../components/ApplyButton";
 import NavigationBar from "../../components/NavigationBar";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../../constants";
 
 var { width, height } = Dimensions.get("window");
 

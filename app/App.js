@@ -87,6 +87,7 @@ const MapChatStackNavigator = StackNavigator(
     Profile: { screen: ProfileScreen },
     ProfileCharRoom: { screen: ChatRoomScreen },
     UpdateProfile: { screen: UpdateProfileScreen },
+    ProfileUser: { screen: ProfileUserScreen }
   },
   {
     navigationOptions: {
@@ -106,7 +107,7 @@ const DashboardStackNavigator = StackNavigator(
     Profile: { screen: ProfileScreen },
     ProfileCharRoom: { screen: ChatRoomScreen },
     ProfileUser: { screen: ProfileUserScreen },
-    UpdateProfile: { screen: UpdateProfileScreen },
+    UpdateProfile: { screen: UpdateProfileScreen }
   },
   {
     navigationOptions: {
@@ -125,7 +126,7 @@ const ChatStackNavigator = StackNavigator(
     Profile: { screen: ProfileScreen },
     ProfileCharRoom: { screen: ChatRoomScreen },
     ProfileUser: { screen: ProfileUserScreen },
-    UpdateProfile: { screen: UpdateProfileScreen },
+    UpdateProfile: { screen: UpdateProfileScreen }
   },
   {
     headerMode: "screen",
@@ -144,7 +145,7 @@ const MoreStackNavigator = StackNavigator(
     Profile: { screen: ProfileScreen },
     ProfileCharRoom: { screen: ChatRoomScreen },
     ProfileUser: { screen: ProfileUserScreen },
-    UpdateProfile: { screen: UpdateProfileScreen },
+    UpdateProfile: { screen: UpdateProfileScreen }
   },
   {
     headerMode: "screen",
@@ -219,7 +220,7 @@ const App = StackNavigator(
     IdentityVerification: { screen: IdentityVerificationScreen },
     PaymentrailDetail: { screen: PaymentrailDetailScreen },
     ProfileUser: { screen: ProfileUserScreen },
-    Profile: { screen: ProfileScreen },
+    Profile: { screen: ProfileScreen }
   },
   {
     headerMode: "screen"

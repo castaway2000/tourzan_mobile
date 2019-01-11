@@ -355,7 +355,8 @@ class BookingGuideSettingScreen extends React.Component {
         <View style={styles.navigationbar}>
           <TouchableOpacity
             onPress={() => {
-              this.props.navigation.dispatch(resetRootAction);
+              this.props.navigation.pop();
+              this.props.navigation.pop();
             }}
           >
             <Image
@@ -699,7 +700,7 @@ const styles = StyleSheet.create({
     color: Colors.color999,
     textAlign: "left",
     fontFamily: DefaultFont.textFont,
-    width: "50%",
+    width: "70%",
     alignSelf: "center"
   },
 

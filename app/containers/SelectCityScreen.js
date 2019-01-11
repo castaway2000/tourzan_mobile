@@ -44,7 +44,13 @@ import { autocompleteCity } from "../actions";
 
 //Utilities
 import { isIphoneX } from "../global/Utilities";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 var { width, height } = Dimensions.get("window");
 
@@ -166,7 +172,13 @@ class SelectCityScreen extends React.Component {
               <View
                 style={{ flex: 1, flexDirection: "row", alignItems: "center" }}
               >
-                <Text style={{ width: "100%", textAlign: "center", fontFamily: DefaultFont.textFont }}>
+                <Text
+                  style={{
+                    width: "100%",
+                    textAlign: "center",
+                    fontFamily: DefaultFont.textFont
+                  }}
+                >
                   {this.state.message}
                 </Text>
               </View>
@@ -270,7 +282,7 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     borderColor: "#E4E4E4",
     backgroundColor: "white",
-    borderRadius: 14,
+    borderRadius: 14
   },
   searchBar: {
     paddingLeft: 10,

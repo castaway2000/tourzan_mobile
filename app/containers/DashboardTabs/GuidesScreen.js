@@ -242,7 +242,7 @@ class GuideScreen extends React.Component {
               resizeMode="cover"
               source={
                 item.pic
-                  ? { uri: item.pic }
+                  ? { uri: item.pic, headers: { Pragma: "force-cache" } }
                   : require("../../assets/images/defaultavatar.png")
               }
               style={styles.avatar_img}
@@ -255,8 +255,8 @@ class GuideScreen extends React.Component {
                 ratingCount={5}
                 startingValue={
                   this.props.userdata.user.isLoggedInAsGuide
-                    ? item.rating_tourist
-                    : item.rating_guide
+                    ? parseFloat(item.rating_tourist)
+                    : parseFloat(item.rating_guide)
                 }
                 readonly
                 imageSize={12}
@@ -298,12 +298,12 @@ class GuideScreen extends React.Component {
         <Text style={styles.emptyStateBoldText}>
           {"No previous " +
             (this.props.userdata.user.isLoggedInAsGuide ? "tourist" : "guide") +
-            " found."}
+            " was found."}
         </Text>
         <Text style={styles.emptyStateNormalText}>
           {this.props.userdata.user.isLoggedInAsGuide
-            ? "Your previously booked tourist displayed here."
-            : "You can book a guide from Maps screen. \n Your previously booked guides \n displayed here."}
+            ? "Your previously booked tourists \n are displayed here."
+            : "Your previously booked guides are displayed here. You can book a guide from Maps screen."}
         </Text>
       </View>
     );

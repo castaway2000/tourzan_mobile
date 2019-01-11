@@ -95,6 +95,7 @@ class ChatScreen extends React.Component {
     console.log("Refreshing.....");
 
     this.setState({ isFetching: true });
+
     this.loadChatList();
   }
 
@@ -266,7 +267,7 @@ class ChatScreen extends React.Component {
     let text = searchText.toLowerCase();
 
     let filteredData = notes.filter(note => {
-      return (note.topic.toLowerCase().indexOf(text) != -1);
+      return note.topic.toLowerCase().indexOf(text) != -1;
     });
 
     return filteredData;
@@ -314,7 +315,9 @@ class ChatScreen extends React.Component {
           {"No previous chat found."}
         </Text>
         <Text style={styles.emptyStateNormalText}>
-          {"When guide booked new chat with \n guide will be displayed here."}
+          {
+            "When a booking happens a new chat with your \n guide/tourist will be displayed here."
+          }
         </Text>
       </View>
     );

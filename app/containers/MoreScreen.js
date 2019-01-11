@@ -89,7 +89,10 @@ class MoreScreen extends React.Component {
         {
           text: "OK",
           onPress: () => {
-            if (this.props.userdata.user.isLoggedInAsGuide) {
+            if (
+              this.props.userdata.user.isLoggedInAsGuide &&
+              this.props.userdata.user.isClockedIn
+            ) {
               this.updateClockOutStatusWS(
                 this.props.userdata.user.userid,
                 this.props.currentlocation.lat,
@@ -144,16 +147,10 @@ class MoreScreen extends React.Component {
 
     updateClockInOutStatus(params)
       .then(data => {
-        this.setState({
-          isLoading: false
-        });
 
-        Alert.alert("Tourzan", "You are successfully clocked out");
+        Alert.alert("Tourzan", "You are successfully clocked out.");
       })
       .catch(err => {
-        this.setState({
-          isLoading: false
-        });
         alert(err);
       });
   }

@@ -36,7 +36,7 @@ const contactUsHtml = `<script type="text/javascript" src="https://s3.amazonaws.
 </style>
 <iframe title="Feedback Form" class="freshwidget-embedded-form" id="freshwidget-embedded-form" src="https://tourzan.freshdesk.com/widgets/feedback_widget/new?&widgetType=embedded&formTitle=Contact+Us&submitTitle=Send&submitThanks=Thank+you+for+your+feedback.+&screenshot=No&captcha=yes"
  scrolling="yes" height="500px" width="100%" frameborder="0">
-</iframe>`
+</iframe>`;
 
 var { width, height } = Dimensions.get("window");
 const backAction = NavigationActions.back({});
@@ -101,8 +101,8 @@ class ContactUsScreen extends Component {
         <View style={styles.webviewContainer}>
           <WebView
             onLoad={() => this.hideSpinner()}
-            originWhitelist={['*']}
-            source={{ html: contactUsHtml ,  baseUrl: ''}}
+            originWhitelist={["*"]}
+            source={{ html: contactUsHtml, baseUrl: "" }}
             scalesPageToFit={false}
             startInLoadingState={true}
             injectedJavaScript={`const meta = document.createElement('meta'); meta.setAttribute('content', 'width=width, initial-scale=1, maximum-scale=1, user-scalable=2.0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); `}
@@ -171,8 +171,8 @@ const styles = StyleSheet.create({
   webviewContainer: {
     flex: 1,
     backgroundColor: "#ffffff",
-    width:'100%',
-    height:'100%'
+    width: "100%",
+    height: "100%"
   },
   loadingView: {
     position: "absolute",

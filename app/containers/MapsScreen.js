@@ -39,7 +39,7 @@ import { store } from "../store/index";
 
 //Actions
 import { updatebooking } from "../actions/bookingActions";
-import { updateuser } from "../actions/userActions";
+import { updateuser, updateOrder, updateChat } from "../actions/userActions";
 import { updatelocation } from "../actions/locationActions";
 import * as Actions from "../actions";
 
@@ -138,14 +138,13 @@ class MapsScreen extends React.Component {
   //#endregion
 
   async componentDidMount() {
+    //Manages notifications
     this.handelNotifications();
 
-    console.log("componentDidMount");
-
-    console.log("navigator.geolocation", navigator.geolocation);
-
+    //Get Credit/Debit card images
     this.paymentMethodTypesWS();
 
+    //Track users current location
     navigator.geolocation.getCurrentPosition(
       position => {
         // Create the object to update this.state.mapRegion through the onRegionChange function
@@ -188,8 +187,6 @@ class MapsScreen extends React.Component {
 
     this.watchID = navigator.geolocation.watchPosition(
       position => {
-        console.log("navigator.geolocation");
-
         // Create the object to update this.state.mapRegion through the onRegionChange function
         this.addressFromCoordnate(
           position.coords.latitude,
@@ -251,10 +248,11 @@ class MapsScreen extends React.Component {
       }, 5000);
     }
 
+    /*
     //Check Token Exipred or not
     setTimeout(() => {
       this.verifyTokenWS();
-    }, 5000);
+    }, 5000);*/
   }
 
   componentWillUnmount() {
@@ -916,6 +914,8 @@ class MapsScreen extends React.Component {
           console.log("Previous trip found. Trip id is", data.trip_id);
 
           this.gettripstatusWS(data.trip_id);
+        } else if (data.detail && data.detail == "Signature has expired.") {
+          this.logout();
         }
       })
       .catch(err => {});
@@ -969,8 +969,10 @@ class MapsScreen extends React.Component {
         if (
           !this.props.userdata.user.isClockedIn &&
           this.props.userdata.user.isLoggedInAsGuide &&
-          !this.props.bookingdata.isTripInProgress
+          this.props.bookingdata.isTripInProgress &&
+          !this.state.switchOn
         ) {
+          this.setState({ switchOn: !this.state.switchOn });
           this.updateClockInOutStatusWS(true);
         }
 
@@ -1000,8 +1002,6 @@ class MapsScreen extends React.Component {
       .then(data => {
         console.log("Get onGetNearbyGuide-->", data);
 
-        //Alert.alert('Get Nearby Guide Responce', JSON.stringify(data))
-
         if (data) {
           if (data.length < 1) {
             console.log("No nearby guides available");
@@ -1019,6 +1019,56 @@ class MapsScreen extends React.Component {
       });
   }
 
+  logout() {
+    //Stop all webservice calls
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+
+    Alert.alert(
+      "Tourzan",
+      "Session expired please login again.",
+      [
+        {
+          text: "OK",
+          onPress: () => {
+            //Reset Trip
+
+            //Clock out guide if already clocked in
+            if (
+              this.props.userdata.user.isLoggedInAsGuide &&
+              this.props.userdata.user.isClockedIn
+            ) {
+              this.updateClockInOutStatusWS(false);
+            }
+
+            //Reset Trip
+            let storestate = store.getState();
+            storestate.tour.bookingdata.isTripInProgress = false;
+            storestate.tour.bookingdata.tripid = 0;
+            storestate.tour.bookingdata.isAutomatic = true;
+            store.dispatch(updatebooking(storestate.tour.bookingdata));
+
+            //Reste order state
+            store.dispatch(updateOrder([]));
+
+            //Remove user storage
+            Storage.removeItem("currentuser");
+
+            //Reset user state
+            store.dispatch(updateuser({}));
+
+            //Reset chat state
+            store.dispatch(updateChat([]));
+
+            this.props.navigation.dispatch(resetRootAction);
+          }
+        }
+      ],
+      { cancelable: false }
+    );
+  }
+  /*
   verifyTokenWS() {
     var { dispatch } = this.props;
 
@@ -1056,7 +1106,7 @@ class MapsScreen extends React.Component {
       .catch(err => {
         alert(err);
       });
-  }
+  }*/
 
   getOrderbyidWS(orderid) {
     var { dispatch } = this.props;
@@ -1204,11 +1254,11 @@ class MapsScreen extends React.Component {
             this.confirmAlertDelay = null;
 
             Alert.alert(
-              "Debug",
-              JSON.stringify(extradata),
+              "New trip offer",
+              "Hey! You have received new trip offer. Please respond to this offer.",
               [
                 {
-                  text: "Reject",
+                  text: "Cancel",
                   onPress: () => {},
                   style: "cancel"
                 },
@@ -1219,7 +1269,7 @@ class MapsScreen extends React.Component {
                   }
                 },
                 {
-                  text: "Cancel",
+                  text: "Reject",
                   onPress: () => {}
                 }
               ],
@@ -1260,16 +1310,17 @@ class MapsScreen extends React.Component {
 
             Alert.alert(
               "Tourzan",
-              "Your trip ended successfully. Would you like to give review?.",
+              "Your trip ended successfully. Would you like to give review?",
               [
                 {
-                  text: "Yes",
+                  text: "Add Review",
                   onPress: () => {
                     this.getOrderbyidWS(this.props.bookingdata.orderid);
                   }
                 },
                 {
-                  text: "No",
+                  text: "Cancel",
+                  style: "cancel",
                   onPress: () => {}
                 }
               ],
@@ -1302,11 +1353,11 @@ class MapsScreen extends React.Component {
             console.log("Still calls two times!");
 
             Alert.alert(
-              "Debug",
-              JSON.stringify(extradata),
+              "New trip offer",
+              "Hey! You have received new trip offer. Please respond to this offer.",
               [
                 {
-                  text: "Reject",
+                  text: "Cancel",
                   onPress: () => {},
                   style: "cancel"
                 },
@@ -1317,7 +1368,7 @@ class MapsScreen extends React.Component {
                   }
                 },
                 {
-                  text: "Cancel",
+                  text: "Reject",
                   onPress: () => {}
                 }
               ],
@@ -1357,16 +1408,17 @@ class MapsScreen extends React.Component {
 
             Alert.alert(
               "Tourzan",
-              "Your trip ended successfully. Would you like to give review?.",
+              "Your trip ended successfully. Would you like to give review?",
               [
                 {
-                  text: "Yes",
+                  text: "Add Review",
                   onPress: () => {
                     this.getOrderbyidWS(this.props.bookingdata.orderid);
                   }
                 },
                 {
-                  text: "No",
+                  text: "Cancel",
+                  style: "cancel",
                   onPress: () => {}
                 }
               ],
@@ -1454,7 +1506,7 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 10,
     shadowOpacity: 0.2,
-    elevation: 2
+    elevation: 12
   },
   location_address_view: {
     padding: 8,

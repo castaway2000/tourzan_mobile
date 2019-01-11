@@ -27,7 +27,13 @@ import { store } from "../../store/index";
 
 //Utilities
 import { isIphoneX, isNumber, Storage } from "../../global/Utilities";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../../constants";
 
 //Actions
 import { updatebooking } from "../../actions/bookingActions";
@@ -119,7 +125,7 @@ class BookingSearchingScreen extends React.Component {
 
         if (data) {
           if (data.length < 1) {
-            // Alert.alert('Tourzan', 'No nearby guide available. Please try again later.')
+            Alert.alert('Tourzan', 'No nearby guide available. Please try again later.')
             this.props.navigation.dispatch(backAction);
           } else {
             //timer.setTimeout(this, '', () => this.navigate.navigate('BookingGuideSetting', { guides: data }), 5000);

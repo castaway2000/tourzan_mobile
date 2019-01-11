@@ -58,6 +58,8 @@ const backAction = NavigationActions.back({
   // key: 'WelcomeScreen'
 });
 
+const popToTopAction = NavigationActions.popToTop({});
+
 class ProfileUserScreen extends React.Component {
   static navigationOptions = {
     title: "Maps",
@@ -274,7 +276,17 @@ class ProfileUserScreen extends React.Component {
     );
   };
 
-  _onBooking = () => {};
+  _onBooking = () => {
+    if (!this.props.currentlocation.lat || !this.props.currentlocation.long) {
+      Alert.alert(
+        "Tourzan",
+        "Your current location is unavailable. Please try again."
+      );
+      return;
+    }
+
+    this.bookGuideWS();
+  };
 
   renderRow = ({ item, index }) => {
     let isGuide = this.props.userdata.user.isLoggedInAsGuide;
@@ -443,6 +455,7 @@ class ProfileUserScreen extends React.Component {
             // <Button containerStyle={styles.interesting_container_btn} style={styles.interesting_btn} onPress={() => this._interestingBtnHandlePress()} >Attractions</Button>
 
             <TouchableOpacity
+              key={i.toString()}
               style={styles.interesting_container_btn}
               onPress={() => this._interestingBtnHandlePress()}
             >
@@ -631,7 +644,7 @@ class ProfileUserScreen extends React.Component {
     var params = {
       token: this.props.userdata.token,
       userid: this.props.userdata.user.userid,
-      guides: "[" + parseInt(guide.id) + "]",
+      guides: "[" + this.getUserID() + "]",
       latitude: this.props.currentlocation.lat,
       longitude: this.props.currentlocation.long,
       timelimit: storestate.tour.bookingdata.timeLimit,

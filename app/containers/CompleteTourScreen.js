@@ -155,9 +155,9 @@ class CompleteTourScreen extends React.Component {
         />
       );
     }
-    
+
     let profilepicture = "";
-    
+
     profilepicture = this.state.profileData.pic;
 
     if (profilepicture) {
@@ -507,7 +507,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     borderBottomWidth: 1,
     borderColor: "#ddd",
-    backgroundColor: "white",
+    backgroundColor: "white"
   },
   row_setting_btn_icon: {
     height: 15,
@@ -525,7 +525,7 @@ const styles = StyleSheet.create({
     width: width,
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: 'center',
+    justifyContent: "center",
     marginTop: 20
   },
   add_feedback_btn: {

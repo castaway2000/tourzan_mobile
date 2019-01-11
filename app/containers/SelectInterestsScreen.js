@@ -161,7 +161,7 @@ class SelectInterestsScreen extends React.Component {
         </View>
         <View style={styles.view}>
           <View style={styles.searchBarbg}>
-          <Image
+            <Image
               resizeMode="cover"
               source={require("../assets/images/search_white_icon.png")}
               style={styles.searchIcon}
@@ -343,19 +343,19 @@ const styles = StyleSheet.create({
     borderColor: "#E4E4E4",
     backgroundColor: "white",
     borderRadius: 14,
-    flexDirection:'row',
-    alignItems:'center'
+    flexDirection: "row",
+    alignItems: "center"
   },
   searchBar: {
     flex: 1,
     fontFamily: DefaultFont.textFont
   },
-  searchIcon:{
-    marginLeft:10,
-    marginRight:10,
-    width:12,
-    height:12,
-    tintColor:'#5c5c5c'
+  searchIcon: {
+    marginLeft: 10,
+    marginRight: 10,
+    width: 12,
+    height: 12,
+    tintColor: "#5c5c5c"
   },
 
   // --- Activity --- //

@@ -171,7 +171,9 @@ class CardListScreen extends React.Component {
           {"No payment method added."}
         </Text>
         <Text style={styles.emptyStateNormalText}>
-          {"You can add payment method, \n clicking top right icon."}
+          {
+            "You can add a payment method \n by clicking top right icon. \n You will be unable to book a \n guide without a payment method."
+          }
         </Text>
       </View>
     );
@@ -191,7 +193,7 @@ class CardListScreen extends React.Component {
             }}
           >
             <Image
-              resizeMode='cover'
+              resizeMode="cover"
               source={require("../assets/images/back.png")}
               style={styles.backButton}
             />

@@ -62,6 +62,7 @@ var { width, height } = Dimensions.get("window");
 const onButtonPress = () => {
   Alert.alert("Button has been pressed!");
 };
+
 const backAction = NavigationActions.back({
   // key: 'WelcomeScreen'
 });
@@ -71,8 +72,7 @@ class ProfileScreen extends React.Component {
     title: "Maps",
     header: null,
     tabBarLabel: "Maps",
-    isLoading: false,
-    profileData: null,
+
     tabBarIcon: ({ tintColor }) => (
       <Image
         resizeMode="contain"
@@ -91,6 +91,10 @@ class ProfileScreen extends React.Component {
     this.onContentSize = this.onContentSize.bind(this);
 
     this.state = {
+      isLoading: false,
+
+      profileData: null,
+
       // for listview
       reviewsArray: [],
 

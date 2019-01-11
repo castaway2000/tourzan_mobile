@@ -29,6 +29,10 @@ import DashboardTapNavigator from "./DashboardTabs/DashboardTapNavigator";
 import ProfileScreen from "./ProfileScreen";
 import ProfileUserScreen from "./ProfileUserScreen";
 import UpdateProfileScreen from "../containers/UpdateProfileScreen";
+import SelectInterestsScreen from "../containers/SelectInterestsScreen";
+import WriteFeedbackScreen from "../containers/WriteFeedbackScreen";
+import SelectLanguageScreen from "../containers/SelectLanguageScreen";
+import SelectLanguageProficiencyScreen from "../containers/SelectLanguageProficiencyScreen";
 
 //Store
 import { connect } from "react-redux";
@@ -40,7 +44,13 @@ import { updateuser } from "../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 var { width, height } = Dimensions.get("window");
 
@@ -68,6 +78,10 @@ const DashboardStackNavigator = StackNavigator(
     Profile: { screen: ProfileScreen },
     ProfileUser: { screen: ProfileUserScreen },
     UpdateProfile: { screen: UpdateProfileScreen },
+    SelectInterests: { screen: SelectInterestsScreen },
+    WriteFeedback: { screen: WriteFeedbackScreen },
+    SelectLanguage: { screen: SelectLanguageScreen },
+    SelectLanguageProficiency: { screen: SelectLanguageProficiencyScreen }
   },
   {
     headerMode: "screen",

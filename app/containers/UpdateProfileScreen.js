@@ -68,7 +68,8 @@ import { TagSelect } from "react-native-tag-select";
 class UpdateProfileScreen extends React.Component {
   //#region Constractors
   static navigationOptions = {
-    header: null
+    header: null,
+    tabBarVisible: false
   };
 
   constructor(props) {
@@ -619,15 +620,17 @@ class UpdateProfileScreen extends React.Component {
                 </View>
               </TouchableOpacity>
 
-              <View style={styles.row_icon_view}>
+              <View style={styles.row_icon_view_no_height}>
                 {/* <Image resizeMode='contain' source={require("../assets/images/key_unlock_icon.png")} style={styles.row_small_icon} /> */}
                 <TextInput
+                
                   underlineColorAndroid="transparent"
-                  placeholder="Overview"
-                  style={styles.row_icon_lb}
+                  placeholder= "Please describe a little bit about yourself and your interests here. for example: I am from Seattle, I love hiking, boating and taking photos. I am really excited about this vacation because I can get to experience new things"
+                  style={[styles.row_icon_lb, {textAlignVertical: "top", lineHeight: 22}]}
                   secureTextEntry={false}
                   value={this.state.overview}
                   multiline={true}
+                  numberOfLines={7}
                   onChangeText={text => this.setOverview(text)}
                 />
               </View>
@@ -688,7 +691,6 @@ class UpdateProfileScreen extends React.Component {
   }
 
   updateUI(data) {
-
     //First name
     if (data.general_profile.first_name) {
       this.setState({ firstname: data.general_profile.first_name });
@@ -789,7 +791,7 @@ class UpdateProfileScreen extends React.Component {
           city.terms = [{ value: data.general_profile.registration_country }];
         }
 
-        console.log('city object',city)
+        console.log("city object", city);
 
         this.setState({ city: city });
       }
@@ -856,7 +858,6 @@ class UpdateProfileScreen extends React.Component {
     //City Logic
     var terms = "";
     if (this.state.city) {
-
       if (this.state.city.terms) {
         terms = this.state.city.terms;
         if (terms.length > 0) {
@@ -1222,6 +1223,16 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: "#c2c3c9",
     backgroundColor: "white"
+  },
+  row_icon_view_no_height: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 30,
+    width: width,
+    borderBottomWidth: 1,
+    borderColor: "#c2c3c9",
+    backgroundColor: "white",
+    minHeight: 50
   },
   row_icon_tag_view: {
     flexDirection: "row",

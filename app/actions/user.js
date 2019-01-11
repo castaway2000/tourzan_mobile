@@ -126,8 +126,8 @@ function usermixins(params) {
       method: "POST",
       headers: {
         "Content-Type": "multipart/form-data",
-        pragma: "no-cache",
-        "Cache-Control": "no-cache",
+        "Cache-Control": "force-cache",
+        "pragma": "force-cache",
         Authorization: "JWT " + storeState.user.userdata.token,
       },
       body: formData
