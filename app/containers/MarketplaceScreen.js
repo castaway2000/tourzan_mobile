@@ -17,7 +17,7 @@ import {
   Platform
 } from "react-native";
 
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import { Rating, AirbnbRating } from "react-native-ratings";
 import { NavigationActions } from "react-navigation";
 import NavigationBar from "../components/NavigationBar";
 
@@ -31,7 +31,13 @@ import { updateuser } from "../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 var { width, height } = Dimensions.get("window");
 

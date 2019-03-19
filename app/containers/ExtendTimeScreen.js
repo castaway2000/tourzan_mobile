@@ -24,7 +24,13 @@ var { width, height } = Dimensions.get("window");
 
 //Utilities
 import { isIphoneX, isNumber, Storage } from "../global/Utilities";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 //Store
 import { connect } from "react-redux";

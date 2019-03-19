@@ -74,6 +74,19 @@ class ChatScreen extends React.Component {
     )
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      // for ratingview
+      starCount: 0.0,
+      isFetching: false,
+      shouldShowEmptyState: false
+    };
+
+    this.chatArrayHolder = [];
+  }
+
   _handleResults(results) {
     this.setState({ results });
   }
@@ -82,19 +95,8 @@ class ChatScreen extends React.Component {
     console.log("Refreshing.....");
 
     this.setState({ isFetching: true });
+
     this.loadChatList();
-  }
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      // for ratingview
-      starCount: 0.0,
-      isFetching: false
-    };
-
-    this.chatArrayHolder = [];
   }
 
   // function for ratingview
@@ -135,6 +137,9 @@ class ChatScreen extends React.Component {
 
               this.loadUserNameProfilePics(data, i);
             }
+            this.setState({ shouldShowEmptyState: false });
+          } else {
+            this.setState({ shouldShowEmptyState: true });
           }
           this.setState({ isFetching: false });
         })
@@ -172,6 +177,9 @@ class ChatScreen extends React.Component {
 
               this.loadUserNameProfilePics(data, i);
             }
+            this.setState({ shouldShowEmptyState: false });
+          } else {
+            this.setState({ shouldShowEmptyState: true });
           }
           this.setState({ isFetching: false });
         })
@@ -250,12 +258,12 @@ class ChatScreen extends React.Component {
     console.log("debug", searchText);
     this.setState({ searchText });
 
-    let filteredData = this.filterNotes(searchText, this.chatArrayHolder);
+    let filteredData = this.filterChats(searchText, this.chatArrayHolder);
 
     store.dispatch(updateChat(filteredData));
   }
 
-  filterNotes(searchText, notes) {
+  filterChats(searchText, notes) {
     let text = searchText.toLowerCase();
 
     let filteredData = notes.filter(note => {
@@ -288,13 +296,32 @@ class ChatScreen extends React.Component {
   };
 
   getMessagesText = rowData => {
-
     if (rowData.messages && rowData.messages.length > 0) {
       return rowData.messages[0].message;
     }
 
     return " ";
   };
+
+  showEmptyState() {
+    return (
+      <View style={styles.emptyStateContainer}>
+        <Image
+          resizeMode="contain"
+          source={require("../assets/images/message-icons.png")}
+          style={styles.emptyStateImage}
+        />
+        <Text style={styles.emptyStateBoldText}>
+          {"No previous chat found."}
+        </Text>
+        <Text style={styles.emptyStateNormalText}>
+          {
+            "When a booking happens a new chat with your \n guide/tourist will be displayed here."
+          }
+        </Text>
+      </View>
+    );
+  }
 
   renderItem(rowData) {
     let { item, index } = rowData;
@@ -379,7 +406,7 @@ class ChatScreen extends React.Component {
               <TextInput
                 style={styles.search_header_text}
                 underlineColorAndroid="transparent"
-                placeholder="Search here..."
+                placeholder="Search chat history..."
                 placeholderTextColor="white"
                 value={this.state.searchText}
                 onChange={this.setSearchText.bind(this)}
@@ -387,18 +414,24 @@ class ChatScreen extends React.Component {
             </View>
           </View>
           <View style={Platform.OS === "ios" ? { flex: 1 } : null}>
-            <FlatList
-              data={this.props.chats}
-              removeClippedSubviews={false}
-              extraData={this.state}
-              renderItem={this.renderItem.bind(this)}
-              ItemSeparatorComponent={(sectionId, rowId) => (
-                <View key={rowId} style={styles.separator} />
-              )}
-              onRefresh={() => this.onRefresh()}
-              refreshing={this.state.isFetching}
-              //renderHeader={() => <SearchListHeader />}
-            />
+            {this.props.chats.length < 1 &&
+              this.state.shouldShowEmptyState &&
+              this.showEmptyState()}
+
+            {this.props.chats.length > 0 && (
+              <FlatList
+                data={this.props.chats}
+                removeClippedSubviews={false}
+                extraData={this.state}
+                renderItem={this.renderItem.bind(this)}
+                ItemSeparatorComponent={(sectionId, rowId) => (
+                  <View key={rowId} style={styles.separator} />
+                )}
+                onRefresh={() => this.onRefresh()}
+                refreshing={this.state.isFetching}
+                //renderHeader={() => <SearchListHeader />}
+              />
+            )}
           </View>
         </View>
       </View>
@@ -567,6 +600,34 @@ const styles = StyleSheet.create({
   badge_icon: {
     height: 10,
     width: 10
+  },
+
+  //Empty state
+  emptyStateContainer: {
+    flex: 1,
+    alignItems: "center",
+    width: "100%",
+    justifyContent: "center"
+  },
+  emptyStateImage: {
+    width: 80,
+    height: 80,
+    opacity: 0.1
+  },
+  emptyStateBoldText: {
+    width: "100%",
+    marginTop: 12,
+    textAlign: "center",
+    color: "#bbbbbb",
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
+  },
+  emptyStateNormalText: {
+    width: "100%",
+    marginTop: 12,
+    textAlign: "center",
+    color: "#bbbbbb",
+    fontFamily: DefaultFont.textFont
   }
 });
 

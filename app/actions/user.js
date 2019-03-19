@@ -76,6 +76,8 @@ function emailSignup(params) {
 }
 
 function profile(params) {
+  let storeState = store.getState();
+
   var formData = new FormData();
   formData.append("user_id", params.userid);
 
@@ -90,7 +92,8 @@ function profile(params) {
       headers: {
         "Content-Type": "multipart/form-data",
         pragma: "no-cache",
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token,
       },
       body: formData
     })
@@ -107,6 +110,8 @@ function profile(params) {
 }
 
 function usermixins(params) {
+  let storeState = store.getState();
+
   var formData = new FormData();
   formData.append("id", params.id);
   formData.append("user_type", params.usertype);
@@ -121,8 +126,9 @@ function usermixins(params) {
       method: "POST",
       headers: {
         "Content-Type": "multipart/form-data",
-        pragma: "no-cache",
-        "Cache-Control": "no-cache"
+        "Cache-Control": "force-cache",
+        "pragma": "force-cache",
+        Authorization: "JWT " + storeState.user.userdata.token,
       },
       body: formData
     })
@@ -297,7 +303,8 @@ function searchInterest(params) {
       headers: {
         pragma: "no-cache",
         "Cache-Control": "no-cache",
-        "Content-Type": "application/x-www-form-urlencoded"
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: "JWT " + storeState.user.userdata.token,
       }
     })
       .then(res => res.json())
@@ -368,7 +375,8 @@ function languageSearch(params) {
       headers: {
         pragma: "no-cache",
         "Cache-Control": "no-cache",
-        "Content-Type": "application/x-www-form-urlencoded"
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: "JWT " + storeState.user.userdata.token,
       }
     })
       .then(res => res.json())
@@ -542,6 +550,36 @@ function getReviewTouristRepresentation() {
   });
 }
 
+function getUserProfileAllData() {
+  let storeState = store.getState();
+
+  let url = API.SERVER + API.VERSION + "/get_my_profile_info/";
+
+  console.log("Get My Profile info API URL-->", url);
+  // console.log("Get My Profile info API PARAMS-->", formData);
+
+  return new Promise((resolve, reject) => {
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        pragma: "no-cache",
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        //console.log("Get My Profile info API Success", data);
+        resolve(data);
+      })
+      .catch(err => {
+        console.log("Get My Profile info  API Error", err);
+        reject(err);
+      });
+  });
+}
+
 module.exports = {
   emailLogin,
   emailSignup,
@@ -558,5 +596,6 @@ module.exports = {
   uploadProfilePicture,
   getOrdersTouristRepresentation,
   getOrderbyid,
-  getReviewTouristRepresentation
+  getReviewTouristRepresentation,
+  getUserProfileAllData
 };

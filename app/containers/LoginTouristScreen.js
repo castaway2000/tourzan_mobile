@@ -63,8 +63,8 @@ class LoginTouristScreen extends React.Component {
     super(props);
     this.state = {
       isChecked: true,
-      username: "", // tester1 test1003
-      password: "", // test1234 Cred@123
+      username: "", // tester1 test1003 test2001
+      password: "", // test1234 Cred@123 Cred@123
       isLoading: false
     };
     this.navigate = this.props.navigation;
@@ -238,7 +238,7 @@ class LoginTouristScreen extends React.Component {
               style={styles.button_login}
             />
             <TouchableOpacity onPress={() => this.onSignup()} title="SING UP">
-              <Text style={styles.button_signup}> SIGN UP </Text>
+              <Text style={styles.button_signup}>SIGN UP</Text>
             </TouchableOpacity>
 
             <View style={styles.termsView}>
@@ -249,17 +249,7 @@ class LoginTouristScreen extends React.Component {
                   fontFamily: DefaultFont.textFont
                 }}
               >
-                {" "}
-                By clicking "
-                <Text
-                  style={{
-                    color: Colors.main,
-                    fontFamily: DefaultFont.textFont
-                  }}
-                >
-                  Sign Up
-                </Text>
-                " I agree to the{" "}
+                By clicking Sign Up I agree to the
               </Text>
               <TouchableOpacity
                 onPress={() => {
@@ -270,7 +260,8 @@ class LoginTouristScreen extends React.Component {
                   style={{
                     fontSize: 13,
                     marginTop: 4,
-                    fontFamily: DefaultFont.textFont
+                    fontFamily: DefaultFont.textFont,
+                    color: "#000000"
                   }}
                 >
                   {" "}
@@ -336,7 +327,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     width: width - 60,
-    marginTop: 30,
+    marginTop: 10,
     height: 40,
     fontFamily: DefaultFont.textFont
   },

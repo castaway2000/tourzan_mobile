@@ -27,7 +27,7 @@ import { store } from "../store/index";
 
 //Actions
 import { updatebooking } from "../actions/bookingActions";
-import { updateuser, updateOrder } from "../actions/userActions";
+import { updateuser, updateOrder, updateChat } from "../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../global/Utilities";
@@ -89,7 +89,10 @@ class MoreScreen extends React.Component {
         {
           text: "OK",
           onPress: () => {
-            if (this.props.userdata.user.isLoggedInAsGuide) {
+            if (
+              this.props.userdata.user.isLoggedInAsGuide &&
+              this.props.userdata.user.isClockedIn
+            ) {
               this.updateClockOutStatusWS(
                 this.props.userdata.user.userid,
                 this.props.currentlocation.lat,
@@ -104,13 +107,17 @@ class MoreScreen extends React.Component {
             storestate.tour.bookingdata.isAutomatic = true;
             store.dispatch(updatebooking(storestate.tour.bookingdata));
 
-            //Reste order
+            //Reste order state
             store.dispatch(updateOrder([]));
 
-            //Remove User data
+            //Remove user storage
             Storage.removeItem("currentuser");
 
+            //Reset user state
             store.dispatch(updateuser({}));
+
+            //Reset chat state
+            store.dispatch(updateChat([]));
 
             this.props.navigation.dispatch(resetRootAction);
           }
@@ -140,16 +147,10 @@ class MoreScreen extends React.Component {
 
     updateClockInOutStatus(params)
       .then(data => {
-        this.setState({
-          isLoading: false
-        });
 
-        Alert.alert("Tourzan", "You are successfully clocked out");
+        Alert.alert("Tourzan", "You are successfully clocked out.");
       })
       .catch(err => {
-        this.setState({
-          isLoading: false
-        });
         alert(err);
       });
   }

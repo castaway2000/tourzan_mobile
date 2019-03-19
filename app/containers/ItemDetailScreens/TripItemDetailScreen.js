@@ -17,9 +17,15 @@ import {
 
 import { NavigationActions } from "react-navigation";
 import Checkbox from "react-native-custom-checkbox";
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import { Rating, AirbnbRating } from "react-native-ratings";
 import ReadMore from "@expo/react-native-read-more-text";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../../constants";
 import NavigationBar from "../../components/NavigationBar";
 import moment from "moment";
 import ParallaxScrollView from "react-native-parallax-scroll-view";

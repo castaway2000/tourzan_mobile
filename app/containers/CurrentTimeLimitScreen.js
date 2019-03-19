@@ -124,7 +124,7 @@ class CurrentTimeLimitScreen extends React.Component {
       selected: i
     });
 
-    if (this.state.selected == 1) {
+    if (this.state.selected == 0) {
       this.endTripWS();
     }
   }

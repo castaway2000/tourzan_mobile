@@ -21,6 +21,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
+		1C9255ED21C7A53200ED61F9 /* libRNBraintreeDropIn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3528043E213587AD00120A44 /* libRNBraintreeDropIn.a */; };
 		1CE0815A215A41DB00112091 /* OnfidoSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CE08158215A41DB00112091 /* OnfidoSDK.m */; };
 		1CE0815B215A41DB00112091 /* OnfidoSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE08159215A41DB00112091 /* OnfidoSDK.swift */; };
 		1CE0815E215A4B7900112091 /* Onfido.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CE08091215A306400112091 /* Onfido.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -433,6 +434,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1C9255ED21C7A53200ED61F9 /* libRNBraintreeDropIn.a in Frameworks */,
 				35280485213589B500120A44 /* libRCTLinking.a in Frameworks */,
 				35627CC820EB7CF700EC9DA7 /* libRNFIRMessaging.a in Frameworks */,
 				350C1DAE20E3CE87008E1D53 /* libSplashScreen.a in Frameworks */,
@@ -849,12 +851,12 @@
 					ProjectRef = 00C302BB1ABCB91800DB3ED1 /* RCTImage.xcodeproj */;
 				},
 				{
-					ProductGroup = 352804522135899200120A44 /* Products */;
-					ProjectRef = 352804512135899200120A44 /* RCTLinking.xcodeproj */;
-				},
-				{
 					ProductGroup = 78C398B11ACF4ADC00677621 /* Products */;
 					ProjectRef = 78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */;
+				},
+				{
+					ProductGroup = 352804522135899200120A44 /* Products */;
+					ProjectRef = 352804512135899200120A44 /* RCTLinking.xcodeproj */;
 				},
 				{
 					ProductGroup = 00C302D41ABCB9D200DB3ED1 /* Products */;

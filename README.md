@@ -35,3 +35,23 @@
 - Need to Install Watchman: `brew install watchman`
 - Need to Install React Native CLI: `npm install -g react-native-cli`
 
+## Checklist For Live
+ - `app/constants/api.js`
+   - `IS_SANDBOX: true`
+ - `app/constants/braintree.js`
+   - `Braintree.environment`
+   - `Braintree.merchantId`
+   - `Braintree.publicKey`
+   - `Braintree.privateKey`
+ - `app/constants/googleAPIKey.js`
+   - `GoogleAPIKey.geoCoder`
+   - `GoogleAPIKey.direction`
+ - `app/constants/onfido.js`
+   - `OnfidoAPIKey.key`
+ - `app/constants/paymentrails.js`
+   - `Paymentrails.apiSecret`
+   - `Paymentrails.apiKey`
+ - `ios/OnfidoRNBridge/OnfidoSDK.swift`
+   - `private let token = "..."`
+ - `/android/app/src/main/java/com/tourzan/OnfidoSDK.java`
+   - `String token = "..."`

@@ -15,4 +15,7 @@ RCT_EXTERN_METHOD(startSDK:(NSString *)applicationID
                   resolver:(RCTResponseSenderBlock *)resolve
                   rejecter:(RCTResponseSenderBlock *)reject)
 
++ (BOOL)requiresMainQueueSetup{
+  return NO;
+}
 @end

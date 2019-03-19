@@ -20,7 +20,13 @@ import {
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 import { NavigationActions } from "react-navigation";
 import MapView from "react-native-maps";
 
@@ -81,6 +87,16 @@ class IdentityVerificationScreen extends React.Component {
     }
   }
 
+  onSkip() {
+    const { params } = this.props.navigation.state;
+    const { navigate } = this.props.navigation;
+
+    //Paymentrail Detail
+    navigate("PaymentrailDetail", {
+      isFromRegistration: params ? params.isFromRegistration : false
+    });
+  }
+
   render() {
     const { navigate } = this.props.navigation;
 
@@ -112,6 +128,14 @@ class IdentityVerificationScreen extends React.Component {
           />
         </View>
         {this.showLoading()}
+        <View style={styles.skipView}>
+          <TouchableOpacity
+            style={styles.skipButtonView}
+            onPress={() => this.onSkip()}
+          >
+            <Text style={styles.skipButton}>Skip</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -149,21 +173,22 @@ class IdentityVerificationScreen extends React.Component {
   }
 
   generateOnfidoApplicantID(data) {
-    if (!data.first_name || !data.last_name) {
+    console.log("data", data);
+
+    if (!data.last_name) {
       Alert.alert(
         "Tourzan",
-        "Please complete your first name and last name to continue."
+        "Please complete your first name and last name to verify your identity or you can skip it."
       );
+      this.setState({
+        isLoading: false
+      });
       return;
     }
 
-    this.setState({
-      isLoading: true
-    });
-
     var params = {
-      firstname: data.first_name,
-      lastname: data.last_name
+      firstname: data.username,
+      lastname: data.last_name ? data.last_name : data.username
     };
 
     createApplicantOnfido(params)
@@ -314,6 +339,28 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "transparent"
+  },
+  // --- Skip --- //
+  skipView: {
+    position: "absolute",
+    left: 0,
+    bottom: 0,
+    right: 0,
+    height: 44,
+    flexDirection: "row"
+  },
+  skipButton: {
+    fontSize: 16,
+    color: "#ffffff",
+    fontWeight: "800",
+    fontFamily: DefaultFont.textFont
+  },
+  skipButtonView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.main,
+    marginRight: 1
   }
 });
 

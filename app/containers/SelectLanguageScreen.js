@@ -44,7 +44,13 @@ import { languageSearch } from "../actions";
 
 //Utilities
 import { isIphoneX } from "../global/Utilities";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 var { width, height } = Dimensions.get("window");
 
@@ -62,13 +68,16 @@ class SelectLanguageScreen extends React.Component {
       languages: [],
       isLoading: false,
       message: "",
-      searchText: ""
+      searchText: "",
+      rightViewButtonText: ""
     };
   }
 
   //#endregion
   componentDidMount() {
     this.refs.SearchBar.focus();
+
+    this.languageSearchWS();
 
     console.log(
       "this.props.navigation.state.params",
@@ -93,7 +102,6 @@ class SelectLanguageScreen extends React.Component {
 
     if (text.length < 1) {
       this.setState({ message: "" });
-      return;
     }
 
     if (this.searchWaiting) {
@@ -110,18 +118,82 @@ class SelectLanguageScreen extends React.Component {
     // this.props.navigation.state.params.languageDidSelected(language);
     // this.props.navigation.dispatch(backAction)
 
+    var isSelectedFound = false;
+    for (let i = 0; i < this.state.languages.length; i++) {
+      if (language.text === this.state.languages[i].text) {
+        this.state.languages[i].isSelected = !this.state.languages[i]
+          .isSelected;
+        isSelectedFound = this.state.languages[i].isSelected;
+      } else {
+        this.state.languages[i].isSelected = false;
+      }
+    }
+
+    if (isSelectedFound) {
+      this.setState({ rightViewButtonText: "Next" });
+    } else {
+      this.setState({ rightViewButtonText: "Save" });
+    }
+
+    this.setState({ languages: this.state.languages });
+
+    // const { navigate } = this.props.navigation;
+
+    // this.props.navigation.state.params.selectedLanguage.id = language.id;
+    // this.props.navigation.state.params.selectedLanguage.text = language.text;
+
+    // console.log("languageDidSelected", this.props.navigation.state.params);
+
+    // navigate("SelectLanguageProficiency", {
+    //   selectedLanguage: this.props.navigation.state.params.selectedLanguage,
+    //   languageDidSelected: this.props.navigation.state.params
+    //     .languageDidSelected
+    // });
+  }
+
+  onNext() {
     const { navigate } = this.props.navigation;
+    var selectedLanguage = null;
 
-    this.props.navigation.state.params.selectedLanguage.id = language.id;
-    this.props.navigation.state.params.selectedLanguage.text = language.text;
+    var isSelectedFound = false;
+    for (let i = 0; i < this.state.languages.length; i++) {
+      if (this.state.languages[i].isSelected) {
+        selectedLanguage = this.state.languages[i];
+        isSelectedFound = true;
+      }
+    }
 
-    console.log("languageDidSelected", this.props.navigation.state.params);
+    if (isSelectedFound) {
+      this.props.navigation.state.params.selectedLanguage.id =
+        selectedLanguage.id;
+      this.props.navigation.state.params.selectedLanguage.text =
+        selectedLanguage.text;
 
-    navigate("SelectLanguageProficiency", {
-      selectedLanguage: this.props.navigation.state.params.selectedLanguage,
-      languageDidSelected: this.props.navigation.state.params
-        .languageDidSelected
-    });
+      console.log("languageDidSelected", this.props.navigation.state.params);
+
+      navigate("SelectLanguageProficiency", {
+        selectedLanguage: this.props.navigation.state.params.selectedLanguage,
+        languageDidSelected: this.props.navigation.state.params
+          .languageDidSelected
+      });
+    } else {
+
+      console.log(
+        "this.props.navigation.state.params.selectedLanguage",
+        this.props.navigation.state.params.selectedLanguage
+      );
+
+      this.props.navigation.state.params.selectedLanguage.id = null;
+      this.props.navigation.state.params.selectedLanguage.text = "";
+      //this.props.navigation.state.params.selectedLanguage.proficiency.type = "";
+
+      //Callback to UpdateProfileScreen.js
+      this.props.navigation.state.params.languageDidSelected(
+        this.props.navigation.state.params.selectedLanguage
+      );
+
+      this.props.navigation.pop(1);
+    }
   }
 
   render() {
@@ -145,13 +217,20 @@ class SelectLanguageScreen extends React.Component {
           </TouchableOpacity>
           <Text style={styles.centerText}>Search Language</Text>
           <View style={styles.rightView}>
-            {/* <TouchableOpacity onPress={() => this.onDone()}>
-                            <Text style={styles.rightView}>DONE</Text>
-                        </TouchableOpacity> */}
+            <TouchableOpacity onPress={() => this.onDone()}>
+              <Text style={styles.rightView}>
+                {/* {this.state.rightViewButtonText} */}
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.view}>
           <View style={styles.searchBarbg}>
+            <Image
+              resizeMode="cover"
+              source={require("../assets/images/search_white_icon.png")}
+              style={styles.searchIcon}
+            />
             <TextInput
               style={styles.searchBar}
               value={this.state.searchText}
@@ -166,6 +245,7 @@ class SelectLanguageScreen extends React.Component {
             {this.state.languages.length > 0 && (
               <FlatList
                 data={this.state.languages}
+                extraData={this.state}
                 renderItem={({ item, index }) => (
                   <TouchableOpacity
                     onPress={() => this.languageDidSelected(item)}
@@ -174,6 +254,14 @@ class SelectLanguageScreen extends React.Component {
                       <View style={styles.item}>
                         <Text style={styles.celltext}>{item.text}</Text>
                       </View>
+
+                      {item.isSelected && (
+                        <Image
+                          resizeMode="contain"
+                          source={require("../assets/images/checked_green_badge.png")}
+                          style={styles.row_icon}
+                        />
+                      )}
                     </View>
                   </TouchableOpacity>
                 )}
@@ -186,7 +274,13 @@ class SelectLanguageScreen extends React.Component {
               <View
                 style={{ flex: 1, flexDirection: "row", alignItems: "center" }}
               >
-                <Text style={{ width: "100%", textAlign: "center", fontFamily: DefaultFont.textFont }}>
+                <Text
+                  style={{
+                    width: "100%",
+                    textAlign: "center",
+                    fontFamily: DefaultFont.textFont
+                  }}
+                >
                   {this.state.message}
                 </Text>
               </View>
@@ -194,6 +288,17 @@ class SelectLanguageScreen extends React.Component {
           </View>
         </View>
         {this.showLoading()}
+
+        <View style={styles.skipView}>
+          <TouchableOpacity
+            style={styles.skipButtonView}
+            onPress={() => this.onNext()}
+          >
+            <Text style={styles.skipButton}>
+              {this.state.rightViewButtonText}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -203,12 +308,34 @@ class SelectLanguageScreen extends React.Component {
     var { dispatch } = this.props;
 
     var params = {
-      q: this.state.searchText
+      q: this.state.searchText ? this.state.searchText : ""
     };
 
     languageSearch(params)
       .then(data => {
         if (data.items && data.items.length > 0) {
+          var isSelectedFound = false;
+
+          for (let i = 0; i < data.items.length; i++) {
+            const element = data.items[i];
+
+            if (
+              element.text ===
+              this.props.navigation.state.params.selectedLanguage.text
+            ) {
+              element.isSelected = true;
+              isSelectedFound = true;
+            } else {
+              element.isSelected = false;
+            }
+          }
+
+          if (isSelectedFound) {
+            this.setState({ rightViewButtonText: "Next" });
+          } else {
+            this.setState({ rightViewButtonText: "Save" });
+          }
+
           this.setState({ languages: data.items });
         } else {
           this.setState({ languages: [], message: "No languages found." });
@@ -266,6 +393,7 @@ const styles = StyleSheet.create({
   },
   rightView: {
     marginRight: 8,
+    width: 44,
     height: 20
   },
 
@@ -273,21 +401,30 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     width: "100%",
-    backgroundColor: "#E4E4E4"
+    backgroundColor: "#E4E4E4",
+    marginBottom: 44
   },
 
   // --- search --- //
   searchBarbg: {
-    height: 44,
+    height: 50,
     borderWidth: 4,
     borderColor: "#E4E4E4",
     backgroundColor: "white",
-    borderRadius: 14
+    borderRadius: 14,
+    flexDirection: "row",
+    alignItems: "center"
   },
   searchBar: {
-    paddingLeft: 10,
     flex: 1,
     fontFamily: DefaultFont.textFont
+  },
+  searchIcon: {
+    marginLeft: 10,
+    marginRight: 10,
+    width: 12,
+    height: 12,
+    tintColor: "#5c5c5c"
   },
 
   // --- Activity --- //
@@ -306,7 +443,10 @@ const styles = StyleSheet.create({
   itemContainer: {
     padding: 5,
     borderBottomWidth: 0.5,
-    borderColor: "lightgray"
+    borderColor: "lightgray",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
   },
   listview: {
     backgroundColor: "white",
@@ -318,6 +458,33 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingLeft: 4,
     fontFamily: DefaultFont.textFont
+  },
+  row_icon: {
+    height: 15,
+    width: 15
+  },
+
+  // --- Skip --- //
+  skipView: {
+    position: "absolute",
+    left: 0,
+    bottom: 0,
+    right: 0,
+    height: 44,
+
+    flexDirection: "row"
+  },
+  skipButton: {
+    fontSize: 16,
+    color: "#ffffff",
+    fontWeight: "800"
+  },
+  skipButtonView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.main,
+    marginRight: 1
   }
 });
 

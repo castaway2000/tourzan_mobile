@@ -44,7 +44,13 @@ import { searchInterest } from "../actions";
 
 //Utilities
 import { isIphoneX } from "../global/Utilities";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 var { width, height } = Dimensions.get("window");
 
@@ -69,6 +75,7 @@ class SelectInterestsScreen extends React.Component {
   //#endregion
   componentDidMount() {
     this.refs.SearchBar.focus();
+    this.getSearchInterest();
   }
 
   showLoading() {
@@ -95,9 +102,9 @@ class SelectInterestsScreen extends React.Component {
 
       if (text.length < 1) {
         this.setState({ interests: [], message: "" });
-      } else {
-        this.getSearchInterest();
       }
+
+      this.getSearchInterest();
     }, 500);
   }
 
@@ -154,6 +161,11 @@ class SelectInterestsScreen extends React.Component {
         </View>
         <View style={styles.view}>
           <View style={styles.searchBarbg}>
+            <Image
+              resizeMode="cover"
+              source={require("../assets/images/search_white_icon.png")}
+              style={styles.searchIcon}
+            />
             <TextInput
               style={styles.searchBar}
               value={this.state.searchText}
@@ -195,7 +207,13 @@ class SelectInterestsScreen extends React.Component {
               <View
                 style={{ flex: 1, flexDirection: "row", alignItems: "center" }}
               >
-                <Text style={{ width: "100%", textAlign: "center" , fontFamily: DefaultFont.textFont}}>
+                <Text
+                  style={{
+                    width: "100%",
+                    textAlign: "center",
+                    fontFamily: DefaultFont.textFont
+                  }}
+                >
                   {this.state.message}
                 </Text>
               </View>
@@ -324,13 +342,20 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     borderColor: "#E4E4E4",
     backgroundColor: "white",
-    borderRadius: 14
+    borderRadius: 14,
+    flexDirection: "row",
+    alignItems: "center"
   },
   searchBar: {
-    paddingLeft: 10,
-    fontSize: 14,
     flex: 1,
     fontFamily: DefaultFont.textFont
+  },
+  searchIcon: {
+    marginLeft: 10,
+    marginRight: 10,
+    width: 12,
+    height: 12,
+    tintColor: "#5c5c5c"
   },
 
   // --- Activity --- //

@@ -76,7 +76,7 @@ class GuideScreen extends React.Component {
     this.state = {
       guideList: [],
       starCount: 0.0,
-      message: "",
+      shouldShowEmptyState: false,
       isFetching: false
     };
 
@@ -112,14 +112,14 @@ class GuideScreen extends React.Component {
               return new Date(b.date_booked_for) - new Date(a.date_booked_for);
             });
 
-            this.setState({ guideList: data, message: "" });
+            this.setState({ guideList: data, shouldShowEmptyState: false });
 
             for (let i = 0; i < data.length; i++) {
               this.loadUserNameProfilePics(i);
             }
             this.setState({ isFetching: false });
           } else {
-            this.setState({ guideList: [], message: "No data found." });
+            this.setState({ guideList: [], shouldShowEmptyState: true });
           }
         })
         .catch(err => {
@@ -136,14 +136,14 @@ class GuideScreen extends React.Component {
               return new Date(b.date_booked_for) - new Date(a.date_booked_for);
             });
 
-            this.setState({ guideList: data, message: "" });
+            this.setState({ guideList: data, shouldShowEmptyState: false });
 
             for (let i = 0; i < data.length; i++) {
               this.loadUserNameProfilePics(i);
             }
             this.setState({ isFetching: false });
           } else {
-            this.setState({ guideList: [], message: "No data found." });
+            this.setState({ guideList: [], shouldShowEmptyState: true });
           }
         })
         .catch(err => {
@@ -242,19 +242,26 @@ class GuideScreen extends React.Component {
               resizeMode="cover"
               source={
                 item.pic
-                  ? { uri: item.pic }
+                  ? { uri: item.pic, headers: { Pragma: "force-cache" } }
                   : require("../../assets/images/defaultavatar.png")
               }
               style={styles.avatar_img}
               defaultSource={require("../../assets/images/user_placeholder.png")}
             />
             <View style={styles.rate_view} pointerEvents="none">
-              <Text style={styles.rating_text}>
-                Rating:{" "}
-                {this.props.userdata.user.isLoggedInAsGuide
-                  ? item.rating_tourist
-                  : item.rating_guide}
-              </Text>
+              <Rating
+                ratingColor="#3498db"
+                ratingBackgroundColor="#c8c7c8"
+                ratingCount={5}
+                startingValue={
+                  this.props.userdata.user.isLoggedInAsGuide
+                    ? parseFloat(item.rating_tourist)
+                    : parseFloat(item.rating_guide)
+                }
+                readonly
+                imageSize={12}
+                onFinishRating={this.ratingCompleted}
+              />
             </View>
           </View>
           <View style={styles.info_view}>
@@ -280,59 +287,37 @@ class GuideScreen extends React.Component {
     );
   };
 
+  showEmptyState() {
+    return (
+      <View style={styles.emptyStateContainer}>
+        <Image
+          resizeMode="contain"
+          source={require("../../assets/images/tourzan-transparant.png")}
+          style={styles.emptyStateImage}
+        />
+        <Text style={styles.emptyStateBoldText}>
+          {"No previous " +
+            (this.props.userdata.user.isLoggedInAsGuide ? "tourist" : "guide") +
+            " was found."}
+        </Text>
+        <Text style={styles.emptyStateNormalText}>
+          {this.props.userdata.user.isLoggedInAsGuide
+            ? "Your previously booked tourists \n are displayed here."
+            : "Your previously booked guides are displayed here. You can book a guide from Maps screen."}
+        </Text>
+      </View>
+    );
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        {/* <TouchableOpacity style={styles.sortBtn}>
-                    <Image source={require('../../assets/images/ic_tab_settings.png')} style={styles.sortImg} />
-                </TouchableOpacity> */}
-
-        {this.state.guideList.length < 1 && (
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              alignItems: "center",
-              width: "100%"
-            }}
-          >
-            <Text
-              style={{
-                width: "100%",
-                textAlign: "center",
-                fontFamily: DefaultFont.textFont
-              }}
-            >
-              {this.state.message}
-            </Text>
-          </View>
-        )}
+        {this.state.guideList.length < 1 &&
+          this.state.shouldShowEmptyState &&
+          this.showEmptyState()}
 
         {this.state.guideList.length > 0 && (
           <View style={styles.mTableView}>
-            {/* {this.showGuideList()} */}
-
-            {this.state.guideList.length < 1 && (
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  width: "100%"
-                }}
-              >
-                <Text
-                  style={{
-                    width: "100%",
-                    textAlign: "center",
-                    fontFamily: DefaultFont.textFont
-                  }}
-                >
-                  {this.state.message}
-                </Text>
-              </View>
-            )}
-
             {this.state.guideList.length > 0 && (
               <FlatList
                 data={this.state.guideList}
@@ -364,7 +349,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   mTableView: {
-    width: '100%'
+    width: "100%"
   },
   sortImg: {
     marginTop: 25,
@@ -465,6 +450,34 @@ const styles = StyleSheet.create({
   arrow_btn: {
     width: 10,
     height: 15
+  },
+
+  //Empty state
+  emptyStateContainer: {
+    flex: 1,
+    alignItems: "center",
+    width: "100%",
+    justifyContent: "center"
+  },
+  emptyStateImage: {
+    width: 80,
+    height: 80,
+    opacity: 0.1
+  },
+  emptyStateBoldText: {
+    width: "100%",
+    marginTop: 12,
+    textAlign: "center",
+    color: "#bbbbbb",
+    fontWeight: "bold",
+    fontFamily: DefaultFont.textFont
+  },
+  emptyStateNormalText: {
+    width: "100%",
+    marginTop: 12,
+    textAlign: "center",
+    color: "#bbbbbb",
+    fontFamily: DefaultFont.textFont
   }
 });
 

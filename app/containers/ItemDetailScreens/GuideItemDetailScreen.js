@@ -19,9 +19,15 @@ import {
 
 import { NavigationActions } from "react-navigation";
 import Checkbox from "react-native-custom-checkbox";
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import { Rating, AirbnbRating } from "react-native-ratings";
 import ReadMore from "@expo/react-native-read-more-text";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../../constants";
 
 import ApplyButton from "../../components/ApplyButton";
 import NavigationBar from "../../components/NavigationBar";
@@ -172,7 +178,8 @@ class GuideItemDetailScreen extends React.Component {
           style={styles.top_container}
         >
           <View style={styles.navigationbar}>
-            <TouchableOpacity style={styles.backButtomContainer}
+            <TouchableOpacity
+              style={styles.backButtomContainer}
               onPress={() => {
                 this.props.navigation.dispatch(backAction);
               }}
@@ -294,7 +301,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between"
   },
-  backButtomContainer:{
+  backButtomContainer: {
     width: 44,
     height: 44,
     alignItems: "center",

@@ -1,4 +1,4 @@
-import { API, Paymentrails, OnfidoAPIKey} from "../constants";
+import { API, Paymentrails, OnfidoAPIKey } from "../constants";
 var CryptoJS = require("crypto-js");
 
 //Store

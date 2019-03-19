@@ -44,7 +44,13 @@ import {} from "../actions";
 
 //Utilities
 import { isIphoneX } from "../global/Utilities";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 var { width, height } = Dimensions.get("window");
 
@@ -61,10 +67,10 @@ class SelectLanguageProficiencyScreen extends React.Component {
     super(props);
     this.state = {
       proficiencys: [
-        { type: "Native", level: 1 },
-        { type: "Advanced", level: 2 },
-        { type: "Intermediate", level: 3 },
-        { type: "Beignner", level: 4 }
+        { type: "Native", level: 1, id: "1" },
+        { type: "Advanced", level: 2, id: "2" },
+        { type: "Intermediate", level: 3, id: "3" },
+        { type: "Beignner", level: 4, id: "4" }
       ]
     };
   }
@@ -80,6 +86,7 @@ class SelectLanguageProficiencyScreen extends React.Component {
   proficiencyDidSelected(proficiency) {
     this.props.navigation.state.params.selectedLanguage.proficiency = proficiency;
 
+    ////Callback to UpdateProfileScreen.js
     this.props.navigation.state.params.languageDidSelected(
       this.props.navigation.state.params.selectedLanguage
     );

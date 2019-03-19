@@ -56,7 +56,13 @@ import {
 
 //Utilities
 import { isIphoneX } from "../global/Utilities";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 //Braintree Dropin
 import BraintreeDropIn from "react-native-braintree-payments-drop-in";
@@ -67,7 +73,7 @@ const backAction = NavigationActions.back({});
 
 const resetRootAction = NavigationActions.reset({
   index: 0,
-  actions: [NavigationActions.navigate({ routeName: "Welcome" })],
+  actions: [NavigationActions.navigate({ routeName: "Home" })],
   key: null
 });
 
@@ -105,6 +111,10 @@ class AddPaymentMethodScreen extends React.Component {
     }
   }
 
+  onSkip() {
+    this.props.navigation.dispatch(resetRootAction);
+  }
+
   render() {
     const { navigate } = this.props.navigation;
 
@@ -136,6 +146,14 @@ class AddPaymentMethodScreen extends React.Component {
           />
         </View>
         {this.showLoading()}
+        <View style={styles.skipView}>
+          <TouchableOpacity
+            style={styles.skipButtonView}
+            onPress={() => this.onSkip()}
+          >
+            <Text style={styles.skipButton}>Finish</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -191,13 +209,11 @@ class AddPaymentMethodScreen extends React.Component {
         if (data && data.status == "success") {
           Alert.alert(
             "Tourzan",
-            "A new payment method was successfully added. Please login again.",
+            "A new payment method was successfully added.",
             [
               {
                 text: "OK",
-                onPress: () => {
-                  this.props.navigation.dispatch(resetRootAction);
-                }
+                onPress: () => {}
               }
             ],
             { cancelable: false }
@@ -316,6 +332,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "transparent"
+  },
+
+  // --- Skip --- //
+  skipView: {
+    position: "absolute",
+    left: 0,
+    bottom: 0,
+    right: 0,
+    height: 44,
+
+    flexDirection: "row"
+  },
+  skipButton: {
+    fontSize: 16,
+    color: "#ffffff",
+    fontWeight: "800",
+    fontFamily: DefaultFont.textFont
+  },
+  skipButtonView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.main,
+    marginRight: 1
   }
 });
 

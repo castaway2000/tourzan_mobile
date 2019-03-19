@@ -97,7 +97,7 @@ const updateUser = (state, action) => {
 
 const updateOrder = (state, action) => {
   let ud = action.orderdata;
-  return { ...state, orderList: ud };
+  return { ...state, orderList: Object.assign([], ud) };
 };
 
 const updateChat = (state, action) => {

@@ -33,6 +33,8 @@ function getGuideList() {
 }
 
 function bookGuide(params) {
+  let storeState = store.getState();
+
   var formData = new FormData();
   formData.append("token", params.token);
   formData.append("user_id", params.userid);
@@ -53,7 +55,8 @@ function bookGuide(params) {
       headers: {
         "Content-Type": "multipart/form-data",
         pragma: "no-cache",
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache",
+        Authorization: "JWT " + storeState.user.userdata.token
       },
       body: formData
     })

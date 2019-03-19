@@ -13,7 +13,6 @@ import {
   TouchableWithoutFeedback
 } from "react-native";
 
-
 import GuidesScreen from "./GuidesScreen";
 import TransactionsScreen from "./TransactionsScreen";
 import TripsScreen from "./TripsScreen";
@@ -28,7 +27,13 @@ import { updateuser } from "../../actions/userActions";
 
 //Utilities
 import { Storage, isIphoneX } from "../../global/Utilities";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../../constants";
 
 var { width, height } = Dimensions.get("window");
 
@@ -121,45 +126,67 @@ class DashboardTapNavigator extends React.Component {
                         </TouchableWithoutFeedback> */}
             <TouchableWithoutFeedback onPress={() => this.onGuides()}>
               <View style={styles.tripsButtonView}>
-                <Image
-                  resizeMode="contain"
-                  source={require("../../assets/images/guides_icon.png")}
+                <View style={styles.tripsButtonView}>
+                  <Image
+                    resizeMode="contain"
+                    source={require("../../assets/images/guides_icon.png")}
+                    style={
+                      this.state.isGuides
+                        ? [styles.icon, { tintColor: "white" }]
+                        : styles.icon
+                    }
+                  />
+                  <Text
+                    style={
+                      this.state.isGuides
+                        ? [styles.tabtxt, { color: "white" }]
+                        : styles.tabtxt
+                    }
+                  >
+                    {this.props.userdata.user.isLoggedInAsGuide
+                      ? "PREV TOURIST"
+                      : "PREV GUIDES"}
+                  </Text>
+                </View>
+                <View
                   style={
                     this.state.isGuides
-                      ? [styles.icon, { tintColor: "white" }]
-                      : styles.icon
+                      ? [styles.bottomLine, { backgroundColor: "white" }]
+                      : styles.bottomLine
                   }
                 />
-                <Text
-                  style={
-                    this.state.isGuides
-                      ? [styles.tabtxt, { color: "white" }]
-                      : styles.tabtxt
-                  }
-                > {this.props.userdata.user.isLoggedInAsGuide ? 'PREV TOURIST' : 'PREV GUIDES'}
-                </Text>
               </View>
             </TouchableWithoutFeedback>
+
             <TouchableWithoutFeedback onPress={() => this.onTransaction()}>
               <View style={styles.tripsButtonView}>
-                <Image
-                  resizeMode="contain"
-                  source={require("../../assets/images/transactions_icon.png")}
+                <View style={styles.tripsButtonView}>
+                  <Image
+                    resizeMode="contain"
+                    source={require("../../assets/images/transactions_icon.png")}
+                    style={
+                      this.state.isTransaction
+                        ? [styles.icon, { tintColor: "white" }]
+                        : styles.icon
+                    }
+                  />
+                  <Text
+                    style={
+                      this.state.isTransaction
+                        ? [styles.tabtxt, { color: "white" }]
+                        : styles.tabtxt
+                    }
+                  >
+                    TRANSACTION
+                  </Text>
+                </View>
+                <View
                   style={
                     this.state.isTransaction
-                      ? [styles.icon, { tintColor: "white" }]
-                      : styles.icon
+                      ? [styles.bottomLine, { backgroundColor: "white" }]
+                      : styles.bottomLine
                   }
                 />
-                <Text
-                  style={
-                    this.state.isTransaction
-                      ? [styles.tabtxt, { color: "white" }]
-                      : styles.tabtxt
-                  }
-                >
-                  TRANSACTION
-                </Text>
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -216,7 +243,7 @@ const styles = StyleSheet.create({
   },
   tripsButtonView: {
     width: width / 2,
-    height: 50,
+    height: 55,
     alignItems: "center",
     justifyContent: "center"
   },
@@ -247,6 +274,11 @@ const styles = StyleSheet.create({
     width: width,
     flex: 1,
     alignItems: "center"
+  },
+  bottomLine: {
+    height: 3,
+    backgroundColor: "transparent",
+    width: "80%"
   }
 });
 

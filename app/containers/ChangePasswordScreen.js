@@ -22,7 +22,13 @@ import Checkbox from "react-native-custom-checkbox";
 import NavigationBar from "../components/NavigationBar";
 import { changePassword } from "../actions/";
 import { isIphoneX } from "../global/Utilities";
-import { Colors, API, Paymentrails, Braintree, DefaultFont  } from "../constants";
+import {
+  Colors,
+  API,
+  Paymentrails,
+  Braintree,
+  DefaultFont
+} from "../constants";
 
 var { width, height } = Dimensions.get("window");
 
