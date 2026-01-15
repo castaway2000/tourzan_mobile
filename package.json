@@ -11,7 +11,7 @@
     "color-convert": "1.9.1",
     "crypto-js": "^3.1.9-1",
     "metro-bundler": "0.20.2",
-    "moment": "^2.19.2",
+    "moment": "^2.29.4",
     "react": "^16.3.1",
     "react-native": "^0.55.4",
     "react-native-actionsheet": "^2.2.2",
